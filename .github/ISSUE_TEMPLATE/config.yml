@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 🚨 Broken site (faster than GitHub)
+    url: https://bannerbye.com
+    about: Install BannerBye and use the in-extension "Report broken site" button — lands straight in our inbox with the hostname pre-filled.
+  - name: 📬 General questions
+    url: mailto:hello@bannerbye.com
+    about: Email us for anything not code-related.
+  - name: 🔒 Security issue
+    url: mailto:hello@bannerbye.com
+    about: Please email us privately rather than opening a public issue.

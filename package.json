@@ -1,0 +1,44 @@
+{
+  "name": "bannerbye",
+  "version": "0.2.0",
+  "description": "Cookie banners, killed. Before they load.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wxt",
+    "dev:firefox": "wxt -b firefox",
+    "build": "wxt build",
+    "build:firefox": "wxt build -b firefox",
+    "build:safari": "wxt build -b safari",
+    "build:all": "wxt build && wxt build -b firefox && wxt build -b safari",
+    "zip": "wxt zip",
+    "zip:firefox": "wxt zip -b firefox",
+    "compile": "tsc --noEmit",
+    "postinstall": "wxt prepare",
+    "tcf:sample": "node --experimental-strip-types scripts/tcf-sample.ts"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.270",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "@wxt-dev/module-react": "^1.1.3",
+    "sharp": "^0.33.5",
+    "typescript": "^5.6.3",
+    "wxt": "^0.19.29"
+  },
+  "packageManager": "pnpm@9.12.0",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "@vitejs/plugin-react": "^4.3.4",
+      "vite": "^6.0.0"
+    }
+  }
+}

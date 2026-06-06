@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# WXT build output + cache
+.output/
+.wxt/
+web-ext-artifacts/
+
+# Build output
+dist/
+build/
+out/
+*.zip
+*.crx
+*.xpi
+*.pem
+
+# Env + secrets
+.env
+.env.local
+.env.*.local
+.secrets/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor + OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+*.swp
+*.swo
+
+# Coverage + test
+coverage/
+.nyc_output/
+*.lcov
+
+# TypeScript
+*.tsbuildinfo

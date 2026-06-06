@@ -1,0 +1,558 @@
+/* BannerBye popup — gebruikt landing-pagina-design-tokens */
+
+:root {
+  --cream: #faf7f0;
+  --ink: #0e1116;
+  --ember: #e85a2c;
+  --smoke: #6b7077;
+  --smoke-soft: rgba(107, 112, 119, 0.15);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  /* v0.1.3: width was vast 320px — brak in Safari iPad popover (~280px breed).
+     Nu responsive: min-width voor leesbaarheid, max-width voor desktop-dropdowns. */
+  width: 100%;
+  min-width: 280px;
+  max-width: 380px;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+body {
+  padding: 0;
+}
+
+.bb-loading {
+  padding: 32px 20px;
+  text-align: center;
+  color: var(--smoke);
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 12px;
+}
+
+.bb-popup {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Header */
+.bb-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bb-wordmark {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 22px;
+  letter-spacing: -0.5px;
+}
+.bb-wordmark-ink {
+  color: var(--ink);
+}
+.bb-wordmark-ember {
+  color: var(--ember);
+}
+
+.bb-status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--smoke-soft);
+}
+.bb-status-dot.active {
+  background: var(--ember);
+  box-shadow: 0 0 0 4px rgba(232, 90, 44, 0.18);
+}
+.bb-status-dot.inactive {
+  background: var(--smoke-soft);
+}
+
+/* Report-broken-site modal (v0.2.0, #115) */
+.bb-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(14, 17, 22, 0.55);
+  z-index: 100;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 12px;
+  animation: bb-fade-in 200ms ease-out;
+}
+
+@keyframes bb-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.bb-modal {
+  background: var(--cream);
+  border-radius: 12px;
+  padding: 14px;
+  width: 100%;
+  max-width: 360px;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bb-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bb-modal-title {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--ink);
+}
+
+.bb-modal-close {
+  background: none;
+  border: none;
+  padding: 4px 8px;
+  color: var(--smoke);
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+.bb-modal-close:hover {
+  background: rgba(14, 17, 22, 0.06);
+}
+
+.bb-modal-help {
+  font-size: 12px;
+  color: var(--smoke);
+  line-height: 1.5;
+}
+
+.bb-modal-email {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  color: var(--ink);
+}
+
+.bb-modal-textarea {
+  width: 100%;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 10px;
+  border: 1px solid rgba(14, 17, 22, 0.1);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--ink);
+  resize: vertical;
+  box-sizing: border-box;
+  min-height: 80px;
+}
+.bb-modal-textarea:focus {
+  outline: 2px solid var(--ember);
+  outline-offset: -1px;
+  border-color: var(--ember);
+}
+.bb-modal-textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.bb-modal-error {
+  font-size: 12px;
+  color: var(--ember);
+  margin-top: -4px;
+}
+
+.bb-modal-sent {
+  font-size: 13px;
+  color: var(--ink);
+  line-height: 1.5;
+  padding: 8px 0 4px;
+}
+
+.bb-modal-copy {
+  background: var(--ink);
+  color: var(--cream);
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+.bb-modal-copy:hover:not(:disabled) {
+  opacity: 0.92;
+}
+.bb-modal-copy:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
+/* Celebration card (v0.2.0) — verschijnt boven .bb-status wanneer
+   stats.pendingCelebrations een net-unlocked milestone bevat. Dismiss
+   verbergt 'm + clear de "🎉"-badge in de toolbar. */
+.bb-celebration {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 14px 14px 16px;
+  border-radius: 12px;
+  background: var(--ember);
+  color: var(--cream);
+  box-shadow: 0 4px 14px -4px rgba(232, 90, 44, 0.45);
+  animation: bb-celebration-in 380ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes bb-celebration-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.bb-celebration-emoji {
+  font-size: 24px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.bb-celebration-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.bb-celebration-label {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(250, 247, 240, 0.7);
+  margin-bottom: 2px;
+}
+
+.bb-celebration-name {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: -0.3px;
+  color: var(--cream);
+}
+
+.bb-celebration-share,
+.bb-celebration-dismiss {
+  background: none;
+  border: none;
+  padding: 4px 8px;
+  color: rgba(250, 247, 240, 0.7);
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.15s ease, color 0.15s ease;
+  flex-shrink: 0;
+}
+.bb-celebration-share:hover,
+.bb-celebration-dismiss:hover {
+  background: rgba(250, 247, 240, 0.15);
+  color: var(--cream);
+}
+.bb-celebration-share {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Status sentence */
+.bb-status {
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(14, 17, 22, 0.05);
+}
+.bb-status-text {
+  font-size: 14px;
+  color: var(--ink);
+}
+.bb-host {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 13px;
+  color: var(--ink);
+}
+
+/* Controls */
+.bb-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bb-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--cream);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+.bb-toggle:hover {
+  opacity: 0.92;
+}
+.bb-toggle.off {
+  background: transparent;
+  color: var(--ink);
+}
+.bb-toggle-state {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ember);
+}
+.bb-toggle.off .bb-toggle-state {
+  color: var(--smoke);
+}
+
+.bb-pause {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(14, 17, 22, 0.12);
+  background: transparent;
+  color: var(--ink);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.bb-pause:hover {
+  background: rgba(232, 90, 44, 0.05);
+  border-color: var(--ember);
+}
+
+/* Stats */
+.bb-stats {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  border-top: 1px solid rgba(14, 17, 22, 0.06);
+  padding-top: 14px;
+  /* v0.1.3: voorkom verticale stapeling in smalle Safari iPad popover. */
+  flex-wrap: nowrap;
+  min-width: 0;
+}
+.bb-stat-number {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 28px;
+  color: var(--ember);
+  letter-spacing: -1px;
+  /* Never krimpt — getallen blijven leesbaar. */
+  flex-shrink: 0;
+}
+.bb-stat-label {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 13px;
+  color: var(--smoke);
+  /* Label mag wrappen of truncaten in smalle popover, niet stapelen onder cijfer. */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+/* Milestones (v0.2.0) — compact lijst van alle milestones met unlock-status.
+   Onder .bb-stats, boven .bb-footer. */
+.bb-milestones {
+  border-top: 1px solid rgba(14, 17, 22, 0.06);
+  padding-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bb-milestones-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.bb-milestones-label {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--smoke);
+}
+
+.bb-milestones-count {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 11px;
+  color: var(--ember);
+}
+
+.bb-milestones-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bb-milestone {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.bb-milestone-marker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.bb-milestone-name {
+  font-family: 'Inter', system-ui, sans-serif;
+  letter-spacing: -0.1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.bb-milestone.unlocked .bb-milestone-marker {
+  color: var(--ember);
+}
+.bb-milestone.unlocked .bb-milestone-name {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.bb-milestone.locked .bb-milestone-marker {
+  color: rgba(107, 112, 119, 0.4);
+}
+.bb-milestone.locked .bb-milestone-name {
+  color: var(--smoke);
+}
+
+/* Footer */
+.bb-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 8px;
+}
+.bb-link:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.bb-link:disabled:hover {
+  color: var(--smoke);
+}
+.bb-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--smoke);
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+.bb-link:hover {
+  color: var(--ember);
+}
+
+/* ============================================================
+   iOS / iPad responsive layer — v1.0 voor Mobile Safari Web Ext
+   ============================================================
+   Op Chrome/Firefox desktop wordt de popup als 320px dropdown
+   gerenderd (zie html/body width hierboven). Op iOS Safari opent
+   de popup als full-screen overlay (iPhone) of grote popover
+   (iPad). Voor die contexten:
+   - Tap-targets minimaal 44pt (Apple HIG)
+   - Layout vertical-first, geen verkleind dropdown-formaat
+   - Hover-states uitschakelen (geen hover op touch)
+   - Status-dot prominenter (groter, contrastrijker)
+*/
+
+@media (max-width: 420px) {
+  /* iPhone full-screen mode */
+  html, body {
+    width: 100%;
+    font-size: 16px;
+  }
+  .bb-popup {
+    padding: 24px;
+    gap: 22px;
+    min-height: 100vh;
+  }
+  .bb-wordmark { font-size: 26px; }
+  .bb-status-dot { width: 14px; height: 14px; }
+  .bb-status { padding: 16px 18px; }
+  .bb-status-text { font-size: 16px; }
+  .bb-toggle {
+    min-height: 44px;
+    padding: 14px 18px;
+    font-size: 16px;
+  }
+  .bb-pause {
+    min-height: 44px;
+    padding: 14px 18px;
+    font-size: 15px;
+    width: 100%;
+  }
+  .bb-stat-number { font-size: 36px; }
+  .bb-stat-label { font-size: 15px; }
+  .bb-link { font-size: 13px; padding: 8px 0; }
+}
+
+@media (min-width: 421px) and (max-width: 768px) {
+  /* iPad popover mode — iets ruimer dan desktop maar geen full-screen */
+  html, body { width: 360px; }
+  .bb-popup { padding: 22px; gap: 20px; }
+  .bb-toggle { min-height: 44px; }
+  .bb-pause { min-height: 44px; }
+}
+
+@media (hover: none) {
+  /* Touch-only devices — hover-feedback uit, gebruik :active */
+  .bb-toggle:hover { opacity: 1; }
+  .bb-pause:hover { background: transparent; border-color: rgba(14, 17, 22, 0.12); }
+  .bb-link:hover { color: var(--smoke); }
+  .bb-toggle:active { opacity: 0.85; }
+  .bb-pause:active { background: rgba(232, 90, 44, 0.08); border-color: var(--ember); }
+  .bb-link:active { color: var(--ember); }
+}

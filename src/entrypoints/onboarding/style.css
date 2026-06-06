@@ -1,0 +1,218 @@
+/* BannerBye onboarding — gebruikt landing-page-design-tokens */
+
+:root {
+  --cream: #faf7f0;
+  --ink: #0e1116;
+  --ember: #e85a2c;
+  --smoke: #6b7077;
+  --smoke-soft: rgba(107, 112, 119, 0.15);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  min-height: 100vh;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.bb-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+}
+
+.bb-card {
+  width: 100%;
+  max-width: 640px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(14, 17, 22, 0.06);
+  border-radius: 24px;
+  padding: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  min-height: 540px;
+}
+
+/* Header */
+.bb-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bb-wordmark {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: -0.5px;
+  line-height: 1;
+}
+.bb-wordmark-ink {
+  color: var(--ink);
+}
+.bb-wordmark-ember {
+  color: var(--ember);
+}
+
+.bb-skip {
+  background: none;
+  border: none;
+  color: var(--smoke);
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 6px 10px;
+  transition: color 0.15s ease;
+}
+.bb-skip:hover {
+  color: var(--ember);
+}
+.bb-skip:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+/* Content */
+.bb-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.bb-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.bb-eyebrow {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--smoke);
+}
+
+.bb-headline {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 44px;
+  letter-spacing: -1.5px;
+  line-height: 1.05;
+  color: var(--ink);
+}
+.bb-headline em {
+  color: var(--ember);
+  font-style: italic;
+}
+
+.bb-body {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--smoke);
+  max-width: 56ch;
+}
+.bb-body em {
+  color: var(--ink);
+  font-style: italic;
+  font-weight: 500;
+}
+.bb-body strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.bb-tip {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 13px;
+  color: var(--smoke);
+  background: rgba(232, 90, 44, 0.06);
+  border-left: 2px solid var(--ember);
+  padding: 12px 14px;
+  border-radius: 0 8px 8px 0;
+  max-width: 56ch;
+}
+
+.bb-mono {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 14px;
+  color: var(--ember);
+  padding: 0 2px;
+}
+
+/* Footer */
+.bb-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(14, 17, 22, 0.06);
+}
+
+.bb-dots {
+  display: flex;
+  gap: 8px;
+}
+.bb-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--smoke-soft);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.bb-dot.active {
+  background: var(--ember);
+  transform: scale(1.2);
+}
+
+.bb-cta {
+  background: var(--ink);
+  color: var(--cream);
+  border: 1px solid var(--ink);
+  border-radius: 12px;
+  padding: 14px 24px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.1s ease;
+}
+.bb-cta:hover {
+  opacity: 0.92;
+}
+.bb-cta:active {
+  transform: scale(0.98);
+}
+.bb-cta:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+@media (max-width: 640px) {
+  .bb-card {
+    padding: 32px 24px;
+    border-radius: 16px;
+    min-height: 0;
+  }
+  .bb-headline {
+    font-size: 34px;
+  }
+}
