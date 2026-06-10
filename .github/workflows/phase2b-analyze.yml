@@ -37,12 +37,14 @@ jobs:
           token: ${{ secrets.LANDING_REPO_TOKEN }}
           path: landing
 
-      # setup-node@v5 activeert Corepack o.b.v. het root packageManager-veld
-      # (pnpm) en faalt omdat pnpm niet op de runner staat. De analyzer gebruikt
-      # alleen npm → blijf op @v4.
-      - uses: actions/setup-node@v4
+      # setup-node@v5 wil via package-manager-cache Corepack/pnpm activeren (root
+      # packageManager-veld pnpm@9.12.0) en crasht omdat pnpm niet op de runner
+      # staat. De analyzer gebruikt alleen npm → cache uit, dan draait v5 (node24)
+      # schoon en verdwijnt de node20-deprecation-warning.
+      - uses: actions/setup-node@v5
         with:
           node-version: "22"
+          package-manager-cache: false
 
       - name: Install analyzer deps
         working-directory: scripts/phase2b
