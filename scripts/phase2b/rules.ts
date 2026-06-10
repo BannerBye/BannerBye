@@ -20,7 +20,15 @@ export interface RemoteRules {
 }
 
 const here = dirname(fileURLToPath(import.meta.url));
-export const RULES_PATH = resolve(here, '../../rules.json');
+
+/**
+ * Doelbestand: in CI wijst RULES_FILE naar de uitgecheckte landing-repo
+ * (bv. $GITHUB_WORKSPACE/landing/rules.json). Lokaal valt 't terug op de
+ * canonieke repo/rules.json.
+ */
+export const RULES_PATH = process.env.RULES_FILE
+  ? resolve(process.env.RULES_FILE)
+  : resolve(here, '../../rules.json');
 
 export async function loadRules(): Promise<RemoteRules> {
   const raw = await readFile(RULES_PATH, 'utf8');

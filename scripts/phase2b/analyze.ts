@@ -20,7 +20,7 @@
 
 import { appendFile, writeFile } from 'node:fs/promises';
 import { chromium, type Browser } from 'playwright';
-import { setRemoteKeywords } from '../../src/lib/autoclick/keywords.ts';
+import { setRemoteKeywords, normalize } from '../../src/lib/autoclick/keywords.ts';
 import {
   getRedis,
   getHostsToAnalyze,
@@ -31,6 +31,19 @@ import {
 import { detectInPage, type DetectionResult } from './detect.ts';
 import { classify, type Classification } from './classify.ts';
 import { loadRules, mergeRejectKeywords, saveRules } from './rules.ts';
+import { judgeKeyword, isAutoApprove, type Judgement } from './claude.ts';
+
+/** Een voorgesteld keyword met de context die de judge nodig heeft. */
+interface Proposal {
+  keyword: string;
+  buttonText: string;
+  bannerSnippet: string;
+  hostname: string;
+}
+
+interface JudgedProposal extends Proposal {
+  judgement: Judgement;
+}
 
 interface HostResult {
   host: string;
@@ -85,38 +98,57 @@ async function analyzeHost(
 
 function buildSummary(
   results: HostResult[],
-  addedKeywords: string[],
+  applied: JudgedProposal[],
+  needsReview: JudgedProposal[],
 ): string {
-  const byCat: Record<string, HostResult[]> = {};
-  for (const r of results) {
-    (byCat[r.classification.category] ??= []).push(r);
-  }
   const lines: string[] = [];
-  lines.push('## BannerBye Phase 2B — analyse-run');
+  lines.push('## BannerBye Phase 2C — analyse-run');
   lines.push('');
   lines.push(`Hosts onderzocht: **${results.length}**`);
   lines.push('');
-  if (addedKeywords.length) {
-    lines.push(`### Voorgestelde reject-keywords (${addedKeywords.length})`);
-    addedKeywords.forEach((k) => lines.push(`- \`${k}\``));
-    lines.push('');
+  lines.push(`### ✅ Automatisch toegepast (${applied.length})`);
+  if (applied.length) {
+    applied.forEach((p) =>
+      lines.push(
+        `- \`${p.keyword}\` — ${p.hostname} · Claude: ${p.judgement.confidence} · ${p.judgement.reason}`,
+      ),
+    );
   } else {
-    lines.push('_Geen nieuwe keyword-voorstellen deze run._');
-    lines.push('');
+    lines.push('_Niets automatisch toegepast deze run._');
   }
-  for (const cat of Object.keys(byCat)) {
-    lines.push(`### ${cat} (${byCat[cat].length})`);
-    for (const r of byCat[cat]) {
-      const cmps = r.classification.cmps.length
-        ? ` · CMP: ${r.classification.cmps.join(', ')}`
-        : '';
-      const kws = r.classification.proposedKeywords.length
-        ? ` · → ${r.classification.proposedKeywords.map((k) => `\`${k}\``).join(', ')}`
-        : '';
-      lines.push(`- **${r.host}**${cmps} — ${r.classification.reason}${kws}`);
-    }
-    lines.push('');
+  lines.push('');
+  lines.push(`### 🕵️ Naar review (${needsReview.length})`);
+  if (needsReview.length) {
+    needsReview.forEach((p) =>
+      lines.push(
+        `- \`${p.keyword}\` — ${p.hostname} · Claude: ${p.judgement.verdict}/${p.judgement.confidence} · ${p.judgement.reason}`,
+      ),
+    );
+  } else {
+    lines.push('_Geen randgevallen deze run._');
   }
+  lines.push('');
+  return lines.join('\n');
+}
+
+/** PR-body voor de needs-review draft-PR. */
+function buildPrBody(needsReview: JudgedProposal[]): string {
+  const lines: string[] = [];
+  lines.push('## BannerBye Phase 2C — keywords naar review');
+  lines.push('');
+  lines.push(
+    'Deze keywords kwamen uit de site-analyse maar Claude keurde ze **niet met hoge zekerheid** goed — daarom geen auto-apply. Beoordeel handmatig en merge als je akkoord bent.',
+  );
+  lines.push('');
+  needsReview.forEach((p) => {
+    lines.push(`### \`${p.keyword}\``);
+    lines.push(`- Site: ${p.hostname}`);
+    lines.push(`- Originele knop: "${p.buttonText}"`);
+    lines.push(
+      `- Claude: **${p.judgement.verdict} / ${p.judgement.confidence}** — ${p.judgement.reason}`,
+    );
+    lines.push('');
+  });
   return lines.join('\n');
 }
 
@@ -154,16 +186,28 @@ async function main(): Promise<void> {
 
   const browser = await chromium.launch({ args: ['--no-sandbox'] });
   const results: HostResult[] = [];
-  const allProposed: string[] = [];
+  const proposals = new Map<string, Proposal>();
 
   try {
     for (const work of hosts) {
       console.log(`→ ${work.hostname} (${work.reportIds.length} meldingen)`);
       const result = await analyzeHost(browser, work);
       results.push(result);
-      allProposed.push(...result.classification.proposedKeywords);
 
-      // Bewaar analyse + markeer meldingen onderzocht (idempotent).
+      // Verzamel voorstellen mét context (knop-tekst + banner) voor de judge.
+      for (const kw of result.classification.proposedKeywords) {
+        if (proposals.has(kw)) continue;
+        const cand = result.detection?.candidates.find(
+          (c) => normalize(c.text) === kw,
+        );
+        proposals.set(kw, {
+          keyword: kw,
+          buttonText: cand?.text ?? kw,
+          bannerSnippet: result.detection?.bannerTextSnippet ?? '',
+          hostname: work.hostname,
+        });
+      }
+
       await writeAnalysis(redis, work.hostname, {
         hostname: work.hostname,
         category: result.classification.category,
@@ -179,17 +223,63 @@ async function main(): Promise<void> {
     await browser.close();
   }
 
-  // Merge keyword-voorstellen in rules.json.
-  const { added } = mergeRejectKeywords(rules, allProposed);
-  if (added.length) {
-    await saveRules(rules);
+  // Claude beoordeelt elk voorstel; alleen approve+high mag auto-live.
+  const judged: JudgedProposal[] = [];
+  for (const p of proposals.values()) {
+    const judgement = await judgeKeyword(p);
+    console.log(
+      `   judge "${p.keyword}" → ${judgement.verdict}/${judgement.confidence}`,
+    );
+    judged.push({ ...p, judgement });
+  }
+  const applied = judged.filter((j) => isAutoApprove(j.judgement));
+  const needsReview = judged.filter((j) => !isAutoApprove(j.judgement));
+
+  // Approved-high → toepassen op rules.json (de landing-checkout) voor auto-deploy.
+  const { added } = mergeRejectKeywords(
+    rules,
+    applied.map((p) => p.keyword),
+  );
+  if (added.length) await saveRules(rules);
+
+  // Needs-review → apart bestand + PR-body voor de draft-PR-stap.
+  await writeFile(
+    'needs-review.json',
+    JSON.stringify(
+      needsReview.map((p) => ({
+        keyword: p.keyword,
+        hostname: p.hostname,
+        buttonText: p.buttonText,
+        verdict: p.judgement.verdict,
+        confidence: p.judgement.confidence,
+        reason: p.judgement.reason,
+      })),
+      null,
+      2,
+    ) + '\n',
+  );
+  if (needsReview.length) {
+    const prBody = buildPrBody(needsReview);
+    await writeFile('pr-body.md', prBody + '\n');
+    await setOutput('pr_body', prBody);
   }
 
-  const summary = buildSummary(results, added);
+  const summary = buildSummary(results, applied, needsReview);
   await writeFile('summary.md', summary + '\n');
-  await setOutput('changed', added.length ? 'true' : 'false');
+
+  const commitMsg =
+    `Phase 2C: ${added.length} keyword(s) auto-toegepast\n\n` +
+    applied
+      .map((p) => `- ${p.keyword} (${p.hostname}): ${p.judgement.reason}`)
+      .join('\n');
+
+  await setOutput('applied', added.length ? 'true' : 'false');
+  await setOutput('needs_review', needsReview.length ? 'true' : 'false');
+  await setOutput('commit_message', commitMsg);
   await setOutput('summary', summary);
-  console.log(`\nKlaar. Nieuwe keywords: ${added.length}.`);
+  console.log(
+    `\nKlaar. Auto-toegepast: ${added.length}. Naar review: ${needsReview.length}.`,
+  );
 }
 
 main().catch((err) => {

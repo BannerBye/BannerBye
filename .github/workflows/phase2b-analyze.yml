@@ -1,7 +1,9 @@
-name: Phase 2B — analyze reported sites
+name: Phase 2B/2C — analyze reported sites
 
-# Headless analyse van gemelde "broken sites" + draft-PR met keyword-voorstellen.
-# Draait dagelijks en handmatig. Opent NOOIT een auto-merge — alleen een draft-PR.
+# Headless analyse van gemelde "broken sites" → Claude beoordeelt voorgestelde
+# keywords. Approve+high gaat AUTOMATISCH live (commit naar landing-repo →
+# Vercel auto-deploy). Randgevallen → draft-PR (het vangnet). Nooit auto-merge
+# van de review-PR.
 
 on:
   schedule:
@@ -25,9 +27,20 @@ jobs:
   analyze:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - name: Checkout extensie-repo (analyzer + keyword-logica)
+        uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v5
+      - name: Checkout landing-repo (bannerbye.com bron)
+        uses: actions/checkout@v5
+        with:
+          repository: BannerBye/bannerbye-landing
+          token: ${{ secrets.LANDING_REPO_TOKEN }}
+          path: landing
+
+      # setup-node@v5 activeert Corepack o.b.v. het root packageManager-veld
+      # (pnpm) en faalt omdat pnpm niet op de runner staat. De analyzer gebruikt
+      # alleen npm → blijf op @v4.
+      - uses: actions/setup-node@v4
         with:
           node-version: "22"
 
@@ -39,24 +52,49 @@ jobs:
         working-directory: scripts/phase2b
         run: npx playwright install --with-deps chromium
 
-      - name: Run analyzer
+      - name: Run analyzer (analyse + Claude-judge + auto-apply)
         id: analyze
         working-directory: scripts/phase2b
         env:
           KV_REST_API_URL: ${{ secrets.KV_REST_API_URL }}
           KV_REST_API_TOKEN: ${{ secrets.KV_REST_API_TOKEN }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           MAX_HOSTS: ${{ github.event.inputs.max_hosts || '25' }}
+          RULES_FILE: ${{ github.workspace }}/landing/rules.json
         run: node --experimental-strip-types analyze.ts
 
-      - name: Open draft PR with keyword proposals
-        if: steps.analyze.outputs.changed == 'true'
+      # Approve+high → meteen live via de Git-gekoppelde landing-repo.
+      - name: Auto-apply approved keywords (→ Vercel auto-deploy)
+        if: steps.analyze.outputs.applied == 'true'
+        working-directory: landing
+        env:
+          COMMIT_MESSAGE: ${{ steps.analyze.outputs.commit_message }}
+        run: |
+          git config user.name "bannerbye-bot"
+          git config user.email "hello@bannerbye.com"
+          git add rules.json
+          git commit -m "$COMMIT_MESSAGE"
+          git push origin HEAD:main
+
+      # Randgevallen: zet ze in rules.json op een branch + open draft-PR.
+      - name: Stage needs-review keywords
+        if: steps.analyze.outputs.needs_review == 'true'
+        working-directory: scripts/phase2b
+        env:
+          RULES_FILE: ${{ github.workspace }}/landing/rules.json
+        run: node --experimental-strip-types apply-needs-review.ts
+
+      - name: Draft-PR voor needs-review keywords
+        if: steps.analyze.outputs.needs_review == 'true'
         uses: peter-evans/create-pull-request@v7
         with:
-          branch: phase2b/keyword-proposals
+          path: landing
+          token: ${{ secrets.LANDING_REPO_TOKEN }}
+          branch: phase2c/keyword-review
           base: main
           draft: true
           add-paths: rules.json
-          commit-message: "Phase 2B: voorgestelde reject-keywords uit site-analyse"
-          title: "Phase 2B — voorgestelde reject-keywords"
-          body: ${{ steps.analyze.outputs.summary }}
-          labels: phase-2b, automated
+          commit-message: "Phase 2C: keywords naar review"
+          title: "Phase 2C — keywords naar review"
+          body: ${{ steps.analyze.outputs.pr_body }}
+          labels: phase-2c, automated, needs-review
