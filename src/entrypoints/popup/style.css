@@ -30,6 +30,12 @@ body {
 
 body {
   padding: 0;
+  /* v1.1.0 Safari Mac fix: popover heeft onzichtbare hoogte-clip rond ~600px
+     waardoor de footer (Share / Report broken site) onbereikbaar werd.
+     Chrome/Firefox doen auto-scroll; Safari niet. Forceer hier expliciet
+     scrolling. iPhone full-screen mode overschrijft dit verderop. */
+  max-height: 600px;
+  overflow-y: auto;
 }
 
 .bb-loading {
