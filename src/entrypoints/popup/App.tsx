@@ -488,9 +488,9 @@ export function App() {
           className="bb-link"
           onClick={shareStats}
           disabled={state.stats.blocked === 0}
-          title={state.stats.blocked === 0 ? 'Refuse a banner first' : 'Download share image of your stats'}
+          title={state.stats.blocked === 0 ? 'Refuse a banner first' : 'Saves a shareable PNG image of your stats to your downloads'}
         >
-          Share story →
+          Download stats image →
         </button>
         <button
           type="button"

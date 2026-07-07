@@ -113,8 +113,6 @@ export function detectInPage(): DetectionResult {
     }
   }
 
-  const bannerVisible = banner !== null;
-
   // --- 3. Klikbare elementen binnen de banner verzamelen ---
   const candidates: ClickCandidate[] = [];
   const seen = new Set<string>();
@@ -141,12 +139,38 @@ export function detectInPage(): DetectionResult {
 
   const bannerTextSnippet = banner ? textOf(banner).slice(0, 300) : '';
 
+  // --- 4. Validatie: is dit ÉCHT een consent-banner? ---
+  // De container-zoeker matcht op elk cookie-context-woord, inclusief het zwakke
+  // 'privacy'. Daardoor werd bv. een site-footer met alleen een "Privacy Policy"-
+  // link soms als banner gezien (→ ruis: categorie "unknown"). Eis daarom een
+  // STERK cookie/consent-signaal in de tekst, OF minstens één knop die op een
+  // consent-actie lijkt (accept/reject/manage/…). Een losse "Privacy Policy"-
+  // link telt niet.
+  const STRONG_CONSENT = [
+    'cookie', 'consent', 'gdpr', 'toestemming', 'cookiebeleid',
+    'cookieverklaring', 'einwilligung', 'we use cookies', 'wij gebruiken cookies',
+  ];
+  const ACTION_HINTS = [
+    'accept', 'agree', 'allow', 'reject', 'decline', 'refuse', 'manage',
+    'preferen', 'setting', 'customi', 'more options', 'got it', 'akkoord',
+    'accepteer', 'weiger', 'afwijz', 'toestaan', 'beheer', 'instellingen',
+    'aanpassen', 'noodzakelij', 'necessary', 'essential', 'zustimm',
+    'akzeptier', 'ablehn', 'accepter', 'refuser',
+  ];
+  const bannerFull = banner ? textOf(banner).toLowerCase() : '';
+  const textHasConsent = STRONG_CONSENT.some((wd) => bannerFull.includes(wd));
+  const hasActionButton = candidates.some((c) => {
+    const t = c.text.toLowerCase();
+    return ACTION_HINTS.some((a) => t.includes(a));
+  });
+  const realBanner = banner !== null && (textHasConsent || hasActionButton);
+
   return {
     finalUrl: location.href,
     cmps,
     hasTcf,
-    bannerVisible,
-    candidates,
-    bannerTextSnippet,
+    bannerVisible: realBanner,
+    candidates: realBanner ? candidates : [],
+    bannerTextSnippet: realBanner ? bannerTextSnippet : '',
   };
 }
