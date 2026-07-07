@@ -142,3 +142,81 @@ export async function clearPendingCelebration(id: string): Promise<LocalStats> {
   await chrome.storage.local.set({ [STATS_KEY]: next });
   return next;
 }
+
+/** Max aantal gemelde hosts dat we lokaal "in de gaten houden" (#reward-1). */
+const REPORTED_SITES_CAP = 50;
+
+/**
+ * Onthoud lokaal dat de gebruiker `hostname` als kapot heeft gemeld, zodat we
+ * later kunnen vieren wanneer BannerBye er alsnog een banner blokkeert.
+ * Puur lokaal (chrome.storage.local), geen server, geen identiteit. Idempotent
+ * en gecapt op de meest recente REPORTED_SITES_CAP hosts.
+ *
+ * v0.3.0: nieuw voor "jouw melding is nu gekild"-card (#reward-1).
+ */
+export async function addReportedSite(hostname: string): Promise<LocalStats> {
+  const host = hostname.trim().toLowerCase();
+  if (!host) return getStats();
+  const current = await getStats();
+  // Al gemeld (en nog niet opgelost) of al als opgelost in de wachtrij? Skip.
+  if (
+    current.reportedSites.includes(host) ||
+    current.pendingReportFixed.includes(host)
+  ) {
+    return current;
+  }
+  const nextReported = [host, ...current.reportedSites].slice(
+    0,
+    REPORTED_SITES_CAP,
+  );
+  const next: LocalStats = { ...current, reportedSites: nextReported };
+  await chrome.storage.local.set({ [STATS_KEY]: next });
+  return next;
+}
+
+/**
+ * Markeer een eerder gemelde host als opgelost: haal 'm uit reportedSites en
+ * zet 'm in pendingReportFixed zodat de popup de celebration card toont.
+ * No-op (returnt false) als de host niet gemeld was of al in de wachtrij staat.
+ *
+ * v0.3.0: nieuw voor "jouw melding is nu gekild"-card (#reward-1).
+ */
+export async function markReportFixed(
+  hostname: string,
+): Promise<{ stats: LocalStats; changed: boolean }> {
+  const host = hostname.trim().toLowerCase();
+  const current = await getStats();
+  if (!host || !current.reportedSites.includes(host)) {
+    return { stats: current, changed: false };
+  }
+  const next: LocalStats = {
+    ...current,
+    reportedSites: current.reportedSites.filter((h) => h !== host),
+    pendingReportFixed: current.pendingReportFixed.includes(host)
+      ? current.pendingReportFixed
+      : [...current.pendingReportFixed, host],
+  };
+  await chrome.storage.local.set({ [STATS_KEY]: next });
+  return { stats: next, changed: true };
+}
+
+/**
+ * Verwijder één host uit pendingReportFixed (na popup-dismiss van de card).
+ *
+ * v0.3.0: nieuw voor "jouw melding is nu gekild"-card (#reward-1).
+ */
+export async function clearPendingReportFixed(
+  hostname: string,
+): Promise<LocalStats> {
+  const host = hostname.trim().toLowerCase();
+  const current = await getStats();
+  if (!current.pendingReportFixed.includes(host)) {
+    return current;
+  }
+  const next: LocalStats = {
+    ...current,
+    pendingReportFixed: current.pendingReportFixed.filter((h) => h !== host),
+  };
+  await chrome.storage.local.set({ [STATS_KEY]: next });
+  return next;
+}

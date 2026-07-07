@@ -36,7 +36,9 @@ import {
   markInstalled,
   incrementBlocked,
   markUnlockedAndPending,
+  markReportFixed,
 } from '@/lib/storage';
+import { normalizeHost } from '@/lib/host';
 import type { SyncedSettings } from '@/lib/types';
 import { computeNewUnlocks, MILESTONES } from '@/lib/milestones';
 import {
@@ -310,9 +312,12 @@ async function syncRankBadge(): Promise<void> {
       stats.unlockedMilestones.includes(m.id),
     ).length;
 
-    if (stats.pendingCelebrations.length > 0) {
+    if (
+      stats.pendingCelebrations.length > 0 ||
+      stats.pendingReportFixed.length > 0
+    ) {
       // Celebration heeft prioriteit. setCelebrationBadge zorgt voor 🎉.
-      // Niet hier overschrijven.
+      // Niet hier overschrijven (geldt ook voor "melding gekild"-cards).
       return;
     }
 
@@ -333,7 +338,10 @@ async function syncRankBadge(): Promise<void> {
  * scripts sturen alleen de message. Voorkomt race tussen popup-display en
  * achtergrond-detectie.
  */
-async function handleBannerBlocked(tabId: number): Promise<void> {
+async function handleBannerBlocked(
+  tabId: number,
+  hostname: string | null,
+): Promise<void> {
   try {
     const stats = await incrementBlocked();
     await flashTabBadge(tabId);
@@ -342,6 +350,14 @@ async function handleBannerBlocked(tabId: number): Promise<void> {
     if (newlyUnlocked.length > 0) {
       await markUnlockedAndPending(newlyUnlocked.map((m) => m.id));
       await setCelebrationBadge();
+    }
+
+    // #reward-1: als dit een host is die de gebruiker ooit als kapot meldde,
+    // is de melding nu "opgelost" — zet 'm klaar voor een celebration card.
+    // Puur lokaal; markReportFixed is een no-op als de host niet gemeld was.
+    if (hostname) {
+      const { changed } = await markReportFixed(hostname);
+      if (changed) await setCelebrationBadge();
     }
   } catch (err) {
     console.warn('[BannerBye] handleBannerBlocked failed:', err);
@@ -411,7 +427,9 @@ export default defineBackground({
   // en checkt op nieuwe milestone-unlocks (zie #86).
   chrome.runtime.onMessage.addListener((msg, sender) => {
     if (msg?.type === 'bb:banner-blocked' && sender.tab?.id !== undefined) {
-      void handleBannerBlocked(sender.tab.id);
+      // Hostname uit de tab-URL (voor #reward-1 melding-gekild-detectie).
+      const host = sender.tab.url ? normalizeHost(sender.tab.url) : null;
+      void handleBannerBlocked(sender.tab.id, host);
     }
     return false; // Geen async response.
   });

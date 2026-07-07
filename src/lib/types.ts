@@ -39,6 +39,19 @@ export interface LocalStats {
   unlockedMilestones: string[];
   /** v0.2.0: IDs van milestones waarvoor we de celebration card nog moeten tonen. */
   pendingCelebrations: string[];
+  /**
+   * v0.3.0: hostnames die de gebruiker als kapot heeft gemeld en die we nog
+   * "in de gaten houden" — puur lokaal, geen tracking, geen server-koppeling.
+   * Zodra BannerBye op zo'n host alsnog een banner blokkeert, geldt de melding
+   * als opgelost en tonen we een celebration card (#reward-1). Gecapt op de
+   * meest recente REPORTED_SITES_CAP hosts.
+   */
+  reportedSites: string[];
+  /**
+   * v0.3.0: gemelde hosts waarvoor we de "jouw melding is nu gekild"-card nog
+   * moeten tonen. Subset-flow gelijk aan pendingCelebrations, maar per hostname.
+   */
+  pendingReportFixed: string[];
 }
 
 /**
@@ -63,4 +76,6 @@ export const DEFAULT_STATS: LocalStats = {
   installedAt: 0,
   unlockedMilestones: [],
   pendingCelebrations: [],
+  reportedSites: [],
+  pendingReportFixed: [],
 };

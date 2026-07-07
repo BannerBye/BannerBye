@@ -18,6 +18,8 @@ import {
   setPausedForSite,
   getStats,
   clearPendingCelebration,
+  addReportedSite,
+  clearPendingReportFixed,
 } from '@/lib/storage';
 import { isHostPaused, normalizeHost } from '@/lib/host';
 import { getMilestoneById, MILESTONES, type Milestone } from '@/lib/milestones';
@@ -25,6 +27,23 @@ import { downloadShareCard, downloadStatsCard } from '@/lib/share-card';
 import type { LocalStats, SyncedSettings } from '@/lib/types';
 
 const REPORT_ENDPOINT = 'https://bannerbye.com/api/report';
+
+/**
+ * v0.2.1: review-link in de footer (ASO — reviews aanjagen).
+ * Per browser de juiste store-reviewpagina. Pas zichtbaar vanaf
+ * REVIEW_THRESHOLD geblokkeerde banners: we vragen alleen op het
+ * moment dat de extensie zich bewezen heeft. Geen prompt, geen
+ * nag — één stille link. (Anti-feature manifest: no pressure.)
+ */
+const REVIEW_URLS: Record<string, string> = {
+  chrome:
+    'https://chromewebstore.google.com/detail/gjeafgcfhehafjioplpjkocbglmhhbfg/reviews',
+  firefox: 'https://addons.mozilla.org/firefox/addon/bannerbye/reviews/',
+  safari: 'https://apps.apple.com/app/id6771131989?action=write-review',
+};
+const REVIEW_URL =
+  REVIEW_URLS[import.meta.env.BROWSER] ?? REVIEW_URLS.chrome!;
+const REVIEW_THRESHOLD = 100;
 
 type ReportStatus = 'idle' | 'sending' | 'sent' | 'error';
 
@@ -38,9 +57,16 @@ interface PopupState {
   reportModal: {
     hostname: string;
     message: string;
+    /** v0.3.0: optioneel e-mailadres om een seintje te krijgen bij een fix. */
+    email: string;
     status: ReportStatus;
     errorText: string;
   } | null;
+}
+
+/** Losse, tolerante e-mailcheck — alleen om onzin te weren, niet streng. */
+function looksLikeEmail(value: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
 }
 
 async function getActiveTabHost(): Promise<string | null> {
@@ -52,7 +78,14 @@ async function getActiveTabHost(): Promise<string | null> {
 export function App() {
   const [state, setState] = useState<PopupState>({
     settings: { enabled: true, pausedSites: [], onboardingCompleted: false },
-    stats: { blocked: 0, installedAt: 0, unlockedMilestones: [], pendingCelebrations: [] },
+    stats: {
+      blocked: 0,
+      installedAt: 0,
+      unlockedMilestones: [],
+      pendingCelebrations: [],
+      reportedSites: [],
+      pendingReportFixed: [],
+    },
     hostname: null,
     loading: true,
     reportModal: null,
@@ -103,6 +136,19 @@ export function App() {
     // dat de "🎉" vervangt door het persistente rang-getal (#85).
   }
 
+  /**
+   * #reward-1: eerste host in pendingReportFixed → toon de "jouw melding is nu
+   * gekild"-card. Losstaand van milestone-celebrations.
+   */
+  const currentReportFixed: string | null =
+    state.stats.pendingReportFixed[0] ?? null;
+
+  async function dismissReportFixed() {
+    if (!currentReportFixed) return;
+    const nextStats = await clearPendingReportFixed(currentReportFixed);
+    setState((s) => ({ ...s, stats: nextStats }));
+  }
+
   /** Share-card download (#87). Genereert 1200x630 PNG met milestone-info. */
   function shareCelebration() {
     if (!currentCelebration) return;
@@ -136,6 +182,7 @@ export function App() {
       reportModal: {
         hostname: state.hostname!,
         message: '',
+        email: '',
         status: 'idle',
         errorText: '',
       },
@@ -149,9 +196,19 @@ export function App() {
     }));
   }
 
+  function updateReportEmail(email: string) {
+    setState((s) => ({
+      ...s,
+      reportModal: s.reportModal ? { ...s.reportModal, email } : null,
+    }));
+  }
+
   async function sendReport() {
     if (!state.reportModal) return;
-    const { hostname, message } = state.reportModal;
+    const { hostname, message, email } = state.reportModal;
+    // Alleen een plausibel e-mailadres meesturen; leeg = volledig anoniem.
+    const trimmedEmail = email.trim();
+    const emailToSend = looksLikeEmail(trimmedEmail) ? trimmedEmail : '';
     setState((s) => ({
       ...s,
       reportModal: s.reportModal
@@ -166,12 +223,16 @@ export function App() {
           hostname,
           version: chrome.runtime.getManifest().version,
           message,
+          ...(emailToSend ? { email: emailToSend } : {}),
         }),
       });
       if (!res.ok) {
         const data = (await res.json().catch(() => ({}))) as { error?: string };
         throw new Error(data.error ?? `HTTP ${res.status}`);
       }
+      // #reward-1: onthoud lokaal dat we deze host meldden, zodat we later
+      // kunnen vieren wanneer BannerBye er alsnog een banner blokkeert.
+      void addReportedSite(hostname);
       setState((s) => ({
         ...s,
         reportModal: s.reportModal
@@ -197,6 +258,12 @@ export function App() {
 
   function closeReportModal() {
     setState((s) => ({ ...s, reportModal: null }));
+  }
+
+  /** Opent de store-reviewpagina in een nieuw tabblad en sluit de popup. */
+  function openReview() {
+    void chrome.tabs.create({ url: REVIEW_URL });
+    window.close();
   }
 
   if (state.loading) {
@@ -245,6 +312,20 @@ export function App() {
                   maxLength={2000}
                   disabled={state.reportModal.status === 'sending'}
                 />
+                <input
+                  className="bb-modal-input"
+                  type="email"
+                  placeholder="Email me when it's fixed (optional)"
+                  value={state.reportModal.email}
+                  onChange={(e) => updateReportEmail(e.target.value)}
+                  maxLength={254}
+                  autoComplete="email"
+                  disabled={state.reportModal.status === 'sending'}
+                />
+                <p className="bb-modal-fineprint">
+                  Leave it blank to stay fully anonymous. If you add it, we only
+                  use it to send one heads-up when this banner is handled.
+                </p>
                 {state.reportModal.status === 'error' && (
                   <p className="bb-modal-error">
                     Couldn't send: {state.reportModal.errorText}
@@ -299,6 +380,27 @@ export function App() {
             type="button"
             className="bb-celebration-dismiss"
             onClick={() => void dismissCelebration()}
+            aria-label="Dismiss"
+          >
+            ✕
+          </button>
+        </section>
+      )}
+
+      {currentReportFixed && (
+        <section className="bb-celebration bb-celebration-fixed" aria-live="polite">
+          <span className="bb-celebration-emoji" aria-hidden="true">✓</span>
+          <div className="bb-celebration-body">
+            <p className="bb-celebration-label">A banner you reported</p>
+            <p className="bb-celebration-name">
+              Now killed on{' '}
+              <span className="bb-host">{currentReportFixed}</span>
+            </p>
+          </div>
+          <button
+            type="button"
+            className="bb-celebration-dismiss"
+            onClick={() => void dismissReportFixed()}
             aria-label="Dismiss"
           >
             ✕
@@ -397,6 +499,16 @@ export function App() {
         >
           Report broken site →
         </button>
+        {state.stats.blocked >= REVIEW_THRESHOLD && (
+          <button
+            type="button"
+            className="bb-link"
+            onClick={openReview}
+            title="Leave a review — it keeps BannerBye visible"
+          >
+            Rate BannerBye →
+          </button>
+        )}
       </footer>
     </div>
   );

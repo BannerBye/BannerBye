@@ -7,10 +7,16 @@
  */
 
 import { readFile } from 'node:fs/promises';
-import { loadRules, mergeRejectKeywords, saveRules } from './rules.ts';
+import {
+  loadRules,
+  mergeProposals,
+  saveRules,
+  type KeywordList,
+} from './rules.ts';
 
 interface NeedsReviewEntry {
   keyword: string;
+  list?: KeywordList;
 }
 
 async function main(): Promise<void> {
@@ -22,16 +28,20 @@ async function main(): Promise<void> {
     return;
   }
   const entries = JSON.parse(raw) as NeedsReviewEntry[];
-  const keywords = entries.map((e) => e.keyword).filter(Boolean);
-  if (!keywords.length) {
+  const proposals = entries
+    .filter((e) => e.keyword)
+    .map((e) => ({ keyword: e.keyword, list: e.list ?? 'reject' }));
+  if (!proposals.length) {
     console.log('Geen needs-review keywords.');
     return;
   }
   const rules = await loadRules();
-  const { added } = mergeRejectKeywords(rules, keywords);
+  const { added } = mergeProposals(rules, proposals);
   if (added.length) {
     await saveRules(rules);
-    console.log(`Needs-review toegevoegd voor PR: ${added.join(', ')}`);
+    console.log(
+      `Needs-review toegevoegd voor PR: ${added.map((a) => `${a.keyword}[${a.list}]`).join(', ')}`,
+    );
   } else {
     console.log('Needs-review keywords stonden al in rules.json.');
   }

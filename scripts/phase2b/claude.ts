@@ -23,6 +23,8 @@ export interface Judgement {
   reason: string;
 }
 
+export type KeywordList = 'reject' | 'ambiguous' | 'stepInto';
+
 export interface JudgeInput {
   /** Genormaliseerd voorgesteld keyword, bv. "reject additional cookies". */
   keyword: string;
@@ -32,16 +34,29 @@ export interface JudgeInput {
   bannerSnippet: string;
   /** Hostname waar het voorstel vandaan komt. */
   hostname: string;
+  /** Doellijst — bepaalt hoe streng we oordelen. Default 'reject'. */
+  list?: KeywordList;
 }
 
-const SYSTEM = `Je beoordeelt of een knop-tekst van een cookie-banner betekent dat de gebruiker consent WEIGERT (alle niet-noodzakelijke cookies afwijst).
+const SYSTEM = `Je beoordeelt of een knop-tekst van een cookie-banner veilig automatisch aangeklikt mag worden door een browser-extensie die namens de gebruiker consent WEIGERT. Het keyword wordt bij approve+high automatisch live op miljoenen sites. Een fout is duur.
 
-Dit keyword wordt, als je goedkeurt met hoge zekerheid, automatisch toegevoegd aan een browser-extensie die deze knop AUTOMATISCH aanklikt op miljoenen sites. Een fout is duur: keur NOOIT goed als de tekst ook maar enigszins een ACCEPTEER-knop, een "instellingen/meer opties"-knop, of iets dubbelzinnigs kan zijn.
+Er zijn drie soorten voorstellen:
+- reject: een directe weiger-knop. Keur alleen approve/high bij een ondubbelzinnige weiger-betekenis (bv. "reject additional cookies", "alleen noodzakelijke cookies", "decline optional cookies").
+- ambiguous: een "opslaan/bevestigen"-knop in een detail-paneel. Alleen veilig als hij de keuze bewaart ZONDER extra consent te geven (bv. "save necessary only", "bevestig mijn keuze"). Bij enige kans dat hij toestemming vastlegt: NIET hoog.
+- stepInto: een knop die alleen een instellingen-/detail-paneel OPENT (geeft zelf geen consent). Keur approve/high als het duidelijk een "aanpassen / meer opties / instellingen"-knop is.
 
-Keur alleen 'approve' + 'high' goed bij een ondubbelzinnige weiger-betekenis (bv. "reject additional cookies", "alleen noodzakelijke cookies", "decline optional cookies").
+Keur NOOIT goed als de knop consent kan GEVEN (accepteren/toestaan/akkoord).
 
 Antwoord UITSLUITEND met JSON, geen extra tekst:
 {"verdict":"approve"|"reject","confidence":"high"|"medium"|"low","reason":"<korte uitleg>"}`;
+
+const LIST_HINT: Record<KeywordList, string> = {
+  reject: 'Type: directe weiger-knop. Betekent deze knop ondubbelzinnig consent weigeren?',
+  ambiguous:
+    'Type: opslaan/bevestigen-knop in een detail-paneel. Keur alleen hoog als hij de (default-uit) keuze bewaart zonder extra consent te geven; twijfel = niet hoog.',
+  stepInto:
+    'Type: knop die alleen een instellingen-/detail-paneel opent (geen consent). Keur hoog als het duidelijk een aanpassen/meer-opties/instellingen-knop is.',
+};
 
 function safeDefault(reason: string): Judgement {
   return { verdict: 'reject', confidence: 'low', reason };
@@ -51,13 +66,16 @@ export async function judgeKeyword(input: JudgeInput): Promise<Judgement> {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) return safeDefault('ANTHROPIC_API_KEY ontbreekt');
 
+  const list: KeywordList = input.list ?? 'reject';
   const userMsg = [
+    LIST_HINT[list],
+    ``,
     `Voorgesteld keyword (genormaliseerd): "${input.keyword}"`,
     `Originele knop-tekst: "${input.buttonText}"`,
     `Site: ${input.hostname}`,
     `Banner-context (ingekort): "${input.bannerSnippet.slice(0, 280)}"`,
     ``,
-    `Betekent deze knop ondubbelzinnig "consent weigeren"? Geef je oordeel als JSON.`,
+    `Geef je oordeel als JSON.`,
   ].join('\n');
 
   try {

@@ -107,3 +107,63 @@ export async function writeAnalysis(
     ex: ANALYSIS_TTL_SECONDS,
   });
 }
+
+export interface FixedEntry {
+  hostname: string;
+  keyword: string;
+  list: string;
+  fixedAt: number;
+}
+
+/**
+ * #reward-2: registreer opgeloste hosts voor de publieke /fixed-changelog.
+ * bb:fixed ZSET (score=fixedAt, member=host, dedup per host) + per-host meta.
+ * Bevat GEEN persoonlijke data — alleen hostname + keyword + datum.
+ */
+export async function recordFixed(
+  redis: Redis,
+  entries: { hostname: string; keyword: string; list: string }[],
+): Promise<void> {
+  if (!entries.length) return;
+  const now = Date.now();
+  const p = redis.pipeline();
+  for (const e of entries) {
+    p.zadd('bb:fixed', { score: now, member: e.hostname });
+    p.set(
+      `bb:fixed:meta:${e.hostname}`,
+      { hostname: e.hostname, keyword: e.keyword, list: e.list, fixedAt: now },
+      { ex: ANALYSIS_TTL_SECONDS },
+    );
+  }
+  await p.exec();
+}
+
+/**
+ * #reward-3: haal de opt-in e-mail-watchers van een host op (kan leeg zijn).
+ * Geschreven door deploy/api/report.ts als `bb:host:watchers:{host}` SET.
+ */
+export async function getWatchers(
+  redis: Redis,
+  hostname: string,
+): Promise<string[]> {
+  try {
+    const emails = (await redis.smembers(
+      `bb:host:watchers:${hostname}`,
+    )) as string[];
+    return Array.isArray(emails) ? emails.filter(Boolean) : [];
+  } catch {
+    return [];
+  }
+}
+
+/** #reward-3: verwijder de watcher-SET nadat de seintjes verstuurd zijn. */
+export async function clearWatchers(
+  redis: Redis,
+  hostname: string,
+): Promise<void> {
+  try {
+    await redis.del(`bb:host:watchers:${hostname}`);
+  } catch {
+    // Niet kritiek — verloopt anders vanzelf via TTL.
+  }
+}

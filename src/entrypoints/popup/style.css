@@ -178,6 +178,36 @@ body {
   cursor: not-allowed;
 }
 
+/* v0.3.0: optioneel e-mailveld in de report-modal (opt-in notify). */
+.bb-modal-input {
+  width: 100%;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 10px;
+  border: 1px solid rgba(14, 17, 22, 0.1);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--ink);
+  box-sizing: border-box;
+}
+.bb-modal-input:focus {
+  outline: 2px solid var(--ember);
+  outline-offset: -1px;
+  border-color: var(--ember);
+}
+.bb-modal-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.bb-modal-fineprint {
+  font-size: 11px;
+  color: var(--smoke);
+  line-height: 1.4;
+  margin-top: -2px;
+}
+
 .bb-modal-error {
   font-size: 12px;
   color: var(--ember);
@@ -235,6 +265,21 @@ body {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
+}
+
+/* v0.3.0 (#reward-1): "a banner you reported is now killed" — een rustigere,
+   bevestigende variant (ink i.p.v. ember) zodat hij losstaat van de
+   milestone-celebration. De ✓ krijgt de ember-accent. */
+.bb-celebration-fixed {
+  background: var(--ink);
+  box-shadow: 0 4px 14px -4px rgba(14, 17, 22, 0.4);
+}
+.bb-celebration-fixed .bb-celebration-emoji {
+  color: var(--ember);
+}
+.bb-celebration-fixed .bb-host {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  color: var(--cream);
 }
 
 .bb-celebration-emoji {

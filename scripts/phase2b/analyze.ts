@@ -1,21 +1,18 @@
 /**
- * Phase 2B — main analyzer.
+ * Phase 2B/2C — main analyzer (incl. accept-only / step-into, #69-73).
  *
  * Draait in GitHub Actions (zie .github/workflows/phase2b-analyze.yml):
  *   1. lees hosts met nog niet onderzochte meldingen uit Redis
  *   2. bezoek elke host met headless Chromium, detecteer de consent-situatie
- *   3. classificeer (hergebruikt extensie-keyword-logica)
- *   4. markeer reports analyzed + bewaar per-host analyse in Redis
- *   5. merge voorgestelde keywords in repo/rules.json
- *   6. schrijf summary.md + zet GITHUB_OUTPUT changed=true/false
+ *   3. bij "Customize / Accept All" (geen directe reject): klik de step-into
+ *      knop en analyseer het geopende paneel (spiegelt de extensie-flow)
+ *   4. classificeer + Claude beoordeelt elk voorstel (per doellijst)
+ *   5. approve+high → toepassen op rules.json (reject/ambiguous/stepInto)
+ *   6. rest → needs-review draft-PR; markeer reports analyzed
  *
- * De workflow opent daarna een DRAFT-PR als rules.json gewijzigd is.
- *
- * Env:
- *   KV_REST_API_URL, KV_REST_API_TOKEN   (Upstash, verplicht)
- *   MAX_HOSTS        (default 25)
- *   NAV_TIMEOUT_MS   (default 20000)
- *   WAIT_MS          (default 3500)
+ * Env: KV_REST_API_URL/TOKEN (verplicht), ANTHROPIC_API_KEY,
+ *      MAX_HOSTS (25), NAV_TIMEOUT_MS (20000), WAIT_MS (3500),
+ *      PANEL_WAIT_MS (1800), RULES_FILE.
  */
 
 import { appendFile, writeFile } from 'node:fs/promises';
@@ -26,35 +23,44 @@ import {
   getHostsToAnalyze,
   markAnalyzed,
   writeAnalysis,
+  recordFixed,
+  getWatchers,
+  clearWatchers,
   type HostWork,
 } from './redis.ts';
+import { sendFixedEmail } from './notify.ts';
 import { detectInPage, type DetectionResult } from './detect.ts';
-import { classify, type Classification } from './classify.ts';
-import { loadRules, mergeRejectKeywords, saveRules } from './rules.ts';
+import {
+  classify,
+  classifyStepPanel,
+  type Classification,
+  type KeywordProposal,
+} from './classify.ts';
+import { loadRules, mergeProposals, saveRules } from './rules.ts';
 import { judgeKeyword, isAutoApprove, type Judgement } from './claude.ts';
 
-/** Een voorgesteld keyword met de context die de judge nodig heeft. */
-interface Proposal {
-  keyword: string;
+interface Proposal extends KeywordProposal {
   buttonText: string;
   bannerSnippet: string;
   hostname: string;
 }
-
 interface JudgedProposal extends Proposal {
   judgement: Judgement;
 }
-
 interface HostResult {
   host: string;
   classification: Classification;
   detection: DetectionResult | null;
+  stepIntoButtonText?: string;
   error?: string;
 }
 
 const MAX_HOSTS = Number(process.env.MAX_HOSTS ?? '25');
 const NAV_TIMEOUT_MS = Number(process.env.NAV_TIMEOUT_MS ?? '20000');
 const WAIT_MS = Number(process.env.WAIT_MS ?? '3500');
+const PANEL_WAIT_MS = Number(process.env.PANEL_WAIT_MS ?? '1800');
+
+const CLICKABLE = 'button, [role="button"], a, input[type="button"], input[type="submit"]';
 
 async function analyzeHost(
   browser: Browser,
@@ -76,6 +82,44 @@ async function analyzeHost(
     await page.waitForTimeout(WAIT_MS);
     const detection = (await page.evaluate(detectInPage)) as DetectionResult;
     const classification = classify(detection);
+
+    // Fase 2: geen directe reject, wél een step-into knop → klik + heranalyseer.
+    if (
+      classification.category === 'needs_step_into' &&
+      classification.stepIntoButtonText
+    ) {
+      const btn = classification.stepIntoButtonText;
+      try {
+        await page
+          .locator(CLICKABLE, { hasText: btn })
+          .first()
+          .click({ timeout: 3000 });
+        await page.waitForTimeout(PANEL_WAIT_MS);
+        const panel = (await page.evaluate(detectInPage)) as DetectionResult;
+        const panelClass = classifyStepPanel(panel, btn, detection.cmps);
+        return {
+          host,
+          classification: panelClass,
+          detection: panel,
+          stepIntoButtonText: btn,
+        };
+      } catch (err) {
+        return {
+          host,
+          detection,
+          stepIntoButtonText: btn,
+          classification: {
+            category: 'unknown',
+            proposals: [],
+            reason: `Step-into knop "${btn}" gevonden maar klikken/heranalyseren faalde: ${
+              err instanceof Error ? err.message : String(err)
+            }`,
+            cmps: detection.cmps,
+          },
+        };
+      }
+    }
+
     return { host, classification, detection };
   } catch (err) {
     return {
@@ -83,7 +127,7 @@ async function analyzeHost(
       detection: null,
       classification: {
         category: 'unknown',
-        proposedKeywords: [],
+        proposals: [],
         reason: `Kon de site niet laden/analyseren: ${
           err instanceof Error ? err.message : String(err)
         }`,
@@ -101,37 +145,22 @@ function buildSummary(
   applied: JudgedProposal[],
   needsReview: JudgedProposal[],
 ): string {
+  const fmt = (p: JudgedProposal): string =>
+    `- \`${p.keyword}\` [${p.list}] — ${p.hostname} · Claude: ${p.judgement.verdict}/${p.judgement.confidence} · ${p.judgement.reason}`;
   const lines: string[] = [];
   lines.push('## BannerBye Phase 2C — analyse-run');
   lines.push('');
   lines.push(`Hosts onderzocht: **${results.length}**`);
   lines.push('');
   lines.push(`### ✅ Automatisch toegepast (${applied.length})`);
-  if (applied.length) {
-    applied.forEach((p) =>
-      lines.push(
-        `- \`${p.keyword}\` — ${p.hostname} · Claude: ${p.judgement.confidence} · ${p.judgement.reason}`,
-      ),
-    );
-  } else {
-    lines.push('_Niets automatisch toegepast deze run._');
-  }
+  lines.push(applied.length ? applied.map(fmt).join('\n') : '_Niets automatisch toegepast deze run._');
   lines.push('');
   lines.push(`### 🕵️ Naar review (${needsReview.length})`);
-  if (needsReview.length) {
-    needsReview.forEach((p) =>
-      lines.push(
-        `- \`${p.keyword}\` — ${p.hostname} · Claude: ${p.judgement.verdict}/${p.judgement.confidence} · ${p.judgement.reason}`,
-      ),
-    );
-  } else {
-    lines.push('_Geen randgevallen deze run._');
-  }
+  lines.push(needsReview.length ? needsReview.map(fmt).join('\n') : '_Geen randgevallen deze run._');
   lines.push('');
   return lines.join('\n');
 }
 
-/** PR-body voor de needs-review draft-PR. */
 function buildPrBody(needsReview: JudgedProposal[]): string {
   const lines: string[] = [];
   lines.push('## BannerBye Phase 2C — keywords naar review');
@@ -141,7 +170,7 @@ function buildPrBody(needsReview: JudgedProposal[]): string {
   );
   lines.push('');
   needsReview.forEach((p) => {
-    lines.push(`### \`${p.keyword}\``);
+    lines.push(`### \`${p.keyword}\` → \`${p.list}Keywords\``);
     lines.push(`- Site: ${p.hostname}`);
     lines.push(`- Originele knop: "${p.buttonText}"`);
     lines.push(
@@ -155,7 +184,6 @@ function buildPrBody(needsReview: JudgedProposal[]): string {
 async function setOutput(key: string, value: string): Promise<void> {
   const file = process.env.GITHUB_OUTPUT;
   if (!file) return;
-  // Multiline-safe via heredoc-syntax.
   const delim = `__bb_${Math.random().toString(36).slice(2)}__`;
   await appendFile(file, `${key}<<${delim}\n${value}\n${delim}\n`);
 }
@@ -169,7 +197,6 @@ async function main(): Promise<void> {
   const hosts = await getHostsToAnalyze(redis, { maxHosts: MAX_HOSTS });
   console.log(`Hosts te analyseren: ${hosts.length}`);
 
-  // Laad huidige rules zodat reeds-voorgestelde keywords meetellen als gematcht.
   const rules = await loadRules();
   setRemoteKeywords({
     rejectKeywords: rules.autoclick?.rejectKeywords ?? [],
@@ -179,7 +206,8 @@ async function main(): Promise<void> {
 
   if (!hosts.length) {
     await writeFile('summary.md', 'Geen nieuwe meldingen om te analyseren.\n');
-    await setOutput('changed', 'false');
+    await setOutput('applied', 'false');
+    await setOutput('needs_review', 'false');
     await setOutput('summary', 'Geen nieuwe meldingen om te analyseren.');
     return;
   }
@@ -194,15 +222,19 @@ async function main(): Promise<void> {
       const result = await analyzeHost(browser, work);
       results.push(result);
 
-      // Verzamel voorstellen mét context (knop-tekst + banner) voor de judge.
-      for (const kw of result.classification.proposedKeywords) {
-        if (proposals.has(kw)) continue;
+      for (const p of result.classification.proposals) {
+        const key = `${p.list}:${p.keyword}`;
+        if (proposals.has(key)) continue;
         const cand = result.detection?.candidates.find(
-          (c) => normalize(c.text) === kw,
+          (c) => normalize(c.text) === p.keyword,
         );
-        proposals.set(kw, {
-          keyword: kw,
-          buttonText: cand?.text ?? kw,
+        const buttonText =
+          cand?.text ??
+          (p.list === 'stepInto' ? result.stepIntoButtonText ?? p.keyword : p.keyword);
+        proposals.set(key, {
+          keyword: p.keyword,
+          list: p.list,
+          buttonText,
           bannerSnippet: result.detection?.bannerTextSnippet ?? '',
           hostname: work.hostname,
         });
@@ -213,7 +245,8 @@ async function main(): Promise<void> {
         category: result.classification.category,
         reason: result.classification.reason,
         cmps: result.classification.cmps,
-        proposedKeywords: result.classification.proposedKeywords,
+        proposals: result.classification.proposals,
+        stepIntoButtonText: result.stepIntoButtonText,
         sampleMessage: work.sampleMessage,
         analyzedAt: Date.now(),
       });
@@ -223,31 +256,75 @@ async function main(): Promise<void> {
     await browser.close();
   }
 
-  // Claude beoordeelt elk voorstel; alleen approve+high mag auto-live.
   const judged: JudgedProposal[] = [];
   for (const p of proposals.values()) {
-    const judgement = await judgeKeyword(p);
+    const judgement = await judgeKeyword({
+      keyword: p.keyword,
+      buttonText: p.buttonText,
+      bannerSnippet: p.bannerSnippet,
+      hostname: p.hostname,
+      list: p.list,
+    });
     console.log(
-      `   judge "${p.keyword}" → ${judgement.verdict}/${judgement.confidence}`,
+      `   judge [${p.list}] "${p.keyword}" → ${judgement.verdict}/${judgement.confidence}`,
     );
     judged.push({ ...p, judgement });
   }
   const applied = judged.filter((j) => isAutoApprove(j.judgement));
   const needsReview = judged.filter((j) => !isAutoApprove(j.judgement));
 
-  // Approved-high → toepassen op rules.json (de landing-checkout) voor auto-deploy.
-  const { added } = mergeRejectKeywords(
+  const { added } = mergeProposals(
     rules,
-    applied.map((p) => p.keyword),
+    applied.map((p) => ({ keyword: p.keyword, list: p.list })),
   );
   if (added.length) await saveRules(rules);
 
-  // Needs-review → apart bestand + PR-body voor de draft-PR-stap.
+  // #reward-2 + #reward-3: een host geldt als "opgelost" wanneer voor die host
+  // een NIEUW keyword auto-toegepast is. Registreer die hosts voor de publieke
+  // /fixed-changelog en stuur de opt-in "nu opgelost"-mail naar hun watchers.
+  const addedKeys = new Set(added.map((a) => `${a.list}:${a.keyword}`));
+  const fixedByHost = new Map<string, { keyword: string; list: string }>();
+  for (const p of applied) {
+    if (!addedKeys.has(`${p.list}:${p.keyword}`)) continue;
+    if (!fixedByHost.has(p.hostname)) {
+      fixedByHost.set(p.hostname, { keyword: p.keyword, list: p.list });
+    }
+  }
+  if (fixedByHost.size) {
+    const fixedEntries = Array.from(fixedByHost.entries()).map(
+      ([hostname, k]) => ({ hostname, keyword: k.keyword, list: k.list }),
+    );
+    try {
+      await recordFixed(redis, fixedEntries);
+    } catch (err) {
+      console.warn('[analyze] recordFixed faalde:', err);
+    }
+    // Opt-in notify — best-effort, nooit de run laten klappen.
+    let notified = 0;
+    for (const { hostname } of fixedEntries) {
+      const watchers = await getWatchers(redis, hostname);
+      if (!watchers.length) continue;
+      let anySent = false;
+      for (const email of watchers) {
+        if (await sendFixedEmail(email, hostname)) {
+          notified++;
+          anySent = true;
+        }
+      }
+      // Alleen wissen als er (deels) verstuurd is; anders volgende run opnieuw.
+      if (anySent) await clearWatchers(redis, hostname);
+    }
+    console.log(
+      `Fixes geregistreerd: ${fixedEntries.length}. Notify-mails verstuurd: ${notified}.`,
+    );
+  }
+
   await writeFile(
     'needs-review.json',
     JSON.stringify(
       needsReview.map((p) => ({
         keyword: p.keyword,
+        list: p.list,
         hostname: p.hostname,
         buttonText: p.buttonText,
         verdict: p.judgement.verdict,
@@ -270,7 +347,7 @@ async function main(): Promise<void> {
   const commitMsg =
     `Phase 2C: ${added.length} keyword(s) auto-toegepast\n\n` +
     applied
-      .map((p) => `- ${p.keyword} (${p.hostname}): ${p.judgement.reason}`)
+      .map((p) => `- [${p.list}] ${p.keyword} (${p.hostname}): ${p.judgement.reason}`)
       .join('\n');
 
   await setOutput('applied', added.length ? 'true' : 'false');

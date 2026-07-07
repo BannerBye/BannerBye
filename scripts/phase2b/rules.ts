@@ -30,35 +30,52 @@ export const RULES_PATH = process.env.RULES_FILE
   ? resolve(process.env.RULES_FILE)
   : resolve(here, '../../rules.json');
 
+export type KeywordList = 'reject' | 'ambiguous' | 'stepInto';
+
+export interface KeywordProposal {
+  keyword: string;
+  list: KeywordList;
+}
+
+const LIST_FIELD: Record<KeywordList, 'rejectKeywords' | 'ambiguousKeywords' | 'stepIntoKeywords'> = {
+  reject: 'rejectKeywords',
+  ambiguous: 'ambiguousKeywords',
+  stepInto: 'stepIntoKeywords',
+};
+
 export async function loadRules(): Promise<RemoteRules> {
   const raw = await readFile(RULES_PATH, 'utf8');
   const parsed = JSON.parse(raw) as RemoteRules;
-  parsed.autoclick = parsed.autoclick ?? {};
-  parsed.autoclick.rejectKeywords = parsed.autoclick.rejectKeywords ?? [];
+  const a = (parsed.autoclick = parsed.autoclick ?? {});
+  a.rejectKeywords = a.rejectKeywords ?? [];
+  a.ambiguousKeywords = a.ambiguousKeywords ?? [];
+  a.stepIntoKeywords = a.stepIntoKeywords ?? [];
   return parsed;
 }
 
 /**
- * Voeg nieuwe (al genormaliseerde) reject-keywords toe. Dedupliceert
- * case-insensitive tegen wat er al staat. Geeft terug welke écht nieuw waren.
+ * Voeg voorstellen toe aan de juiste lijst (reject / ambiguous / stepInto).
+ * Dedupliceert case-insensitive per lijst. Geeft terug welke écht nieuw waren.
  */
-export function mergeRejectKeywords(
+export function mergeProposals(
   rules: RemoteRules,
-  keywords: string[],
-): { added: string[] } {
-  const current = new Set(
-    (rules.autoclick!.rejectKeywords ?? []).map((k) => k.toLowerCase()),
-  );
-  const added: string[] = [];
-  for (const kw of keywords) {
-    const low = kw.toLowerCase();
-    if (!low || current.has(low)) continue;
-    current.add(low);
-    rules.autoclick!.rejectKeywords!.push(kw);
-    added.push(kw);
+  proposals: KeywordProposal[],
+): { added: KeywordProposal[] } {
+  const a = rules.autoclick!;
+  const added: KeywordProposal[] = [];
+  const changedFields = new Set<string>();
+
+  for (const p of proposals) {
+    const field = LIST_FIELD[p.list];
+    const arr = (a[field] = a[field] ?? []);
+    const low = p.keyword.toLowerCase();
+    if (!low || arr.some((k) => k.toLowerCase() === low)) continue;
+    arr.push(p.keyword);
+    changedFields.add(field);
+    added.push(p);
   }
   if (added.length) {
-    rules.autoclick!.rejectKeywords!.sort();
+    for (const f of changedFields) a[f as keyof typeof a]!.sort();
     rules.updatedAt = new Date().toISOString();
   }
   return { added };

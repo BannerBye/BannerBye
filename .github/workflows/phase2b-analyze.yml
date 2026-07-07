@@ -5,9 +5,13 @@ name: Phase 2B/2C — analyze reported sites
 # Vercel auto-deploy). Randgevallen → draft-PR (het vangnet). Nooit auto-merge
 # van de review-PR.
 
+# Draait NIET meer op een dagschema. In plaats daarvan meteen wanneer een
+# gebruiker een link inzendt: deploy/api/report.ts vuurt na een geldige melding
+# een repository_dispatch (type "report-submitted") af. Weinig inzendingen →
+# behapbaar. workflow_dispatch blijft voor handmatige (her)runs.
 on:
-  schedule:
-    - cron: "0 6 * * *" # elke dag 06:00 UTC
+  repository_dispatch:
+    types: [report-submitted]
   workflow_dispatch:
     inputs:
       max_hosts:
@@ -61,6 +65,9 @@ jobs:
           KV_REST_API_URL: ${{ secrets.KV_REST_API_URL }}
           KV_REST_API_TOKEN: ${{ secrets.KV_REST_API_TOKEN }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Opt-in "email me when fixed" (#reward-3). Ontbreekt de secret, dan is
+          # notify een stille no-op — de rest van de run draait gewoon door.
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           MAX_HOSTS: ${{ github.event.inputs.max_hosts || '25' }}
           RULES_FILE: ${{ github.workspace }}/landing/rules.json
         run: node --experimental-strip-types analyze.ts
