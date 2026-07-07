@@ -222,6 +222,32 @@ async function main(): Promise<void> {
       const result = await analyzeHost(browser, work);
       results.push(result);
 
+      // --- Diagnose-logging: precies wat de analyzer op deze host zag. ---
+      const d = result.detection;
+      const cls = result.classification;
+      console.log(`   categorie : ${cls.category}`);
+      console.log(`   reden     : ${cls.reason}`);
+      console.log(
+        `   banner    : ${d ? (d.bannerVisible ? 'zichtbaar' : 'NIET gevonden') : 'geen detectie'}` +
+          ` · TCF: ${d?.hasTcf ? 'ja' : 'nee'} · CMP: [${(cls.cmps ?? []).join(', ') || '-'}]`,
+      );
+      if (d) console.log(`   eind-URL  : ${d.finalUrl}`);
+      if (result.stepIntoButtonText)
+        console.log(`   step-into : "${result.stepIntoButtonText}"`);
+      const cand = d?.candidates ?? [];
+      console.log(
+        `   knoppen (${cand.length}): ${
+          cand.map((c) => `"${c.text}"`).join(', ') || '(geen)'
+        }`,
+      );
+      if (d?.bannerTextSnippet)
+        console.log(`   banner-tekst: ${d.bannerTextSnippet.slice(0, 160)}`);
+      console.log(
+        `   voorstellen: ${
+          cls.proposals.map((p) => `${p.list}:${p.keyword}`).join(', ') || '(geen)'
+        }`,
+      );
+
       for (const p of result.classification.proposals) {
         const key = `${p.list}:${p.keyword}`;
         if (proposals.has(key)) continue;
