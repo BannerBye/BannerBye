@@ -56,14 +56,16 @@ jobs:
 
       # De GitHub-runner heeft af en toe een kapotte Microsoft/Azure apt-repo
       # ("InRelease no longer signed / NOSPLIT") waardoor `--with-deps` (die
-      # apt-get draait) faalt. Playwright heeft die repo's niet nodig — weg
-      # ermee vóór de install, dan blijft de run robuust.
+      # apt-get draait) faalt. Playwright heeft die repo's niet nodig. We
+      # verwijderen ELK bronbestand dat naar packages.microsoft.com verwijst
+      # (zowel oude .list- als nieuwe .sources-bestanden), en als apt dan nog
+      # struikelt valt de install terug op alleen de browser-binary.
       - name: Install Playwright Chromium
         working-directory: scripts/phase2b
         run: |
-          sudo rm -f /etc/apt/sources.list.d/microsoft*.list \
-                     /etc/apt/sources.list.d/*azure*.list 2>/dev/null || true
-          npx playwright install --with-deps chromium
+          grep -rlZ 'packages.microsoft.com' /etc/apt/sources.list /etc/apt/sources.list.d 2>/dev/null \
+            | xargs -0 -r sudo rm -f || true
+          npx playwright install --with-deps chromium || npx playwright install chromium
 
       - name: Run analyzer (analyse + Claude-judge + auto-apply)
         id: analyze
