@@ -27,6 +27,7 @@
 
 import { defineContentScript } from 'wxt/sandbox';
 import { startAutoClick } from '@/lib/autoclick/index.ts';
+import { restorePageAfterReject } from '@/lib/autoclick/cleanup.ts';
 import { setRemoteKeywords } from '@/lib/autoclick/keywords.ts';
 import { getCachedRules } from '@/lib/rules/fetcher.ts';
 import { getSettings } from '@/lib/storage.ts';
@@ -97,6 +98,17 @@ export default defineContentScript({
       } catch {
         // Background-worker kan net idle zijn — niet kritiek.
       }
+      // Post-reject opruiming (concurrentie-pariteit): herstel scrollen en
+      // verwijder verweesde overlays die de CMP achterlaat. Korte vertraging
+      // zodat de banner z'n eigen teardown eerst kan doen. Draait ALLEEN ná
+      // een echte weiger-klik — opruimen ná weigeren, niet verbergen.
+      setTimeout(() => {
+        try {
+          restorePageAfterReject();
+        } catch {
+          // Nooit laten klappen.
+        }
+      }, 350);
       // Voor debug: console.log(`[BannerBye] auto-click: "${result.buttonText}" in ${result.elapsedMs}ms`);
     }
   },
