@@ -29,14 +29,40 @@ const SCAN_THROTTLE_MS = 150;
  * banner-UI tijd om het detail-paneel te renderen. */
 const STEP_INTO_DELAY_MS = 500;
 
+/** Wachttijd ná een weiger-klik voordat we verifiëren of de banner echt weg is. */
+const VERIFY_DELAY_MS = 600;
+
 export interface AutoClickResult {
   clicked: boolean;
+  /**
+   * True als de banner ná de weiger-klik ook echt verdwenen is (geverifieerd).
+   * False = geklikt maar de banner staat er nog (klik werkte niet).
+   */
+  verified?: boolean;
   /** Tekst van de geklikte reject-knop, voor logging/debug. */
   buttonText?: string;
   /** True als we via step-into de reject-knop bereikten. */
   viaStepInto?: boolean;
   /** Hoe lang het duurde voor we 'm vonden (ms na start). */
   elapsedMs: number;
+}
+
+/**
+ * Is de banner ná een weiger-klik nog echt aanwezig? Bewust onafhankelijk van
+ * onze eigen prehide (die `opacity:0` gebruikt): we checken op verwijderd/
+ * verborgen via DOM-connectie, display/visibility en grootte — NIET op opacity.
+ * Een echte CMP-dismissal verwijdert de banner of zet 'm op display:none.
+ */
+function bannerStillPresent(el: Element): boolean {
+  if (!el.isConnected) return false;
+  try {
+    const cs = getComputedStyle(el);
+    if (cs.display === 'none' || cs.visibility === 'hidden') return false;
+  } catch {
+    return false;
+  }
+  const r = el.getBoundingClientRect();
+  return r.width > 0 || r.height > 0;
 }
 
 /**
@@ -51,6 +77,7 @@ export function startAutoClick(
 
   return new Promise((resolve) => {
     let resolved = false;
+    let verifying = false;
     let stepIntoClicked = false;
     let throttleTimeoutId = 0;
     let pendingScan = false;
@@ -69,7 +96,7 @@ export function startAutoClick(
      * we die nog niet eerder hebben geprobeerd.
      */
     const tryClick = (): void => {
-      if (resolved) return;
+      if (resolved || verifying) return;
 
       // PASS 1+2: directe reject-knop. Na een step-into klik passen we
       // de relax-flag toe — we zitten dan al in een cookie-flow, en het
@@ -80,15 +107,24 @@ export function startAutoClick(
         const buttonText = (reject.innerText || reject.textContent || '').trim();
         try {
           reject.click();
-          finish({
-            clicked: true,
-            buttonText,
-            viaStepInto: stepIntoClicked,
-            elapsedMs: Date.now() - startTime,
-          });
         } catch (err) {
           console.warn('[BannerBye] reject click failed:', err);
+          return; // klik faalde → blijf proberen
         }
+        // Geklikt. Verifieer ná een korte delay of de banner écht weg is,
+        // i.p.v. blind aannemen dat de klik werkte. `verifying` blokkeert
+        // ondertussen nieuwe klik-pogingen; finish() ruimt observer/timeouts op.
+        verifying = true;
+        const viaStepInto = stepIntoClicked;
+        window.setTimeout(() => {
+          finish({
+            clicked: true,
+            verified: !bannerStillPresent(reject),
+            buttonText,
+            viaStepInto,
+            elapsedMs: Date.now() - startTime,
+          });
+        }, VERIFY_DELAY_MS);
         return;
       }
 
@@ -121,7 +157,7 @@ export function startAutoClick(
 
     // Direct proberen — knop kan al aanwezig zijn op document_idle.
     tryClick();
-    if (resolved) return;
+    if (resolved || verifying) return;
 
     const observer = new MutationObserver(scheduleScan);
     observer.observe(document.documentElement, {

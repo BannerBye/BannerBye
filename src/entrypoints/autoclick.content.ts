@@ -89,20 +89,25 @@ export default defineContentScript({
 
     const result = await startAutoClick();
 
+    // "Afgehandeld" = geklikt ÉN geverifieerd dat de banner echt weg is. Een
+    // klik die de banner niet wegkreeg telt niet mee (en de prehide toont 'm
+    // dan weer). verified is alleen undefined als er niet geklikt is.
+    const handled = result.clicked && result.verified !== false;
+
     // Meld de uitslag aan de prehide-laag (document_start) zodat die de banner
     // verborgen houdt bij succes of juist meteen toont bij falen. Zelfde
     // ISOLATED world → gedeelde window, dus een CustomEvent volstaat.
     try {
       window.dispatchEvent(
         new CustomEvent('bb:autoclick-done', {
-          detail: { clicked: result.clicked },
+          detail: { handled },
         }),
       );
     } catch {
       // niet kritiek
     }
 
-    if (result.clicked) {
+    if (handled) {
       // v0.2.0: stuur banner-blocked event naar background. Background
       // doet de counter-increment, badge-flash, en milestone-check als
       // single source of truth voor storage-writes. Voorkomt race tussen

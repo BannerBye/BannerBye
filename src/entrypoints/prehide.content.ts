@@ -75,12 +75,14 @@ export default defineContentScript({
     window.addEventListener(
       'bb:autoclick-done',
       (e: Event) => {
-        const clicked = Boolean((e as CustomEvent).detail?.clicked);
-        if (clicked) {
-          // Banner wordt door de CMP verwijderd; prehide kort daarna opheffen
-          // zodat een later, ongerelateerd element niet verborgen blijft.
+        const handled = Boolean((e as CustomEvent).detail?.handled);
+        if (handled) {
+          // Weiger geverifieerd; banner wordt door de CMP verwijderd. Prehide
+          // kort daarna opheffen zodat een later, ongerelateerd element niet
+          // verborgen blijft.
           window.setTimeout(reveal, 800);
         } else {
+          // Niet (betrouwbaar) geweigerd → banner tonen zodat de gebruiker kiest.
           reveal();
         }
       },
