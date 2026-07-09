@@ -88,6 +88,20 @@ export default defineContentScript({
     }
 
     const result = await startAutoClick();
+
+    // Meld de uitslag aan de prehide-laag (document_start) zodat die de banner
+    // verborgen houdt bij succes of juist meteen toont bij falen. Zelfde
+    // ISOLATED world → gedeelde window, dus een CustomEvent volstaat.
+    try {
+      window.dispatchEvent(
+        new CustomEvent('bb:autoclick-done', {
+          detail: { clicked: result.clicked },
+        }),
+      );
+    } catch {
+      // niet kritiek
+    }
+
     if (result.clicked) {
       // v0.2.0: stuur banner-blocked event naar background. Background
       // doet de counter-increment, badge-flash, en milestone-check als
