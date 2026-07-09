@@ -97,6 +97,11 @@ export function startAutoClick(
      */
     const tryClick = (): void => {
       if (resolved || verifying) return;
+      // Autoconsent-laag (Fase 1) handelt bekende CMP's zelf af. Zolang die
+      // actief is of al klaar is, laat de generieke laag deze pagina met rust
+      // (voorkomt dubbel klikken/tellen). Flags staan op de gedeelde window.
+      const w = window as Window;
+      if (w.__bbConsentHandled || w.__bbConsentActive) return;
 
       // PASS 1+2: directe reject-knop. Na een step-into klik passen we
       // de relax-flag toe — we zitten dan al in een cookie-flow, en het
