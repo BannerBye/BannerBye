@@ -22,6 +22,7 @@
  */
 
 import { defineContentScript } from 'wxt/sandbox';
+import { isPdfDocument } from '@/lib/pdf-guard.ts';
 
 export default defineContentScript({
   matches: ['<all_urls>'],
@@ -51,6 +52,9 @@ export default defineContentScript({
   allFrames: false,
 
   main() {
+    // v0.3.1: PDF's op extensieloze URL's glippen door excludeMatches — runtime-check.
+    if (isPdfDocument()) return;
+
     const relay = (): void => {
       try {
         void chrome.runtime.sendMessage({ type: 'bb:banner-blocked' });

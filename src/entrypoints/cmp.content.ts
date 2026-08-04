@@ -25,6 +25,7 @@
 import { defineContentScript } from 'wxt/sandbox';
 import { handlers } from '@/lib/cmp/index.ts';
 import { readActiveState } from '@/lib/active-flag.ts';
+import { isPdfDocument } from '@/lib/pdf-guard.ts';
 
 export default defineContentScript({
   // v0.2.0 (#111): Chrome MV3 → dynamic. Zie tcf.content.ts voor toelichting.
@@ -60,6 +61,9 @@ export default defineContentScript({
   allFrames: false,
 
   async main() {
+    // v0.3.1: PDF's op extensieloze URL's glippen door excludeMatches — runtime-check.
+    if (isPdfDocument()) return;
+
     // v0.2.0: vroege exit als BannerBye uit staat of host gepauzeerd is.
     // Zie active-flag bridge in background.ts.
     if (readActiveState() !== 'active') {

@@ -20,6 +20,7 @@ import { defineContentScript } from 'wxt/sandbox';
 import { injectPrehide, revealPrehide } from '@/lib/autoclick/prehide.ts';
 import { getSettings } from '@/lib/storage.ts';
 import { isHostPaused } from '@/lib/host.ts';
+import { isPdfDocument } from '@/lib/pdf-guard.ts';
 
 /** Maximale tijd dat een banner onzichtbaar mag blijven zonder uitsluitsel. */
 const REVEAL_FALLBACK_MS = 3500;
@@ -49,6 +50,9 @@ export default defineContentScript({
   allFrames: false,
 
   main() {
+    // v0.3.1: PDF's op extensieloze URL's glippen door excludeMatches — runtime-check.
+    if (isPdfDocument()) return;
+
     // Zo vroeg mogelijk verbergen — vóór de banner schildert.
     injectPrehide();
 

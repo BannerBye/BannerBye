@@ -32,6 +32,7 @@ import { setRemoteKeywords } from '@/lib/autoclick/keywords.ts';
 import { getCachedRules } from '@/lib/rules/fetcher.ts';
 import { getSettings } from '@/lib/storage.ts';
 import { isHostPaused } from '@/lib/host.ts';
+import { isPdfDocument } from '@/lib/pdf-guard.ts';
 
 export default defineContentScript({
   matches: ['<all_urls>'],
@@ -63,6 +64,9 @@ export default defineContentScript({
   allFrames: false,
 
   async main() {
+    // v0.3.1: PDF's op extensieloze URL's glippen door excludeMatches — runtime-check.
+    if (isPdfDocument()) return;
+
     // v0.2.0: respect globale toggle en per-site pause. autoclick draait
     // in ISOLATED world dus heeft directe chrome.storage-toegang — geen
     // window-flag-bridge nodig hier (anders dan TCF/CMP/GPC).

@@ -13,6 +13,7 @@
 import { defineContentScript } from 'wxt/sandbox';
 import { getSettings } from '@/lib/storage.ts';
 import { isHostPaused } from '@/lib/host.ts';
+import { isPdfDocument } from '@/lib/pdf-guard.ts';
 
 /** Feature-flag — pas op true na dev-browser-verificatie. */
 const AUTOCONSENT_LAYER_ENABLED = false;
@@ -41,6 +42,9 @@ export default defineContentScript({
   allFrames: false,
 
   async main() {
+    // v0.3.1: PDF's op extensieloze URL's glippen door excludeMatches — runtime-check.
+    if (isPdfDocument()) return;
+
     if (!AUTOCONSENT_LAYER_ENABLED) return;
 
     try {

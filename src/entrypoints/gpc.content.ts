@@ -25,6 +25,7 @@
 
 import { defineContentScript } from 'wxt/sandbox';
 import { readActiveState } from '@/lib/active-flag.ts';
+import { isPdfDocument } from '@/lib/pdf-guard.ts';
 
 export default defineContentScript({
   // v0.2.0 (#111): Chrome MV3 → dynamic. Zie tcf.content.ts voor toelichting.
@@ -57,6 +58,9 @@ export default defineContentScript({
   allFrames: true,
 
   main() {
+    // v0.3.1: PDF's op extensieloze URL's glippen door excludeMatches — runtime-check.
+    if (isPdfDocument()) return;
+
     // v0.2.0: bij toggle-OFF of paused-host doen we de prototype-mutatie
     // niet. De HTTP-header (DNR) wordt elders gestuurd:
     //   - Bij toggle-OFF (globaal): syncGpcRuleset(false) zet de DNR-rule uit

@@ -28,6 +28,7 @@
 import { defineContentScript } from 'wxt/sandbox';
 import { buildNoConsentTCData, type TCData } from '@/lib/tcf/tcdata.ts';
 import { readActiveState } from '@/lib/active-flag.ts';
+import { isPdfDocument } from '@/lib/pdf-guard.ts';
 
 /** Response shape voor `__tcfapi('ping', ...)`. */
 interface PingResponse {
@@ -130,6 +131,9 @@ export default defineContentScript({
   allFrames: true,
 
   main() {
+    // v0.3.1: PDF's op extensieloze URL's glippen door excludeMatches — runtime-check.
+    if (isPdfDocument()) return;
+
     // === ACTIVE-FLAG CHECK (v0.2.0) ===
     // Background heeft net voor onze injectie een MAIN-world script
     // gerund dat window.__bannerbyeState heeft gezet. Als die state
