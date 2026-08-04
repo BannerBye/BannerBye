@@ -46,3 +46,7 @@ coverage/
 
 # TypeScript
 *.tsbuildinfo
+v0.3.1-chrome-unpacked/
+*.zip
+.output/
+node_modules/
