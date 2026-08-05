@@ -12,7 +12,7 @@ export default defineConfig({
   manifest: ({ browser, manifestVersion }) => ({
     name: 'BannerBye',
     description: 'Cookie banners, killed. Before they load.',
-    version: '0.3.1',
+    version: '0.3.2',
     permissions: [
       'storage',
       'tabs',
