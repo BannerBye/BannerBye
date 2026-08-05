@@ -81,6 +81,17 @@ export function startAutoClick(
     let stepIntoClicked = false;
     let throttleTimeoutId = 0;
     let pendingScan = false;
+    // v0.3.2 (#154 hotfix): observer/timeoutId hier al declareren (i.p.v. pas
+    // na de eerste tryClick()-aanroep verderop) — voorkomt dat `finish()` ze
+    // sluit over bindings die op dat punt in de scope nog niet bestaan. Puur
+    // JS-semantisch was de oude volgorde correct (finish() wordt nooit sync
+    // aangeroepen vanuit de eerste tryClick()), maar een Chrome Web Store
+    // foutrapport op v0.3.1 liet op sommige sites toch een "Cannot access
+    // before initialization" zien in dit bestand — vermoedelijk een
+    // bundler/minifier-scope-edge-case. Deze herschikking sluit dat risico
+    // structureel uit, ongeacht de exacte oorzaak.
+    let observer: MutationObserver | undefined;
+    let timeoutId = 0;
 
     const finish = (result: AutoClickResult): void => {
       if (resolved) return;
@@ -164,14 +175,14 @@ export function startAutoClick(
     tryClick();
     if (resolved || verifying) return;
 
-    const observer = new MutationObserver(scheduleScan);
+    observer = new MutationObserver(scheduleScan);
     observer.observe(document.documentElement, {
       childList: true,
       subtree: true,
     });
 
     // Geef het op na timeoutMs.
-    const timeoutId = window.setTimeout(() => {
+    timeoutId = window.setTimeout(() => {
       finish({ clicked: false, elapsedMs: Date.now() - startTime });
     }, timeoutMs);
   });
