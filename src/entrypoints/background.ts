@@ -48,6 +48,14 @@ import {
 } from '@/lib/rules/fetcher';
 
 const GPC_RULESET_ID = 'gpc-headers';
+// v0.3.2 (#158 hotfix): rules/gpc-headers.json beperkt Sec-GPC-header-injectie
+// tot resourceTypes main_frame/sub_frame. Stond eerder ook op script, stylesheet,
+// xmlhttprequest, websocket, media, font, object, ping, csp_report, other — dat
+// brak Google Sheets' laadproces (declarativeNetRequest die de header op élke
+// subresource zet corrumpeert kennelijk Google's edge-cache/service-worker voor
+// complexe SPA's). Het GPC-signaal hoort sowieso op page-niveau te landen (plus
+// de JS-property via gpc.content.ts) — nooit meer verbreden naar subresources
+// zonder eerst tegen een zware SPA (Sheets/Docs/Gmail) te testen.
 
 /**
  * IDs van alle dynamisch geregistreerde content scripts.
