@@ -1,0 +1,8 @@
+{
+  "extName": {
+    "message": "BannerBye — Blockerar cookiebanners innan de laddas"
+  },
+  "extDesc": {
+    "message": "Cookiebanners stoppade innan de laddas. Ställ in din integritet en gång — BannerBye nekar automatiskt på varje webbplats."
+  }
+}

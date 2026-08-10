@@ -10,9 +10,14 @@ export default defineConfig({
   publicDir: '../public',
 
   manifest: ({ browser, manifestVersion }) => ({
-    name: 'BannerBye',
-    description: 'Cookie banners, killed. Before they load.',
-    version: '0.3.3',
+    // v0.3.4 (groeiplan H1.3): naam + omschrijving gelokaliseerd via
+    // public/_locales/<lang>/messages.json (11 talen). CWS toont de
+    // manifest-description als zoekbare "Summary" per taal — dit is de
+    // goedkoopste store-ranking-hefboom (ISDCAC-speelboek).
+    name: '__MSG_extName__',
+    description: '__MSG_extDesc__',
+    default_locale: 'en',
+    version: '0.3.4',
     permissions: [
       'storage',
       'tabs',
@@ -60,6 +65,14 @@ export default defineConfig({
           data_collection_permissions: {
             required: ['none'],
           },
+        },
+        // v0.3.4 (#135/groeiplan H1): Firefox for Android. Sinds Firefox 120
+        // is het extensie-ecosysteem op Android open; deze key markeert de
+        // extensie als Android-compatibel op AMO. Popup is al mobile-responsive
+        // (iOS-werk #99). 121.0 als minimum: eerste stabiele release ná de
+        // opening van het ecosysteem.
+        gecko_android: {
+          strict_min_version: '121.0',
         },
       },
     }),

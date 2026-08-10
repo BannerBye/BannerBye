@@ -1,0 +1,8 @@
+{
+  "extName": {
+    "message": "BannerBye — Bloqueia banners de cookies antes de carregar"
+  },
+  "extDesc": {
+    "message": "Banners de cookies bloqueados antes de carregarem. Configure a privacidade uma vez; o BannerBye recusa o resto em todos os sites."
+  }
+}
