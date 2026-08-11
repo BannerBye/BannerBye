@@ -14,9 +14,25 @@ export default defineConfig({
     // public/_locales/<lang>/messages.json (11 talen). CWS toont de
     // manifest-description als zoekbare "Summary" per taal — dit is de
     // goedkoopste store-ranking-hefboom (ISDCAC-speelboek).
-    name: '__MSG_extName__',
-    description: '__MSG_extDesc__',
-    default_locale: 'en',
+    //
+    // ⚠️ Safari-uitzondering: de Xcode-wrapper registreert de extensie-
+    // resources als LOSSE file-references in project.pbxproj (zie
+    // bannerbye-safari/wrapper/.../BannerBye.xcodeproj). `_locales/` staat
+    // daar niet in en wordt dus NIET meegebundeld. Met __MSG_extName__ zou
+    // de extensie in Safari letterlijk "__MSG_extName__" heten. Daarom
+    // krijgt de safari-target een literale naam en géén default_locale.
+    // Localisatie van de Apple-listing loopt via App Store Connect, niet
+    // via het extensie-manifest.
+    ...(browser === 'safari'
+      ? {
+          name: 'BannerBye',
+          description: 'Cookie banners, killed. Before they load.',
+        }
+      : {
+          name: '__MSG_extName__',
+          description: '__MSG_extDesc__',
+          default_locale: 'en',
+        }),
     version: '0.3.4',
     permissions: [
       'storage',
