@@ -18,6 +18,7 @@ import {
   isRejectText,
   isAmbiguousRejectText,
   isStepIntoText,
+  containsRejectPhrase,
 } from '../../src/lib/autoclick/keywords.ts';
 import type { DetectionResult } from './detect.ts';
 
@@ -106,6 +107,14 @@ export function classify(d: DetectionResult): Classification {
     if (!norm) continue;
     if (isRejectText(c.text) || isAmbiguousRejectText(c.text)) {
       hasMatchedReject = true;
+      continue;
+    }
+    // Zin-knoppen ("... können Sie diese hier ablehnen.") bevatten vaak óók
+    // een accept-woord ("akzeptieren") en zouden hieronder als accept worden
+    // weggefilterd. De gecureerde REJECT_PHRASES uit de extensie zijn
+    // eenduidig weiger-formuleringen — die winnen van de accept-heuristiek.
+    if (containsRejectPhrase(c.text)) {
+      rejectProposals.push({ keyword: norm, list: 'reject' });
       continue;
     }
     const looksReject = hasAny(norm, REJECT_INDICATORS);
@@ -200,6 +209,11 @@ export function classifyStepPanel(
     if (!norm) continue;
     if (isRejectText(c.text) || isAmbiguousRejectText(c.text)) {
       hasMatchedReject = true;
+      continue;
+    }
+    // Zin-knoppen: zie classify() — reject-frase wint van accept-heuristiek.
+    if (containsRejectPhrase(c.text)) {
+      proposals.push({ keyword: norm, list: 'reject' });
       continue;
     }
     const looksAccept = hasAny(norm, ACCEPT_INDICATORS);
