@@ -19,6 +19,14 @@
  * v1-beperking: geen MAIN-world eval-bridge. ~5% van de regels gebruikt een
  * `eval`-actie; die beantwoorden we met `false` (degradeert netjes). De overige
  * ~95% werkt op DOM-clicks. Eval-bridge kan later als vervolg.
+ *
+ * v0.3.5-nuance: voor een handvol bekende eval-snippets beantwoorden we de
+ * vraag alsnog — niet door page-JS te draaien, maar met een DOM-check die in
+ * ISOLATED world gewoon kan (document is gedeeld). Voorbeeld: de
+ * `usercentrics-api`-regel opent z'n popup-detectie met
+ * `typeof UC_UI === "object"`; zonder antwoord komt de regel nooit toe aan
+ * z'n verderop volledig DOM-gebaseerde klikroute, terwijl de aanwezigheid
+ * van de UC-container in de DOM hetzelfde vertelt. Zie EVAL_DOM_SHIMS.
  */
 
 import AutoConsent from '@duckduckgo/autoconsent';
@@ -31,6 +39,22 @@ declare global {
     __bbConsentHandled?: boolean;
   }
 }
+
+/**
+ * DOM-gebaseerde antwoorden voor bekende eval-snippets. Alleen toevoegen
+ * als de vraag betrouwbaar uit de gedeelde DOM af te leiden is — bij twijfel
+ * niet shimen (false is de veilige default).
+ *
+ * EVAL_USERCENTRICS_API_0 vraagt `typeof UC_UI === "object"` (is de
+ * Usercentrics-API er?). De v3 Web CMP definieert UC_UI überhaupt niet meer,
+ * dus de eigenlijke vraag is "is Usercentrics hier actief" — en dat zegt de
+ * aanwezigheid van de containers net zo goed. De regelstappen erna zijn purely
+ * DOM (waitForVisible + click op de deny-knop).
+ */
+const EVAL_DOM_SHIMS: Record<string, () => boolean> = {
+  EVAL_USERCENTRICS_API_0: () =>
+    !!document.querySelector('#usercentrics-cmp-ui, #usercentrics-root'),
+};
 
 /**
  * Start de Autoconsent-laag. `onHandled` wordt één keer aangeroepen zodra een
@@ -71,15 +95,27 @@ export function startAutoconsentLayer(onHandled: () => void): void {
   const consent = new AutoConsent(
     async (msg) => {
       switch (msg.type) {
-        case 'eval':
+        case 'eval': {
           // Geen MAIN-world eval in v1 → antwoord false; regel neemt de
-          // else-tak of slaat de stap over.
+          // else-tak of slaat de stap over. Uitzondering: snippets waarvoor
+          // een DOM-shim bestaat (zie boven) beantwoorden we inhoudelijk.
+          let result = false;
+          const snippetId = (msg as { snippetId?: string }).snippetId;
+          const shim = snippetId ? EVAL_DOM_SHIMS[snippetId] : undefined;
+          if (shim) {
+            try {
+              result = shim();
+            } catch {
+              result = false;
+            }
+          }
           await consent.receiveMessageCallback({
             type: 'evalResp',
             id: msg.id,
-            result: false,
+            result,
           });
           break;
+        }
         case 'cmpDetected':
           // Bekende CMP herkend → de generieke auto-click moet even wachten.
           window.__bbConsentActive = true;
