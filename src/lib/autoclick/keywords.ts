@@ -109,6 +109,53 @@ export const REJECT_KEYWORDS: readonly string[] = [
 ];
 
 /**
+ * **Zins-fragmenten** die een weiger-actie aankondigen binnen een langere
+ * knoptekst (PASS 1.5).
+ *
+ * Aanleiding (#refurbishedstore.de, 2026-08-14): sommige custom banners
+ * zetten de weiger-actie niet op een knop met het woord "Ablehnen", maar op
+ * een hele zin:
+ *
+ *   "Sie möchten diese Cookies nicht akzeptieren? Dann können Sie diese
+ *    hier ablehnen."
+ *
+ * De exact-match van PASS 1 mist die per definitie. Substring-matching op
+ * losse woorden ("reject") is te riskant, daarom matchen we op fragmenten
+ * die alléén in een weiger-formulering voorkomen — en dan nog uitsluitend:
+ *   - binnen een cookie-banner-container (isInCookieBanner), én
+ *   - op een écht knop-achtig element (geen link die wegnavigeert), én
+ *   - op teksten korter dan MAX_PHRASE_TEXT_LENGTH (een knop, geen alinea).
+ *
+ * Zie finder.ts PASS 1.5 voor die vangrails.
+ */
+export const REJECT_PHRASES: readonly string[] = [
+  // === Nederlands ===
+  'hier weigeren',
+  'ze hier weigeren',
+  'hier afwijzen',
+  'niet accepteren?',
+  'hier weigeren.',
+  // === Deutsch ===
+  'hier ablehnen',
+  'diese hier ablehnen',
+  'nicht akzeptieren?',
+  // === English ===
+  'refuse them here',
+  'reject them here',
+  'decline them here',
+  'reject them below',
+  // === Français ===
+  'les refuser ici',
+  'refuser ici',
+  // === Español ===
+  'rechazarlas aquí',
+  'rechazarlos aquí',
+  // === Italiano ===
+  'rifiutarli qui',
+  'rifiutarle qui',
+];
+
+/**
  * **Ambigue** reject-keywords — woorden die OOK een weiger-actie kunnen
  * betekenen, maar in andere contexten gewone form-acties zijn.
  *
@@ -256,6 +303,7 @@ export const COOKIE_CONTEXT_WORDS: readonly string[] = [
 let remoteRejectKeywords: string[] = [];
 let remoteAmbiguousKeywords: string[] = [];
 let remoteStepIntoKeywords: string[] = [];
+let remoteRejectPhrases: string[] = [];
 
 /**
  * Injecteer remote keywords. Roep aan vanuit content scripts ná het lezen
@@ -268,7 +316,11 @@ export function setRemoteKeywords(rules: {
   rejectKeywords?: string[];
   ambiguousKeywords?: string[];
   stepIntoKeywords?: string[];
+  rejectPhrases?: string[];
 }): void {
+  remoteRejectPhrases = (rules.rejectPhrases ?? [])
+    .map(normalize)
+    .filter((s) => s.length > 0);
   remoteRejectKeywords = (rules.rejectKeywords ?? [])
     .map(normalize)
     .filter((s) => s.length > 0);
@@ -306,6 +358,21 @@ export function isRejectText(text: string): boolean {
   return (
     REJECT_KEYWORDS.includes(normalized) ||
     remoteRejectKeywords.includes(normalized)
+  );
+}
+
+/**
+ * Returns true als de (genormaliseerde) tekst één van de REJECT_PHRASES
+ * bevat — substring-match, bedoeld voor knoppen waarvan de tekst een hele
+ * zin is. Caller MOET zelf de vangrails uit finder.ts PASS 1.5 toepassen
+ * (knop-achtig element, geen navigerende link, lengtelimiet, banner-context).
+ */
+export function containsRejectPhrase(text: string): boolean {
+  const normalized = normalize(text);
+  if (!normalized) return false;
+  return (
+    REJECT_PHRASES.some((phrase) => normalized.includes(phrase)) ||
+    remoteRejectPhrases.some((phrase) => normalized.includes(phrase))
   );
 }
 

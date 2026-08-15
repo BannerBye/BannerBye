@@ -130,7 +130,22 @@ export function detectInPage(): DetectionResult {
       const aria = el.getAttribute('aria-label');
       text = (val || aria || '').replace(/\s+/g, ' ').trim();
     }
-    if (!text || text.length > 60) continue;
+    if (!text) continue;
+    // Normale knoppen: max 60 tekens (ruisfilter). Zin-knoppen — zoals
+    // "Sie möchten diese Cookies nicht akzeptieren? Dann können Sie diese
+    // hier ablehnen." (refurbishedstore.de, 2026-08-14) — zijn langer; die
+    // laten we tot 160 tekens door, maar alléén met een weiger-signaalwoord
+    // in de tekst. (Self-contained: dit draait in page.evaluate.)
+    const SENTENCE_REJECT_HINTS = [
+      'ablehn', 'weiger', 'afwijz', 'refuse', 'reject', 'decline',
+      'refuser', 'rechaz', 'rifiut',
+    ];
+    const lowerText = text.toLowerCase();
+    const lenOk =
+      text.length <= 60 ||
+      (text.length <= 160 &&
+        SENTENCE_REJECT_HINTS.some((h) => lowerText.includes(h)));
+    if (!lenOk) continue;
     const key = text.toLowerCase();
     if (seen.has(key)) continue;
     seen.add(key);

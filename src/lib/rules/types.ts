@@ -30,5 +30,10 @@ export interface RemoteRules {
     ambiguousKeywords?: string[];
     /** Extra step-into keywords ("Meer opties"-varianten, PASS 3). */
     stepIntoKeywords?: string[];
+    /**
+     * Extra zin-fragmenten voor PASS 1.5 (substring-match binnen een
+     * knoptekst, alleen in cookie-banner-context). Zie REJECT_PHRASES.
+     */
+    rejectPhrases?: string[];
   };
 }

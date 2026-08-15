@@ -24,6 +24,7 @@ import {
   isRejectText,
   isAmbiguousRejectText,
   isStepIntoText,
+  containsRejectPhrase,
   hasCookieContext,
 } from './keywords.ts';
 
@@ -38,6 +39,13 @@ const CLICKABLE_SELECTOR = [
 
 /** Hoeveel parents we omhoog walken om een banner-container te vinden. */
 const MAX_PARENT_DEPTH = 15;
+
+/**
+ * Maximale tekstlengte voor een PASS 1.5 zin-match. Een weiger-knop met een
+ * hele zin erop is lang (~80 tekens), een alinea met een reject-woord erin is
+ * veel langer. Deze grens houdt PASS 1.5 op knoppen en niet op tekstblokken.
+ */
+const MAX_PHRASE_TEXT_LENGTH = 160;
 
 /**
  * Zoekt de eerste zichtbare reject-knop in de huidige DOM (incl. shadow).
@@ -66,6 +74,16 @@ export function findRejectButton(relaxContext = false): HTMLElement | null {
     if (isRejectText(text)) return el;
   }
 
+  // PASS 1.5: zin-matches ("... können Sie diese hier ablehnen.").
+  // Alleen op knop-achtige elementen binnen een cookie-banner, en met een
+  // lengtelimiet — zie REJECT_PHRASES in keywords.ts voor de motivatie.
+  for (const { el, text } of candidates) {
+    if (text.length > MAX_PHRASE_TEXT_LENGTH) continue;
+    if (!containsRejectPhrase(text)) continue;
+    if (!isSafeToClickPhrase(el)) continue;
+    if (relaxContext || isInCookieBanner(el)) return el;
+  }
+
   // PASS 2: ambiguous matches.
   // - Default: alleen binnen een fixed/sticky cookie-banner-container
   // - relaxContext: skip de container-check, matchen overal
@@ -75,6 +93,28 @@ export function findRejectButton(relaxContext = false): HTMLElement | null {
   }
 
   return null;
+}
+
+/**
+ * Vangrail voor PASS 1.5: alleen klikken op elementen die écht een knop zijn.
+ *
+ * Een zin als "Cookies kun je hier weigeren" staat op sommige sites op een
+ * gewone link naar de cookie-instellingenpagina. Die klikken zou de gebruiker
+ * wegnavigeren van de pagina waar hij is — erger dan een banner laten staan.
+ * Anchors mogen dus alleen als ze nergens heen gaan (`#`, leeg, javascript:).
+ */
+function isSafeToClickPhrase(el: HTMLElement): boolean {
+  const tag = el.tagName;
+  if (tag === 'BUTTON') return true;
+  if (tag === 'INPUT') return true;
+  if (el.getAttribute('role') === 'button') return true;
+
+  if (tag === 'A') {
+    const href = (el.getAttribute('href') ?? '').trim();
+    return href === '' || href === '#' || href.toLowerCase().startsWith('javascript:');
+  }
+
+  return false;
 }
 
 /**
