@@ -52,6 +52,14 @@ export const REJECT_KEYWORDS: readonly string[] = [
   'alleen functionele cookies',
   'alleen essentiële',
   'alleen essentiële cookies',
+  // v0.3.5 (#168): varianten zónder buigings-e. Lieferando/Thuisbezorgd
+  // (Just Eat Takeaway) gebruikt letterlijk "Alleen noodzakelijk" — die viel
+  // eerder buiten de exacte match en liet de banner staan.
+  'alleen noodzakelijk',
+  'alleen functioneel',
+  'alleen essentieel',
+  'alleen technisch noodzakelijk',
+  'alleen technisch noodzakelijke cookies',
   'doorgaan zonder accepteren',
   'verder zonder accepteren',
   // v0.1.5: "Nee dank je"-varianten zoals op sabineboogaard.nl waar de

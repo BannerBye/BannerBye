@@ -48,6 +48,55 @@ const MAX_PARENT_DEPTH = 15;
 const MAX_PHRASE_TEXT_LENGTH = 160;
 
 /**
+ * Maximale lengte van een label dat we van een shadow-host overnemen.
+ * Een knoplabel is kort; is de host-tekst langer, dan is het waarschijnlijk
+ * een container en geen knop — dan liever niets dan een verkeerde match.
+ */
+const MAX_HOST_LABEL_LENGTH = 60;
+
+/**
+ * Leest de zichtbare tekst van een klikbaar element.
+ *
+ * v0.3.5 (#168): design systems op basis van web-componenten — Just Eat's
+ * PIE (lieferando.de, thuisbezorgd.nl), maar ook Lit/Stencil-gebaseerde
+ * bibliotheken in het algemeen — renderen een echte <button> ín hun shadow
+ * root en zetten het label via een <slot> uit de light DOM. De shadow-button
+ * heeft dan lege innerText én textContent, terwijl de host (<pie-button>) de
+ * zichtbare tekst draagt. Zonder deze fallback ziet de matcher een knop
+ * zonder tekst, matcht geen enkel keyword, en blijft de banner staan.
+ *
+ * Volgorde: eigen tekst → aria-label → tekst van de dichtstbijzijnde
+ * custom-element-host. We klikken bewust nog steeds op de shadow-button
+ * zelf, want dáár hangt de event-handler.
+ */
+function readLabel(el: HTMLElement): string {
+  const own = (el.innerText || el.textContent || '').trim();
+  if (own) return own;
+
+  const aria = (el.getAttribute('aria-label') || '').trim();
+  if (aria) return aria;
+
+  let root: Node = el.getRootNode();
+  let depth = 0;
+  while (root instanceof ShadowRoot && depth < 3) {
+    const host = root.host as HTMLElement | null;
+    if (!host) break;
+    // Alleen custom elements (tagnaam met koppelteken) — een gewone <div>
+    // als shadow-host zegt niets over een knoplabel.
+    if (host.tagName.includes('-')) {
+      const hostText = (host.innerText || host.textContent || '').trim();
+      if (hostText && hostText.length <= MAX_HOST_LABEL_LENGTH) return hostText;
+      const hostAria = (host.getAttribute('aria-label') || '').trim();
+      if (hostAria) return hostAria;
+    }
+    root = host.getRootNode();
+    depth++;
+  }
+
+  return '';
+}
+
+/**
  * Zoekt de eerste zichtbare reject-knop in de huidige DOM (incl. shadow).
  * Eerst strict pass, dan ambiguous-met-context pass.
  *
@@ -64,8 +113,8 @@ export function findRejectButton(relaxContext = false): HTMLElement | null {
   const candidates: Array<{ el: HTMLElement; text: string }> = [];
   for (const el of walkClickables(document)) {
     if (!isVisible(el)) continue;
-    const text = el.innerText || el.textContent || '';
-    if (!text.trim()) continue;
+    const text = readLabel(el);
+    if (!text) continue;
     candidates.push({ el, text });
   }
 
@@ -130,8 +179,8 @@ function isSafeToClickPhrase(el: HTMLElement): boolean {
 export function findStepIntoButton(): HTMLElement | null {
   for (const el of walkClickables(document)) {
     if (!isVisible(el)) continue;
-    const text = el.innerText || el.textContent || '';
-    if (!text.trim()) continue;
+    const text = readLabel(el);
+    if (!text) continue;
     if (isStepIntoText(text) && isInCookieBanner(el)) return el;
   }
   return null;
