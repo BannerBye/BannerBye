@@ -22,6 +22,11 @@ import {
   clearPendingReportFixed,
 } from '@/lib/storage';
 import { isHostPaused, normalizeHost } from '@/lib/host';
+import {
+  isConsentOrPayHost,
+  setRemoteConsentOrPayHosts,
+} from '@/lib/consent-or-pay';
+import { getCachedRules } from '@/lib/rules/fetcher';
 import { getMilestoneById, MILESTONES, type Milestone } from '@/lib/milestones';
 import { downloadShareCard, downloadStatsCard } from '@/lib/share-card';
 import type { LocalStats, SyncedSettings } from '@/lib/types';
@@ -53,6 +58,12 @@ interface PopupState {
   /** Hostname van de actieve tab, of null als chrome:// of dergelijke. */
   hostname: string | null;
   loading: boolean;
+  /**
+   * Staat deze site bekend als consent-or-pay ("PUR")? Dan houdt BannerBye
+   * zich bewust in en leggen we dat hier uit — anders leest een blijvende
+   * banner als een storing. Zie src/lib/consent-or-pay.ts.
+   */
+  consentOrPay: boolean;
   /** v0.2.0: Report-modal state. null = modal dicht. */
   reportModal: {
     hostname: string;
@@ -89,6 +100,7 @@ export function App() {
     hostname: null,
     loading: true,
     reportModal: null,
+    consentOrPay: false,
   });
 
   useEffect(() => {
@@ -98,7 +110,24 @@ export function App() {
         getStats(),
         getActiveTabHost(),
       ]);
-      setState({ settings, stats, hostname, loading: false, reportModal: null });
+      // Remote consent-or-pay-lijst erbij als 'ie gecached is; faalt dat,
+      // dan werkt de gebundelde lijst nog steeds.
+      try {
+        const remote = await getCachedRules();
+        setRemoteConsentOrPayHosts(remote?.consentOrPay);
+      } catch {
+        // cache onbeschikbaar — gebundelde lijst volstaat.
+      }
+      const consentOrPay =
+        hostname !== null && isConsentOrPayHost(hostname);
+      setState({
+        settings,
+        stats,
+        hostname,
+        loading: false,
+        reportModal: null,
+        consentOrPay,
+      });
     })();
   }, []);
 
@@ -107,7 +136,10 @@ export function App() {
     : false;
 
   const isActiveOnSite =
-    state.settings.enabled && state.hostname !== null && !isSitePaused;
+    state.settings.enabled &&
+    state.hostname !== null &&
+    !isSitePaused &&
+    !state.consentOrPay;
 
   async function toggleGlobal() {
     const next = await updateSettings({ enabled: !state.settings.enabled });
@@ -408,11 +440,25 @@ export function App() {
         </section>
       )}
 
-      <section className="bb-status">
+      <section
+        className={`bb-status${state.consentOrPay && state.settings.enabled ? ' bb-status-wall' : ''}`}
+      >
         {!state.settings.enabled ? (
           <p className="bb-status-text">BannerBye is off everywhere.</p>
         ) : !state.hostname ? (
           <p className="bb-status-text">No site to act on.</p>
+        ) : state.consentOrPay ? (
+          <>
+            <p className="bb-status-text">
+              Accept-or-pay wall on{' '}
+              <span className="bb-host">{state.hostname}</span>.
+            </p>
+            <p className="bb-status-note">
+              This site offers no way to refuse for free — only accept, or
+              subscribe. That is a choice about money, so BannerBye leaves it
+              to you.
+            </p>
+          </>
         ) : isSitePaused ? (
           <p className="bb-status-text">
             Paused on <span className="bb-host">{state.hostname}</span>.
@@ -436,7 +482,7 @@ export function App() {
           </span>
         </button>
 
-        {state.hostname && state.settings.enabled && (
+        {state.hostname && state.settings.enabled && !state.consentOrPay && (
           <button
             type="button"
             className="bb-pause"

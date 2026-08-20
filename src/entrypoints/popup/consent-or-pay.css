@@ -1,0 +1,22 @@
+/**
+ * Popup-styling voor de consent-or-pay-status.
+ *
+ * Apart gehouden van style.css omdat het bij de feature hoort (zie
+ * src/lib/consent-or-pay.ts) en zo in één oogopslag te vinden is.
+ *
+ * Toon: dit is geen foutmelding maar een bewuste keuze van BannerBye. Een
+ * zachte ember-tint valt op zonder alarmerend te zijn — rood zou lezen als
+ * "er is iets stuk", en dat is precies het misverstand dat we wegnemen.
+ */
+
+.bb-status-wall {
+  background: rgba(232, 90, 44, 0.06);
+  border-color: rgba(232, 90, 44, 0.3);
+}
+
+.bb-status-note {
+  margin-top: 6px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--smoke);
+}
