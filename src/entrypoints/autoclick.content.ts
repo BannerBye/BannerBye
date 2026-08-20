@@ -33,6 +33,7 @@ import { getCachedRules } from '@/lib/rules/fetcher.ts';
 import { getSettings } from '@/lib/storage.ts';
 import { isHostPaused } from '@/lib/host.ts';
 import { isPdfDocument } from '@/lib/pdf-guard.ts';
+import { shouldProcessFrame } from '@/lib/frame-guard.ts';
 
 export default defineContentScript({
   matches: ['<all_urls>'],
@@ -61,9 +62,16 @@ export default defineContentScript({
   // gerendered zijn, vroeg genoeg dat de gebruiker er nog niet veel
   // van gezien heeft.
   runAt: 'document_idle',
-  allFrames: false,
+  // v0.3.7 (#170): ook in sub-frames. Sourcepoint (bild.de, spiegel.de,
+  // theguardian.com) rendert zijn banner in een cross-origin iframe; vanuit
+  // het hoofdframe is die principieel onbereikbaar (contentDocument gooit).
+  // `shouldProcessFrame()` houdt advertentie-iframes buiten de deur.
+  allFrames: true,
 
   async main() {
+    // v0.3.7: in sub-frames alleen doorgaan als dit een consent-frame kan zijn.
+    if (!shouldProcessFrame()) return;
+
     // v0.3.1: PDF's op extensieloze URL's glippen door excludeMatches — runtime-check.
     if (isPdfDocument()) return;
 

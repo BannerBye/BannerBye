@@ -14,8 +14,19 @@ import { defineContentScript } from 'wxt/sandbox';
 import { getSettings } from '@/lib/storage.ts';
 import { isHostPaused } from '@/lib/host.ts';
 import { isPdfDocument } from '@/lib/pdf-guard.ts';
+import { shouldProcessFrame } from '@/lib/frame-guard.ts';
 
-/** Feature-flag — pas op true na dev-browser-verificatie. */
+/**
+ * Feature-flag — pas op true na dev-browser-verificatie.
+ *
+ * ⚠️ STAAT NOG STEEDS UIT (vastgesteld 2026-08-21). Deze vlag is bij de bouw
+ * van de laag op `false` gezet en is sindsdien nooit gewijzigd — te
+ * controleren met `git log -L` op deze regel. Eerdere release-notities die
+ * beweerden dat de Autoconsent-motor sinds v0.3.0 live stond, klopten dus
+ * niet: de 672 KB-regelbundel zit niet in de gepubliceerde builds (die zijn
+ * ~476 KB in totaal). De laag is nu wel iframe-klaar; aanzetten pas ná een
+ * echte browsertest op Sourcepoint-sites (bild.de, spiegel.de, theguardian.com).
+ */
 const AUTOCONSENT_LAYER_ENABLED = false;
 
 export default defineContentScript({
@@ -39,9 +50,17 @@ export default defineContentScript({
     '*://*.exactonline.es/*',
   ],
   runAt: 'document_start',
-  allFrames: false,
+  // v0.3.7 (#170): 26 van de gebundelde Autoconsent-regels hebben
+  // `runContext.frame === true` en `main === false` — die konden met
+  // allFrames:false nooit vuren. Sourcepoint (bild.de) is precies zo'n geval.
+  allFrames: true,
 
   async main() {
+    // v0.3.7: in sub-frames alleen doorgaan als dit een consent-frame kan zijn.
+    // Zonder deze rem zou de 672 KB-regelbundel in élk advertentie-iframe
+    // geladen worden — op een nieuwssite tientallen keren per pagina.
+    if (!shouldProcessFrame()) return;
+
     // v0.3.1: PDF's op extensieloze URL's glippen door excludeMatches — runtime-check.
     if (isPdfDocument()) return;
 
