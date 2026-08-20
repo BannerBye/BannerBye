@@ -104,6 +104,8 @@ function isValidRules(value: unknown): value is RemoteRules {
     if (acObj.rejectPhrases !== undefined && !isStringArray(acObj.rejectPhrases)) return false;
   }
 
+  if (obj.consentOrPay !== undefined && !isStringArray(obj.consentOrPay)) return false;
+
   return true;
 }
 
