@@ -33,7 +33,10 @@ import { getCachedRules } from '@/lib/rules/fetcher.ts';
 import { getSettings } from '@/lib/storage.ts';
 import { isHostPaused } from '@/lib/host.ts';
 import { isPdfDocument } from '@/lib/pdf-guard.ts';
-import { shouldProcessFrame } from '@/lib/frame-guard.ts';
+import {
+  isConsentOrPayHost,
+  setRemoteConsentOrPayHosts,
+} from '@/lib/consent-or-pay.ts';
 
 export default defineContentScript({
   matches: ['<all_urls>'],
@@ -62,16 +65,9 @@ export default defineContentScript({
   // gerendered zijn, vroeg genoeg dat de gebruiker er nog niet veel
   // van gezien heeft.
   runAt: 'document_idle',
-  // v0.3.7 (#170): ook in sub-frames. Sourcepoint (bild.de, spiegel.de,
-  // theguardian.com) rendert zijn banner in een cross-origin iframe; vanuit
-  // het hoofdframe is die principieel onbereikbaar (contentDocument gooit).
-  // `shouldProcessFrame()` houdt advertentie-iframes buiten de deur.
-  allFrames: true,
+  allFrames: false,
 
   async main() {
-    // v0.3.7: in sub-frames alleen doorgaan als dit een consent-frame kan zijn.
-    if (!shouldProcessFrame()) return;
-
     // v0.3.1: PDF's op extensieloze URL's glippen door excludeMatches — runtime-check.
     if (isPdfDocument()) return;
 
@@ -95,8 +91,25 @@ export default defineContentScript({
       if (remote?.autoclick) {
         setRemoteKeywords(remote.autoclick);
       }
+      setRemoteConsentOrPayHosts(remote?.consentOrPay);
     } catch {
       // storage.local niet beschikbaar of corrupt — niet kritiek.
+    }
+
+    // Consent-or-pay-muur? Dan klikken we hier niets. Er ís geen weigerknop;
+    // de enige knop is "accepteren", en die indrukken is precies wat BannerBye
+    // níet doet. Meteen melden dat we niets afhandelen, zodat de prehide-laag
+    // de muur direct toont in plaats van 'm tot de safety-timeout te verbergen
+    // — een betaalmuur verbergen is geen optie. Zie src/lib/consent-or-pay.ts.
+    if (isConsentOrPayHost(location.hostname)) {
+      try {
+        window.dispatchEvent(
+          new CustomEvent('bb:autoclick-done', { detail: { handled: false } }),
+        );
+      } catch {
+        // niet kritiek — prehide heeft ook nog z'n eigen vangnet-timeout.
+      }
+      return;
     }
 
     const result = await startAutoClick();
