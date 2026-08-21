@@ -12,6 +12,9 @@ importers:
 
   .:
     dependencies:
+      '@duckduckgo/autoconsent':
+        specifier: ^16.9.0
+        version: 16.23.0
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -158,6 +161,9 @@ packages:
     resolution: {integrity: sha512-7rBLLzWQnBwutH2WZ0EWUkQdihqrnLYCUMaB44hSol9e0/cdIhuNFcqZO0xNheAU6qqHVA8sMiLofkYTgb+lmw==}
     engines: {node: '>= 0.10.4'}
     hasBin: true
+
+  '@duckduckgo/autoconsent@16.23.0':
+    resolution: {integrity: sha512-NTmDhASFf5pUsSwg2TyT9R75GYUcuYZXPyBnRcYgJgozg6RLeXXP9uH8ADxA364yQ2gJBMu83AN/D24Y4nkPKg==}
 
   '@emnapi/runtime@1.10.0':
     resolution: {integrity: sha512-ewvYlk86xUoGI0zQRNq/mC+16R1QeDlKQy21Ki3oSYXNgLb45GV1P6A0M+/s6nyCuNDqe5VpaY84BzXGwVbwFA==}
@@ -1892,6 +1898,12 @@ packages:
     resolution: {integrity: sha512-pn99VhoACYR8nFHhxqix+uvsbXineAasWm5ojXoN8xEwK5Kd3/TrhNn1wByuD52UxWRLy8pu+kRMniEi6Eq9Zg==}
     engines: {node: '>=12.0.0'}
 
+  tldts-core@7.4.10:
+    resolution: {integrity: sha512-KnQjp53ZekKgm/r3l+u8kJGGzYgrWdP8+Mql7a4vijh2WE0IrZWspQj/TpTxDho/YxO+AnOZnIjQcCD+q6iJsw==}
+
+  tldts-experimental@7.4.10:
+    resolution: {integrity: sha512-l+FUGTqw3cYLnM6uL45IhdIG1ue9N7ZnMe9ZFC0S3/ROTL6xkJrUFQvsjfqSD9YzywDvgWj9uRZTXib3v3bnHw==}
+
   tmp@0.2.5:
     resolution: {integrity: sha512-voyz6MApa1rQGUxT3E+BK7/ROe8itEx7vD8/HEvt4xwXucvQ5G5oeEiHkmHZJuBO21RpOf+YYm9MOivj709jow==}
     engines: {node: '>=14.14'}
@@ -2235,6 +2247,10 @@ snapshots:
       split: 1.0.1
     transitivePeerDependencies:
       - supports-color
+
+  '@duckduckgo/autoconsent@16.23.0':
+    dependencies:
+      tldts-experimental: 7.4.10
 
   '@emnapi/runtime@1.10.0':
     dependencies:
@@ -3821,6 +3837,12 @@ snapshots:
     dependencies:
       fdir: 6.5.0(picomatch@4.0.4)
       picomatch: 4.0.4
+
+  tldts-core@7.4.10: {}
+
+  tldts-experimental@7.4.10:
+    dependencies:
+      tldts-core: 7.4.10
 
   tmp@0.2.5: {}
 
