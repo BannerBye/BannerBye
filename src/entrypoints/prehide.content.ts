@@ -23,7 +23,7 @@ import { getSettings } from '@/lib/storage.ts';
 import { isHostPaused } from '@/lib/host.ts';
 import { isPdfDocument } from '@/lib/pdf-guard.ts';
 import {
-  isConsentOrPayHost,
+  isConsentOrPayContext,
   setRemoteConsentOrPayHosts,
 } from '@/lib/consent-or-pay.ts';
 import { getCachedRules } from '@/lib/rules/fetcher.ts';
@@ -63,7 +63,7 @@ export default defineContentScript({
     // verbergen. Zo'n muur is geen cookiebanner maar een betaalkeuze; die
     // hoort direct zichtbaar te zijn. Deze check is synchroon zodat er geen
     // enkel frame verborgen wordt. (Remote-hosts volgen hieronder async.)
-    if (isConsentOrPayHost(location.hostname)) return;
+    if (isConsentOrPayContext()) return;
 
     // Zo vroeg mogelijk verbergen — vóór de banner schildert.
     injectPrehide();
@@ -92,7 +92,7 @@ export default defineContentScript({
       try {
         const remote = await getCachedRules();
         setRemoteConsentOrPayHosts(remote?.consentOrPay);
-        if (isConsentOrPayHost(location.hostname)) reveal();
+        if (isConsentOrPayContext()) reveal();
       } catch {
         // cache onbeschikbaar — vangnet-timeout vangt dit af.
       }

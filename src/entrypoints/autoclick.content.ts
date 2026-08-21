@@ -33,8 +33,9 @@ import { getCachedRules } from '@/lib/rules/fetcher.ts';
 import { getSettings } from '@/lib/storage.ts';
 import { isHostPaused } from '@/lib/host.ts';
 import { isPdfDocument } from '@/lib/pdf-guard.ts';
+import { shouldProcessFrame } from '@/lib/frame-guard.ts';
 import {
-  isConsentOrPayHost,
+  isConsentOrPayContext,
   setRemoteConsentOrPayHosts,
 } from '@/lib/consent-or-pay.ts';
 
@@ -65,9 +66,16 @@ export default defineContentScript({
   // gerendered zijn, vroeg genoeg dat de gebruiker er nog niet veel
   // van gezien heeft.
   runAt: 'document_idle',
-  allFrames: false,
+  // v0.3.7 (#170): ook in sub-frames. Sourcepoint (bild.de, spiegel.de,
+  // theguardian.com) rendert zijn banner in een cross-origin iframe; vanuit
+  // het hoofdframe is die principieel onbereikbaar (contentDocument gooit).
+  // `shouldProcessFrame()` houdt advertentie-iframes buiten de deur.
+  allFrames: true,
 
   async main() {
+    // v0.3.7: in sub-frames alleen doorgaan als dit een consent-frame kan zijn.
+    if (!shouldProcessFrame()) return;
+
     // v0.3.1: PDF's op extensieloze URL's glippen door excludeMatches — runtime-check.
     if (isPdfDocument()) return;
 
@@ -100,8 +108,12 @@ export default defineContentScript({
     // de enige knop is "accepteren", en die indrukken is precies wat BannerBye
     // níet doet. Meteen melden dat we niets afhandelen, zodat de prehide-laag
     // de muur direct toont in plaats van 'm tot de safety-timeout te verbergen
-    // — een betaalmuur verbergen is geen optie. Zie src/lib/consent-or-pay.ts.
-    if (isConsentOrPayHost(location.hostname)) {
+    // — een betaalmuur verbergen is geen optie.
+    //
+    // Let op: `isConsentOrPayContext()` en niet `location.hostname`. Sinds
+    // v0.3.7 draait dit script ook in het consent-iframe, en daar is de
+    // hostname die van de CMP-leverancier (privacy-mgmt.com), niet bild.de.
+    if (isConsentOrPayContext()) {
       try {
         window.dispatchEvent(
           new CustomEvent('bb:autoclick-done', { detail: { handled: false } }),
