@@ -33,6 +33,14 @@ export const REJECT_KEYWORDS: readonly string[] = [
   'only essential',
   'use necessary cookies only',
   'use essential cookies only',
+  // v0.4.0 (#170-test): typeless.com toont "Reject non-essential cookies".
+  // PASS 1 is een exacte match, dus de losse variant 'reject' hielp hier niet.
+  'reject non-essential cookies',
+  'reject non-essential',
+  'reject non essential cookies',
+  'reject optional cookies',
+  'decline optional cookies',
+  'reject unnecessary cookies',
   'continue without accepting',
   'continue without consent',
   // v0.1.5: courtesy-style decline-knoppen die we eerder gemist hebben.
@@ -85,6 +93,15 @@ export const REJECT_KEYWORDS: readonly string[] = [
   'nur erforderliche cookies',
   'nur notwendige',
   'nur notwendige cookies',
+  // v0.4.0 (#170-test): event-buddy.de toont "Nur Essenzielle" — die variant
+  // ontbrak, waardoor de banner bleef staan. Beide spellingen meenemen.
+  'nur essenzielle',
+  'nur essenzielle cookies',
+  'nur essentielle',
+  'nur essentielle cookies',
+  'nur technisch notwendige',
+  'nur technisch notwendige cookies',
+  'essenzielle cookies',
   'weiter ohne zustimmung',
   // v0.1.5: courtesy-decline.
   'nein danke',
