@@ -34,6 +34,10 @@ import { getSettings } from '@/lib/storage.ts';
 import { isHostPaused } from '@/lib/host.ts';
 import { isPdfDocument } from '@/lib/pdf-guard.ts';
 import { shouldProcessFrame } from '@/lib/frame-guard.ts';
+import {
+  isConsentOrPayContext,
+  setRemoteConsentOrPayHosts,
+} from '@/lib/consent-or-pay.ts';
 
 export default defineContentScript({
   matches: ['<all_urls>'],
@@ -95,8 +99,29 @@ export default defineContentScript({
       if (remote?.autoclick) {
         setRemoteKeywords(remote.autoclick);
       }
+      setRemoteConsentOrPayHosts(remote?.consentOrPay);
     } catch {
       // storage.local niet beschikbaar of corrupt — niet kritiek.
+    }
+
+    // Consent-or-pay-muur? Dan klikken we hier niets. Er ís geen weigerknop;
+    // de enige knop is "accepteren", en die indrukken is precies wat BannerBye
+    // níet doet. Meteen melden dat we niets afhandelen, zodat de prehide-laag
+    // de muur direct toont in plaats van 'm tot de safety-timeout te verbergen
+    // — een betaalmuur verbergen is geen optie.
+    //
+    // Let op: `isConsentOrPayContext()` en niet `location.hostname`. Sinds
+    // v0.3.7 draait dit script ook in het consent-iframe, en daar is de
+    // hostname die van de CMP-leverancier (privacy-mgmt.com), niet bild.de.
+    if (isConsentOrPayContext()) {
+      try {
+        window.dispatchEvent(
+          new CustomEvent('bb:autoclick-done', { detail: { handled: false } }),
+        );
+      } catch {
+        // niet kritiek — prehide heeft ook nog z'n eigen vangnet-timeout.
+      }
+      return;
     }
 
     const result = await startAutoClick();

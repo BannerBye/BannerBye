@@ -26,6 +26,7 @@ import { defineContentScript } from 'wxt/sandbox';
 import { handlers } from '@/lib/cmp/index.ts';
 import { readActiveState } from '@/lib/active-flag.ts';
 import { isPdfDocument } from '@/lib/pdf-guard.ts';
+import { isConsentOrPayContext } from '@/lib/consent-or-pay.ts';
 
 export default defineContentScript({
   // v0.2.0 (#111): Chrome MV3 → dynamic. Zie tcf.content.ts voor toelichting.
@@ -67,6 +68,13 @@ export default defineContentScript({
     // v0.2.0: vroege exit als BannerBye uit staat of host gepauzeerd is.
     // Zie active-flag bridge in background.ts.
     if (readActiveState() !== 'active') {
+      return;
+    }
+
+    // Consent-or-pay-muur: niets aanraken, ook niet via de CMP-API. Deze laag
+    // draait in MAIN world zonder storage-toegang, dus alleen de gebundelde
+    // lijst telt hier; de remote-lijst wordt door autoclick en prehide gedekt.
+    if (isConsentOrPayContext()) {
       return;
     }
 

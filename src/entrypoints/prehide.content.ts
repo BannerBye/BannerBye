@@ -14,6 +14,7 @@
  *  - harde safety-timeout → altijd tonen na REVEAL_FALLBACK_MS, wat er ook
  *    gebeurt.
  *  - extensie uit / site gepauzeerd → meteen tonen.
+ *  - consent-or-pay-muur → nooit verbergen; zie src/lib/consent-or-pay.ts.
  */
 
 import { defineContentScript } from 'wxt/sandbox';
@@ -21,6 +22,11 @@ import { injectPrehide, revealPrehide } from '@/lib/autoclick/prehide.ts';
 import { getSettings } from '@/lib/storage.ts';
 import { isHostPaused } from '@/lib/host.ts';
 import { isPdfDocument } from '@/lib/pdf-guard.ts';
+import {
+  isConsentOrPayContext,
+  setRemoteConsentOrPayHosts,
+} from '@/lib/consent-or-pay.ts';
+import { getCachedRules } from '@/lib/rules/fetcher.ts';
 
 /** Maximale tijd dat een banner onzichtbaar mag blijven zonder uitsluitsel. */
 const REVEAL_FALLBACK_MS = 3500;
@@ -53,6 +59,12 @@ export default defineContentScript({
     // v0.3.1: PDF's op extensieloze URL's glippen door excludeMatches — runtime-check.
     if (isPdfDocument()) return;
 
+    // Consent-or-pay-muur uit de gebundelde lijst? Dan helemaal niet
+    // verbergen. Zo'n muur is geen cookiebanner maar een betaalkeuze; die
+    // hoort direct zichtbaar te zijn. Deze check is synchroon zodat er geen
+    // enkel frame verborgen wordt. (Remote-hosts volgen hieronder async.)
+    if (isConsentOrPayContext()) return;
+
     // Zo vroeg mogelijk verbergen — vóór de banner schildert.
     injectPrehide();
 
@@ -69,9 +81,20 @@ export default defineContentScript({
         const settings = await getSettings();
         if (!settings.enabled || isHostPaused(location.hostname, settings.pausedSites)) {
           reveal();
+          return;
         }
       } catch {
         // Storage-race bij startup — laat de safety-timeout het afhandelen.
+      }
+
+      // Consent-or-pay-hosts die alleen via rules.json bekend zijn: zodra de
+      // cache gelezen is alsnog meteen tonen, niet wachten op de autoclick-laag.
+      try {
+        const remote = await getCachedRules();
+        setRemoteConsentOrPayHosts(remote?.consentOrPay);
+        if (isConsentOrPayContext()) reveal();
+      } catch {
+        // cache onbeschikbaar — vangnet-timeout vangt dit af.
       }
     })();
 

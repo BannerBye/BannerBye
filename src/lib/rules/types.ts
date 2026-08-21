@@ -36,4 +36,14 @@ export interface RemoteRules {
      */
     rejectPhrases?: string[];
   };
+
+  /**
+   * Hosts met een consent-or-pay-muur (het "PUR"-model): geen gratis
+   * weigeroptie, alleen accepteren of betalen. BannerBye laat die met rust
+   * en legt in de popup uit waarom. Zie `src/lib/consent-or-pay.ts`.
+   *
+   * Alleen toevoegen na verificatie dat er écht geen gratis weigerknop is —
+   * een host hier onterecht in zetten laat een site los die we wél aankonden.
+   */
+  consentOrPay?: string[];
 }
