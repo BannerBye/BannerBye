@@ -47,8 +47,11 @@ const REVIEW_URLS: Record<string, string> = {
   firefox: 'https://addons.mozilla.org/firefox/addon/bannerbye/reviews/',
   safari: 'https://apps.apple.com/app/id6771131989?action=write-review',
 };
+// Zelfde cast als tcf.content.ts — wxt's ImportMeta-typing dekt `env` hier niet.
 const REVIEW_URL =
-  REVIEW_URLS[import.meta.env.BROWSER] ?? REVIEW_URLS.chrome!;
+  REVIEW_URLS[
+    (import.meta as unknown as { env: { BROWSER: string } }).env.BROWSER
+  ] ?? REVIEW_URLS.chrome!;
 const REVIEW_THRESHOLD = 100;
 
 type ReportStatus = 'idle' | 'sending' | 'sent' | 'error';
