@@ -40,6 +40,17 @@ const CONSENT_FRAME_HOSTS = [
   'sourcepoint.mgr.consensu.org',
 ];
 
+/**
+ * Generieke herkenning voor consent-frames op een eigen (sub)domein.
+ *
+ * v0.3.7 (#173): Duitse uitgevers hosten hun CMP vaak zelf onder namen als
+ * `cmp.uitgever.de`, `consent.uitgever.de` of `privacy.uitgever.de` — die
+ * staan per definitie niet in een vaste hostlijst. Deze fragmenten vangen dat
+ * patroon af. Bewust smal gehouden: het gaat alleen om sub-frames, en een
+ * advertentie-iframe heet zelden zo.
+ */
+const CONSENT_HOST_FRAGMENTS = ['consent', 'cmp.', '.cmp', 'privacy', 'cookie', 'gdpr'];
+
 /** Draaien we in een sub-frame (dus niet het hoofdvenster)? */
 export function isSubFrame(): boolean {
   try {
@@ -63,6 +74,12 @@ export function shouldProcessFrame(): boolean {
   try {
     const href = location.href.toLowerCase();
     if (CONSENT_FRAME_HOSTS.some((host) => href.includes(host))) return true;
+
+    // Zelf-gehoste CMP's: kijk alleen naar de hostnaam, niet naar het pad —
+    // anders matcht elke URL met "cookie" of "privacy" erin (bijvoorbeeld een
+    // link naar een privacyverklaring) en halen we advertentie-iframes binnen.
+    const host = location.hostname.toLowerCase();
+    if (CONSENT_HOST_FRAGMENTS.some((frag) => host.includes(frag))) return true;
 
     // Fallback voor zelfgebouwde consent-iframes op een eigen subdomein:
     // een klein document dat expliciet over cookies/toestemming gaat.
