@@ -11,8 +11,12 @@
 import {
   type SyncedSettings,
   type LocalStats,
+  type ActivityEntry,
+  type ActivityOutcome,
   DEFAULT_SETTINGS,
   DEFAULT_STATS,
+  ACTIVITY_CAP,
+  ACTIVITY_TTL_MS,
 } from './types';
 
 const SETTINGS_KEY = 'settings';
@@ -72,6 +76,75 @@ export async function incrementBlocked(by = 1): Promise<LocalStats> {
   const next: LocalStats = { ...current, blocked: current.blocked + by };
   await chrome.storage.local.set({ [STATS_KEY]: next });
   return next;
+}
+
+/**
+ * v0.4.0: leg vast wat BannerBye op een host deed — het bewijs achter de teller.
+ *
+ * Bewust samengevat per host: bestaat er al een regel voor deze host, dan wordt
+ * die bijgewerkt in plaats van dat er een tweede bijkomt. De lijst is dus een
+ * overzicht van wáár BannerBye werkte, geen tijdlijn van je bezoeken.
+ *
+ * Een 'refused' overschrijft een eerdere 'clean' voor dezelfde host — als er op
+ * die site ooit iets te weigeren viel, is dat het interessantere feit.
+ */
+export async function recordActivity(
+  host: string,
+  outcome: ActivityOutcome,
+  platform?: string,
+): Promise<LocalStats> {
+  if (!host) return getStats();
+
+  const current = await getStats();
+  const now = Date.now();
+
+  // Vervallen regels weggooien vóór we iets toevoegen.
+  const fresh = (current.recentActivity ?? []).filter(
+    (e) => now - e.lastAt < ACTIVITY_TTL_MS,
+  );
+
+  const existing = fresh.find((e) => e.host === host);
+  let next: ActivityEntry[];
+
+  if (existing) {
+    const merged: ActivityEntry = {
+      ...existing,
+      lastAt: now,
+      count: existing.count + 1,
+      outcome: outcome === 'refused' ? 'refused' : existing.outcome,
+      platform: platform ?? existing.platform,
+    };
+    next = [merged, ...fresh.filter((e) => e.host !== host)];
+  } else {
+    next = [{ host, platform, outcome, lastAt: now, count: 1 }, ...fresh];
+  }
+
+  // Nieuwste bovenaan, gecapt.
+  const capped = next.slice(0, ACTIVITY_CAP);
+  const updated: LocalStats = { ...current, recentActivity: capped };
+  await chrome.storage.local.set({ [STATS_KEY]: updated });
+  return updated;
+}
+
+/** v0.4.0: activiteitenlijst wissen — één tik in de popup. */
+export async function clearActivity(): Promise<LocalStats> {
+  const current = await getStats();
+  const updated: LocalStats = { ...current, recentActivity: [] };
+  await chrome.storage.local.set({ [STATS_KEY]: updated });
+  return updated;
+}
+
+/**
+ * v0.4.0: lees de activiteitenlijst en gooi verlopen regels weg.
+ * De popup gebruikt dit zodat oude regels ook verdwijnen als er intussen
+ * niets nieuws is bijgekomen.
+ */
+export async function getRecentActivity(): Promise<ActivityEntry[]> {
+  const stats = await getStats();
+  const now = Date.now();
+  return (stats.recentActivity ?? []).filter(
+    (e) => now - e.lastAt < ACTIVITY_TTL_MS,
+  );
 }
 
 /** Eenmalig bij install: zet installedAt. */

@@ -55,9 +55,20 @@ export default defineContentScript({
     // v0.3.1: PDF's op extensieloze URL's glippen door excludeMatches — runtime-check.
     if (isPdfDocument()) return;
 
-    const relay = (): void => {
+    // v0.4.0: het platform-label uit de CustomEvent-detail reist mee naar
+    // background, zodat de popup kan tonen wát er herkend werd.
+    const relay = (event: Event): void => {
+      let platform: string | undefined;
       try {
-        void chrome.runtime.sendMessage({ type: 'bb:banner-blocked' });
+        const detail = (event as CustomEvent<{ platform?: string }>).detail;
+        if (detail && typeof detail.platform === 'string') {
+          platform = detail.platform;
+        }
+      } catch {
+        // detail ontbreekt of is niet leesbaar — label is optioneel.
+      }
+      try {
+        void chrome.runtime.sendMessage({ type: 'bb:banner-blocked', platform });
       } catch {
         // Background-worker idle of ander runtime-probleem — niet kritiek.
       }

@@ -179,7 +179,12 @@ export default defineContentScript({
         // Belangrijk: dispatch op `document`, niet `window`. Events op
         // window flowen NIET cross-world in Chrome MV3 (MAIN ↔ ISOLATED
         // hebben aparte window-listeners). Document delen ze wel.
-        document.dispatchEvent(new CustomEvent('bb:tcf-blocked'));
+        document.dispatchEvent(
+          new CustomEvent('bb:tcf-blocked', {
+            // v0.4.0: platform-label voor de activiteitenlijst in de popup.
+            detail: { platform: 'IAB TCF' },
+          }),
+        );
       } catch {
         // CustomEvent kan in oude/exotische contexts falen — niet kritiek.
       }

@@ -84,7 +84,10 @@ export default defineContentScript({
       // Bekende CMP geweigerd → tel mee als een geblokkeerde banner (background
       // is single source of truth voor de teller/badge/milestones).
       try {
-        void chrome.runtime.sendMessage({ type: 'bb:banner-blocked' });
+        void chrome.runtime.sendMessage({
+          type: 'bb:banner-blocked',
+          platform: 'Known platform',
+        });
       } catch {
         // background kan net idle zijn — niet kritiek.
       }

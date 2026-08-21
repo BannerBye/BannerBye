@@ -33,7 +33,7 @@ import { getCachedRules } from '@/lib/rules/fetcher.ts';
 import { getSettings } from '@/lib/storage.ts';
 import { isHostPaused } from '@/lib/host.ts';
 import { isPdfDocument } from '@/lib/pdf-guard.ts';
-import { shouldProcessFrame } from '@/lib/frame-guard.ts';
+import { shouldProcessFrame, isSubFrame } from '@/lib/frame-guard.ts';
 
 export default defineContentScript({
   matches: ['<all_urls>'],
@@ -125,7 +125,11 @@ export default defineContentScript({
       // single source of truth voor storage-writes. Voorkomt race tussen
       // popup en background-detectie van nieuwe milestones (#86).
       try {
-        void chrome.runtime.sendMessage({ type: 'bb:banner-blocked' });
+        void chrome.runtime.sendMessage({
+          type: 'bb:banner-blocked',
+          // v0.4.0: bron mee zodat de popup kan tonen wát er herkend werd.
+          platform: 'Custom banner',
+        });
       } catch {
         // Background-worker kan net idle zijn — niet kritiek.
       }
@@ -141,6 +145,16 @@ export default defineContentScript({
         }
       }, 350);
       // Voor debug: console.log(`[BannerBye] auto-click: "${result.buttonText}" in ${result.elapsedMs}ms`);
+    } else if (!result.clicked && !isSubFrame()) {
+      // v0.4.0: er viel hier niets te weigeren. Alleen vanuit het hoofdframe
+      // melden (anders zou elk consent-verdacht iframe apart tellen) en alleen
+      // als we niet geklikt hebben — een mislukte klik is geen schone pagina.
+      // Background schrijft dit als 'clean'-regel in de activiteitenlijst.
+      try {
+        void chrome.runtime.sendMessage({ type: 'bb:no-banner' });
+      } catch {
+        // Background-worker kan net idle zijn — niet kritiek.
+      }
     }
   },
 });

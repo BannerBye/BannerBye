@@ -20,11 +20,17 @@ import {
   clearPendingCelebration,
   addReportedSite,
   clearPendingReportFixed,
+  getRecentActivity,
+  clearActivity,
 } from '@/lib/storage';
 import { isHostPaused, normalizeHost } from '@/lib/host';
 import { getMilestoneById, MILESTONES, type Milestone } from '@/lib/milestones';
 import { downloadShareCard, downloadStatsCard } from '@/lib/share-card';
-import type { LocalStats, SyncedSettings } from '@/lib/types';
+import type {
+  ActivityEntry,
+  LocalStats,
+  SyncedSettings,
+} from '@/lib/types';
 
 const REPORT_ENDPOINT = 'https://bannerbye.com/api/report';
 
@@ -62,6 +68,21 @@ interface PopupState {
     status: ReportStatus;
     errorText: string;
   } | null;
+  /** v0.4.0: recente activiteit per host — het bewijs onder de teller. */
+  activity: ActivityEntry[];
+  /** v0.4.0: staat het bewijs-paneel open? Dicht bij openen van de popup. */
+  activityOpen: boolean;
+}
+
+/** "3 min ago" / "2 days ago" — kort en zonder bibliotheek. */
+function timeAgo(ts: number): string {
+  const mins = Math.floor((Date.now() - ts) / 60000);
+  if (mins < 1) return 'just now';
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  return days === 1 ? '1 day ago' : `${days} days ago`;
 }
 
 /** Losse, tolerante e-mailcheck — alleen om onzin te weren, niet streng. */
@@ -85,20 +106,32 @@ export function App() {
       pendingCelebrations: [],
       reportedSites: [],
       pendingReportFixed: [],
+      recentActivity: [],
     },
     hostname: null,
     loading: true,
     reportModal: null,
+    activity: [],
+    activityOpen: false,
   });
 
   useEffect(() => {
     void (async () => {
-      const [settings, stats, hostname] = await Promise.all([
+      const [settings, stats, hostname, activity] = await Promise.all([
         getSettings(),
         getStats(),
         getActiveTabHost(),
+        getRecentActivity(),
       ]);
-      setState({ settings, stats, hostname, loading: false, reportModal: null });
+      setState({
+        settings,
+        stats,
+        hostname,
+        loading: false,
+        reportModal: null,
+        activity,
+        activityOpen: false,
+      });
     })();
   }, []);
 
@@ -118,6 +151,18 @@ export function App() {
     if (!state.hostname) return;
     const next = await setPausedForSite(state.hostname, !isSitePaused);
     setState((s) => ({ ...s, settings: next }));
+  }
+
+  /** v0.4.0: bewijs-paneel open/dicht. Puur lokale UI-state, niets opgeslagen. */
+  function toggleActivity() {
+    setState((s) => ({ ...s, activityOpen: !s.activityOpen }));
+  }
+
+  /** v0.4.0: wis de activiteitenlijst. De teller blijft staan — dat is een
+   * ander gegeven (wat BannerBye deed vs. waar het dat deed). */
+  async function wipeActivity() {
+    const nextStats = await clearActivity();
+    setState((s) => ({ ...s, stats: nextStats, activity: [] }));
   }
 
   /** Eerste in pendingCelebrations → toon als card. Lookup via stable id. */
@@ -452,6 +497,62 @@ export function App() {
           {state.stats.blocked.toLocaleString('en-US')}
         </span>
         <span className="bb-stat-label">banners refused</span>
+
+        {state.activity.length > 0 && (
+          <>
+            <button
+              type="button"
+              className="bb-activity-toggle"
+              onClick={toggleActivity}
+              aria-expanded={state.activityOpen}
+              aria-controls="bb-activity-panel"
+            >
+              <span className="bb-activity-caret" aria-hidden="true">
+                {state.activityOpen ? '▾' : '▸'}
+              </span>
+              {state.activityOpen ? 'Hide the evidence' : 'Show the evidence'}
+            </button>
+
+            {state.activityOpen && (
+              <div id="bb-activity-panel" className="bb-activity">
+                <ul className="bb-activity-list">
+                  {state.activity.map((entry) => (
+                    <li key={entry.host} className="bb-activity-row">
+                      <span
+                        className={`bb-activity-mark ${entry.outcome}`}
+                        aria-hidden="true"
+                      >
+                        {entry.outcome === 'refused' ? '✕' : '·'}
+                      </span>
+                      <span className="bb-activity-host" title={entry.host}>
+                        {entry.host}
+                      </span>
+                      <span className="bb-activity-meta">
+                        {entry.outcome === 'refused'
+                          ? (entry.platform ?? 'Banner refused')
+                          : 'No banner'}
+                        {entry.count > 1 ? ` · ${entry.count}×` : ''}
+                      </span>
+                      <span className="bb-activity-time">
+                        {timeAgo(entry.lastAt)}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+                <p className="bb-activity-note">
+                  Kept on this device only, for seven days. Never sent anywhere.
+                </p>
+                <button
+                  type="button"
+                  className="bb-activity-clear"
+                  onClick={wipeActivity}
+                >
+                  Clear this list
+                </button>
+              </div>
+            )}
+          </>
+        )}
       </section>
 
       <section className="bb-milestones">

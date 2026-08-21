@@ -98,7 +98,13 @@ export default defineContentScript({
         // in Chrome MV3 — MAIN ↔ ISOLATED delen document maar hebben aparte
         // window-listeners.
         try {
-          document.dispatchEvent(new CustomEvent('bb:cmp-blocked'));
+          // v0.4.0: handler-naam mee zodat de popup kan tonen wélk platform
+          // herkend werd (bijv. "OneTrust").
+          document.dispatchEvent(
+            new CustomEvent('bb:cmp-blocked', {
+              detail: { platform: handler.name },
+            }),
+          );
         } catch {
           // CustomEvent faalt zelden — niet kritiek.
         }

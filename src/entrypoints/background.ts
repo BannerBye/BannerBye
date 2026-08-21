@@ -37,6 +37,7 @@ import {
   incrementBlocked,
   markUnlockedAndPending,
   markReportFixed,
+  recordActivity,
 } from '@/lib/storage';
 import { normalizeHost } from '@/lib/host';
 import type { SyncedSettings } from '@/lib/types';
@@ -349,10 +350,21 @@ async function syncRankBadge(): Promise<void> {
 async function handleBannerBlocked(
   tabId: number,
   hostname: string | null,
+  platform?: string,
 ): Promise<void> {
   try {
     const stats = await incrementBlocked();
     await flashTabBadge(tabId);
+
+    // v0.4.0: leg vast wát er geweigerd werd — het bewijs achter de teller.
+    // Faalt dit, dan mag de teller er niet onder lijden: eigen try/catch.
+    if (hostname) {
+      try {
+        await recordActivity(hostname, 'refused', platform);
+      } catch {
+        // Activiteitenlijst is bijzaak; nooit de rest laten sneuvelen.
+      }
+    }
 
     const newlyUnlocked = computeNewUnlocks(stats);
     if (newlyUnlocked.length > 0) {
@@ -437,7 +449,16 @@ export default defineBackground({
     if (msg?.type === 'bb:banner-blocked' && sender.tab?.id !== undefined) {
       // Hostname uit de tab-URL (voor #reward-1 melding-gekild-detectie).
       const host = sender.tab.url ? normalizeHost(sender.tab.url) : null;
-      void handleBannerBlocked(sender.tab.id, host);
+      const platform =
+        typeof msg.platform === 'string' ? msg.platform : undefined;
+      void handleBannerBlocked(sender.tab.id, host, platform);
+    }
+
+    // v0.4.0: autoclick meldt vanuit het hoofdframe dat er niets te weigeren
+    // viel. Alleen een regel in de activiteitenlijst — geen teller, geen badge.
+    if (msg?.type === 'bb:no-banner' && sender.tab?.url) {
+      const host = normalizeHost(sender.tab.url);
+      if (host) void recordActivity(host, 'clean');
     }
     return false; // Geen async response.
   });

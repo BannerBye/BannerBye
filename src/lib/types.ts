@@ -52,7 +52,44 @@ export interface LocalStats {
    * moeten tonen. Subset-flow gelijk aan pendingCelebrations, maar per hostname.
    */
   pendingReportFixed: string[];
+  /**
+   * v0.4.0: recente activiteit per host — het "bewijs" achter de teller.
+   *
+   * PRIVACY: dit is de enige plek waar BannerBye bijhoudt wélke sites je
+   * bezocht. Bewust ingeperkt: één regel per host (geen bezoeklog), maximaal
+   * ACTIVITY_CAP hosts, automatisch vervallen na ACTIVITY_TTL_MS, blijft
+   * uitsluitend in `chrome.storage.local` en gaat nooit mee in een melding of
+   * naar een server. De gebruiker kan de lijst met één tik wissen.
+   */
+  recentActivity: ActivityEntry[];
 }
+
+/** Uitkomst van BannerBye op één host. */
+export type ActivityOutcome = 'refused' | 'clean';
+
+/**
+ * Eén regel in de activiteitenlijst. Bewust per host samengevat in plaats van
+ * per paginabezoek — dat maakt het een overzicht van waar BannerBye werkte,
+ * niet een tijdlijn van wat je gelezen hebt.
+ */
+export interface ActivityEntry {
+  /** Genormaliseerde hostname, bijvoorbeeld "zalando.nl". */
+  host: string;
+  /** Herkend consent-platform, indien bekend. Bijvoorbeeld "IAB TCF". */
+  platform?: string;
+  /** 'refused' = banner geweigerd · 'clean' = geen banner aangetroffen. */
+  outcome: ActivityOutcome;
+  /** Laatste keer dat dit gebeurde (ms sinds epoch). */
+  lastAt: number;
+  /** Hoe vaak op deze host, sinds de regel bestaat. */
+  count: number;
+}
+
+/** Maximaal aantal hosts in de activiteitenlijst. */
+export const ACTIVITY_CAP = 40;
+
+/** Hoe lang een regel blijft staan: zeven dagen. */
+export const ACTIVITY_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 
 /**
  * Status voor de huidige tab, berekend in de popup.
@@ -78,4 +115,5 @@ export const DEFAULT_STATS: LocalStats = {
   pendingCelebrations: [],
   reportedSites: [],
   pendingReportFixed: [],
+  recentActivity: [],
 };
