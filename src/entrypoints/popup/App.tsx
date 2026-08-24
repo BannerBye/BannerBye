@@ -22,6 +22,7 @@ import {
   clearPendingReportFixed,
   getRecentActivity,
   clearActivity,
+  markReviewAskDone,
 } from '@/lib/storage';
 import { isHostPaused, normalizeHost } from '@/lib/host';
 import { getMilestoneById, MILESTONES, type Milestone } from '@/lib/milestones';
@@ -54,6 +55,17 @@ const REVIEW_URL =
   ] ?? REVIEW_URLS.chrome!;
 const REVIEW_THRESHOLD = 100;
 
+/**
+ * v0.4.0: de éne actieve review-vraag die het anti-feature manifest toestaat.
+ * Verschijnt precies één keer, direct na het wegklikken van een milestone-
+ * viering — het moment waarop de extensie zich net bewezen heeft. Wegklikken
+ * of doorklikken = klaar, voor altijd (reviewAskDone in storage). Niet bij de
+ * allereerste milestones: pas vanaf 100 banners of een dag-milestone.
+ */
+function milestoneWarrantsReviewAsk(m: Milestone): boolean {
+  return m.threshold.type === 'days' || m.threshold.count >= REVIEW_THRESHOLD;
+}
+
 type ReportStatus = 'idle' | 'sending' | 'sent' | 'error';
 
 interface PopupState {
@@ -75,6 +87,8 @@ interface PopupState {
   activity: ActivityEntry[];
   /** v0.4.0: staat het bewijs-paneel open? Dicht bij openen van de popup. */
   activityOpen: boolean;
+  /** v0.4.0: toon de eenmalige review-vraag (na dismiss van een viering). */
+  reviewAsk: boolean;
 }
 
 /** "3 min ago" / "2 days ago" — kort en zonder bibliotheek. */
@@ -110,12 +124,14 @@ export function App() {
       reportedSites: [],
       pendingReportFixed: [],
       recentActivity: [],
+      reviewAskDone: false,
     },
     hostname: null,
     loading: true,
     reportModal: null,
     activity: [],
     activityOpen: false,
+    reviewAsk: false,
   });
 
   useEffect(() => {
@@ -134,6 +150,7 @@ export function App() {
         reportModal: null,
         activity,
         activityOpen: false,
+        reviewAsk: false,
       });
     })();
   }, []);
@@ -177,11 +194,33 @@ export function App() {
 
   async function dismissCelebration() {
     if (!currentCelebration) return;
+    // v0.4.0: dít is het enige moment waarop de eenmalige review-vraag mag
+    // verschijnen — direct na een viering, en alleen als hij nooit eerder is
+    // afgehandeld en de milestone zwaar genoeg is (anti-feature manifest).
+    const showReviewAsk =
+      !state.stats.reviewAskDone &&
+      milestoneWarrantsReviewAsk(currentCelebration);
     const nextStats = await clearPendingCelebration(currentCelebration.id);
-    setState((s) => ({ ...s, stats: nextStats }));
+    setState((s) => ({
+      ...s,
+      stats: nextStats,
+      reviewAsk: s.reviewAsk || showReviewAsk,
+    }));
     // Geen handmatige badge-clear meer hier — chrome.storage.local.set
     // in clearPendingCelebration triggert background.onChanged → syncRankBadge,
     // dat de "🎉" vervangt door het persistente rang-getal (#85).
+  }
+
+  /** v0.4.0: review-vraag weggeklikt — markeer definitief afgehandeld. */
+  async function dismissReviewAsk() {
+    const nextStats = await markReviewAskDone();
+    setState((s) => ({ ...s, stats: nextStats, reviewAsk: false }));
+  }
+
+  /** v0.4.0: doorgeklikt naar de store — ook definitief afgehandeld. */
+  function acceptReviewAsk() {
+    void markReviewAskDone();
+    openReview();
   }
 
   /**
@@ -450,6 +489,36 @@ export function App() {
             className="bb-celebration-dismiss"
             onClick={() => void dismissReportFixed()}
             aria-label="Dismiss"
+          >
+            ✕
+          </button>
+        </section>
+      )}
+
+      {state.reviewAsk && !currentCelebration && (
+        <section className="bb-celebration bb-celebration-review" aria-live="polite">
+          <span className="bb-celebration-emoji" aria-hidden="true">★</span>
+          <div className="bb-celebration-body">
+            <p className="bb-celebration-label">A one-time ask</p>
+            <p className="bb-celebration-name">Enjoying the quiet?</p>
+            <p className="bb-review-text">
+              A short review keeps BannerBye easy to find. Ask once — never
+              again.
+            </p>
+            <button
+              type="button"
+              className="bb-review-cta"
+              onClick={acceptReviewAsk}
+            >
+              Rate BannerBye →
+            </button>
+          </div>
+          <button
+            type="button"
+            className="bb-celebration-dismiss"
+            onClick={() => void dismissReviewAsk()}
+            aria-label="No thanks"
+            title="No thanks — we won't ask again"
           >
             ✕
           </button>

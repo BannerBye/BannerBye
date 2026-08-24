@@ -216,6 +216,21 @@ export async function clearPendingCelebration(id: string): Promise<LocalStats> {
   return next;
 }
 
+/**
+ * v0.4.0: markeer de eenmalige review-vraag als afgehandeld. Wordt gezet bij
+ * wegklikken én bij doorklikken naar de store — beide betekenen: nooit meer
+ * vragen. Idempotent.
+ */
+export async function markReviewAskDone(): Promise<LocalStats> {
+  const current = await getStats();
+  if (current.reviewAskDone) {
+    return current;
+  }
+  const next: LocalStats = { ...current, reviewAskDone: true };
+  await chrome.storage.local.set({ [STATS_KEY]: next });
+  return next;
+}
+
 /** Max aantal gemelde hosts dat we lokaal "in de gaten houden" (#reward-1). */
 const REPORTED_SITES_CAP = 50;
 

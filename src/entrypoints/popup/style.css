@@ -332,6 +332,39 @@ body {
   font-weight: 600;
 }
 
+/* v0.4.0: de eenmalige review-vraag — rustige ink-variant met ember-ster.
+   Verschijnt één keer, na een milestone-dismiss. ✕ = nooit meer vragen. */
+.bb-celebration-review {
+  background: var(--ink);
+  box-shadow: 0 4px 14px -4px rgba(14, 17, 22, 0.4);
+  align-items: flex-start;
+}
+.bb-celebration-review .bb-celebration-emoji {
+  color: var(--ember);
+}
+.bb-review-text {
+  margin-top: 4px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: rgba(250, 247, 240, 0.75);
+}
+.bb-review-cta {
+  margin-top: 10px;
+  padding: 7px 12px;
+  border: none;
+  border-radius: 8px;
+  background: var(--ember);
+  color: var(--cream);
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+.bb-review-cta:hover {
+  filter: brightness(1.08);
+}
+
 /* Status sentence */
 .bb-status {
   padding: 12px 14px;

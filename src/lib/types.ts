@@ -62,6 +62,12 @@ export interface LocalStats {
    * naar een server. De gebruiker kan de lijst met één tik wissen.
    */
   recentActivity: ActivityEntry[];
+  /**
+   * v0.4.0: is de eenmalige review-vraag afgehandeld (weggeklikt of gebruikt)?
+   * Anti-feature manifest: we vragen precies één keer, ná een milestone-viering,
+   * en nooit opnieuw na een dismissal. Geen nag, geen herhaling, geen timer.
+   */
+  reviewAskDone: boolean;
 }
 
 /** Uitkomst van BannerBye op één host. */
@@ -116,4 +122,5 @@ export const DEFAULT_STATS: LocalStats = {
   reportedSites: [],
   pendingReportFixed: [],
   recentActivity: [],
+  reviewAskDone: false,
 };
