@@ -33,7 +33,7 @@ export default defineConfig({
           description: '__MSG_extDesc__',
           default_locale: 'en',
         }),
-    version: '0.3.8',
+    version: '0.4.0',
     permissions: [
       'storage',
       'tabs',
