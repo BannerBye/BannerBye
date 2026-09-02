@@ -33,7 +33,11 @@ export default defineConfig({
           description: '__MSG_extDesc__',
           default_locale: 'en',
         }),
-    version: '0.4.0',
+    // v0.4.1 (#182): OneTrust + Cookiebot + TrustArc CMP-handlers toegevoegd
+    // (waren jarenlang geclaimd in de listings maar nooit gebouwd — alleen
+    // Didomi + Usercentrics bestonden). Zie src/lib/cmp/onetrust.ts,
+    // cookiebot.ts en trustarc.ts voor de onderbouwing per handler.
+    version: '0.4.1',
     permissions: [
       'storage',
       'tabs',

@@ -10,21 +10,33 @@
 import type { CmpHandler } from './types.ts';
 import { didomiHandler } from './didomi.ts';
 import { usercentricsHandler } from './usercentrics.ts';
+import { onetrustHandler } from './onetrust.ts';
+import { cookiebotHandler } from './cookiebot.ts';
+import { trustarcHandler } from './trustarc.ts';
 
 export type { CmpHandler } from './types.ts';
 export { didomiHandler } from './didomi.ts';
 export { usercentricsHandler } from './usercentrics.ts';
+export { onetrustHandler } from './onetrust.ts';
+export { cookiebotHandler } from './cookiebot.ts';
+export { trustarcHandler } from './trustarc.ts';
 
 /**
  * Volledige lijst met handlers, in evaluatie-volgorde.
  *
- * TODO: implementeer deze in volgende iteraties:
- *  - onetrustHandler (cmpId 411) — DPG, RTL, etc.
- *  - cookiebotHandler (cmpId 14) — veel SMB
- *  - trustarcHandler — enterprise US
+ * OneTrust/Cookiebot vooraan: beide hebben een gedocumenteerde publieke
+ * reject-API en zijn de meest voorkomende enterprise/SMB-CMPs na Didomi/
+ * Usercentrics. TrustArc staat laatst — geen publieke API, best-effort
+ * DOM-klik (zie trustarc.ts voor de volledige onderbouwing).
  */
 export const handlers: readonly CmpHandler[] = [
   didomiHandler,
   // v0.3.5 (report pamo-design.de): Usercentrics v2 (UC_UI) + v3 (__ucCmp).
   usercentricsHandler,
+  // v0.4.1 (#182): de drie CMPs die al jaren in de listings/skill werden
+  // geclaimd maar nooit gebouwd waren — zie SKILL.md §1/§13 voor de
+  // geschiedenis van die claim.
+  onetrustHandler,
+  cookiebotHandler,
+  trustarcHandler,
 ];
