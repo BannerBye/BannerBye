@@ -9,6 +9,9 @@
  *   4. classificeer + Claude beoordeelt elk voorstel (per doellijst)
  *   5. approve+high → toepassen op rules.json (reject/ambiguous/stepInto)
  *   6. rest → needs-review draft-PR; markeer reports analyzed
+ *   7. #134 — stuur Robin altijd een samenvattingsmail: per host wat de
+ *      uitkomst was (opgelost / naar review / vals positief / accept-only /
+ *      technische fout). Best-effort, faalt nooit de run.
  *
  * Env: KV_REST_API_URL/TOKEN (verplicht), ANTHROPIC_API_KEY,
  *      MAX_HOSTS (25), NAV_TIMEOUT_MS (20000), WAIT_MS (3500),
@@ -28,7 +31,7 @@ import {
   clearWatchers,
   type HostWork,
 } from './redis.ts';
-import { sendFixedEmail } from './notify.ts';
+import { sendFixedEmail, sendOwnerSummaryEmail } from './notify.ts';
 import { detectInPage, type DetectionResult } from './detect.ts';
 import {
   classify,
@@ -179,6 +182,44 @@ function buildPrBody(needsReview: JudgedProposal[]): string {
     lines.push('');
   });
   return lines.join('\n');
+}
+
+/**
+ * #134 — één leesbare regel per onderzochte host voor de eigenaar-mail.
+ * Vertaalt de classificatie-categorie + het judge-resultaat naar een
+ * ondubbelzinnige uitkomst, inclusief het "vals positief"-geval
+ * (`no_banner`: geen banner meer gevonden — waarschijnlijk al opgelost of
+ * niet reproduceerbaar bij de melder, zoals bij het ikea.com-onderzoek van
+ * 2 sep).
+ */
+function describeHostOutcome(
+  r: HostResult,
+  applied: JudgedProposal[],
+  needsReview: JudgedProposal[],
+): string {
+  const appliedHere = applied.filter((p) => p.hostname === r.host);
+  const reviewHere = needsReview.filter((p) => p.hostname === r.host);
+
+  if (r.error) {
+    return `- ${r.host}: FOUT bij bezoeken — ${r.error}`;
+  }
+  if (appliedHere.length) {
+    const kws = appliedHere.map((p) => `"${p.keyword}" [${p.list}]`).join(', ');
+    return `- ${r.host}: OPGELOST — nieuw keyword automatisch toegepast (${kws})`;
+  }
+  if (reviewHere.length) {
+    const details = reviewHere
+      .map((p) => `"${p.keyword}": ${p.judgement.reason}`)
+      .join('; ');
+    return `- ${r.host}: NAAR REVIEW — voorstel gevonden maar niet met hoge zekerheid (${details}) — draft-PR volgt`;
+  }
+  if (r.classification.category === 'no_banner') {
+    return `- ${r.host}: GEEN BANNER GEVONDEN — waarschijnlijk vals positief of al opgelost (niet reproduceerbaar bij deze run)`;
+  }
+  if (r.classification.category === 'accept_only') {
+    return `- ${r.host}: ACCEPT-ONLY — geen weiger-optie op de site zelf, niet oplosbaar via klikken (geen bug)`;
+  }
+  return `- ${r.host}: ONBEKEND — ${r.classification.reason}`;
 }
 
 async function setOutput(key: string, value: string): Promise<void> {
@@ -343,6 +384,16 @@ async function main(): Promise<void> {
     console.log(
       `Fixes geregistreerd: ${fixedEntries.length}. Notify-mails verstuurd: ${notified}.`,
     );
+  }
+
+  // #134 — samenvattingsmail naar de eigenaar, altijd, ongeacht uitkomst.
+  // Best-effort: een mislukte mail mag de rest van de run nooit blokkeren.
+  try {
+    const ownerLines = results.map((r) => describeHostOutcome(r, applied, needsReview));
+    const sent = await sendOwnerSummaryEmail(ownerLines, applied.length, needsReview.length);
+    console.log(`[analyze] eigenaar-samenvatting verstuurd: ${sent}`);
+  } catch (err) {
+    console.warn('[analyze] eigenaar-samenvatting faalde:', err);
   }
 
   await writeFile(
