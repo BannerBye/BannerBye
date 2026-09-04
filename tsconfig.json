@@ -10,5 +10,5 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*", "wxt.config.ts"]
+  "include": ["src/**/*", "wxt.config.ts", ".wxt/wxt.d.ts"]
 }

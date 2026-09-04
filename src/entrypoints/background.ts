@@ -40,6 +40,10 @@ import {
 } from '@/lib/storage';
 import { normalizeHost } from '@/lib/host';
 import type { SyncedSettings } from '@/lib/types';
+import type { Config as AutoconsentConfig } from '@duckduckgo/autoconsent';
+// Regels als lokaal databestand + STATISCH importeren (zie uitleg bij de config
+// hieronder — dynamische import crasht de service worker via Vite's window-helper).
+import autoconsentRules from '@/lib/autoclick/autoconsent-rules.json';
 import { computeNewUnlocks, MILESTONES } from '@/lib/milestones';
 import {
   fetchRemoteRules,
@@ -385,6 +389,84 @@ async function syncGpcRuleset(enabled: boolean): Promise<void> {
   }
 }
 
+// ============================================================================
+// AUTOCONSENT-LAAG (Fase 1) — background-afhandeling.
+//
+// De content-laag (achter een flag, standaard uit) stuurt `init` en `eval`. De
+// background antwoordt met config + de 776 regels (`initResp`) en draait
+// AutoConsent's eval-snippets in de MAIN-world van de pagina (`evalResp`).
+// Assets worden LAZY geladen — pas als er een init/eval binnenkomt (dus alleen
+// wanneer de flag aanstaat). Zonder flag: nul kosten.
+// ============================================================================
+
+// Config STATISCH (geen dynamische import in de service worker: Vite's
+// preload-helper roept `window.dispatchEvent` aan en `window` bestaat niet in de
+// background → crash). De regels (`autoconsentRules`) zijn pure JSON-data en
+// worden bovenaan statisch geïmporteerd; de eval-code draaien we in de pagina.
+const AUTOCONSENT_CONFIG: AutoconsentConfig = {
+  enabled: true,
+  autoAction: 'optOut',
+  disabledCmps: [],
+  enablePrehide: true,
+  // Ethos: géén cosmetisch verbergen via filterlijsten als default.
+  enableCosmeticRules: false,
+  enableGeneratedRules: true,
+  detectRetries: 20,
+  isMainWorld: false,
+  prehideTimeout: 2000,
+  enableHeuristicDetection: true,
+  enablePopupMutationObserver: true,
+  visualTest: false,
+  logs: {
+    lifecycle: false,
+    rulesteps: false,
+    detectionsteps: false,
+    evals: false,
+    errors: false,
+    messages: false,
+    waits: false,
+  },
+  performanceLoggingEnabled: false,
+  heuristicPopupSearchTimeout: 3000,
+  heuristicMode: 'tier1',
+};
+
+/** Draai AutoConsent's eval-code in de MAIN-world van de pagina en stuur het
+ *  resultaat terug. (Geen lib nodig in de background — we evalueren de code
+ *  rechtstreeks; bij CSP-blokkade valt het netjes terug op false.) */
+async function handleAutoconsentEval(
+  tabId: number,
+  frameId: number,
+  id: string,
+  code: string | undefined,
+): Promise<void> {
+  let result: unknown = false;
+  try {
+    if (code) {
+      const res = await chrome.scripting.executeScript({
+        target: { tabId, frameIds: [frameId] },
+        world: 'MAIN',
+        func: (src: string) => {
+          try {
+            return (0, eval)(src);
+          } catch {
+            return false;
+          }
+        },
+        args: [code],
+      });
+      result = res[0]?.result;
+    }
+  } catch {
+    result = false;
+  }
+  try {
+    await chrome.tabs.sendMessage(tabId, { type: 'evalResp', id, result }, { frameId });
+  } catch {
+    // tab/frame kan weg zijn — niet kritiek.
+  }
+}
+
 export default defineBackground({
   // `persistent: false` is verplicht voor Safari op iOS/iPadOS — die ondersteunt
   // geen langlopende background pages. Onze code is event-driven (chrome.alarms,
@@ -432,6 +514,31 @@ export default defineBackground({
       void handleBannerBlocked(sender.tab.id, host);
     }
     return false; // Geen async response.
+  });
+
+  // === AUTOCONSENT-LAAG: init/eval-berichten van de content-laag. ===
+  // Triggert alleen als de (geflagde) content-laag aanstaat en berichten stuurt.
+  chrome.runtime.onMessage.addListener((msg, sender) => {
+    const tabId = sender.tab?.id;
+    if (tabId === undefined) return false;
+    const frameId = sender.frameId ?? 0;
+    if (msg?.type === 'init' && typeof msg.url === 'string') {
+      try {
+        void chrome.tabs.sendMessage(
+          tabId,
+          { type: 'initResp', config: AUTOCONSENT_CONFIG, rules: autoconsentRules },
+          { frameId },
+        );
+      } catch {
+        // tab/frame kan weg zijn — niet kritiek.
+      }
+      return false;
+    }
+    if (msg?.type === 'eval' && typeof msg.id === 'string') {
+      void handleAutoconsentEval(tabId, frameId, msg.id, msg.code);
+      return false;
+    }
+    return false;
   });
 
   // === INSTALL / UPDATE ===

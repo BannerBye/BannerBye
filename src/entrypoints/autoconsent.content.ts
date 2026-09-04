@@ -1,21 +1,18 @@
 /**
- * BannerBye — Autoconsent-laag content script (Fase 1).
+ * BannerBye — Autoconsent-laag content script (Fase 1, referentie-wiring).
  *
- * ⚠️ STANDAARD UIT. Zet `AUTOCONSENT_LAYER_ENABLED` op true nadat je 'm in een
- * dev-build in een echte browser hebt getest op een paar CMP-sites. Deze laag
- * draait op elke pagina en coördineert met de generieke auto-click; verifieer
- * dus vóór productie.
- *
- * ISOLATED world, document_start: Autoconsent doet z'n eigen prehide en heeft
- * z'n detectie zo vroeg mogelijk nodig.
+ * ⚠️ STANDAARD UIT. Zet `AUTOCONSENT_LAYER_ENABLED` op true na een dev-browser-
+ * test (console mag geen autoconsent-fouten geven). Deze laag draait op elke
+ * pagina (incl. iframes) en werkt samen met de background (init/eval) en de
+ * generieke auto-click (window-vlaggen).
  */
 
 import { defineContentScript } from 'wxt/sandbox';
 import { getSettings } from '@/lib/storage.ts';
 import { isHostPaused } from '@/lib/host.ts';
 
-/** Feature-flag — pas op true na dev-browser-verificatie. */
-const AUTOCONSENT_LAYER_ENABLED = false;
+/** Feature-flag — geverifieerd in dev-browser (CNN + nu.nl schoon, geen crash, 2026-07-09). */
+const AUTOCONSENT_LAYER_ENABLED = true;
 
 export default defineContentScript({
   matches: ['<all_urls>'],
@@ -38,28 +35,29 @@ export default defineContentScript({
     '*://*.exactonline.es/*',
   ],
   runAt: 'document_start',
-  allFrames: false,
+  // Alle frames: CMP's als Sourcepoint renderen in een iframe.
+  allFrames: true,
 
   async main() {
     if (!AUTOCONSENT_LAYER_ENABLED) return;
 
-    try {
-      const settings = await getSettings();
-      if (!settings.enabled) return;
-      if (isHostPaused(location.hostname, settings.pausedSites)) return;
-    } catch {
-      // storage-race bij startup — fail-open zoals de andere lagen.
+    // Enabled/paused alleen in het hoofdframe checken (subframes erven de keuze).
+    if (window.top === window.self) {
+      try {
+        const settings = await getSettings();
+        if (!settings.enabled) return;
+        if (isHostPaused(location.hostname, settings.pausedSites)) return;
+      } catch {
+        // storage-race bij startup — fail-open zoals de andere lagen.
+      }
     }
 
-    // Dynamische import: de (grote) Autoconsent-regelbundel wordt pas geladen
-    // wanneer de laag daadwerkelijk aanstaat — geen kosten zolang de flag uit is.
-    const { startAutoconsentLayer } = await import(
+    // Dynamische import: laadt de AutoConsent-engine pas als de flag aanstaat.
+    const { startAutoconsentContent } = await import(
       '@/lib/autoclick/autoconsent-layer.ts'
     );
 
-    startAutoconsentLayer(() => {
-      // Bekende CMP geweigerd → tel mee als een geblokkeerde banner (background
-      // is single source of truth voor de teller/badge/milestones).
+    startAutoconsentContent(() => {
       try {
         void chrome.runtime.sendMessage({ type: 'bb:banner-blocked' });
       } catch {

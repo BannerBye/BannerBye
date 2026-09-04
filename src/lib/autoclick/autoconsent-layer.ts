@@ -1,29 +1,19 @@
 /**
- * Autoconsent-laag (concurrentie-pariteit — Fase 1).
+ * Autoconsent-laag — content-kant (Fase 1, referentie-wiring).
  *
- * Draait de DuckDuckGo Autoconsent-engine (MPL-2.0) met 776 declaratieve
- * CMP-regels als extra laag tussen TCF en de generieke auto-click. Handelt
- * bekende Consent Management Providers deterministisch af met meerstaps
- * opt-out + eigen prehide + self-test.
+ * We volgen nu de geteste DuckDuckGo-opzet: de content-script maakt een dunne
+ * AutoConsent-instantie ZONDER config/regels. AutoConsent stuurt dan zelf een
+ * `init`-bericht naar de background; die antwoordt met config + de 776 regels
+ * (`initResp`) en draait `eval`-snippets in de MAIN-world van de pagina
+ * (`evalResp`). Zonder die background-afhandeling faalde de prehide eerder
+ * (`domActions` undefined) — dát was de bug.
  *
- * ⚠️ NB: deze laag draait op elke pagina en coördineert async met de generieke
- * auto-click. Hij staat standaard UIT (zie AUTOCONSENT_LAYER_ENABLED in
- * autoconsent.content.ts) tot 'ie in een dev-build in een echte browser is
- * getest. Veilig te mergen; pas live zetten na verificatie.
- *
- * Coördinatie met de generieke auto-click gebeurt via twee vlaggen op de
- * gedeelde ISOLATED-world `window`:
- *   __bbConsentActive  — een bekende CMP wordt nu verwerkt → autoclick wacht
- *   __bbConsentHandled — CMP is afgehandeld → autoclick slaat over
- *
- * v1-beperking: geen MAIN-world eval-bridge. ~5% van de regels gebruikt een
- * `eval`-actie; die beantwoorden we met `false` (degradeert netjes). De overige
- * ~95% werkt op DOM-clicks. Eval-bridge kan later als vervolg.
+ * Coördinatie met de generieke auto-click via window-vlaggen (gedeelde ISOLATED
+ * world): `__bbConsentActive` (bekende CMP wordt verwerkt) en
+ * `__bbConsentHandled` (afgehandeld → autoclick slaat over).
  */
 
 import AutoConsent from '@duckduckgo/autoconsent';
-import type { Config, RuleBundle } from '@duckduckgo/autoconsent';
-import rules from '@duckduckgo/autoconsent/rules/rules.json';
 
 declare global {
   interface Window {
@@ -33,75 +23,36 @@ declare global {
 }
 
 /**
- * Start de Autoconsent-laag. `onHandled` wordt één keer aangeroepen zodra een
- * bekende CMP succesvol is geweigerd (voor de teller + badge).
+ * Start de content-kant van de Autoconsent-laag. `onHandled` wordt één keer
+ * aangeroepen zodra een bekende CMP succesvol is geweigerd (voor teller/badge).
  */
-export function startAutoconsentLayer(onHandled: () => void): void {
-  const config: Partial<Config> = {
-    enabled: true,
-    autoAction: 'optOut',
-    // Ethos: géén cosmetisch verbergen via filterlijsten als default.
-    enableCosmeticRules: false,
-    // Autoconsent doet z'n eigen prehide voor de CMP's die het kent.
-    enablePrehide: true,
-    isMainWorld: false,
-    logs: {
-      lifecycle: false,
-      rulesteps: false,
-      detectionsteps: false,
-      evals: false,
-      errors: false,
-      messages: false,
-      waits: false,
-    },
-  };
-
-  let handledFired = false;
-  const markHandled = (): void => {
-    if (handledFired) return;
-    handledFired = true;
-    window.__bbConsentHandled = true;
-    try {
-      onHandled();
-    } catch {
-      // teller-callback mag nooit de laag breken
-    }
-  };
-
-  const consent = new AutoConsent(
-    async (msg) => {
-      switch (msg.type) {
-        case 'eval':
-          // Geen MAIN-world eval in v1 → antwoord false; regel neemt de
-          // else-tak of slaat de stap over.
-          await consent.receiveMessageCallback({
-            type: 'evalResp',
-            id: msg.id,
-            result: false,
-          });
-          break;
-        case 'cmpDetected':
-          // Bekende CMP herkend → de generieke auto-click moet even wachten.
-          window.__bbConsentActive = true;
-          break;
-        case 'optOutResult':
-          if (msg.result) markHandled();
-          break;
-        case 'autoconsentDone':
-          // Klaar. Niets afgehandeld → laat de fallback-laag weer los.
-          if (!handledFired) window.__bbConsentActive = false;
-          break;
-        default:
-          break;
+export function startAutoconsentContent(onHandled: () => void): void {
+  const consent = new AutoConsent((msg) => {
+    // Observeer de uitgaande berichten voor orkestratie + tellen.
+    if (msg.type === 'cmpDetected') {
+      window.__bbConsentActive = true;
+    } else if (msg.type === 'optOutResult') {
+      const ok = (msg as { result?: boolean }).result === true;
+      if (ok && !window.__bbConsentHandled) {
+        window.__bbConsentHandled = true;
+        onHandled();
       }
-    },
-    config,
-    rules as unknown as RuleBundle,
-  );
+    } else if (msg.type === 'autoconsentDone' && !window.__bbConsentHandled) {
+      // Niets afgehandeld → laat de generieke auto-click weer los.
+      window.__bbConsentActive = false;
+    }
+    // Doorsturen naar de background (init/eval/… worden daar afgehandeld).
+    try {
+      void chrome.runtime.sendMessage(msg);
+    } catch {
+      // background kan net idle zijn — niet kritiek.
+    }
+    return Promise.resolve();
+  });
 
-  try {
-    consent.start();
-  } catch {
-    window.__bbConsentActive = false;
-  }
+  // Antwoorden van de background (initResp/evalResp/optOut/…) aan AutoConsent geven.
+  chrome.runtime.onMessage.addListener((message) => {
+    void consent.receiveMessageCallback(message);
+    return false; // geen sendResponse — background antwoordt via tabs.sendMessage
+  });
 }

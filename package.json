@@ -1,6 +1,6 @@
 {
   "name": "bannerbye",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Cookie banners, killed. Before they load.",
   "private": true,
   "type": "module",
