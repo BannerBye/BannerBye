@@ -92,51 +92,68 @@ export function startAutoconsentLayer(onHandled: () => void): void {
     }
   };
 
-  const consent = new AutoConsent(
-    async (msg) => {
-      switch (msg.type) {
-        case 'eval': {
-          // Geen MAIN-world eval in v1 → antwoord false; regel neemt de
-          // else-tak of slaat de stap over. Uitzondering: snippets waarvoor
-          // een DOM-shim bestaat (zie boven) beantwoorden we inhoudelijk.
-          let result = false;
-          const snippetId = (msg as { snippetId?: string }).snippetId;
-          const shim = snippetId ? EVAL_DOM_SHIMS[snippetId] : undefined;
-          if (shim) {
-            try {
-              result = shim();
-            } catch {
-              result = false;
-            }
+  // v0.4.2 (#170, 7 sep): construeer ZONDER config/rules. De vendored library
+  // roept, als config direct aan de constructor wordt meegegeven, synchroon
+  // `this.initialize(config, ...)` aan vóórdat de constructor's eigen laatste
+  // regel (`this.domActions = new DomActions(this)`) is uitgevoerd. Staat
+  // `enablePrehide: true` (onze config) én bestaat `document.documentElement`
+  // al (waar is bij document_start) dan roept `initialize()` synchroon
+  // `prehideElements()` aan, die weer `this.domActions.prehide(...)` nodig
+  // heeft — en dat veld bestaat op dat moment nog niet. Resultaat: een
+  // ongevangen TypeError ("Cannot read properties of undefined (reading
+  // 'prehide')") op praktisch elke pagina, vóórdat er ook maar iets
+  // gedetecteerd is. Ontdekt tijdens de testronde van taak #170 (7 sep) — dit
+  // gooide de hele laag stil onderuit sinds ze ooit bestond, want ze stond
+  // nooit lang genoeg aan om het te merken. Fix: construeer met `null` als
+  // config (en zonder rules), zodat `this.domActions` al bestaat zodra wij
+  // zelf `consent.initialize(config, rules)` aanroepen.
+  const consent = new AutoConsent(async (msg) => {
+    switch (msg.type) {
+      case 'eval': {
+        // Geen MAIN-world eval in v1 → antwoord false; regel neemt de
+        // else-tak of slaat de stap over. Uitzondering: snippets waarvoor
+        // een DOM-shim bestaat (zie boven) beantwoorden we inhoudelijk.
+        let result = false;
+        const snippetId = (msg as { snippetId?: string }).snippetId;
+        const shim = snippetId ? EVAL_DOM_SHIMS[snippetId] : undefined;
+        if (shim) {
+          try {
+            result = shim();
+          } catch {
+            result = false;
           }
-          await consent.receiveMessageCallback({
-            type: 'evalResp',
-            id: msg.id,
-            result,
-          });
-          break;
         }
-        case 'cmpDetected':
-          // Bekende CMP herkend → de generieke auto-click moet even wachten.
-          window.__bbConsentActive = true;
-          break;
-        case 'optOutResult':
-          if (msg.result) markHandled();
-          break;
-        case 'autoconsentDone':
-          // Klaar. Niets afgehandeld → laat de fallback-laag weer los.
-          if (!handledFired) window.__bbConsentActive = false;
-          break;
-        default:
-          break;
+        await consent.receiveMessageCallback({
+          type: 'evalResp',
+          id: msg.id,
+          result,
+        });
+        break;
       }
-    },
-    config,
-    rules as unknown as RuleBundle,
-  );
+      case 'cmpDetected':
+        // Bekende CMP herkend → de generieke auto-click moet even wachten.
+        window.__bbConsentActive = true;
+        break;
+      case 'optOutResult':
+        if (msg.result) markHandled();
+        break;
+      case 'autoconsentDone':
+        // Klaar. Niets afgehandeld → laat de fallback-laag weer los.
+        if (!handledFired) window.__bbConsentActive = false;
+        break;
+      default:
+        break;
+    }
+  });
 
   try {
-    consent.start();
+    // domActions bestaat nu (constructor is al klaar) — pas hier initialiseren
+    // met de échte config + regelset. `initialize()` roept zelf al `start()`
+    // aan (direct, of ná DOMContentLoaded als de pagina nog laadt) — dat was
+    // ook al zo in de oorspronkelijke, kapotte constructor-route. Een eigen
+    // extra `consent.start()` hierna zou het detectieproces dus een tweede
+    // keer inplannen; expliciet weggelaten.
+    consent.initialize(config, rules as unknown as RuleBundle);
   } catch {
     window.__bbConsentActive = false;
   }
