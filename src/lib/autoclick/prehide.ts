@@ -15,14 +15,25 @@
  * (+ pointer-events:none) is de banner onzichtbaar en klikt de gebruiker door
  * naar de pagina, maar blijft de weiger-knop vindbaar en programmatisch
  * klikbaar (element.click() negeert pointer-events).
+ *
+ * ⚠️ v0.4.2 (#204, heise.de-incident 2026-09-06): deze aanname geldt alleen
+ * als er ook een laag actief is die de knop daadwerkelijk kan bereiken. Voor
+ * CMP's die hun UI in een cross-origin iframe zetten (Sourcepoint) kan de
+ * generieke auto-click-laag principieel niet bij de knop (zie
+ * autoclick.content.ts) — alleen de nu nog uitgeschakelde Autoconsent-laag
+ * kan dat. Verberg zo'n container dus NOOIT onvoorwaardelijk: zie
+ * IFRAME_ONLY_CMP_SELECTORS in feature-flags.ts en de opbouw van
+ * PREHIDE_SELECTORS hieronder.
  */
+
+import { AUTOCONSENT_LAYER_ENABLED, IFRAME_ONLY_CMP_SELECTORS } from '@/lib/feature-flags.ts';
 
 /**
  * SPECIFIEKE CMP-container-selectors. Bewust krap gehouden (echte CMP-roots,
  * geen brede `[class*=cookie]`-patronen) om false positives te voorkomen. De
  * safety-reveal vangt een eventuele misser sowieso binnen enkele seconden op.
  */
-export const PREHIDE_SELECTORS: string[] = [
+const ALWAYS_PREHIDE_SELECTORS: string[] = [
   // OneTrust
   '#onetrust-banner-sdk',
   '#onetrust-consent-sdk',
@@ -38,8 +49,6 @@ export const PREHIDE_SELECTORS: string[] = [
   // Quantcast
   '.qc-cmp2-container',
   '#qc-cmp2-container',
-  // Sourcepoint (message container in de hoofd-DOM houdt de iframe vast)
-  '[id^="sp_message_container"]',
   // TrustArc
   '#truste-consent-track',
   '.truste_overlay',
@@ -62,6 +71,18 @@ export const PREHIDE_SELECTORS: string[] = [
   '#cookie-notice',
   '#cookieConsent',
   '#cookie-consent-banner',
+];
+
+/**
+ * Sourcepoint (en andere iframe-only CMP's, zie feature-flags.ts) horen hier
+ * alleen bij als er ook echt een laag actief is die de banner kan wegklikken.
+ * Anders verbergt prehide iets dat na REVEAL_FALLBACK_MS gegarandeerd toch
+ * weer verschijnt — op een nieuwssite (veel paginanavigaties) voelt dat als
+ * aanhoudend knipperen. Zie taak #170 en #204.
+ */
+export const PREHIDE_SELECTORS: string[] = [
+  ...ALWAYS_PREHIDE_SELECTORS,
+  ...(AUTOCONSENT_LAYER_ENABLED ? IFRAME_ONLY_CMP_SELECTORS : []),
 ];
 
 const STYLE_ID = 'bb-prehide-style';

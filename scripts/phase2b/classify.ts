@@ -29,6 +29,7 @@ export type Category =
   | 'tcf_or_cmp'
   | 'accept_only'
   | 'no_banner'
+  | 'cmp_iframe_unreachable'
   | 'unknown';
 
 /** Doellijst in rules.json waar een voorgesteld keyword heen gaat. */
@@ -88,6 +89,25 @@ export function classify(d: DetectionResult): Classification {
   const cmps = d.cmps;
 
   if (!d.bannerVisible) {
+    // heise.de-incident (#204, 2026-09-06): een CMP-signature (bv. Sourcepoint's
+    // `sp_message_container`) kan aanwezig zijn terwijl de banner-tekst toch
+    // leeg blijft, omdat de daadwerkelijke UI in een (cross-origin) iframe
+    // rendert die deze in-page detector niet inspecteert. Dat is geen "geen
+    // banner" — het is een blinde vlek van de scanner. Nooit "vals positief"
+    // claimen als er wél een CMP-signature is; dat weersprak een échte melding.
+    if (cmps.length > 0) {
+      return {
+        category: 'cmp_iframe_unreachable',
+        proposals: [],
+        reason:
+          `CMP gedetecteerd (${cmps.join(', ')}) maar de banner-inhoud is niet ` +
+          `leesbaar in het hoofddocument — vermoedelijk rendert de UI in een ` +
+          `(cross-origin) iframe die deze scanner niet inspecteert (page.frames() ` +
+          `ontbreekt hier nog). Dit is GEEN bevestiging dat de banner weg is; ` +
+          `vereist handmatige review, niet auto-apply.`,
+        cmps,
+      };
+    }
     return {
       category: 'no_banner',
       proposals: [],

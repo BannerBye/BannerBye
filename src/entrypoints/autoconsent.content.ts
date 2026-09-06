@@ -15,19 +15,10 @@ import { getSettings } from '@/lib/storage.ts';
 import { isHostPaused } from '@/lib/host.ts';
 import { isPdfDocument } from '@/lib/pdf-guard.ts';
 import { shouldProcessFrame } from '@/lib/frame-guard.ts';
-
-/**
- * Feature-flag — pas op true na dev-browser-verificatie.
- *
- * ⚠️ STAAT NOG STEEDS UIT (vastgesteld 2026-08-21). Deze vlag is bij de bouw
- * van de laag op `false` gezet en is sindsdien nooit gewijzigd — te
- * controleren met `git log -L` op deze regel. Eerdere release-notities die
- * beweerden dat de Autoconsent-motor sinds v0.3.0 live stond, klopten dus
- * niet: de 672 KB-regelbundel zit niet in de gepubliceerde builds (die zijn
- * ~476 KB in totaal). De laag is nu wel iframe-klaar; aanzetten pas ná een
- * echte browsertest op Sourcepoint-sites (bild.de, spiegel.de, theguardian.com).
- */
-const AUTOCONSENT_LAYER_ENABLED = false;
+// v0.4.2 (#204): flag verhuisd naar een gedeelde module — prehide.ts moet
+// 'm ook kunnen lezen (zie feature-flags.ts voor de volledige toelichting
+// en het heise.de-incident dat dit nodig maakte).
+import { AUTOCONSENT_LAYER_ENABLED } from '@/lib/feature-flags.ts';
 
 export default defineContentScript({
   matches: ['<all_urls>'],
