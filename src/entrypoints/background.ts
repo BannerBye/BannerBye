@@ -47,6 +47,10 @@ import {
   scheduleRulesFetch,
   isRulesFetchAlarm,
 } from '@/lib/rules/fetcher';
+// v0.4.2 (#170): de eval-snippets van de Autoconsent-regels (~86 kleine,
+// zelfstandige functies). Alleen dít object wordt meegebundeld — de rest van
+// de library blijft in content-scripts/autoconsent-engine.js.
+import { evalSnippets } from '@duckduckgo/autoconsent';
 
 const GPC_RULESET_ID = 'gpc-headers';
 // v0.3.2 (#158 hotfix): rules/gpc-headers.json beperkt Sec-GPC-header-injectie
@@ -305,6 +309,43 @@ async function injectAutoconsentEngine(tabId: number, frameId: number): Promise<
 }
 
 /**
+ * v0.4.2 (#170): MAIN-world eval-brug voor de Autoconsent-motor.
+ *
+ * Een deel van de DDG-regels (Usercentrics, Cookiebot, consentmanager, …)
+ * stelt vragen aan de pagina-context ("bestaat window.UC_UI?", "weiger via
+ * de API") als eval-snippet. De motor draait in ISOLATED world en kan daar
+ * niet bij; wij voeren het snippet hier uit met `chrome.scripting.executeScript`
+ * + `world: 'MAIN'` + het snippet als `func` — geen string-eval, dus ook geen
+ * CSP-probleem. Dit is exact DDG's eigen MV3-route.
+ *
+ * Antwoord `{ ok: false }` betekent "kon hier niet" (onbekend snippet, geen
+ * scripting-API, of oudere Firefox/Safari zonder MAIN-world-executeScript);
+ * de motor valt dan terug op een DOM-shim of `false`.
+ */
+async function evalAutoconsentSnippet(
+  tabId: number,
+  frameId: number,
+  snippetId: unknown,
+): Promise<{ ok: boolean; result?: boolean }> {
+  if (typeof snippetId !== 'string') return { ok: false };
+  const fn = (evalSnippets as Record<string, (() => unknown) | undefined>)[snippetId];
+  if (typeof fn !== 'function') return { ok: false };
+  if (typeof chrome.scripting?.executeScript !== 'function') return { ok: false };
+  try {
+    const MAIN_WORLD: chrome.scripting.ExecutionWorld = 'MAIN';
+    const results = await chrome.scripting.executeScript({
+      target: { tabId, frameIds: [frameId] },
+      world: MAIN_WORLD,
+      func: fn,
+    });
+    return { ok: true, result: !!results?.[0]?.result };
+  } catch {
+    // Frame weg, chrome://-pagina, of geen MAIN-world-ondersteuning.
+    return { ok: false };
+  }
+}
+
+/**
  * Korte oranje "✓" badge op het toolbar-icoon, ~900ms zichtbaar. UI-
  * feedback bij elke succesvol gekilde banner via autoclick. Per-tab
  * zodat een actie in tab A geen badge op tab B veroorzaakt.
@@ -483,7 +524,27 @@ export default defineBackground({
   // autoclick.content.ts stuurt {type: 'bb:banner-blocked'} na een
   // succesvolle click. Background increments counter, flasht tab-badge,
   // en checkt op nieuwe milestone-unlocks (zie #86).
-  chrome.runtime.onMessage.addListener((msg, sender) => {
+  chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+    // v0.4.2 (#170): eval-vraag van de Autoconsent-motor → MAIN-world
+    // uitvoeren en het resultaat terugsturen. Enige async response in deze
+    // listener; daarom `return true`.
+    if (
+      msg?.type === 'bb:autoconsent-eval' &&
+      sender.tab?.id !== undefined &&
+      typeof sender.frameId === 'number'
+    ) {
+      void evalAutoconsentSnippet(sender.tab.id, sender.frameId, msg.snippetId).then(
+        (response) => {
+          try {
+            sendResponse(response);
+          } catch {
+            // Poort kan al dicht zijn (frame genavigeerd) — niet kritiek.
+          }
+        },
+      );
+      return true;
+    }
+
     if (msg?.type === 'bb:banner-blocked' && sender.tab?.id !== undefined) {
       // Hostname uit de tab-URL (voor #reward-1 melding-gekild-detectie).
       const host = sender.tab.url ? normalizeHost(sender.tab.url) : null;
