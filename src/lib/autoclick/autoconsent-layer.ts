@@ -7,9 +7,8 @@
  * opt-out + eigen prehide + self-test.
  *
  * ⚠️ NB: deze laag draait op elke pagina en coördineert async met de generieke
- * auto-click. Hij staat standaard UIT (zie AUTOCONSENT_LAYER_ENABLED in
- * autoconsent.content.ts) tot 'ie in een dev-build in een echte browser is
- * getest. Veilig te mergen; pas live zetten na verificatie.
+ * auto-click. Aan/uit en host-uitsluitingen: AUTOCONSENT_LAYER_ENABLED en
+ * AUTOCONSENT_EXCLUDED_HOST_SUFFIXES in feature-flags.ts.
  *
  * Coördinatie met de generieke auto-click gebeurt via twee vlaggen op de
  * gedeelde ISOLATED-world `window`:
@@ -69,6 +68,12 @@ export function startAutoconsentLayer(onHandled: () => void): void {
     // Autoconsent doet z'n eigen prehide voor de CMP's die het kent.
     enablePrehide: true,
     isMainWorld: false,
+    // v0.4.2 (#212): standaard 20 pogingen × (500 ms + een DOM-mutatie) — op
+    // een pagina die constant muteert is dat 10 s aan periodieke
+    // detectierondes (elk ~200 querySelector-calls). Tien pogingen dekken
+    // dezelfde CMP's (die zijn er binnen enkele seconden of nooit) en halveren
+    // de last op zware pagina's.
+    detectRetries: 10,
     logs: {
       lifecycle: false,
       rulesteps: false,

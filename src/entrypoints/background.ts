@@ -267,6 +267,44 @@ async function syncFlagSetterScripts(settings: SyncedSettings): Promise<void> {
 }
 
 /**
+ * v0.4.2 (#212): injecteer de Autoconsent-motor in één specifiek frame.
+ *
+ * Chrome/Firefox/Safari met de scripting-API: `chrome.scripting.executeScript`
+ * met `frameIds` (en `injectImmediately` waar ondersteund — Firefox negeert
+ * onbekende velden en injecteert dan op document_idle, wat prima is: onze
+ * eigen prehide.ts dekt de bekende containers intussen al). Oudere MV2-
+ * omgevingen zonder scripting-API vallen terug op `tabs.executeScript`.
+ * Het engine-bestand staat in content-scripts/ zodat de Safari-wrapper 'm
+ * automatisch meebundelt (folder-reference, SKILL.md §7).
+ */
+async function injectAutoconsentEngine(tabId: number, frameId: number): Promise<void> {
+  const file = 'content-scripts/autoconsent-engine.js';
+  try {
+    if (typeof chrome.scripting?.executeScript === 'function') {
+      await chrome.scripting.executeScript({
+        target: { tabId, frameIds: [frameId] },
+        files: [file],
+        injectImmediately: true,
+      });
+      return;
+    }
+    const tabsApi = chrome.tabs as unknown as {
+      executeScript?: (
+        tabId: number,
+        details: { file: string; frameId: number; runAt: string },
+      ) => Promise<unknown>;
+    };
+    if (typeof tabsApi.executeScript === 'function') {
+      await tabsApi.executeScript(tabId, { file: '/' + file, frameId, runAt: 'document_start' });
+    }
+  } catch (err) {
+    // Frame kan al weg zijn (navigatie), of een chrome://-pagina — niet kritiek:
+    // de overige lagen draaien gewoon.
+    console.warn('[BannerBye] autoconsent-engine injectie mislukt:', err);
+  }
+}
+
+/**
  * Korte oranje "✓" badge op het toolbar-icoon, ~900ms zichtbaar. UI-
  * feedback bij elke succesvol gekilde banner via autoclick. Per-tab
  * zodat een actie in tab A geen badge op tab B veroorzaakt.
@@ -459,6 +497,18 @@ export default defineBackground({
     if (msg?.type === 'bb:no-banner' && sender.tab?.url) {
       const host = normalizeHost(sender.tab.url);
       if (host) void recordActivity(host, 'clean');
+    }
+
+    // v0.4.2 (#212): de Autoconsent-poortwachter (autoconsent.content.ts) heeft
+    // vastgesteld dat dit frame een consent-frame kan zijn en vraagt om de
+    // motor. Injecteer de ~800 KB engine alleen in dát frame — nooit via het
+    // manifest in álle frames. Zie autoconsent-engine.content.ts.
+    if (
+      msg?.type === 'bb:autoconsent-inject' &&
+      sender.tab?.id !== undefined &&
+      typeof sender.frameId === 'number'
+    ) {
+      void injectAutoconsentEngine(sender.tab.id, sender.frameId);
     }
     return false; // Geen async response.
   });

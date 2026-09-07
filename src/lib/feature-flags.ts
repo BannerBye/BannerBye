@@ -10,13 +10,72 @@
 /**
  * Autoconsent-laag (Fase 1, iframe-bewust) — zie entrypoints/autoconsent.content.ts.
  *
- * ⚠️ STAAT UIT. Vastgesteld 2026-08-21 (testronde), opnieuw bevestigd
- * 2026-09-06 na het heise.de-incident (zie taak #204 / SKILL.md §11). Zet pas
- * op `true` ná een échte browsertest op Sourcepoint-sites — bild.de,
- * spiegel.de, theguardian.com, heise.de zijn de bekende testkandidaten
- * (allemaal Sourcepoint met cross-origin iframe-UI). Zie taak #170.
+ * Historie: uit sinds de bouw (juli 2026); uit-advies bevestigd 2026-08-21
+ * (testronde) en 2026-09-06 (heise.de-incident, #204). Op 2026-09-07 (#170)
+ * bleek dat de laag sowieso nooit gewerkt kón hebben (constructor-crash in de
+ * vendored library, gefixt in autoconsent-layer.ts) én dat de "successen" van
+ * laag 2 op Sourcepoint-sites in werkelijkheid CMP-crashes waren op onze
+ * niet-schrijfbare `__tcfapi` (zie tcf.content.ts). Die crash is dezelfde dag
+ * gefixt — en daarmee is deze laag geen optie meer maar een noodzaak: zodra
+ * Sourcepoint's wrapper niet meer crasht rendert de banner in een
+ * cross-origin iframe, en alleen deze laag kan daar wegklikken.
+ *
+ * AAN sinds 2026-09-07 in de code. Nog niet uitgebracht — de release-beslissing
+ * blijft aan Robin (zie BannerBye_Autoconsent-Besluit_v1.md en het
+ * release-sync-protocol in SKILL.md §2).
  */
-export const AUTOCONSENT_LAYER_ENABLED = false;
+export const AUTOCONSENT_LAYER_ENABLED = true;
+
+/**
+ * Hosts waarop de Autoconsent-laag NIET draait (suffix-match op de hostnaam).
+ *
+ * v0.4.2 (#170/#212, 7 sep 2026): met de laag aan bleef Google Sheets in
+ * Robins Chrome ruim een minuut onbereikbaar voor scriptinjectie
+ * (`document_idle` werd niet gehaald), terwijl dezelfde pagina met de laag
+ * uit binnen zes seconden klaar was. De exacte oorzaak was in de sandbox niet
+ * te reproduceren (een ingelogde Sheets-editor is daar niet beschikbaar; een
+ * publiek sheet en een synthetische 48k-node-pagina bleven responsief). Deze
+ * lijst is daarom een bewuste rem, in dezelfde geest als de Exact
+ * Online-uitsluiting in de content-scripts: op de app-oppervlakken van deze
+ * productiviteitstools verschijnt nooit een cookie-banner van derden — Google
+ * en Microsoft regelen consent op aparte pagina's (consent.google.com, de
+ * login-flow) — dus een 800-regels-motor heeft er niets te zoeken en kan er
+ * alleen maar kosten. De overige lagen (GPC, TCF, CMP-handlers, generieke
+ * auto-click) blijven op deze hosts gewoon actief.
+ */
+export const AUTOCONSENT_EXCLUDED_HOST_SUFFIXES: string[] = [
+  // Google Workspace-apps (docs/sheets/slides/forms leven allemaal op docs.google.com)
+  'docs.google.com',
+  'drive.google.com',
+  'mail.google.com',
+  'calendar.google.com',
+  'meet.google.com',
+  'keep.google.com',
+  'chat.google.com',
+  'contacts.google.com',
+  // Microsoft 365 / Outlook / Teams / OneDrive
+  'office.com',
+  'office365.com',
+  'microsoft365.com',
+  'live.com',
+  'sharepoint.com',
+  'onedrive.com',
+  'teams.microsoft.com',
+  'outlook.office.com',
+  // Andere zware web-apps zonder cookie-banner op het app-oppervlak
+  'figma.com',
+  'notion.so',
+  'app.slack.com',
+  'miro.com',
+  'canva.com',
+  'web.whatsapp.com',
+];
+
+/** Valt deze hostnaam onder AUTOCONSENT_EXCLUDED_HOST_SUFFIXES? */
+export function isAutoconsentExcludedHost(hostname: string): boolean {
+  const h = hostname.toLowerCase();
+  return AUTOCONSENT_EXCLUDED_HOST_SUFFIXES.some((s) => h === s || h.endsWith('.' + s));
+}
 
 /**
  * CMP-containers die UITSLUITEND via een (vrijwel altijd cross-origin)
