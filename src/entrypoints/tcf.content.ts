@@ -269,14 +269,42 @@ export default defineContentScript({
     tcfapi.__bannerbye = true;
 
     // === INSTALL OP WINDOW ===
-    // defineProperty met configurable:false zodat sites onze stub niet
-    // kunnen overschrijven met hun eigen "yes consent"-versie. Sommige
-    // pagina's pre-freezen window of hebben getter/setter — vandaar
-    // de fallback naar directe assignment.
+    // Accessor-property (getter/setter) met configurable:false zodat sites
+    // onze stub niet kunnen overschrijven met hun eigen "yes consent"-versie.
+    //
+    // v0.4.2 (#170/#215, 7 sep 2026) — WAAROM EEN SETTER EN GEEN
+    // `writable: false`-dataproperty: de IAB-referentiebibliotheek
+    // (@iabtechlabtcf/cmpapi, gebruikt door o.a. Sourcepoint en DPG Media's
+    // consent.js) installeert zichzelf met een kale toewijzing
+    // `window.__tcfapi = this.apiCall.bind(this)` in een `finally`-blok, in
+    // strict mode. Op een niet-schrijfbare dataproperty gooit dat een
+    // TypeError ("Cannot assign to read only property '__tcfapi'") die de
+    // CMP-initialisatie halverwege afbreekt. Gevolgen, allemaal in Robins
+    // echte Chrome vastgesteld: derstandard.at stuurt door naar een
+    // "schakel je browser-add-ons uit"-pagina (Sourcepoint-wrapper logt
+    // "ERROR in messagingWithoutDetection"), DPG's accept-or-pay-muur
+    // (ad.nl/telegraaf.nl) rendert niet — een schending van de ethos dat
+    // zo'n muur zichtbaar moet blijven — en Sourcepoint-banners op
+    // theguardian.com/spiegel.de "verdwenen" niet dankzij ons signaal maar
+    // omdat hun CMP crashte. Met een setter slaagt de toewijzing zonder
+    // fout, terwijl de getter ónze stub blijft teruggeven: precies wat een
+    // niet-strict script vandaag al ervaart. De CMP rendert daarna zijn UI
+    // zoals ontworpen; het wegklikken is het werk van laag 3 (Autoconsent —
+    // de enige laag die in Sourcepoint's cross-origin iframe kan) en laag
+    // 4/5. `configurable: false` blijft: `delete`/`defineProperty` op onze
+    // stub gooit nog steeds, maar dat pad gebruikt geen enkele bekende CMP
+    // voor de installatie zelf.
+    //
+    // Sommige pagina's pre-freezen window of hebben al een getter/setter —
+    // vandaar de fallback naar directe assignment.
     try {
       Object.defineProperty(window, '__tcfapi', {
-        value: tcfapi,
-        writable: false,
+        get: () => tcfapi,
+        set: () => {
+          // Bewust genegeerd: de CMP "installeert" zichzelf zonder fout,
+          // maar het TCF-antwoord aan vendors blijft ons reject-all.
+        },
+        enumerable: true,
         configurable: false,
       });
     } catch {
