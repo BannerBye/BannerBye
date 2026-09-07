@@ -67,6 +67,14 @@ export default defineContentScript({
       } catch {
         // detail ontbreekt of is niet leesbaar — label is optioneel.
       }
+      // v0.4.2 (#170): één weigering per pagina tellen. Als laag 3 of 5 deze
+      // pagina al gemeld heeft (of andersom), niet nóg eens. De vlag leeft op
+      // de gedeelde ISOLATED-world window (zie autoconsent-layer.ts).
+      const w = window as Window & { __bbConsentHandled?: boolean };
+      if (event.type === 'bb:cmp-blocked') {
+        if (w.__bbConsentHandled) return;
+        w.__bbConsentHandled = true;
+      }
       try {
         void chrome.runtime.sendMessage({ type: 'bb:banner-blocked', platform });
       } catch {

@@ -86,23 +86,30 @@ function isConsentFrameByUrl(): boolean {
     const host = location.hostname.toLowerCase();
     if (CONSENT_HOST_FRAGMENTS.some((frag) => host.includes(frag))) return true;
 
-    // v0.4.2 (#170, 7 sep): Sourcepoint's message-iframe is aan zijn URL te
-    // herkennen, onafhankelijk van de host — spiegel.de serveert 'm bijv. op
-    // `sp-spiegel-de.spiegel.de`, zonder leveranciersnaam of 'cmp' in de
-    // hostnaam. Zelfde handtekening als de Sourcepoint-regel van Autoconsent
-    // zelf gebruikt: `/index.html` (of de privacy-manager-varianten) met een
-    // `message_id`-, `consentUUID`- of `requestUUID`-parameter.
+    return isSourcepointFrameUrl();
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * v0.4.2 (#170, 7 sep): Sourcepoint's message-iframe is aan zijn URL te
+ * herkennen, onafhankelijk van de host — spiegel.de serveert 'm bijv. op
+ * `sp-spiegel-de.spiegel.de`, zonder leveranciersnaam of 'cmp' in de
+ * hostnaam. Zelfde handtekening als de Sourcepoint-regel van Autoconsent
+ * zelf gebruikt: `/index.html` (of de privacy-manager-varianten) met een
+ * `message_id`-, `consentUUID`- of `requestUUID`-parameter.
+ */
+export function isSourcepointFrameUrl(): boolean {
+  try {
     const params = new URLSearchParams(location.search);
     const spPath = /\/(index|privacy-manager\/index|ccpa_pm\/index|us_pm\/index)\.html$/.test(
       location.pathname,
     );
-    if (
+    return (
       spPath &&
       (params.has('message_id') || params.has('consentUUID') || params.has('requestUUID'))
-    ) {
-      return true;
-    }
-    return false;
+    );
   } catch {
     return false;
   }

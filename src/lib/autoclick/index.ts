@@ -22,6 +22,12 @@ import { findRejectButton, findStepIntoButton } from './finder.ts';
 /** Hoe lang we proberen voordat we opgeven. */
 const OBSERVE_TIMEOUT_MS = 10_000;
 
+/** Verlengstap zolang de Autoconsent-laag nog met een herkende CMP bezig is. */
+const EXTEND_STEP_MS = 1_000;
+
+/** Absolute bovengrens, ook mét verlenging. */
+const MAX_TOTAL_MS = 30_000;
+
 /** Throttle voor MutationObserver — niet bij elke DOM-mutatie zoeken. */
 const SCAN_THROTTLE_MS = 150;
 
@@ -144,8 +150,10 @@ export function startAutoClick(
         return;
       }
 
-      // PASS 3: step-into (eenmalig per page-load)
-      if (stepIntoClicked) return;
+      // PASS 3: step-into (eenmalig per page-load). v0.4.2 (#170): niet in
+      // frames waar de Autoconsent-laag het instellingenpaneel zelf beheert
+      // (Sourcepoint) — zie __bbStepIntoBlocked in autoconsent-layer.ts.
+      if (stepIntoClicked || w.__bbStepIntoBlocked) return;
       const stepInto = findStepIntoButton();
       if (!stepInto) return;
 
@@ -181,9 +189,27 @@ export function startAutoClick(
       subtree: true,
     });
 
-    // Geef het op na timeoutMs.
-    timeoutId = window.setTimeout(() => {
+    // Geef het op na timeoutMs — tenzij de Autoconsent-laag (laag 3) op dat
+    // moment nog bezig is met een herkende CMP. Dan verlengen we in stapjes
+    // (tot MAX_TOTAL_MS) en doen we, zodra die laag loslaat, nog één scan.
+    // v0.4.2 (#170): zonder dit gaf laag 5 op zalando.nl na 10 s op terwijl
+    // laag 3 nog aan het zoeken was; toen laag 3 losliet was er niemand meer
+    // om "Alleen noodzakelijke" te klikken.
+    const onTimeout = (): void => {
+      if (resolved) return;
+      const w = window as Window;
+      if (
+        w.__bbConsentActive &&
+        !w.__bbConsentHandled &&
+        Date.now() - startTime < MAX_TOTAL_MS
+      ) {
+        timeoutId = window.setTimeout(onTimeout, EXTEND_STEP_MS);
+        return;
+      }
+      tryClick();
+      if (resolved || verifying) return;
       finish({ clicked: false, elapsedMs: Date.now() - startTime });
-    }, timeoutMs);
+    };
+    timeoutId = window.setTimeout(onTimeout, timeoutMs);
   });
 }

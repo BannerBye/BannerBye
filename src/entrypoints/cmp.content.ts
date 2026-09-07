@@ -13,7 +13,9 @@
  *    kunnen praten (die zijn alleen op page-context zichtbaar).
  *  - Wacht op `DOMContentLoaded` voor detectie — sommige CMPs
  *    laden hun script asynchroon en zijn op document_start nog
- *    niet zichtbaar.
+ *    niet zichtbaar. Sinds v0.4.2 (#170) blijft de detectie daarna
+ *    nog 10 s pollen (elke 500 ms) voor CMP's die de app-bundel pas
+ *    later injecteert.
  *  - Past slechts één handler toe per page-load (eerste match wint).
  *  - Faalt stil — als een handler crasht, gaat de rest gewoon door.
  *
@@ -80,41 +82,66 @@ export default defineContentScript({
       });
     }
 
-    for (const handler of handlers) {
-      let detected = false;
-      try {
-        detected = handler.detect();
-      } catch (err) {
-        console.warn(`[BannerBye] CMP detect "${handler.name}" failed:`, err);
-        continue;
-      }
-      if (!detected) continue;
-
-      try {
-        await handler.apply();
-        // v0.2.0 (#114): rapporteer block voor teller. bridge.content.ts
-        // pickt 'bb:cmp-blocked' op en stuurt 'bb:banner-blocked' naar background.
-        // Op `document` (niet `window`) want events flowen daar wél cross-world
-        // in Chrome MV3 — MAIN ↔ ISOLATED delen document maar hebben aparte
-        // window-listeners.
-        try {
-          // v0.4.0: handler-naam mee zodat de popup kan tonen wélk platform
-          // herkend werd (bijv. "OneTrust").
-          document.dispatchEvent(
-            new CustomEvent('bb:cmp-blocked', {
-              detail: { platform: handler.name },
-            }),
-          );
-        } catch {
-          // CustomEvent faalt zelden — niet kritiek.
-        }
-      } catch (err) {
-        console.warn(`[BannerBye] CMP apply "${handler.name}" failed:`, err);
-      }
-      // Eerste match wint. Sites gebruiken zelden meerdere CMPs
-      // tegelijk; als ze dat wel doen, raden we de meest-zichtbare
-      // (= eerste in onze lijst) als primaire.
-      return;
+    // v0.4.2 (#170): niet één keer kijken, maar tot DETECT_WINDOW_MS na
+    // DOMContentLoaded blijven kijken. Steeds meer sites (zalando.nl: de
+    // Usercentrics-loader pas op 3,8 s, ver na DOMContentLoaded op 0,9 s)
+    // injecteren hun CMP vanuit de app-bundel. Eén detectieronde miste die
+    // dan voorgoed, terwijl de handler zelf (API-weigering) juist de
+    // netste route is. Een ronde kost een handvol querySelectors.
+    const started = Date.now();
+    for (;;) {
+      if (await runDetectedHandler()) return;
+      if (Date.now() - started >= DETECT_WINDOW_MS) return;
+      await new Promise<void>((resolve) => window.setTimeout(resolve, DETECT_POLL_MS));
     }
   },
 });
+
+/** Hoe lang we na DOMContentLoaded blijven kijken of er een CMP verschijnt. */
+const DETECT_WINDOW_MS = 10_000;
+const DETECT_POLL_MS = 500;
+
+/**
+ * Eén detectieronde over alle handlers. Geeft `true` zodra er een handler
+ * gematcht heeft (ongeacht of apply slaagde) — eerste match wint, precies
+ * zoals vóór v0.4.2.
+ */
+async function runDetectedHandler(): Promise<boolean> {
+  for (const handler of handlers) {
+    let detected = false;
+    try {
+      detected = handler.detect();
+    } catch (err) {
+      console.warn(`[BannerBye] CMP detect "${handler.name}" failed:`, err);
+      continue;
+    }
+    if (!detected) continue;
+
+    try {
+      await handler.apply();
+      // v0.2.0 (#114): rapporteer block voor teller. bridge.content.ts
+      // pickt 'bb:cmp-blocked' op en stuurt 'bb:banner-blocked' naar background.
+      // Op `document` (niet `window`) want events flowen daar wél cross-world
+      // in Chrome MV3 — MAIN ↔ ISOLATED delen document maar hebben aparte
+      // window-listeners.
+      try {
+        // v0.4.0: handler-naam mee zodat de popup kan tonen wélk platform
+        // herkend werd (bijv. "OneTrust").
+        document.dispatchEvent(
+          new CustomEvent('bb:cmp-blocked', {
+            detail: { platform: handler.name },
+          }),
+        );
+      } catch {
+        // CustomEvent faalt zelden — niet kritiek.
+      }
+    } catch (err) {
+      console.warn(`[BannerBye] CMP apply "${handler.name}" failed:`, err);
+    }
+    // Eerste match wint. Sites gebruiken zelden meerdere CMPs
+    // tegelijk; als ze dat wel doen, raden we de meest-zichtbare
+    // (= eerste in onze lijst) als primaire.
+    return true;
+  }
+  return false;
+}

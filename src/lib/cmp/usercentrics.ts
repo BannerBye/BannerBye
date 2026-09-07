@@ -37,6 +37,7 @@ interface UcV3Api {
 interface UcV2Api {
   denyAllConsents?: () => unknown;
   closeCMP?: () => unknown;
+  isInitialized?: () => boolean;
 }
 
 declare global {
@@ -84,10 +85,19 @@ async function denyViaApi(): Promise<boolean> {
 }
 
 function apiPresent(): boolean {
-  return (
-    typeof window.__ucCmp?.denyAllConsents === 'function' ||
-    typeof window.UC_UI?.denyAllConsents === 'function'
-  );
+  if (typeof window.__ucCmp?.denyAllConsents === 'function') return true;
+  const v2 = window.UC_UI;
+  if (typeof v2?.denyAllConsents !== 'function') return false;
+  // v0.4.2 (#170): v2 zet `UC_UI` al neer vóórdat settings/vertalingen
+  // binnen zijn (zalando.nl: object op ~4,0 s, UI pas op ~4,5 s). Een
+  // denyAllConsents() in dat gat wordt genegeerd. Wacht dus op
+  // isInitialized() — of op het UC_UI_INITIALIZED-event (zie waitForApi).
+  try {
+    if (typeof v2.isInitialized === 'function' && !v2.isInitialized()) return false;
+  } catch {
+    // Onbekende API-variant — behandel als aanwezig.
+  }
+  return true;
 }
 
 /**

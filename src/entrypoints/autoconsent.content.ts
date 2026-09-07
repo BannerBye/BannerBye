@@ -14,7 +14,7 @@ import { defineContentScript } from 'wxt/sandbox';
 import { getSettings } from '@/lib/storage.ts';
 import { isHostPaused } from '@/lib/host.ts';
 import { isPdfDocument } from '@/lib/pdf-guard.ts';
-import { shouldProcessFrameDeferred } from '@/lib/frame-guard.ts';
+import { shouldProcessFrameDeferred, isSourcepointFrameUrl } from '@/lib/frame-guard.ts';
 // v0.4.2 (#204): flag verhuisd naar een gedeelde module — prehide.ts moet
 // 'm ook kunnen lezen (zie feature-flags.ts voor de volledige toelichting
 // en het heise.de-incident dat dit nodig maakte).
@@ -70,6 +70,16 @@ export default defineContentScript({
       if (isHostPaused(location.hostname, settings.pausedSites)) return;
     } catch {
       // storage-race bij startup — fail-open zoals de andere lagen.
+    }
+
+    // v0.4.2 (#170): in een Sourcepoint-frame beheert de motor het
+    // instellingenpaneel zelf (openen, weigeren, en zo nodig terugdraaien op
+    // consent-of-betaal-sites). Zet de rem op laag 5's "doorklikken" hier al
+    // — dit script draait op document_start, ruim vóór de generieke
+    // auto-click op document_idle; de motor zelf komt via de background pas
+    // later binnen en zou die race op bild.de verliezen.
+    if (isSourcepointFrameUrl()) {
+      (window as Window & { __bbStepIntoBlocked?: boolean }).__bbStepIntoBlocked = true;
     }
 
     // v0.4.2 (#212, 7 sep): de motor zelf (autoconsent-engine.content.ts,
