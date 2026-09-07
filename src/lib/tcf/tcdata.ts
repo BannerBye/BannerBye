@@ -83,10 +83,24 @@ export function buildNoConsentTCData(opts: TCStringOptions = {}): TCData {
     cmpId: opts.cmpId ?? 0,
     cmpVersion: opts.cmpVersion ?? 1,
     cmpStatus: 'loaded',
-    // 'useractioncomplete' = user heeft expliciet beslist, signaal is finaal.
-    // Strenge CMPs (Didomi) tonen anders alsnog hun UI om "expliciete actie"
-    // af te dwingen, ook al ligt er een geldige consent-string klaar.
-    eventStatus: 'useractioncomplete',
+    // v0.4.2 (#170, 7 sep 2026): 'tcloaded', niet meer 'useractioncomplete'.
+    //
+    // 'useractioncomplete' betekent per TCF-spec "de gebruiker heeft zojuist
+    // een keuze gemaakt". Uitgevers hangen daar acties aan — heise.de
+    // herlaadt de pagina om de advertentieconfiguratie toe te passen. Omdat
+    // wij dat event bij élke paginalaad meteen afvuurden (ook via
+    // addEventListener), kwam heise.de in een eindeloze reload-lus
+    // (~3 herlaadbeurten per seconde, in de sandbox 45 navigaties in 15 s;
+    // zonder extensie: 1). Dat was het échte "site slaat op tilt" uit taak
+    // #204 — niet de prehide-cyclus. 'tcloaded' is de correcte status voor
+    // "er ligt al een beslissing, er is nu niets nieuws gebeurd".
+    //
+    // De oude reden voor 'useractioncomplete' — strenge CMP's zoals Didomi
+    // tonen bij 'tcloaded' soms alsnog hun UI — is achterhaald: Didomi heeft
+    // sinds v0.2 een eigen handler in laag 4 (window.Didomi API) en de
+    // Autoconsent-laag (laag 3) vangt de rest. Een banner die tóch even
+    // verschijnt is te verkiezen boven een pagina die nooit meer stilstaat.
+    eventStatus: 'tcloaded',
     isServiceSpecific: false,
     useNonStandardStacks: false,
     publisherCC: opts.publisherCC ?? 'AA',

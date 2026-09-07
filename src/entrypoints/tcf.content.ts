@@ -191,12 +191,14 @@ export default defineContentScript({
     };
 
     // === __tcfapi IMPLEMENTATIE ===
-    const tcfapi: TaggedTcfApi = function tcfapi(
-      command,
-      _version,
-      callback,
-      parameter,
-    ) {
+    // v0.4.2 (#170, 7 sep, tweede iteratie): `ownStub` is ons reject-all-
+    // antwoord; `tcfapi` (hieronder) is wat de pagina ziet en delegeert naar
+    // de CMP van de site zodra die zichzelf heeft geïnstalleerd (zie de
+    // setter bij INSTALL OP WINDOW). Vóór dat moment — en op sites zonder
+    // TCF-CMP: altijd — antwoorden wij.
+    let cmpImpl: TcfApi | null = null;
+
+    const ownStub: TcfApi = function ownStub(command, _version, callback, parameter) {
       if (typeof callback !== 'function') return;
 
       switch (command) {
@@ -266,6 +268,20 @@ export default defineContentScript({
       }
     };
 
+    // Wat de pagina daadwerkelijk aanroept: delegeer naar de CMP van de site
+    // zodra die er is, anders ons eigen antwoord.
+    const tcfapi: TaggedTcfApi = function tcfapi(command, version, callback, parameter) {
+      if (cmpImpl) {
+        try {
+          cmpImpl(command, version, callback, parameter);
+          return;
+        } catch {
+          // CMP-implementatie gooit — val terug op ons antwoord.
+        }
+      }
+      ownStub(command, version, callback, parameter);
+    };
+
     tcfapi.__bannerbye = true;
 
     // === INSTALL OP WINDOW ===
@@ -286,23 +302,33 @@ export default defineContentScript({
     // (ad.nl/telegraaf.nl) rendert niet — een schending van de ethos dat
     // zo'n muur zichtbaar moet blijven — en Sourcepoint-banners op
     // theguardian.com/spiegel.de "verdwenen" niet dankzij ons signaal maar
-    // omdat hun CMP crashte. Met een setter slaagt de toewijzing zonder
-    // fout, terwijl de getter ónze stub blijft teruggeven: precies wat een
-    // niet-strict script vandaag al ervaart. De CMP rendert daarna zijn UI
-    // zoals ontworpen; het wegklikken is het werk van laag 3 (Autoconsent —
-    // de enige laag die in Sourcepoint's cross-origin iframe kan) en laag
-    // 4/5. `configurable: false` blijft: `delete`/`defineProperty` op onze
-    // stub gooit nog steeds, maar dat pad gebruikt geen enkele bekende CMP
-    // voor de installatie zelf.
+    // omdat hun CMP crashte.
+    //
+    // Tweede iteratie (zelfde dag, hertest in Robins Chrome): een setter die
+    // de toewijzing stilzwijgend NEGEERT is óók niet genoeg. Sourcepoint's
+    // wrapper praat na installatie via `window.__tcfapi` met zichzelf
+    // (eigen commands, 'useractioncomplete'-events); krijgt hij daar ons
+    // statische reject-all op, dan rondt hij een keuze nooit af — heise.de
+    // kwam zo in een reload-lus: weigering door de motor → Sourcepoint
+    // herlaadt de pagina → keuze niet opgeslagen (geen consentUUID) →
+    // banner opnieuw → weigering → … elke 2-8 s. Daarom: de setter BEWAART
+    // de implementatie van de site en `tcfapi` delegeert er vanaf dat moment
+    // naartoe. Ons reject-all geldt dus in het venster vóór de CMP zich
+    // installeert (precies waar "before they load" over gaat) en permanent op
+    // sites zonder TCF-CMP; daarna is de CMP zelf de bron — en die staat na
+    // laag 3/4/5 op "geweigerd". `configurable: false` blijft: `delete`/
+    // `defineProperty` op onze stub gooit nog steeds, maar dat pad gebruikt
+    // geen enkele bekende CMP voor de installatie zelf.
     //
     // Sommige pagina's pre-freezen window of hebben al een getter/setter —
     // vandaar de fallback naar directe assignment.
     try {
       Object.defineProperty(window, '__tcfapi', {
         get: () => tcfapi,
-        set: () => {
-          // Bewust genegeerd: de CMP "installeert" zichzelf zonder fout,
-          // maar het TCF-antwoord aan vendors blijft ons reject-all.
+        set: (value: unknown) => {
+          if (typeof value === 'function' && value !== tcfapi) {
+            cmpImpl = value as TcfApi;
+          }
         },
         enumerable: true,
         configurable: false,
@@ -383,9 +409,17 @@ export default defineContentScript({
     // `euconsent-v2` is de standaardnaam voor de TCF-cookie. Sites die
     // hun banner-logica baseren op cookie-aanwezigheid (ipv API-call)
     // zien zo direct dat er een geldige consent-decision is.
+    //
+    // v0.4.2 (#170): alleen zetten als er nog géén euconsent-v2 staat. Zodra
+    // een CMP (na de weigering door laag 3/4/5) zijn eigen TC-string heeft
+    // opgeslagen, moet die blijven staan — overschrijven bij elke paginalaad
+    // maakt de opgeslagen keuze voor de CMP onherkenbaar en lokt precies de
+    // "banner komt steeds terug"-lus uit.
     try {
-      const oneYear = 365 * 24 * 60 * 60;
-      document.cookie = `euconsent-v2=${tcData.tcString}; path=/; max-age=${oneYear}; SameSite=Lax`;
+      if (!/(?:^|;\s*)euconsent-v2=/.test(document.cookie)) {
+        const oneYear = 365 * 24 * 60 * 60;
+        document.cookie = `euconsent-v2=${tcData.tcString}; path=/; max-age=${oneYear}; SameSite=Lax`;
+      }
     } catch {
       // Sommige contexten (sandboxed iframe) staan cookies niet toe.
     }
