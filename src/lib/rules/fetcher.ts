@@ -102,6 +102,9 @@ function isValidRules(value: unknown): value is RemoteRules {
     if (acObj.ambiguousKeywords !== undefined && !isStringArray(acObj.ambiguousKeywords)) return false;
     if (acObj.stepIntoKeywords !== undefined && !isStringArray(acObj.stepIntoKeywords)) return false;
     if (acObj.rejectPhrases !== undefined && !isStringArray(acObj.rejectPhrases)) return false;
+    if (acObj.contextWords !== undefined && !isStringArray(acObj.contextWords)) return false;
+    if (acObj.attributeWordHints !== undefined && !isStringArray(acObj.attributeWordHints)) return false;
+    if (acObj.attributeCompactHints !== undefined && !isStringArray(acObj.attributeCompactHints)) return false;
   }
 
   return true;

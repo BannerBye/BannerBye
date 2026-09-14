@@ -128,7 +128,10 @@ export default defineContentScript({
         void chrome.runtime.sendMessage({
           type: 'bb:banner-blocked',
           // v0.4.0: bron mee zodat de popup kan tonen wát er herkend werd.
-          platform: 'Custom banner',
+          // v0.4.4: expliciet zichtbaar maken als de vertaal-fallback nodig
+          // was — nuttig signaal in de bewijslijst (§11 skill) voor talen
+          // die nog niet in de keyword-lijsten zitten.
+          platform: result.viaTranslation ? 'Custom banner (vertaald)' : 'Custom banner',
         });
       } catch {
         // Background-worker kan net idle zijn — niet kritiek.

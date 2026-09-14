@@ -22,7 +22,15 @@ export interface RemoteRules {
   /** ISO-timestamp wanneer dit bestand is gepubliceerd. */
   updatedAt?: string;
 
-  /** Aanvullingen op de gebundelde autoclick-keyword-lijsten. */
+  /**
+   * Aanvullingen op de gebundelde autoclick-keyword-lijsten.
+   *
+   * v0.4.4 (sep 2026): dit is nu het primaire kanaal om een nieuwe taal te
+   * dekken zonder store-release — zie de toelichting bovenaan keywords.ts.
+   * Bij een gebruikersmelding over een taal die hier nog niet in zit: voeg
+   * de keywords toe aan dit bestand (accented + unaccented waar relevant,
+   * zie de Griekse §11-les in de skill) i.p.v. een extensie-versie te bouwen.
+   */
   autoclick?: {
     /** Extra exact-match weiger-keywords (PASS 1). */
     rejectKeywords?: string[];
@@ -35,5 +43,20 @@ export interface RemoteRules {
      * knoptekst, alleen in cookie-banner-context). Zie REJECT_PHRASES.
      */
     rejectPhrases?: string[];
+    /**
+     * Extra cookie-context-woorden (lokale taal voor "cookie"/"privacy"/
+     * "toestemming" e.d.) — gebruikt door isInCookieBanner()/PASS 2.
+     */
+    contextWords?: string[];
+    /**
+     * Extra taalonafhankelijke id/class/data-*-hints, losse tokens
+     * (PASS ATTR, WORD-tier). Zie ATTRIBUTE_REJECT_WORD_HINTS in keywords.ts.
+     */
+    attributeWordHints?: string[];
+    /**
+     * Extra taalonafhankelijke id/class/data-*-hints, samengestelde
+     * substrings (PASS ATTR, COMPACT-tier). Zie ATTRIBUTE_REJECT_COMPACT_HINTS.
+     */
+    attributeCompactHints?: string[];
   };
 }

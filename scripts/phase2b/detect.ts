@@ -29,6 +29,16 @@ export interface DetectionResult {
   candidates: ClickCandidate[];
   /** Korte snippet van de banner-tekst (max 300 tekens), voor de PR-body. */
   bannerTextSnippet: string;
+  /**
+   * v0.4.4: true als deze banner ALLEEN via de vorm-heuristiek gevonden is
+   * (fixed/sticky container + meerdere knoppen), zonder dat er een Latijns-
+   * schrift cookie/consent-woord of actie-woord in de tekst matchte. Dat is
+   * het taalonafhankelijke vangnet — zie de toelichting bij `weakSignal`
+   * hieronder. `false`/afwezig = normale, sterke detectie zoals voorheen.
+   */
+  weakSignal: boolean;
+  /** `document.documentElement.lang`, indien gezet — hint voor Claude bij een taalgat. */
+  pageLang: string;
 }
 
 /**
@@ -113,10 +123,48 @@ export function detectInPage(): DetectionResult {
     }
   }
 
+  // v0.4.4: taalonafhankelijk vangnet. De zoeker hierboven vereist een
+  // Latijns-schrift COOKIE_WORDS-match in de containertekst — een banner
+  // volledig in bv. Arabisch, Chinees of Thai zonder Engelse leenwoorden
+  // ("cookie"/"GDPR") wordt daardoor NOOIT gevonden, ongeacht wat er verderop
+  // in classify.ts gebeurt. Val terug op een pure vorm-heuristiek: een
+  // fixed/sticky container met meerdere korte klikbare elementen, ongeacht
+  // de tekst. Dit is zwakker (kan een newsletter-bar of ander overlay raken)
+  // — daarom een apart `weakSignal`-veld, en classify.ts routeert dit naar
+  // Claude die EERST beoordeelt of het überhaupt een cookie-banner is.
+  let weakBanner: Element | null = null;
+  let weakBannerCandidateCount = 0;
+  if (!banner) {
+    let bestWeak = -1;
+    for (const el of containers) {
+      if (!isVisible(el)) continue;
+      const style = window.getComputedStyle(el as HTMLElement);
+      const fixed = style.position === 'fixed' || style.position === 'sticky';
+      if (!fixed) continue;
+      const rect = (el as HTMLElement).getBoundingClientRect();
+      if (rect.width < 200 || rect.height < 60 || rect.width > window.innerWidth * 1.1) continue;
+      const txt = textOf(el);
+      if (txt.length > 1500) continue; // waarschijnlijk geen compacte banner
+      const clickCount = el.querySelectorAll(
+        'button, a[href], [role="button"], input[type="button"], input[type="submit"]',
+      ).length;
+      // Bijna elke consent-banner heeft minstens 2 losse acties
+      // (accept + reject, of accept + manage). Minder is te zwak een signaal.
+      if (clickCount < 2) continue;
+      const z = parseInt(style.zIndex || '0', 10) || 0;
+      const score = Math.min(z, 100000) / 100 + (1500 - txt.length) / 100;
+      if (score > bestWeak) {
+        bestWeak = score;
+        weakBanner = el;
+        weakBannerCandidateCount = clickCount;
+      }
+    }
+  }
+
   // --- 3. Klikbare elementen binnen de banner verzamelen ---
   const candidates: ClickCandidate[] = [];
   const seen = new Set<string>();
-  const scope: ParentNode = banner ?? document;
+  const scope: ParentNode = banner ?? weakBanner ?? document;
   const clickables = Array.from(
     scope.querySelectorAll(
       'button, a[href], [role="button"], input[type="button"], input[type="submit"]',
@@ -141,10 +189,16 @@ export function detectInPage(): DetectionResult {
       'refuser', 'rechaz', 'rifiut',
     ];
     const lowerText = text.toLowerCase();
+    // v0.4.4: bij een niet-Latijns schrift heeft `lowerText` geen van deze
+    // hints, dus knoppen langer dan 60 tekens zouden er anders altijd
+    // uitvallen — terwijl juist bij een taalgat elke kandidaat-tekst telt.
+    // In weakBanner-scope (geen Latijns-schrift signaal sowieso al gevonden)
+    // laten we daarom de 160-tekens-grens ook zonder hint-match toe.
+    const inWeakBannerScope = banner === null && weakBanner !== null;
     const lenOk =
       text.length <= 60 ||
       (text.length <= 160 &&
-        SENTENCE_REJECT_HINTS.some((h) => lowerText.includes(h)));
+        (SENTENCE_REJECT_HINTS.some((h) => lowerText.includes(h)) || inWeakBannerScope));
     if (!lenOk) continue;
     const key = text.toLowerCase();
     if (seen.has(key)) continue;
@@ -152,7 +206,8 @@ export function detectInPage(): DetectionResult {
     candidates.push({ text, tag: el.tagName.toLowerCase() });
   }
 
-  const bannerTextSnippet = banner ? textOf(banner).slice(0, 300) : '';
+  const activeBanner = banner ?? weakBanner;
+  const bannerTextSnippet = activeBanner ? textOf(activeBanner).slice(0, 300) : '';
 
   // --- 4. Validatie: is dit ÉCHT een consent-banner? ---
   // De container-zoeker matcht op elk cookie-context-woord, inclusief het zwakke
@@ -178,7 +233,12 @@ export function detectInPage(): DetectionResult {
     const t = c.text.toLowerCase();
     return ACTION_HINTS.some((a) => t.includes(a));
   });
-  const realBanner = banner !== null && (textHasConsent || hasActionButton);
+  // v0.4.4: het zwakke vormsignaal telt alleen mee als er geen sterk
+  // Latijns-schrift-signaal was (anders had de normale weg 't al gevonden)
+  // — en levert altijd `weakSignal: true` op, zodat classify.ts weet dat dit
+  // ongeverifieerd is.
+  const weakSignal = banner === null && weakBanner !== null && weakBannerCandidateCount >= 2;
+  const realBanner = banner !== null ? textHasConsent || hasActionButton : weakSignal;
 
   return {
     finalUrl: location.href,
@@ -187,5 +247,7 @@ export function detectInPage(): DetectionResult {
     bannerVisible: realBanner,
     candidates: realBanner ? candidates : [],
     bannerTextSnippet: realBanner ? bannerTextSnippet : '',
+    weakSignal: realBanner ? weakSignal : false,
+    pageLang: document.documentElement.lang || '',
   };
 }

@@ -30,6 +30,7 @@ export type Category =
   | 'accept_only'
   | 'no_banner'
   | 'cmp_iframe_unreachable'
+  | 'possible_language_gap'
   | 'unknown';
 
 /** Doellijst in rules.json waar een voorgesteld keyword heen gaat. */
@@ -202,6 +203,28 @@ export function classify(d: DetectionResult): Classification {
       cmps,
     };
   }
+
+  // v0.4.4: hier komen we alleen als er kandidaat-knoppen zijn (d.bannerVisible
+  // is true en er was geen vroege return), maar GEEN ENKELE ervan matcht ook
+  // maar iets — niet de bekende keywords, niet een van de Latijns-schrift
+  // REJECT/ACCEPT/STEP_INTO-indicators hierboven. Dat is exact het
+  // coffeeisland.gr-patroon van sep 2026: een taal die nog nergens gedekt is.
+  // Aparte categorie i.p.v. de generieke 'unknown', zodat analyze.ts hier
+  // gericht Claude kan vragen de taal te herkennen en kandidaat-keywords voor
+  // te stellen — in plaats van te wachten tot een mens het toevallig meldt.
+  if (d.candidates.length > 0) {
+    return {
+      category: 'possible_language_gap',
+      proposals: [],
+      reason:
+        `Banner zichtbaar met ${d.candidates.length} knop(pen)${
+          d.weakSignal ? ' (via het zwakke vormsignaal — nog te bevestigen dat dit een cookie-banner is)' : ''
+        }, maar geen enkele knop matcht een bekend keyword of een Latijns-schrift ` +
+        `indicatorwoord — vermoedelijk een taal die nog niet gedekt is. Kandidaat voor Claude-taalherkenning.`,
+      cmps,
+    };
+  }
+
   return {
     category: 'unknown',
     proposals: [],

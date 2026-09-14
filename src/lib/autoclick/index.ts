@@ -2,12 +2,16 @@
  * Auto-click fallback orchestrator.
  *
  * Aanroepen vanuit een content script. Deze module:
- *   1. Probeert direct een reject-knop te vinden (strict + ambiguous-met-context)
+ *   1. Probeert direct een reject-knop te vinden (tekst, taalonafhankelijke
+ *      attribuut-hints, zin-fragmenten, ambiguous-met-context — zie finder.ts)
  *   2. Als die er niet is: probeert een step-into knop ("Meer opties" etc.)
  *      te klikken om een detail-paneel te openen, dan opnieuw te zoeken
  *      (dekt dark-pattern sites zoals fok.nl)
  *   3. Zet MutationObserver op de DOM voor banners die later renderen
- *   4. Stopt na een timeout (default 10s)
+ *   4. Stopt na een timeout (default 10s) — maar probeert ná die timeout,
+ *      vóór we echt opgeven, nog één keer via on-device vertaling naar het
+ *      Engels (translate.ts, v0.4.4) — de laatste redmiddel-laag voor talen
+ *      die nergens anders gedekt zijn.
  *
  * Maximaal één klik-actie per "type" per page-load:
  *  - één step-into klik (idempotent)
@@ -18,6 +22,7 @@
  */
 
 import { findRejectButton, findStepIntoButton } from './finder.ts';
+import { tryTranslationFallback } from './translate.ts';
 
 /** Hoe lang we proberen voordat we opgeven. */
 const OBSERVE_TIMEOUT_MS = 10_000;
@@ -49,6 +54,12 @@ export interface AutoClickResult {
   buttonText?: string;
   /** True als we via step-into de reject-knop bereikten. */
   viaStepInto?: boolean;
+  /**
+   * True als we de knop alleen via de on-device vertaal-fallback vonden
+   * (v0.4.4, translate.ts) — knoptekst matchte geen enkele bundled/remote
+   * keyword, maar wél na vertaling naar het Engels.
+   */
+  viaTranslation?: boolean;
   /** Hoe lang het duurde voor we 'm vonden (ms na start). */
   elapsedMs: number;
 }
@@ -208,7 +219,40 @@ export function startAutoClick(
       }
       tryClick();
       if (resolved || verifying) return;
-      finish({ clicked: false, elapsedMs: Date.now() - startTime });
+
+      // Laatste redmiddel vóór we opgeven: on-device vertaling (v0.4.4,
+      // zie translate.ts). Async, dus los van de rest van deze verder
+      // synchrone flow — vandaar de IIFE. Faalt altijd stil binnen budget;
+      // een parallelle MutationObserver-scan kan intussen nog steeds winnen
+      // (resolved-check ná de await beschermt daartegen).
+      void (async () => {
+        const translated = await tryTranslationFallback();
+        if (resolved || verifying) return;
+        if (!translated) {
+          finish({ clicked: false, elapsedMs: Date.now() - startTime });
+          return;
+        }
+
+        const buttonText = (translated.innerText || translated.textContent || '').trim();
+        try {
+          translated.click();
+        } catch (err) {
+          console.warn('[BannerBye] translated reject click failed:', err);
+          finish({ clicked: false, elapsedMs: Date.now() - startTime });
+          return;
+        }
+
+        verifying = true;
+        window.setTimeout(() => {
+          finish({
+            clicked: true,
+            verified: !bannerStillPresent(translated),
+            buttonText,
+            viaTranslation: true,
+            elapsedMs: Date.now() - startTime,
+          });
+        }, VERIFY_DELAY_MS);
+      })();
     };
     timeoutId = window.setTimeout(onTimeout, timeoutMs);
   });

@@ -1,13 +1,23 @@
 /**
  * Vindt de "weigeren"-knop in de DOM, inclusief Shadow DOMs.
  *
- * Twee-staps strategie:
+ * Vier-staps strategie, van hoogste naar laagste vertrouwen:
  *
- *   PASS 1 — STRICT match
+ *   PASS 1 — STRICT tekst-match
  *   Loop door alle klikbare elementen in document + shadow-DOMs +
  *   same-origin iframes. Match button-tekst exact tegen REJECT_KEYWORDS.
  *   Eerste match wint. Lage false-positive risico — keywords zijn
- *   specifiek genoeg ("Alle weigeren", "Decline all", etc.).
+ *   specifiek genoeg ("Alle weigeren", "Decline all", etc.). Taalafhankelijk
+ *   (moet de zichtbare taal kennen).
+ *
+ *   PASS ATTR — taalonafhankelijke id/class/data-*-match (v0.4.4)
+ *   Matcht op attributen i.p.v. zichtbare tekst — CMP's coderen hun knoppen
+ *   bijna altijd in het Engels, ongeacht de gelokaliseerde zichtbare tekst.
+ *   Werkt daardoor voor élke taal tegelijk, en vangt ook icon-only knoppen
+ *   zonder leesbaar label. Zie isRejectAttributeHint() in keywords.ts.
+ *
+ *   PASS 1.5 — zin-fragment-match binnen banner-context
+ *   Voor knoppen met een hele zin als label i.p.v. een los woord.
  *
  *   PASS 2 — AMBIGUOUS match met banner-context
  *   Voor sites met generieke knop-teksten ("Opslaan" / "Save" zonder
@@ -18,6 +28,10 @@
  * Voorbeeld waar PASS 2 nodig is: MediaMarkt heeft alleen "Opslaan" +
  * "Alles accepteren". "Opslaan" slaat de default-OFF selectie op =
  * effectief weigeren, maar het woord alleen is te generiek voor PASS 1.
+ *
+ * Laatste redmiddel (buiten deze functie, zie translate.ts): als geen van
+ * deze vier passes iets vindt, probeert de orchestrator (index.ts) ná de
+ * timeout nog een on-device vertaling van de knoptekst naar het Engels.
  */
 
 import {
@@ -26,6 +40,7 @@ import {
   isStepIntoText,
   containsRejectPhrase,
   hasCookieContext,
+  isRejectAttributeHint,
 } from './keywords.ts';
 
 /** CSS-selector voor alle plausibel-klikbare elementen. */
@@ -109,18 +124,34 @@ function readLabel(el: HTMLElement): string {
  */
 export function findRejectButton(relaxContext = false): HTMLElement | null {
   // We verzamelen alle zichtbare clickable kandidaten één keer en gebruiken
-  // de array voor beide passes. Voorkomt dat we de DOM 2x walken.
+  // de array voor alle passes. Voorkomt dat we de DOM meermaals walken.
+  // `visibleEls` bevat ALLE zichtbare klikbare elementen (ook zonder
+  // leesbare tekst — icon-only knoppen); `candidates` is het subset mét
+  // tekst, voor de tekst-gebaseerde passes.
+  const visibleEls: HTMLElement[] = [];
   const candidates: Array<{ el: HTMLElement; text: string }> = [];
   for (const el of walkClickables(document)) {
     if (!isVisible(el)) continue;
+    visibleEls.push(el);
     const text = readLabel(el);
-    if (!text) continue;
-    candidates.push({ el, text });
+    if (text) candidates.push({ el, text });
   }
 
   // PASS 1: strict matches (current high-confidence behavior)
   for (const { el, text } of candidates) {
     if (isRejectText(text)) return el;
+  }
+
+  // PASS ATTR: taalonafhankelijke id/class/data-*-hints (v0.4.4).
+  // CMP's coderen hun knoppen bijna altijd in het Engels, ook met een
+  // gelokaliseerde zichtbare tekst (coffeeisland.gr's "Cookie Control":
+  // `.ccc-reject-button` met Griekse knoptekst) — dus dit matcht voor élke
+  // taal tegelijk, en vangt ook icon-only knoppen zonder leesbaar label.
+  // Zie isRejectAttributeHint() in keywords.ts voor de match-logica.
+  for (const el of visibleEls) {
+    if (!isSafeToClick(el)) continue;
+    const { tokens, raw } = readAttributeTokens(el);
+    if (isRejectAttributeHint(tokens, raw)) return el;
   }
 
   // PASS 1.5: zin-matches ("... können Sie diese hier ablehnen.").
@@ -129,7 +160,7 @@ export function findRejectButton(relaxContext = false): HTMLElement | null {
   for (const { el, text } of candidates) {
     if (text.length > MAX_PHRASE_TEXT_LENGTH) continue;
     if (!containsRejectPhrase(text)) continue;
-    if (!isSafeToClickPhrase(el)) continue;
+    if (!isSafeToClick(el)) continue;
     if (relaxContext || isInCookieBanner(el)) return el;
   }
 
@@ -145,14 +176,83 @@ export function findRejectButton(relaxContext = false): HTMLElement | null {
 }
 
 /**
- * Vangrail voor PASS 1.5: alleen klikken op elementen die écht een knop zijn.
- *
- * Een zin als "Cookies kun je hier weigeren" staat op sommige sites op een
- * gewone link naar de cookie-instellingenpagina. Die klikken zou de gebruiker
+ * Verzamelt alle zichtbare klikbare elementen mét leesbare tekst — zelfde
+ * DOM-walk als `findRejectButton()`'s tekst-candidates, maar als losse
+ * export zodat andere modules (translate.ts) 'm kunnen hergebruiken zonder
+ * de walk-logica te dupliceren.
+ */
+export function collectVisibleTextCandidates(): Array<{ el: HTMLElement; text: string }> {
+  const candidates: Array<{ el: HTMLElement; text: string }> = [];
+  for (const el of walkClickables(document)) {
+    if (!isVisible(el)) continue;
+    const text = readLabel(el);
+    if (text) candidates.push({ el, text });
+  }
+  return candidates;
+}
+
+/**
+ * Attributen die we naast id/class doorzoeken op taalonafhankelijke hints.
+ * Gangbare test-/CMP-attributen bij verschillende design systems.
+ */
+const ATTRIBUTE_HINT_SOURCES = [
+  'data-testid',
+  'data-test',
+  'data-cy',
+  'data-qa',
+  'data-action',
+  'data-role',
+  'data-purpose',
+  'data-type',
+  'data-cookieconsent',
+  'data-consent',
+];
+
+/**
+ * Verzamelt id/class/relevante data-*-attributen van een element, en
+ * splitst ze op kebab-case/camelCase/snake_case-grenzen tot losse lowercase
+ * tokens — plus de ruwe samengevoegde lowercase-string voor de
+ * compact-hint-substring-check. Taalonafhankelijke tegenhanger van
+ * readLabel(): CMP's coderen hun knoppen bijna altijd in het Engels, ook
+ * bij gelokaliseerde zichtbare tekst (zie isRejectAttributeHint()).
+ */
+function readAttributeTokens(el: HTMLElement): { tokens: string[]; raw: string } {
+  const parts: string[] = [];
+  if (el.id) parts.push(el.id);
+  // SVG-elementen hebben className als SVGAnimatedString, geen string —
+  // die negeren we hier (SVG's zijn zelden de klikbare banner-knop zelf).
+  const className = typeof el.className === 'string' ? el.className : '';
+  if (className) parts.push(className);
+  for (const attr of ATTRIBUTE_HINT_SOURCES) {
+    const val = el.getAttribute(attr);
+    if (val) parts.push(val);
+  }
+
+  const combined = parts.join(' ');
+  const raw = combined.toLowerCase();
+
+  const tokens = combined
+    // camelCase-grenzen eerst markeren (vóór lowercase, anders verdwijnt
+    // het hoofdletter-signaal dat de grens aangeeft).
+    .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+    .toLowerCase()
+    // kebab-case/snake_case/overige scheidingstekens → spatie
+    .replace(/[^a-z0-9]+/g, ' ')
+    .split(' ')
+    .filter(Boolean);
+
+  return { tokens, raw };
+}
+
+/**
+ * Vangrail voor PASS ATTR en PASS 1.5: alleen klikken op elementen die écht
+ * een knop zijn. Een zin als "Cookies kun je hier weigeren", of een element
+ * met een reject-achtige class, kan op sommige sites een gewone link naar
+ * de cookie-instellingenpagina zijn. Die klikken zou de gebruiker
  * wegnavigeren van de pagina waar hij is — erger dan een banner laten staan.
  * Anchors mogen dus alleen als ze nergens heen gaan (`#`, leeg, javascript:).
  */
-function isSafeToClickPhrase(el: HTMLElement): boolean {
+function isSafeToClick(el: HTMLElement): boolean {
   const tag = el.tagName;
   if (tag === 'BUTTON') return true;
   if (tag === 'INPUT') return true;

@@ -9,8 +9,30 @@
  * voorkomt dat we per ongeluk een "Accept"-knop klikken die toevallig
  * "reject"-letters bevat. Beter veilig dan banners onbedoeld accepteren.
  *
- * Talen ondersteund: NL, EN, DE, FR, ES, IT, EL (de grote EU-markten).
+ * Talen ondersteund in deze tekst-lijst: NL, EN, DE, FR, ES, IT, EL.
  * Voor specifieke fouten: voeg toe aan deze lijst, niet in detection-code.
+ *
+ * **Sinds v0.4.4 (sep 2026) is dit niet meer de enige taal-strategie.**
+ * Woordenlijst per taal opbouwen is per definitie reactief — elke nieuwe
+ * taal levert een nieuwe gebruikersmelding op vóór we 'm kunnen fixen.
+ * Structurele aanvullingen, in volgorde van taalonafhankelijkheid:
+ *
+ *   1. `isRejectAttributeHint()` hieronder — matcht op id/class/data-*
+ *      (bijna altijd Engels, ook bij gelokaliseerde zichtbare tekst).
+ *      Taalonafhankelijk: één check, alle talen tegelijk.
+ *   2. `setRemoteKeywords()` — remote keyword-aanvullingen via
+ *      bannerbye.com/rules.json (zie src/lib/rules/), geen store-release
+ *      nodig. Nieuwe-taal-keywords kunnen hier live binnen uren staan i.p.v.
+ *      een release-golf van dagen tot weken.
+ *   3. De self-herstellende pijplijn (Phase 2B/2C, bannerbye-landing-repo)
+ *      detecteert de paginataal van een gemeld probleem en laat Claude
+ *      kandidaat-keywords voorstellen als die taal hier nog ontbreekt —
+ *      ter review, vóór ze naar rules.json gepromoveerd worden.
+ *   4. `translate.ts` — on-device Translator-API (Chrome/Edge) als laatste
+ *      redmiddel voor talen die nergens in 1-3 gedekt zijn.
+ *
+ * Deze bundled lijst blijft de baseline/fallback als geen van de andere
+ * lagen matcht — hem uitbreiden blijft zinvol voor de grootste markten.
  */
 
 export const REJECT_KEYWORDS: readonly string[] = [
@@ -388,6 +410,71 @@ export const COOKIE_CONTEXT_WORDS: readonly string[] = [
 ];
 
 /**
+ * **Taalonafhankelijke** attribuut-hints (id/class/data-*) voor de reject-knop.
+ *
+ * v0.4.4 (sep 2026, structurele opvolging van de Griekse fix): CMP-vendors
+ * programmeren hun knoppen bijna altijd in het Engels, ook als de zichtbare
+ * tekst gelokaliseerd is. coffeeisland.gr's "Cookie Control" (Civic UK) zet
+ * de weiger-knop op `.ccc-reject-button` terwijl de zichtbare tekst Grieks is
+ * ("ΔΕ ΣΥΜΦΩΝΩ"). Een matcher op deze attributen werkt daardoor voor élke
+ * taal tegelijk, zonder dat we per taal een woordenlijst hoeven te bouwen —
+ * dat is het echte antwoord op "morgen is het Albanië, overmorgen Vietnam".
+ *
+ * Twee tiers, dezelfde asymmetrie als tekst-matching:
+ *
+ *   WORD_HINTS — losse tokens, pas gematcht NADAT id/class gesplitst zijn op
+ *   kebab-case/camelCase/snake_case-grenzen (zie finder.ts readAttributeTokens).
+ *   Bewust kort en generiek genoeg dat elk token exact zo'n woord IS, nooit
+ *   een toevallige substring van iets anders.
+ *
+ *   COMPACT_HINTS — substring-check op de ruwe, ongesplitste attribuutstring.
+ *   Vangt CMP's die geen scheidingstekens gebruiken (class="rejectall" zonder
+ *   dash/camelCase). Bewust langere, samengestelde fragmenten om een
+ *   toevallige match te voorkomen.
+ *
+ * Bewust NIET opgenomen als los WORD_HINT: "necessary"/"essential" — OneTrust
+ * en vergelijkbare CMP's gebruiken id="necessary" ook voor de (altijd-aan)
+ * toggle van de noodzakelijke-cookies-categorie, niet voor de weiger-knop.
+ * Dat woord staat alleen in de veiligere, samengestelde COMPACT_HINTS.
+ */
+export const ATTRIBUTE_REJECT_WORD_HINTS: readonly string[] = [
+  'reject',
+  'decline',
+  'deny',
+  'refuse',
+];
+
+export const ATTRIBUTE_REJECT_COMPACT_HINTS: readonly string[] = [
+  'rejectall',
+  'denyall',
+  'declineall',
+  'refuseall',
+  'onlynecessary',
+  'necessaryonly',
+  'onlyessential',
+  'essentialonly',
+  'rejectcookies',
+  'denycookies',
+  'declinecookies',
+  'cookiereject',
+  'cmpreject',
+  'consentreject',
+];
+
+/**
+ * Guard: als dezelfde tokenset ook een accept-hint bevat, matchen we niet —
+ * een class als "accept-and-reject-toggle" is te ambigu om blind te
+ * vertrouwen. Bewust conservatief: liever een gemiste banner dan een per
+ * ongeluk geaccepteerde.
+ */
+export const ATTRIBUTE_ACCEPT_GUARD_WORDS: readonly string[] = [
+  'accept',
+  'agree',
+  'allow',
+  'consent',
+];
+
+/**
  * Runtime-extensies vanuit remote rule-set (zie src/lib/rules/).
  *
  * Bundled keywords blijven de baseline; remote keywords worden additief
@@ -401,19 +488,27 @@ let remoteRejectKeywords: string[] = [];
 let remoteAmbiguousKeywords: string[] = [];
 let remoteStepIntoKeywords: string[] = [];
 let remoteRejectPhrases: string[] = [];
+let remoteContextWords: string[] = [];
+let remoteAttributeWordHints: string[] = [];
+let remoteAttributeCompactHints: string[] = [];
 
 /**
  * Injecteer remote keywords. Roep aan vanuit content scripts ná het lezen
  * van de gecachde rules uit chrome.storage.local.
  *
  * Inputs worden genormaliseerd (lowercase + whitespace) en gefilterd op
- * non-empty strings.
+ * non-empty strings. `contextWords`/`attribute*Hints` gebruiken dezelfde
+ * normalize() als de andere velden — voor attribuut-hints is dat vooral
+ * de lowercase-stap die telt, tokens hebben toch al geen spaties.
  */
 export function setRemoteKeywords(rules: {
   rejectKeywords?: string[];
   ambiguousKeywords?: string[];
   stepIntoKeywords?: string[];
   rejectPhrases?: string[];
+  contextWords?: string[];
+  attributeWordHints?: string[];
+  attributeCompactHints?: string[];
 }): void {
   remoteRejectPhrases = (rules.rejectPhrases ?? [])
     .map(normalize)
@@ -425,6 +520,15 @@ export function setRemoteKeywords(rules: {
     .map(normalize)
     .filter((s) => s.length > 0);
   remoteStepIntoKeywords = (rules.stepIntoKeywords ?? [])
+    .map(normalize)
+    .filter((s) => s.length > 0);
+  remoteContextWords = (rules.contextWords ?? [])
+    .map(normalize)
+    .filter((s) => s.length > 0);
+  remoteAttributeWordHints = (rules.attributeWordHints ?? [])
+    .map(normalize)
+    .filter((s) => s.length > 0);
+  remoteAttributeCompactHints = (rules.attributeCompactHints ?? [])
     .map(normalize)
     .filter((s) => s.length > 0);
 }
@@ -501,9 +605,59 @@ export function isStepIntoText(text: string): boolean {
 
 /**
  * Returns true als de gegeven tekst minstens één cookie-context-woord
- * bevat (substring-match, case-insensitive).
+ * bevat (substring-match, case-insensitive). Checkt zowel bundled als
+ * remote context-woorden (nieuwe taal-context-woorden kunnen zo remote
+ * bijgeleverd worden, net als de andere keyword-tiers).
  */
 export function hasCookieContext(text: string): boolean {
   const lower = text.toLowerCase();
-  return COOKIE_CONTEXT_WORDS.some((word) => lower.includes(word));
+  return (
+    COOKIE_CONTEXT_WORDS.some((word) => lower.includes(word)) ||
+    remoteContextWords.some((word) => lower.includes(word))
+  );
+}
+
+/**
+ * Returns true als de gegeven attribuut-tokens (al gesplitst op
+ * kebab-case/camelCase/snake_case-grenzen door finder.ts) of de ruwe
+ * ongesplitste attribuutstring een taalonafhankelijke reject-hint bevatten.
+ *
+ * Zie de uitgebreide toelichting bij ATTRIBUTE_REJECT_WORD_HINTS hierboven
+ * voor de rationale en de twee-tiers-aanpak.
+ */
+export function isRejectAttributeHint(tokens: string[], raw: string): boolean {
+  if (tokens.length === 0 && !raw) return false;
+
+  const hasAcceptGuard = tokens.some((t) =>
+    ATTRIBUTE_ACCEPT_GUARD_WORDS.includes(t),
+  );
+  if (hasAcceptGuard) return false;
+
+  const wordMatch = tokens.some(
+    (t) =>
+      ATTRIBUTE_REJECT_WORD_HINTS.includes(t) ||
+      remoteAttributeWordHints.includes(t),
+  );
+  if (wordMatch) return true;
+
+  // Compact-check op zowel de ruwe string (vangt géén-scheidingsteken-vorm,
+  // "rejectall") als de losse tokens aan elkaar geplakt (vangt kebab-case/
+  // snake_case/camelCase-vormen met scheidingstekens ertussen, zoals
+  // "necessary-only" → tokens ['necessary','only'] → 'necessaryonly').
+  // Allebei zijn substring-checks tegen bewust samengestelde, specifieke
+  // fragmenten — geen los woord — dus het risico op een toevallige match
+  // blijft laag.
+  const normalizedRaw = raw.toLowerCase();
+  const joinedTokens = tokens.join('');
+  const compactCandidates = [normalizedRaw, joinedTokens].filter((s) => s.length > 0);
+  if (compactCandidates.length === 0) return false;
+
+  return (
+    ATTRIBUTE_REJECT_COMPACT_HINTS.some((hint) =>
+      compactCandidates.some((c) => c.includes(hint)),
+    ) ||
+    remoteAttributeCompactHints.some((hint) =>
+      compactCandidates.some((c) => c.includes(hint)),
+    )
+  );
 }

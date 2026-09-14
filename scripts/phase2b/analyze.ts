@@ -6,12 +6,19 @@
  *   2. bezoek elke host met headless Chromium, detecteer de consent-situatie
  *   3. bij "Customize / Accept All" (geen directe reject): klik de step-into
  *      knop en analyseer het geopende paneel (spiegelt de extensie-flow)
- *   4. classificeer + Claude beoordeelt elk voorstel (per doellijst)
- *   5. approve+high → toepassen op rules.json (reject/ambiguous/stepInto)
+ *   3b. bij `possible_language_gap` (v0.4.4): geen enkele knop matcht een
+ *       bekende taal — vraag Claude de taal te herkennen en kandidaat-
+ *       keywords voor te stellen (proposeLanguageGapKeywords), ipv het aan
+ *       een mens over te laten zoals bij coffeeisland.gr (sep 2026)
+ *   4. classificeer + Claude beoordeelt elk voorstel (per doellijst) —
+ *      óók de taalgat-voorstellen gaan door dezelfde onafhankelijke judge
+ *   5. approve+high → toepassen op rules.json (reject/ambiguous/stepInto),
+ *      inclusief een mechanisch afgeleide accentloze variant bij taalgat-
+ *      voorstellen die daarom vragen (zie keywords.ts voor de Griekse les)
  *   6. rest → needs-review draft-PR; markeer reports analyzed
  *   7. #134 — stuur Robin altijd een samenvattingsmail: per host wat de
  *      uitkomst was (opgelost / naar review / vals positief / accept-only /
- *      technische fout). Best-effort, faalt nooit de run.
+ *      mogelijk nieuwe taal / technische fout). Best-effort, faalt nooit de run.
  *
  * Env: KV_REST_API_URL/TOKEN (verplicht), ANTHROPIC_API_KEY,
  *      MAX_HOSTS (25), NAV_TIMEOUT_MS (20000), WAIT_MS (3500),
@@ -40,12 +47,26 @@ import {
   type KeywordProposal,
 } from './classify.ts';
 import { loadRules, mergeProposals, saveRules } from './rules.ts';
-import { judgeKeyword, isAutoApprove, type Judgement } from './claude.ts';
+import {
+  judgeKeyword,
+  isAutoApprove,
+  proposeLanguageGapKeywords,
+  type Judgement,
+} from './claude.ts';
 
 interface Proposal extends KeywordProposal {
   buttonText: string;
   bannerSnippet: string;
   hostname: string;
+  /**
+   * v0.4.4: alleen gezet voor taalgat-voorstellen waar Claude een
+   * accentloze variant meegaf (zie keywords.ts, de Griekse les). Wordt na
+   * een approve+high judgement mechanisch mee toegevoegd — geen aparte
+   * judge-call nodig, het is dezelfde betekenis als het geoordeelde keyword.
+   */
+  variantWithoutDiacritics?: string;
+  /** v0.4.4: markeert dat dit voorstel via de taalgat-generator kwam, voor logging/mail. */
+  fromLanguageGap?: boolean;
 }
 interface JudgedProposal extends Proposal {
   judgement: Judgement;
@@ -56,6 +77,8 @@ interface HostResult {
   detection: DetectionResult | null;
   stepIntoButtonText?: string;
   error?: string;
+  /** v0.4.4: Claude's oordeel of/welke taal er bij een taalgat herkend is — voor de samenvattingsmail. */
+  languageGapNote?: string;
 }
 
 const MAX_HOSTS = Number(process.env.MAX_HOSTS ?? '25');
@@ -149,7 +172,7 @@ function buildSummary(
   needsReview: JudgedProposal[],
 ): string {
   const fmt = (p: JudgedProposal): string =>
-    `- \`${p.keyword}\` [${p.list}] — ${p.hostname} · Claude: ${p.judgement.verdict}/${p.judgement.confidence} · ${p.judgement.reason}`;
+    `- \`${p.keyword}\` [${p.list}]${p.fromLanguageGap ? ' 🌐' : ''} — ${p.hostname} · Claude: ${p.judgement.verdict}/${p.judgement.confidence} · ${p.judgement.reason}`;
   const lines: string[] = [];
   lines.push('## BannerBye Phase 2C — analyse-run');
   lines.push('');
@@ -160,6 +183,8 @@ function buildSummary(
   lines.push('');
   lines.push(`### 🕵️ Naar review (${needsReview.length})`);
   lines.push(needsReview.length ? needsReview.map(fmt).join('\n') : '_Geen randgevallen deze run._');
+  lines.push('');
+  lines.push('_🌐 = via de taalgat-generator (v0.4.4) — een taal die nog niet in de keyword-lijsten zat._');
   lines.push('');
   return lines.join('\n');
 }
@@ -173,7 +198,7 @@ function buildPrBody(needsReview: JudgedProposal[]): string {
   );
   lines.push('');
   needsReview.forEach((p) => {
-    lines.push(`### \`${p.keyword}\` → \`${p.list}Keywords\``);
+    lines.push(`### \`${p.keyword}\` → \`${p.list}Keywords\`${p.fromLanguageGap ? ' (taalgat-voorstel)' : ''}`);
     lines.push(`- Site: ${p.hostname}`);
     lines.push(`- Originele knop: "${p.buttonText}"`);
     lines.push(
@@ -190,7 +215,7 @@ function buildPrBody(needsReview: JudgedProposal[]): string {
  * ondubbelzinnige uitkomst, inclusief het "vals positief"-geval
  * (`no_banner`: geen banner meer gevonden — waarschijnlijk al opgelost of
  * niet reproduceerbaar bij de melder, zoals bij het ikea.com-onderzoek van
- * 2 sep).
+ * 2 sep) en (v0.4.4) het "mogelijk nieuwe taal"-geval.
  */
 function describeHostOutcome(
   r: HostResult,
@@ -204,7 +229,7 @@ function describeHostOutcome(
     return `- ${r.host}: FOUT bij bezoeken — ${r.error}`;
   }
   if (appliedHere.length) {
-    const kws = appliedHere.map((p) => `"${p.keyword}" [${p.list}]`).join(', ');
+    const kws = appliedHere.map((p) => `"${p.keyword}"${p.fromLanguageGap ? ' [nieuwe taal]' : ''} [${p.list}]`).join(', ');
     return `- ${r.host}: OPGELOST — nieuw keyword automatisch toegepast (${kws})`;
   }
   if (reviewHere.length) {
@@ -212,6 +237,11 @@ function describeHostOutcome(
       .map((p) => `"${p.keyword}": ${p.judgement.reason}`)
       .join('; ');
     return `- ${r.host}: NAAR REVIEW — voorstel gevonden maar niet met hoge zekerheid (${details}) — draft-PR volgt`;
+  }
+  if (r.classification.category === 'possible_language_gap') {
+    return `- ${r.host}: MOGELIJK NIEUWE TAAL — geen bekende taal/indicator matchte een knop${
+      r.languageGapNote ? `; Claude: ${r.languageGapNote}` : ''
+    } — geen bruikbaar voorstel deze run, handmatige blik aanbevolen`;
   }
   if (r.classification.category === 'no_banner') {
     return `- ${r.host}: GEEN BANNER GEVONDEN — waarschijnlijk vals positief of al opgelost (niet reproduceerbaar bij deze run)`;
@@ -261,6 +291,49 @@ async function main(): Promise<void> {
     for (const work of hosts) {
       console.log(`→ ${work.hostname} (${work.reportIds.length} meldingen)`);
       const result = await analyzeHost(browser, work);
+
+      // v0.4.4: taalgat — geen enkele knop matchte een bekende taal/indicator.
+      // Vraag Claude de taal te herkennen en (indien het écht een consent-
+      // banner is) kandidaat-keywords voor te stellen. Deze voorstellen gaan
+      // via dezelfde `proposals`-Map hieronder door de bestaande, onafhankelijke
+      // judge-stap — geen apart auto-apply-pad, geen verlaagde lat.
+      if (
+        result.classification.category === 'possible_language_gap' &&
+        result.detection &&
+        result.detection.candidates.length > 0
+      ) {
+        try {
+          const gap = await proposeLanguageGapKeywords({
+            hostname: work.hostname,
+            bannerSnippet: result.detection.bannerTextSnippet,
+            pageLang: result.detection.pageLang,
+            weakSignal: result.detection.weakSignal,
+            candidateTexts: result.detection.candidates.map((c) => c.text),
+          });
+          result.languageGapNote =
+            (gap.detectedLanguage ? `taal: ${gap.detectedLanguage} — ` : '') + (gap.note || '(geen toelichting)');
+          console.log(
+            `   taalgat   : ${gap.isConsentBanner ? 'consent-banner bevestigd' : 'GEEN consent-banner (Claude)'} · ${result.languageGapNote}`,
+          );
+          for (const gp of gap.proposals) {
+            const key = `${gp.list}:${gp.keyword}`;
+            if (proposals.has(key)) continue;
+            proposals.set(key, {
+              keyword: gp.keyword,
+              list: gp.list,
+              buttonText: gp.buttonText,
+              bannerSnippet: result.detection.bannerTextSnippet,
+              hostname: work.hostname,
+              variantWithoutDiacritics: gp.variantWithoutDiacritics,
+              fromLanguageGap: true,
+            });
+          }
+        } catch (err) {
+          console.warn('[analyze] taalgat-generator faalde:', err);
+          result.languageGapNote = 'Claude-taalgat-analyse faalde (technische fout)';
+        }
+      }
+
       results.push(result);
 
       // --- Diagnose-logging: precies wat de analyzer op deze host zag. ---
@@ -270,7 +343,8 @@ async function main(): Promise<void> {
       console.log(`   reden     : ${cls.reason}`);
       console.log(
         `   banner    : ${d ? (d.bannerVisible ? 'zichtbaar' : 'NIET gevonden') : 'geen detectie'}` +
-          ` · TCF: ${d?.hasTcf ? 'ja' : 'nee'} · CMP: [${(cls.cmps ?? []).join(', ') || '-'}]`,
+          ` · TCF: ${d?.hasTcf ? 'ja' : 'nee'} · CMP: [${(cls.cmps ?? []).join(', ') || '-'}]` +
+          `${d?.weakSignal ? ' · zwak vormsignaal' : ''}`,
       );
       if (d) console.log(`   eind-URL  : ${d.finalUrl}`);
       if (result.stepIntoButtonText)
@@ -314,6 +388,7 @@ async function main(): Promise<void> {
         cmps: result.classification.cmps,
         proposals: result.classification.proposals,
         stepIntoButtonText: result.stepIntoButtonText,
+        languageGapNote: result.languageGapNote,
         sampleMessage: work.sampleMessage,
         analyzedAt: Date.now(),
       });
@@ -333,17 +408,31 @@ async function main(): Promise<void> {
       list: p.list,
     });
     console.log(
-      `   judge [${p.list}] "${p.keyword}" → ${judgement.verdict}/${judgement.confidence}`,
+      `   judge [${p.list}]${p.fromLanguageGap ? ' 🌐' : ''} "${p.keyword}" → ${judgement.verdict}/${judgement.confidence}`,
     );
     judged.push({ ...p, judgement });
   }
   const applied = judged.filter((j) => isAutoApprove(j.judgement));
   const needsReview = judged.filter((j) => !isAutoApprove(j.judgement));
 
-  const { added } = mergeProposals(
-    rules,
-    applied.map((p) => ({ keyword: p.keyword, list: p.list })),
-  );
+  // v0.4.4: voor approved taalgat-voorstellen mét een accentloze variant,
+  // voeg die variant mechanisch toe aan dezelfde lijst — geen aparte
+  // judge-call nodig, het is exact hetzelfde keyword zonder diakritische
+  // tekens (dezelfde reden waarom coffeeisland.gr's Griekse fix beide
+  // vormen nodig had, zie keywords.ts). Nooit een NIEUW, onbeoordeeld
+  // keyword — alleen een mechanische variant van iets dat al goedgekeurd is.
+  const proposalsToMerge: KeywordProposal[] = [];
+  for (const p of applied) {
+    proposalsToMerge.push({ keyword: p.keyword, list: p.list });
+    if (
+      p.variantWithoutDiacritics &&
+      p.variantWithoutDiacritics !== p.keyword
+    ) {
+      proposalsToMerge.push({ keyword: p.variantWithoutDiacritics, list: p.list });
+    }
+  }
+
+  const { added } = mergeProposals(rules, proposalsToMerge);
   if (added.length) await saveRules(rules);
 
   // #reward-2 + #reward-3: een host geldt als "opgelost" wanneer voor die host
@@ -407,6 +496,7 @@ async function main(): Promise<void> {
         verdict: p.judgement.verdict,
         confidence: p.judgement.confidence,
         reason: p.judgement.reason,
+        fromLanguageGap: p.fromLanguageGap ?? false,
       })),
       null,
       2,
@@ -424,7 +514,7 @@ async function main(): Promise<void> {
   const commitMsg =
     `Phase 2C: ${added.length} keyword(s) auto-toegepast\n\n` +
     applied
-      .map((p) => `- [${p.list}] ${p.keyword} (${p.hostname}): ${p.judgement.reason}`)
+      .map((p) => `- [${p.list}] ${p.keyword}${p.fromLanguageGap ? ' (nieuwe taal)' : ''} (${p.hostname}): ${p.judgement.reason}`)
       .join('\n');
 
   await setOutput('applied', added.length ? 'true' : 'false');
