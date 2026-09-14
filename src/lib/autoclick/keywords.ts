@@ -9,7 +9,7 @@
  * voorkomt dat we per ongeluk een "Accept"-knop klikken die toevallig
  * "reject"-letters bevat. Beter veilig dan banners onbedoeld accepteren.
  *
- * Talen ondersteund: NL, EN, DE, FR, ES, IT (de grote EU-markten).
+ * Talen ondersteund: NL, EN, DE, FR, ES, IT, EL (de grote EU-markten).
  * Voor specifieke fouten: voeg toe aan deze lijst, niet in detection-code.
  */
 
@@ -131,6 +131,56 @@ export const REJECT_KEYWORDS: readonly string[] = [
   'rifiuta tutti',
   'solo necessari',
   'continua senza accettare',
+
+  // === Ελληνικά (Greek) ===
+  // v0.4.3 (14 sep 2026): structurele fix na een gebruikersmelding over
+  // coffeeisland.gr. De site draait "Cookie Control" (Civic UK, ccc-prefix
+  // in de DOM) — geen van de vijf CMP-handlers uit laag 4 herkent dat, dus
+  // het moet via deze generieke laag 5 opgelost worden. De weiger-knop op
+  // coffeeisland.gr heet letterlijk "ΔΕ ΣΥΜΦΩΝΩ" — Grieks ontbrak tot dan
+  // volledig in deze lijst, dus élke Griekse site liep hierop vast, niet
+  // alleen dit ene geval.
+  'δε συμφωνώ',
+  'δεν συμφωνώ',
+  'απόρριψη',
+  'απόρριψη όλων',
+  'απόρριψη όλων των cookies',
+  'απόρριψη cookies',
+  'απορρίπτω',
+  'απορρίπτω όλα',
+  'απορρίψτε όλα',
+  'απορρίψτε όλα τα cookies',
+  'μόνο απαραίτητα',
+  'μόνο τα απαραίτητα',
+  'μόνο απαραίτητα cookies',
+  'μόνο τα απαραίτητα cookies',
+  'απόρριψη μη απαραίτητων cookies',
+  'συνέχεια χωρίς αποδοχή',
+  'όχι ευχαριστώ',
+  // Accentloze varianten: Griekse hoofdletters laten het τόνος (accent)
+  // vaak weg — coffeeisland.gr's knop is letterlijk "ΔΕ ΣΥΜΦΩΝΩ" zonder
+  // accent op de omega. `.toLowerCase()` voegt dat accent niet terug
+  // (bevestigd met een losse test: "ΔΕ ΣΥΜΦΩΝΩ".toLowerCase() geeft
+  // "δε συμφωνω", niet "δε συμφωνώ"). Zonder deze regels matcht dus geen
+  // enkele Griekse site die z'n knoptekst in hoofdletters zet — in de
+  // praktijk de norm voor Griekse UI-knoppen, niet de uitzondering.
+  'δε συμφωνω',
+  'δεν συμφωνω',
+  'απορριψη',
+  'απορριψη ολων',
+  'απορριψη ολων των cookies',
+  'απορριψη cookies',
+  'απορριπτω',
+  'απορριπτω ολα',
+  'απορριψτε ολα',
+  'απορριψτε ολα τα cookies',
+  'μονο απαραιτητα',
+  'μονο τα απαραιτητα',
+  'μονο απαραιτητα cookies',
+  'μονο τα απαραιτητα cookies',
+  'απορριψη μη απαραιτητων cookies',
+  'συνεχεια χωρις αποδοχη',
+  'οχι ευχαριστω',
 ];
 
 /**
@@ -292,6 +342,20 @@ export const STEP_INTO_KEYWORDS: readonly string[] = [
   'più opzioni',
   'impostazioni cookie',
   'personalizza',
+  // Ελληνικά (v0.4.3, 14 sep 2026 — zie REJECT_KEYWORDS-toelichting)
+  'ρυθμίσεις',
+  'ρυθμίσεις cookies',
+  'διαχείριση προτιμήσεων',
+  'διαχείριση cookies',
+  'περισσότερες επιλογές',
+  'προσαρμογή',
+  // accentloze varianten (hoofdletter-knoppen)
+  'ρυθμισεις',
+  'ρυθμισεις cookies',
+  'διαχειριση προτιμησεων',
+  'διαχειριση cookies',
+  'περισσοτερες επιλογες',
+  'προσαρμογη',
 ];
 
 /**
@@ -313,6 +377,14 @@ export const COOKIE_CONTEXT_WORDS: readonly string[] = [
   'avg',
   'datenschutz',
   'confidentialité',
+  // Ελληνικά (v0.4.3, 14 sep 2026)
+  'απόρρητο',
+  'συγκατάθεση',
+  'προτιμήσεις',
+  // accentloze varianten
+  'απορρητο',
+  'συγκαταθεση',
+  'προτιμησεις',
 ];
 
 /**
