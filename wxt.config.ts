@@ -37,7 +37,7 @@ export default defineConfig({
     // (waren jarenlang geclaimd in de listings maar nooit gebouwd — alleen
     // Didomi + Usercentrics bestonden). Zie src/lib/cmp/onetrust.ts,
     // cookiebot.ts en trustarc.ts voor de onderbouwing per handler.
-    version: '0.4.2',
+    version: '0.4.4',
     permissions: [
       'storage',
       'tabs',
@@ -51,6 +51,18 @@ export default defineConfig({
       'alarms',
     ],
     host_permissions: ['<all_urls>'],
+    // v0.4.5 (fix #16, security-audit 2026-09-16) — expliciete CSP voor
+    // extensie-pagina's (popup.html, onboarding.html). Dit is exact de
+    // MV3-default (script-src/object-src 'self') — geen functionele
+    // wijziging, want popup/onboarding zijn gebundelde React-bundles zonder
+    // inline scripts of remote content. Wél nu auditeerbaar/expliciet
+    // vastgelegd i.p.v. stilzwijgend op de browser-default te vertrouwen,
+    // zodat een toekomstige wijziging die dit zou verzwakken opvalt in de
+    // diff. MV2 (Firefox/Safari) gebruikt de string-vorm van dezelfde key.
+    content_security_policy:
+      manifestVersion === 3
+        ? { extension_pages: "script-src 'self'; object-src 'self'" }
+        : "script-src 'self'; object-src 'self'",
     icons: {
       '16': 'icon/16.png',
       '32': 'icon/32.png',

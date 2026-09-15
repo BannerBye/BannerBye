@@ -29,9 +29,16 @@ const FETCH_INTERVAL_MIN = 24 * 60;
  */
 export async function fetchRemoteRules(): Promise<RemoteRules | null> {
   try {
+    // v0.4.5 (fix #14, security-audit 2026-09-16): 'error' i.p.v. 'follow'.
+    // RULES_URL is hardcoded https://bannerbye.com/rules.json, maar
+    // 'follow' accepteerde stilzwijgend elke redirect die de server (of een
+    // gecompromitteerde tussenlaag/CDN-misconfig) teruggaf — inclusief naar
+    // een ander domein. 'error' laat de fetch falen (→ fail-safe, bestaande
+    // cache blijft gelden) i.p.v. blind een cross-domain response te
+    // accepteren als was het ons eigen rules.json.
     const res = await fetch(RULES_URL, {
       cache: 'no-cache',
-      redirect: 'follow',
+      redirect: 'error',
     });
     if (!res.ok) {
       console.warn('[BannerBye] rules.json fetch failed:', res.status);
@@ -98,18 +105,70 @@ function isValidRules(value: unknown): value is RemoteRules {
   if (ac !== undefined) {
     if (!ac || typeof ac !== 'object') return false;
     const acObj = ac as Record<string, unknown>;
-    if (acObj.rejectKeywords !== undefined && !isStringArray(acObj.rejectKeywords)) return false;
-    if (acObj.ambiguousKeywords !== undefined && !isStringArray(acObj.ambiguousKeywords)) return false;
-    if (acObj.stepIntoKeywords !== undefined && !isStringArray(acObj.stepIntoKeywords)) return false;
-    if (acObj.rejectPhrases !== undefined && !isStringArray(acObj.rejectPhrases)) return false;
-    if (acObj.contextWords !== undefined && !isStringArray(acObj.contextWords)) return false;
-    if (acObj.attributeWordHints !== undefined && !isStringArray(acObj.attributeWordHints)) return false;
-    if (acObj.attributeCompactHints !== undefined && !isStringArray(acObj.attributeCompactHints)) return false;
+    if (!isValidAutoclickFields(acObj)) return false;
+
+    // v0.4.5 (fix #3): host-scoped regels — elke waarde moet zelf weer een
+    // geldige velden-set zijn. Eén corrupte host-entry maakt het hele
+    // rules.json ongeldig (fail-safe: liever de gecachte versie behouden
+    // dan een deel van een corrupt bestand toepassen).
+    if (acObj.hostRules !== undefined) {
+      if (!acObj.hostRules || typeof acObj.hostRules !== 'object' || Array.isArray(acObj.hostRules)) {
+        return false;
+      }
+      for (const hostFields of Object.values(acObj.hostRules as Record<string, unknown>)) {
+        if (!hostFields || typeof hostFields !== 'object') return false;
+        if (!isValidAutoclickFields(hostFields as Record<string, unknown>)) return false;
+      }
+    }
   }
 
   return true;
 }
 
+/**
+ * v0.4.5 (fix #10, security-audit 2026-09-16): minimumlengte voor
+ * attribuut-hints. `attributeWordHints` matcht als EXACT token (WORD-tier)
+ * en `attributeCompactHints` als substring tegen de ruwe id/class-string
+ * (COMPACT-tier) — zie ATTRIBUTE_REJECT_WORD_HINTS/_COMPACT_HINTS in
+ * keywords.ts. Een te kort fragment ("ok", "no", "id") raakt daardoor al
+ * snel toevallig een niet-gerelateerd element op een willekeurige site. De
+ * bundled lijsten zijn bewust altijd langer dan dit (kortste WORD-hint is
+ * "deny", 4 tekens; kortste COMPACT-hint is 9+ tekens) — dwing een
+ * vergelijkbare ondergrens nu ook af voor remote aanvullingen, waar we niet
+ * zelf de kwaliteit van elk voorstel controleren vóórdat het live gaat.
+ */
+const MIN_ATTRIBUTE_WORD_HINT_LEN = 3;
+const MIN_ATTRIBUTE_COMPACT_HINT_LEN = 6;
+
+/** Valideert de 7 gedeelde keyword-velden (gebruikt zowel globaal als per host-regel). */
+function isValidAutoclickFields(fields: Record<string, unknown>): boolean {
+  if (fields.rejectKeywords !== undefined && !isStringArray(fields.rejectKeywords)) return false;
+  if (fields.ambiguousKeywords !== undefined && !isStringArray(fields.ambiguousKeywords)) return false;
+  if (fields.stepIntoKeywords !== undefined && !isStringArray(fields.stepIntoKeywords)) return false;
+  if (fields.rejectPhrases !== undefined && !isStringArray(fields.rejectPhrases)) return false;
+  if (fields.contextWords !== undefined && !isStringArray(fields.contextWords)) return false;
+  if (
+    fields.attributeWordHints !== undefined &&
+    !isMinLengthStringArray(fields.attributeWordHints, MIN_ATTRIBUTE_WORD_HINT_LEN)
+  ) {
+    return false;
+  }
+  if (
+    fields.attributeCompactHints !== undefined &&
+    !isMinLengthStringArray(fields.attributeCompactHints, MIN_ATTRIBUTE_COMPACT_HINT_LEN)
+  ) {
+    return false;
+  }
+  return true;
+}
+
 function isStringArray(value: unknown): value is string[] {
   return Array.isArray(value) && value.every((v) => typeof v === 'string');
+}
+
+function isMinLengthStringArray(value: unknown, minLen: number): boolean {
+  return (
+    Array.isArray(value) &&
+    value.every((v) => typeof v === 'string' && v.trim().length >= minLen)
+  );
 }

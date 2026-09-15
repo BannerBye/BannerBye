@@ -12,13 +12,20 @@
  *       een mens over te laten zoals bij coffeeisland.gr (sep 2026)
  *   4. classificeer + Claude beoordeelt elk voorstel (per doellijst) —
  *      óók de taalgat-voorstellen gaan door dezelfde onafhankelijke judge
- *   5. approve+high → toepassen op rules.json (reject/ambiguous/stepInto),
- *      inclusief een mechanisch afgeleide accentloze variant bij taalgat-
- *      voorstellen die daarom vragen (zie keywords.ts voor de Griekse les)
- *   6. rest → needs-review draft-PR; markeer reports analyzed
+ *   5. Sinds security-audit 2026-09-16 (bevinding 1): GEEN enkel voorstel
+ *      schrijft hier nog direct naar rules.json of pusht naar main — ook
+ *      approve+high niet. Alle geoordeelde voorstellen (approve/high +
+ *      approve/lager) gaan naar `proposals-to-stage.json`, inclusief een
+ *      mechanisch afgeleide accentloze variant bij taalgat-voorstellen met
+ *      hoge zekerheid (zie keywords.ts voor de Griekse les). Reject-verdicts
+ *      worden niet gestaged, alleen gerapporteerd.
+ *   6. de workflow zet die entries op een branch en opent ÉÉN PR die Robin
+ *      zelf moet mergen (peter-evans/create-pull-request, nooit auto-merge);
+ *      markeer reports analyzed
  *   7. #134 — stuur Robin altijd een samenvattingsmail: per host wat de
- *      uitkomst was (opgelost / naar review / vals positief / accept-only /
- *      mogelijk nieuwe taal / technische fout). Best-effort, faalt nooit de run.
+ *      uitkomst was (voorstel klaar om te mergen / naar review / afgewezen /
+ *      vals positief / accept-only / mogelijk nieuwe taal / technische fout).
+ *      Best-effort, faalt nooit de run.
  *
  * Env: KV_REST_API_URL/TOKEN (verplicht), ANTHROPIC_API_KEY,
  *      MAX_HOSTS (25), NAV_TIMEOUT_MS (20000), WAIT_MS (3500),
@@ -33,12 +40,9 @@ import {
   getHostsToAnalyze,
   markAnalyzed,
   writeAnalysis,
-  recordFixed,
-  getWatchers,
-  clearWatchers,
   type HostWork,
 } from './redis.ts';
-import { sendFixedEmail, sendOwnerSummaryEmail } from './notify.ts';
+import { sendOwnerSummaryEmail } from './notify.ts';
 import { detectInPage, type DetectionResult } from './detect.ts';
 import {
   classify,
@@ -46,7 +50,7 @@ import {
   type Classification,
   type KeywordProposal,
 } from './classify.ts';
-import { loadRules, mergeProposals, saveRules } from './rules.ts';
+import { loadRules } from './rules.ts';
 import {
   judgeKeyword,
   isAutoApprove,
@@ -88,11 +92,66 @@ const PANEL_WAIT_MS = Number(process.env.PANEL_WAIT_MS ?? '1800');
 
 const CLICKABLE = 'button, [role="button"], a, input[type="button"], input[type="submit"]';
 
+/**
+ * v0.4.5 (fix #4, security-audit 2026-09-16) — SSRF-denylist, defense-in-
+ * depth. api/report.ts (bannerbye-landing) blokkeert dit al bij de submit,
+ * maar deze job draait met veel machtigere secrets in zijn environment
+ * (ANTHROPIC_API_KEY, LANDING_REPO_TOKEN met push-rechten, KV_REST_API_TOKEN)
+ * dan de report-endpoint — een tweede check hier, vlak vóór het daadwerkelijke
+ * bezoek, is goedkoop en vangt ook hosts op die via een ouder rapport (van
+ * vóór de report.ts-fix) nog in Redis staan. Zelfde bekende beperking als
+ * daar: dit is een check op de letterlijke hostname-string, geen DNS-
+ * rebinding-bescherming.
+ */
+const DENIED_EXACT_HOSTS = new Set([
+  'localhost',
+  'localhost.localdomain',
+  'ip6-localhost',
+  'ip6-loopback',
+  'broadcasthost',
+  'metadata',
+  'metadata.google.internal',
+  'metadata.internal',
+]);
+
+function isDeniedHostname(hostname: string): boolean {
+  const h = hostname.toLowerCase();
+  if (DENIED_EXACT_HOSTS.has(h)) return true;
+  const m = h.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/);
+  if (m) {
+    const a = Number(m[1]);
+    const b = Number(m[2]);
+    if (a > 255 || b > 255 || Number(m[3]) > 255 || Number(m[4]) > 255) return true;
+    if (a === 127) return true; // 127.0.0.0/8 loopback
+    if (a === 10) return true; // 10.0.0.0/8 private
+    if (a === 0) return true; // 0.0.0.0/8
+    if (a === 169 && b === 254) return true; // 169.254.0.0/16 link-local + cloud metadata
+    if (a === 172 && b >= 16 && b <= 31) return true; // 172.16.0.0/12 private
+    if (a === 192 && b === 168) return true; // 192.168.0.0/16 private
+    if (a === 100 && b >= 64 && b <= 127) return true; // 100.64.0.0/10 CGNAT
+  }
+  return false;
+}
+
 async function analyzeHost(
   browser: Browser,
   work: HostWork,
 ): Promise<HostResult> {
   const host = work.hostname;
+
+  if (isDeniedHostname(host)) {
+    return {
+      host,
+      detection: null,
+      classification: {
+        category: 'unknown',
+        proposals: [],
+        reason: 'Hostname staat op de SSRF-denylist (loopback/private/metadata) — niet bezocht.',
+        cmps: [],
+      },
+    };
+  }
+
   const context = await browser.newContext({
     userAgent:
       'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36',
@@ -168,8 +227,9 @@ async function analyzeHost(
 
 function buildSummary(
   results: HostResult[],
-  applied: JudgedProposal[],
-  needsReview: JudgedProposal[],
+  readyToMerge: JudgedProposal[],
+  needsExtraReview: JudgedProposal[],
+  rejectedByClaude: JudgedProposal[],
 ): string {
   const fmt = (p: JudgedProposal): string =>
     `- \`${p.keyword}\` [${p.list}]${p.fromLanguageGap ? ' 🌐' : ''} — ${p.hostname} · Claude: ${p.judgement.verdict}/${p.judgement.confidence} · ${p.judgement.reason}`;
@@ -178,34 +238,52 @@ function buildSummary(
   lines.push('');
   lines.push(`Hosts onderzocht: **${results.length}**`);
   lines.push('');
-  lines.push(`### ✅ Automatisch toegepast (${applied.length})`);
-  lines.push(applied.length ? applied.map(fmt).join('\n') : '_Niets automatisch toegepast deze run._');
+  lines.push(
+    '⚠️ Sinds de fix van bevinding 1 (security-audit 2026-09-16) gaat niets meer automatisch live. Alles hieronder staat in de PR en wacht op een handmatige merge door Robin.',
+  );
   lines.push('');
-  lines.push(`### 🕵️ Naar review (${needsReview.length})`);
-  lines.push(needsReview.length ? needsReview.map(fmt).join('\n') : '_Geen randgevallen deze run._');
+  lines.push(`### ✅ Hoge zekerheid — klaar om te mergen (${readyToMerge.length})`);
+  lines.push(readyToMerge.length ? readyToMerge.map(fmt).join('\n') : '_Niets met hoge zekerheid deze run._');
+  lines.push('');
+  lines.push(`### 🕵️ Lagere zekerheid — extra aandacht nodig (${needsExtraReview.length})`);
+  lines.push(needsExtraReview.length ? needsExtraReview.map(fmt).join('\n') : '_Geen randgevallen deze run._');
+  lines.push('');
+  lines.push(`### ❌ Afgewezen door Claude — niet gestaged (${rejectedByClaude.length})`);
+  lines.push(rejectedByClaude.length ? rejectedByClaude.map(fmt).join('\n') : '_Niets afgewezen deze run._');
   lines.push('');
   lines.push('_🌐 = via de taalgat-generator (v0.4.4) — een taal die nog niet in de keyword-lijsten zat._');
   lines.push('');
   return lines.join('\n');
 }
 
-function buildPrBody(needsReview: JudgedProposal[]): string {
+function buildPrBody(
+  readyToMerge: JudgedProposal[],
+  needsExtraReview: JudgedProposal[],
+): string {
+  const fmtEntry = (p: JudgedProposal): string[] => [
+    `#### \`${p.keyword}\` → \`${p.list}Keywords\`${p.fromLanguageGap ? ' (taalgat-voorstel)' : ''}`,
+    `- Site: ${p.hostname}`,
+    `- Originele knop: "${p.buttonText}"`,
+    `- Claude: **${p.judgement.verdict} / ${p.judgement.confidence}** — ${p.judgement.reason}`,
+    '',
+  ];
   const lines: string[] = [];
   lines.push('## BannerBye Phase 2C — keywords naar review');
   lines.push('');
   lines.push(
-    'Deze keywords kwamen uit de site-analyse maar Claude keurde ze **niet met hoge zekerheid** goed — daarom geen auto-apply. Beoordeel handmatig en merge als je akkoord bent.',
+    'Sinds de fix van security-bevinding 1 (2026-09-16) past niets zich meer automatisch toe — élk voorstel loopt via deze PR. Merge zelf, na een korte blik. Nooit auto-merge.',
   );
   lines.push('');
-  needsReview.forEach((p) => {
-    lines.push(`### \`${p.keyword}\` → \`${p.list}Keywords\`${p.fromLanguageGap ? ' (taalgat-voorstel)' : ''}`);
-    lines.push(`- Site: ${p.hostname}`);
-    lines.push(`- Originele knop: "${p.buttonText}"`);
-    lines.push(
-      `- Claude: **${p.judgement.verdict} / ${p.judgement.confidence}** — ${p.judgement.reason}`,
-    );
+  if (readyToMerge.length) {
+    lines.push(`### ✅ Hoge zekerheid — Claude keurde dit approve/high goed (${readyToMerge.length})`);
     lines.push('');
-  });
+    readyToMerge.forEach((p) => lines.push(...fmtEntry(p)));
+  }
+  if (needsExtraReview.length) {
+    lines.push(`### 🕵️ Lagere zekerheid — extra aandacht nodig (${needsExtraReview.length})`);
+    lines.push('');
+    needsExtraReview.forEach((p) => lines.push(...fmtEntry(p)));
+  }
   return lines.join('\n');
 }
 
@@ -219,24 +297,32 @@ function buildPrBody(needsReview: JudgedProposal[]): string {
  */
 function describeHostOutcome(
   r: HostResult,
-  applied: JudgedProposal[],
-  needsReview: JudgedProposal[],
+  readyToMerge: JudgedProposal[],
+  needsExtraReview: JudgedProposal[],
+  rejectedByClaude: JudgedProposal[],
 ): string {
-  const appliedHere = applied.filter((p) => p.hostname === r.host);
-  const reviewHere = needsReview.filter((p) => p.hostname === r.host);
+  const readyHere = readyToMerge.filter((p) => p.hostname === r.host);
+  const reviewHere = needsExtraReview.filter((p) => p.hostname === r.host);
+  const rejectedHere = rejectedByClaude.filter((p) => p.hostname === r.host);
 
   if (r.error) {
     return `- ${r.host}: FOUT bij bezoeken — ${r.error}`;
   }
-  if (appliedHere.length) {
-    const kws = appliedHere.map((p) => `"${p.keyword}"${p.fromLanguageGap ? ' [nieuwe taal]' : ''} [${p.list}]`).join(', ');
-    return `- ${r.host}: OPGELOST — nieuw keyword automatisch toegepast (${kws})`;
+  if (readyHere.length) {
+    const kws = readyHere.map((p) => `"${p.keyword}"${p.fromLanguageGap ? ' [nieuwe taal]' : ''} [${p.list}]`).join(', ');
+    return `- ${r.host}: VOORSTEL KLAAR OM TE MERGEN — hoge zekerheid, staat in de review-PR (${kws})`;
   }
   if (reviewHere.length) {
     const details = reviewHere
       .map((p) => `"${p.keyword}": ${p.judgement.reason}`)
       .join('; ');
-    return `- ${r.host}: NAAR REVIEW — voorstel gevonden maar niet met hoge zekerheid (${details}) — draft-PR volgt`;
+    return `- ${r.host}: NAAR REVIEW — voorstel gevonden maar niet met hoge zekerheid (${details}) — staat in de PR`;
+  }
+  if (rejectedHere.length) {
+    const details = rejectedHere
+      .map((p) => `"${p.keyword}": ${p.judgement.reason}`)
+      .join('; ');
+    return `- ${r.host}: VOORSTEL AFGEWEZEN DOOR CLAUDE — niet gestaged (${details})`;
   }
   if (r.classification.category === 'possible_language_gap') {
     return `- ${r.host}: MOGELIJK NIEUWE TAAL — geen bekende taal/indicator matchte een knop${
@@ -277,8 +363,8 @@ async function main(): Promise<void> {
 
   if (!hosts.length) {
     await writeFile('summary.md', 'Geen nieuwe meldingen om te analyseren.\n');
-    await setOutput('applied', 'false');
-    await setOutput('needs_review', 'false');
+    await setOutput('has_proposals', 'false');
+    await setOutput('pr_draft', 'false');
     await setOutput('summary', 'Geen nieuwe meldingen om te analyseren.');
     return;
   }
@@ -412,117 +498,122 @@ async function main(): Promise<void> {
     );
     judged.push({ ...p, judgement });
   }
-  const applied = judged.filter((j) => isAutoApprove(j.judgement));
-  const needsReview = judged.filter((j) => !isAutoApprove(j.judgement));
+  // Bevinding 1 (security-audit 2026-09-16): geen enkel pad meer dat direct
+  // naar rules.json schrijft en naar main pusht. ALLE geoordeelde voorstellen
+  // — ook approve/high — lopen voortaan via één PR die Robin zelf moet
+  // mergen (zie workflow: geen "Auto-apply"-step meer, altijd create-pull-request).
+  const readyToMerge = judged.filter((j) => isAutoApprove(j.judgement));
+  const needsExtraReview = judged.filter(
+    (j) => j.judgement.verdict === 'approve' && !isAutoApprove(j.judgement),
+  );
+  const rejectedByClaude = judged.filter((j) => j.judgement.verdict === 'reject');
 
-  // v0.4.4: voor approved taalgat-voorstellen mét een accentloze variant,
-  // voeg die variant mechanisch toe aan dezelfde lijst — geen aparte
-  // judge-call nodig, het is exact hetzelfde keyword zonder diakritische
-  // tekens (dezelfde reden waarom coffeeisland.gr's Griekse fix beide
-  // vormen nodig had, zie keywords.ts). Nooit een NIEUW, onbeoordeeld
-  // keyword — alleen een mechanische variant van iets dat al goedgekeurd is.
-  const proposalsToMerge: KeywordProposal[] = [];
-  for (const p of applied) {
-    proposalsToMerge.push({ keyword: p.keyword, list: p.list });
-    if (
-      p.variantWithoutDiacritics &&
-      p.variantWithoutDiacritics !== p.keyword
-    ) {
-      proposalsToMerge.push({ keyword: p.variantWithoutDiacritics, list: p.list });
+  // v0.4.4: voor readyToMerge-taalgat-voorstellen mét een accentloze variant,
+  // voeg die variant mechanisch toe — geen aparte judge-call nodig, het is
+  // exact hetzelfde keyword zonder diakritische tekens (dezelfde reden
+  // waarom coffeeisland.gr's Griekse fix beide vormen nodig had, zie
+  // keywords.ts). Alleen voor de hoge-zekerheid-tier; nooit een NIEUW,
+  // onbeoordeeld keyword.
+  interface StageEntry {
+    keyword: string;
+    list: KeywordProposal['list'];
+    hostname: string;
+    buttonText: string;
+    verdict: Judgement['verdict'];
+    confidence: Judgement['confidence'];
+    reason: string;
+    fromLanguageGap: boolean;
+    tier: 'ready' | 'review';
+  }
+  const stageEntries: StageEntry[] = [];
+  for (const p of readyToMerge) {
+    stageEntries.push({
+      keyword: p.keyword,
+      list: p.list,
+      hostname: p.hostname,
+      buttonText: p.buttonText,
+      verdict: p.judgement.verdict,
+      confidence: p.judgement.confidence,
+      reason: p.judgement.reason,
+      fromLanguageGap: p.fromLanguageGap ?? false,
+      tier: 'ready',
+    });
+    if (p.variantWithoutDiacritics && p.variantWithoutDiacritics !== p.keyword) {
+      stageEntries.push({
+        keyword: p.variantWithoutDiacritics,
+        list: p.list,
+        hostname: p.hostname,
+        buttonText: p.buttonText,
+        verdict: p.judgement.verdict,
+        confidence: p.judgement.confidence,
+        reason: `${p.judgement.reason} (accentloze variant, mechanisch afgeleid)`,
+        fromLanguageGap: p.fromLanguageGap ?? false,
+        tier: 'ready',
+      });
     }
   }
-
-  const { added } = mergeProposals(rules, proposalsToMerge);
-  if (added.length) await saveRules(rules);
-
-  // #reward-2 + #reward-3: een host geldt als "opgelost" wanneer voor die host
-  // een NIEUW keyword auto-toegepast is. Registreer die hosts voor de publieke
-  // /fixed-changelog en stuur de opt-in "nu opgelost"-mail naar hun watchers.
-  const addedKeys = new Set(added.map((a) => `${a.list}:${a.keyword}`));
-  const fixedByHost = new Map<string, { keyword: string; list: string }>();
-  for (const p of applied) {
-    if (!addedKeys.has(`${p.list}:${p.keyword}`)) continue;
-    if (!fixedByHost.has(p.hostname)) {
-      fixedByHost.set(p.hostname, { keyword: p.keyword, list: p.list });
-    }
+  for (const p of needsExtraReview) {
+    stageEntries.push({
+      keyword: p.keyword,
+      list: p.list,
+      hostname: p.hostname,
+      buttonText: p.buttonText,
+      verdict: p.judgement.verdict,
+      confidence: p.judgement.confidence,
+      reason: p.judgement.reason,
+      fromLanguageGap: p.fromLanguageGap ?? false,
+      tier: 'review',
+    });
   }
-  if (fixedByHost.size) {
-    const fixedEntries = Array.from(fixedByHost.entries()).map(
-      ([hostname, k]) => ({ hostname, keyword: k.keyword, list: k.list }),
-    );
-    try {
-      await recordFixed(redis, fixedEntries);
-    } catch (err) {
-      console.warn('[analyze] recordFixed faalde:', err);
-    }
-    // Opt-in notify — best-effort, nooit de run laten klappen.
-    let notified = 0;
-    for (const { hostname } of fixedEntries) {
-      const watchers = await getWatchers(redis, hostname);
-      if (!watchers.length) continue;
-      let anySent = false;
-      for (const email of watchers) {
-        if (await sendFixedEmail(email, hostname)) {
-          notified++;
-          anySent = true;
-        }
-      }
-      // Alleen wissen als er (deels) verstuurd is; anders volgende run opnieuw.
-      if (anySent) await clearWatchers(redis, hostname);
-    }
-    console.log(
-      `Fixes geregistreerd: ${fixedEntries.length}. Notify-mails verstuurd: ${notified}.`,
-    );
-  }
+
+  // #reward-2/#reward-3 ("nu opgelost"-mail + publieke /fixed-changelog) zijn
+  // hier bewust VERWIJDERD: die gingen ervan uit dat saveRules() de wijziging
+  // al live had gezet. Dat klopt met deze fix niet meer — niets is live vóór
+  // Robin de PR merget. Een latere iteratie kan dit opnieuw aansluiten op een
+  // "PR gemerged"-webhook/workflow; buiten scope van deze security-fix
+  // (zie BannerBye_Security-Audit_2026-09-16_INTERN.md, bevinding 1).
 
   // #134 — samenvattingsmail naar de eigenaar, altijd, ongeacht uitkomst.
   // Best-effort: een mislukte mail mag de rest van de run nooit blokkeren.
   try {
-    const ownerLines = results.map((r) => describeHostOutcome(r, applied, needsReview));
-    const sent = await sendOwnerSummaryEmail(ownerLines, applied.length, needsReview.length);
+    const ownerLines = results.map((r) =>
+      describeHostOutcome(r, readyToMerge, needsExtraReview, rejectedByClaude),
+    );
+    const sent = await sendOwnerSummaryEmail(ownerLines, readyToMerge.length, needsExtraReview.length);
     console.log(`[analyze] eigenaar-samenvatting verstuurd: ${sent}`);
   } catch (err) {
     console.warn('[analyze] eigenaar-samenvatting faalde:', err);
   }
 
   await writeFile(
-    'needs-review.json',
-    JSON.stringify(
-      needsReview.map((p) => ({
-        keyword: p.keyword,
-        list: p.list,
-        hostname: p.hostname,
-        buttonText: p.buttonText,
-        verdict: p.judgement.verdict,
-        confidence: p.judgement.confidence,
-        reason: p.judgement.reason,
-        fromLanguageGap: p.fromLanguageGap ?? false,
-      })),
-      null,
-      2,
-    ) + '\n',
+    'proposals-to-stage.json',
+    JSON.stringify(stageEntries, null, 2) + '\n',
   );
-  if (needsReview.length) {
-    const prBody = buildPrBody(needsReview);
+  if (stageEntries.length) {
+    const prBody = buildPrBody(readyToMerge, needsExtraReview);
     await writeFile('pr-body.md', prBody + '\n');
     await setOutput('pr_body', prBody);
   }
 
-  const summary = buildSummary(results, applied, needsReview);
+  const summary = buildSummary(results, readyToMerge, needsExtraReview, rejectedByClaude);
   await writeFile('summary.md', summary + '\n');
 
   const commitMsg =
-    `Phase 2C: ${added.length} keyword(s) auto-toegepast\n\n` +
-    applied
-      .map((p) => `- [${p.list}] ${p.keyword}${p.fromLanguageGap ? ' (nieuwe taal)' : ''} (${p.hostname}): ${p.judgement.reason}`)
+    `Phase 2C: ${stageEntries.length} keyword(s) naar review-PR\n\n` +
+    stageEntries
+      .map((p) => `- [${p.tier}] [${p.list}] ${p.keyword}${p.fromLanguageGap ? ' (nieuwe taal)' : ''} (${p.hostname}): ${p.reason}`)
       .join('\n');
 
-  await setOutput('applied', added.length ? 'true' : 'false');
-  await setOutput('needs_review', needsReview.length ? 'true' : 'false');
+  await setOutput('has_proposals', stageEntries.length ? 'true' : 'false');
+  // Draft blijft aan zodra er ook maar één lagere-zekerheid-voorstel bij zit —
+  // dan moet Robin eerst expliciet "Ready for review" klikken vóór hij kan
+  // mergen. Bevat de PR uitsluitend hoge-zekerheid-voorstellen, dan hoeft dat
+  // niet: mergen blijft sowieso Robin's eigen, bewuste actie.
+  await setOutput('pr_draft', needsExtraReview.length ? 'true' : 'false');
   await setOutput('commit_message', commitMsg);
   await setOutput('summary', summary);
   console.log(
-    `\nKlaar. Auto-toegepast: ${added.length}. Naar review: ${needsReview.length}.`,
+    `\nKlaar. Klaar om te mergen: ${readyToMerge.length}. Extra review nodig: ${needsExtraReview.length}. Afgewezen: ${rejectedByClaude.length}.`,
   );
 }
 

@@ -1,9 +1,15 @@
 /**
- * Phase 2C — needs-review keywords in rules.json zetten vóór de draft-PR.
+ * Phase 2C — alle geoordeelde keyword-voorstellen in rules.json zetten
+ * vóór de review-PR.
  *
- * Draait NA de auto-apply-commit, op een schone landing-checkout. Leest
- * needs-review.json (door analyze.ts geschreven), voegt die keywords toe aan
- * RULES_FILE, zodat create-pull-request een branch met precies die diff maakt.
+ * Sinds security-fix bevinding 1 (2026-09-16): er is geen aparte
+ * "auto-apply-commit" meer die hieraan voorafgaat — dit is nu de ENIGE plek
+ * die rules.json schrijft, en dat gebeurt altijd op een PR-branch, nooit
+ * direct op main. Leest proposals-to-stage.json (door analyze.ts
+ * geschreven — bevat zowel de hoge-zekerheid- als de lagere-zekerheid-tier,
+ * Claude's reject-verdicts zitten er niet in), voegt die keywords toe aan
+ * RULES_FILE, zodat create-pull-request een branch met precies die diff
+ * maakt. Robin beoordeelt en merget zelf; nooit auto-merge.
  */
 
 import { readFile } from 'node:fs/promises';
@@ -14,7 +20,7 @@ import {
   type KeywordList,
 } from './rules.ts';
 
-interface NeedsReviewEntry {
+interface StageEntry {
   keyword: string;
   list?: KeywordList;
 }
@@ -22,17 +28,17 @@ interface NeedsReviewEntry {
 async function main(): Promise<void> {
   let raw: string;
   try {
-    raw = await readFile('needs-review.json', 'utf8');
+    raw = await readFile('proposals-to-stage.json', 'utf8');
   } catch {
-    console.log('Geen needs-review.json — niets te doen.');
+    console.log('Geen proposals-to-stage.json — niets te doen.');
     return;
   }
-  const entries = JSON.parse(raw) as NeedsReviewEntry[];
+  const entries = JSON.parse(raw) as StageEntry[];
   const proposals = entries
     .filter((e) => e.keyword)
     .map((e) => ({ keyword: e.keyword, list: e.list ?? 'reject' }));
   if (!proposals.length) {
-    console.log('Geen needs-review keywords.');
+    console.log('Geen te stagen keywords.');
     return;
   }
   const rules = await loadRules();
@@ -40,10 +46,10 @@ async function main(): Promise<void> {
   if (added.length) {
     await saveRules(rules);
     console.log(
-      `Needs-review toegevoegd voor PR: ${added.map((a) => `${a.keyword}[${a.list}]`).join(', ')}`,
+      `Gestaged voor PR: ${added.map((a) => `${a.keyword}[${a.list}]`).join(', ')}`,
     );
   } else {
-    console.log('Needs-review keywords stonden al in rules.json.');
+    console.log('Voorgestelde keywords stonden al in rules.json.');
   }
 }
 

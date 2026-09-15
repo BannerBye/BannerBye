@@ -86,16 +86,63 @@ export async function computeStateForHost(hostname: string | null): Promise<Acti
  * argument meegegeven wordt (`state`) en globals van de page (window).
  *
  * Houd 'm dus zo simpel mogelijk en zelfstandig.
+ *
+ * v0.4.5 (fix #13, security-audit 2026-09-16) — bescherming naar het
+ * patroon van `__tcfapi` in tcf.content.ts: installeer een `configurable:
+ * false`-accessor-property i.p.v. een kale schrijfbare dataproperty.
+ *
+ * Wat dit WEL oplost: vóór deze fix was `window[flagKey] = state` een
+ * gewone, overschrijfbare toewijzing. Een pagina die vóór onze injectie (of
+ * gelijktijdig, bv. via een eigen `Object.defineProperty` met
+ * `writable:false, configurable:false`) de property claimt, kon 'm
+ * permanent op een waarde vastzetten — waarna GEEN latere, legitieme
+ * her-injectie (bv. wanneer Robin de toggle omzet tijdens dezelfde
+ * paginasessie) 'm nog kon bijwerken. Door zelf als eerste (background
+ * injecteert met `injectImmediately:true` op `document_start`, vóór
+ * page-scripts) een `configurable:false`-accessor te installeren, kan een
+ * pagina die niet meer overschrijven/vervangen — onze eigen setter blijft
+ * altijd werken voor toekomstige her-injecties op dezelfde pagina.
+ *
+ * Wat dit NIET oplost: MAIN-world content scripts draaien in dezelfde
+ * JS-realm als de pagina zelf (dat is precies waarom ze daar draaien — zie
+ * de toelichting bovenaan dit bestand). Er bestaat geen "van-ons-maar-niet-
+ * van-de-pagina"-scheiding binnen die realm, dus een pagina kan via onze
+ * setter nog steeds een GELDIGE state-waarde (zoals 'disabled') zetten om
+ * zichzelf te ontwijken. Dat is een architectuurgrens, geen implementatie-
+ * bug — zie ook de vergelijkbare toelichting bij bridge.content.ts's
+ * CustomEvent-relay (fix #7).
  */
 export function inlineSetFlag(state: ActiveState, flagKey: string): void {
   // Aanname: deze runt in page-context (MAIN world). `window` is hier
   // het page-window, niet de extension-context.
+  const w = window as unknown as Record<string, unknown>;
   try {
-    (window as unknown as Record<string, ActiveState>)[flagKey] = state;
+    let current: ActiveState = state;
+    Object.defineProperty(w, flagKey, {
+      get: () => current,
+      set: (value: unknown) => {
+        // Alleen echte ActiveState-waarden accepteren — negeer rommel
+        // i.p.v. 'm klakkeloos door te geven aan content scripts die een
+        // van de drie exacte strings verwachten.
+        if (value === 'active' || value === 'disabled' || value === 'paused') {
+          current = value;
+        }
+      },
+      enumerable: true,
+      configurable: false,
+    });
   } catch {
-    // Sommige strict-mode of frozen-window contexts kunnen 't blokkeren.
-    // Niet kritiek — content scripts treat afwezige flag als 'active'
-    // (= fallback naar v0.1.x-gedrag).
+    // defineProperty faalt hier typisch omdat de accessor al bestaat van
+    // een eerdere injectie op DEZELFDE pagina (live toggle-update, geen
+    // reload) — configurable:false blokkeert dan bewust een herinstallatie.
+    // Val terug op een gewone toewijzing: die roept onze eigen, al
+    // geïnstalleerde setter aan.
+    try {
+      w[flagKey] = state;
+    } catch {
+      // Frozen window o.i.d. — niet kritiek. Content scripts behandelen een
+      // afwezige/onleesbare flag als 'active' (fail-open, zie readActiveState()).
+    }
   }
 }
 

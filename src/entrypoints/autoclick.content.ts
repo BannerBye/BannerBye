@@ -93,7 +93,10 @@ export default defineContentScript({
     try {
       const remote = await getCachedRules();
       if (remote?.autoclick) {
-        setRemoteKeywords(remote.autoclick);
+        // v0.4.5 (fix #3): geef de huidige hostname mee zodat host-scoped
+        // regels (autoclick.hostRules) meegewogen worden naast de globale
+        // keyword-lijsten. Zie keywords.ts / rules/types.ts.
+        setRemoteKeywords(remote.autoclick, location.hostname);
       }
     } catch {
       // storage.local niet beschikbaar of corrupt — niet kritiek.

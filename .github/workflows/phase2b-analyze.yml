@@ -1,9 +1,10 @@
 name: Phase 2B/2C — analyze reported sites
 
 # Headless analyse van gemelde "broken sites" → Claude beoordeelt voorgestelde
-# keywords. Approve+high gaat AUTOMATISCH live (commit naar landing-repo →
-# Vercel auto-deploy). Randgevallen → draft-PR (het vangnet). Nooit auto-merge
-# van de review-PR.
+# keywords. Sinds de security-fix van bevinding 1 (2026-09-16, zie
+# BannerBye_Security-Audit_2026-09-16_INTERN.md) gaat NIETS meer automatisch
+# live: elk geoordeeld voorstel — ook approve/high — komt op een branch en
+# opent één PR die Robin zelf moet beoordelen en mergen. Nooit auto-merge.
 
 # Draait NIET meer op een dagschema. In plaats daarvan meteen wanneer een
 # gebruiker een link inzendt: deploy/api/report.ts vuurt na een geldige melding
@@ -67,7 +68,7 @@ jobs:
             | xargs -0 -r sudo rm -f || true
           npx playwright install --with-deps chromium || npx playwright install chromium
 
-      - name: Run analyzer (analyse + Claude-judge + auto-apply)
+      - name: Run analyzer (analyse + Claude-judge)
         id: analyze
         working-directory: scripts/phase2b
         env:
@@ -81,38 +82,28 @@ jobs:
           RULES_FILE: ${{ github.workspace }}/landing/rules.json
         run: node --experimental-strip-types analyze.ts
 
-      # Approve+high → meteen live via de Git-gekoppelde landing-repo.
-      - name: Auto-apply approved keywords (→ Vercel auto-deploy)
-        if: steps.analyze.outputs.applied == 'true'
-        working-directory: landing
-        env:
-          COMMIT_MESSAGE: ${{ steps.analyze.outputs.commit_message }}
-        run: |
-          git config user.name "bannerbye-bot"
-          git config user.email "hello@bannerbye.com"
-          git add rules.json
-          git commit -m "$COMMIT_MESSAGE"
-          git push origin HEAD:main
-
-      # Randgevallen: zet ze in rules.json op een branch + open draft-PR.
-      - name: Stage needs-review keywords
-        if: steps.analyze.outputs.needs_review == 'true'
+      # Bevinding 1 (security-audit 2026-09-16): geen directe git-push naar
+      # main meer, voor GEEN enkel voorstel — ook approve/high niet. Alles
+      # wat Claude goedkeurde (beide zekerheids-tiers) wordt hier op een
+      # branch gezet en gaat via één PR die Robin zelf moet mergen.
+      - name: Stage beoordeelde keywords (ready-to-merge + needs-extra-review)
+        if: steps.analyze.outputs.has_proposals == 'true'
         working-directory: scripts/phase2b
         env:
           RULES_FILE: ${{ github.workspace }}/landing/rules.json
         run: node --experimental-strip-types apply-needs-review.ts
 
-      - name: Draft-PR voor needs-review keywords
-        if: steps.analyze.outputs.needs_review == 'true'
+      - name: PR voor beoordeelde keywords (nooit auto-merge)
+        if: steps.analyze.outputs.has_proposals == 'true'
         uses: peter-evans/create-pull-request@v7
         with:
           path: landing
           token: ${{ secrets.LANDING_REPO_TOKEN }}
           branch: phase2c/keyword-review
           base: main
-          draft: true
+          draft: ${{ steps.analyze.outputs.pr_draft }}
           add-paths: rules.json
-          commit-message: "Phase 2C: keywords naar review"
+          commit-message: ${{ steps.analyze.outputs.commit_message }}
           title: "Phase 2C — keywords naar review"
           body: ${{ steps.analyze.outputs.pr_body }}
           labels: phase-2c, automated, needs-review

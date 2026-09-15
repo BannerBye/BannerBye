@@ -492,6 +492,31 @@ let remoteContextWords: string[] = [];
 let remoteAttributeWordHints: string[] = [];
 let remoteAttributeCompactHints: string[] = [];
 
+/** Eén set remote keyword-velden — zelfde vorm als RemoteAutoclickFields in rules/types.ts. */
+interface RemoteKeywordFields {
+  rejectKeywords?: string[];
+  ambiguousKeywords?: string[];
+  stepIntoKeywords?: string[];
+  rejectPhrases?: string[];
+  contextWords?: string[];
+  attributeWordHints?: string[];
+  attributeCompactHints?: string[];
+}
+
+/**
+ * v0.4.5 (fix #3, security-audit 2026-09-16): true als `ruleHost` van
+ * toepassing is op `currentHost` — exacte match, of `currentHost` is een
+ * subdomein van `ruleHost` (bv. regel `"example.com"` geldt ook voor
+ * `"www.example.com"`). Nooit andersom: een regel op een subdomein geldt
+ * niet voor de apex. Case-insensitive, zoals de rest van deze module.
+ */
+export function isHostRuleMatch(currentHost: string, ruleHost: string): boolean {
+  const h = currentHost.toLowerCase().trim();
+  const r = ruleHost.toLowerCase().trim();
+  if (!h || !r) return false;
+  return h === r || h.endsWith(`.${r}`);
+}
+
 /**
  * Injecteer remote keywords. Roep aan vanuit content scripts ná het lezen
  * van de gecachde rules uit chrome.storage.local.
@@ -500,37 +525,49 @@ let remoteAttributeCompactHints: string[] = [];
  * non-empty strings. `contextWords`/`attribute*Hints` gebruiken dezelfde
  * normalize() als de andere velden — voor attribuut-hints is dat vooral
  * de lowercase-stap die telt, tokens hebben toch al geen spaties.
+ *
+ * `currentHost` (optioneel, meestal `location.hostname`): als gezet, worden
+ * ook de `hostRules`-entries die op deze host matchen (zie
+ * `isHostRuleMatch()`) meegenomen — additief bovenop de globale velden.
+ * Zonder `currentHost` (zoals de Phase 2B/2C-analyzer, die host-onafhankelijk
+ * draait) worden alleen de globale velden gebruikt; host-scoped regels
+ * blijven dan ongebruikt, wat veilig is (ze zijn per definitie een subset
+ * van wat al globaal toegestaan zou zijn als de host niet bekend is).
  */
-export function setRemoteKeywords(rules: {
-  rejectKeywords?: string[];
-  ambiguousKeywords?: string[];
-  stepIntoKeywords?: string[];
-  rejectPhrases?: string[];
-  contextWords?: string[];
-  attributeWordHints?: string[];
-  attributeCompactHints?: string[];
-}): void {
-  remoteRejectPhrases = (rules.rejectPhrases ?? [])
-    .map(normalize)
-    .filter((s) => s.length > 0);
-  remoteRejectKeywords = (rules.rejectKeywords ?? [])
-    .map(normalize)
-    .filter((s) => s.length > 0);
-  remoteAmbiguousKeywords = (rules.ambiguousKeywords ?? [])
-    .map(normalize)
-    .filter((s) => s.length > 0);
-  remoteStepIntoKeywords = (rules.stepIntoKeywords ?? [])
-    .map(normalize)
-    .filter((s) => s.length > 0);
-  remoteContextWords = (rules.contextWords ?? [])
-    .map(normalize)
-    .filter((s) => s.length > 0);
-  remoteAttributeWordHints = (rules.attributeWordHints ?? [])
-    .map(normalize)
-    .filter((s) => s.length > 0);
-  remoteAttributeCompactHints = (rules.attributeCompactHints ?? [])
-    .map(normalize)
-    .filter((s) => s.length > 0);
+export function setRemoteKeywords(
+  rules: RemoteKeywordFields & { hostRules?: Record<string, RemoteKeywordFields> },
+  currentHost?: string,
+): void {
+  const merged: RemoteKeywordFields = {
+    rejectKeywords: [...(rules.rejectKeywords ?? [])],
+    ambiguousKeywords: [...(rules.ambiguousKeywords ?? [])],
+    stepIntoKeywords: [...(rules.stepIntoKeywords ?? [])],
+    rejectPhrases: [...(rules.rejectPhrases ?? [])],
+    contextWords: [...(rules.contextWords ?? [])],
+    attributeWordHints: [...(rules.attributeWordHints ?? [])],
+    attributeCompactHints: [...(rules.attributeCompactHints ?? [])],
+  };
+
+  if (currentHost && rules.hostRules) {
+    for (const [ruleHost, fields] of Object.entries(rules.hostRules)) {
+      if (!isHostRuleMatch(currentHost, ruleHost)) continue;
+      merged.rejectKeywords!.push(...(fields.rejectKeywords ?? []));
+      merged.ambiguousKeywords!.push(...(fields.ambiguousKeywords ?? []));
+      merged.stepIntoKeywords!.push(...(fields.stepIntoKeywords ?? []));
+      merged.rejectPhrases!.push(...(fields.rejectPhrases ?? []));
+      merged.contextWords!.push(...(fields.contextWords ?? []));
+      merged.attributeWordHints!.push(...(fields.attributeWordHints ?? []));
+      merged.attributeCompactHints!.push(...(fields.attributeCompactHints ?? []));
+    }
+  }
+
+  remoteRejectPhrases = merged.rejectPhrases!.map(normalize).filter((s) => s.length > 0);
+  remoteRejectKeywords = merged.rejectKeywords!.map(normalize).filter((s) => s.length > 0);
+  remoteAmbiguousKeywords = merged.ambiguousKeywords!.map(normalize).filter((s) => s.length > 0);
+  remoteStepIntoKeywords = merged.stepIntoKeywords!.map(normalize).filter((s) => s.length > 0);
+  remoteContextWords = merged.contextWords!.map(normalize).filter((s) => s.length > 0);
+  remoteAttributeWordHints = merged.attributeWordHints!.map(normalize).filter((s) => s.length > 0);
+  remoteAttributeCompactHints = merged.attributeCompactHints!.map(normalize).filter((s) => s.length > 0);
 }
 
 /**
