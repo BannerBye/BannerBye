@@ -1,0 +1,180 @@
+{
+  "extName": {
+    "message": "BannerBye — حظر لافتات ملفات تعريف الارتباط قبل تحميلها"
+  },
+  "extDesc": {
+    "message": "لافتات ملفات تعريف الارتباط يتم حظرها قبل أن يتم تحميلها. اضبط إعدادات الخصوصية مرة واحدة فقط، وسيتولى BannerBye الباقي — تلقائيًا، على كل موقع."
+  },
+
+  "popup_loading": { "message": "جارٍ التحميل…" },
+
+  "popup_status_off": { "message": "BannerBye معطل في كل مكان." },
+  "popup_status_no_site": { "message": "لا يوجد موقع لتطبيق الإعدادات عليه." },
+  "popup_status_paused": {
+    "message": "متوقف مؤقتًا على $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "نشط على $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "نشط" },
+  "popup_status_dot_inactive_aria": { "message": "غير نشط" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "قيد التشغيل" },
+  "popup_toggle_off": { "message": "معطل" },
+  "popup_pause_site": { "message": "إيقاف مؤقت على هذا الموقع" },
+  "popup_resume_site": { "message": "استئناف على هذا الموقع" },
+
+  "popup_stat_label": { "message": "لافتة مرفوضة" },
+
+  "popup_activity_show": { "message": "إظهار الدليل" },
+  "popup_activity_hide": { "message": "إخفاء الدليل" },
+  "popup_activity_no_banner": { "message": "لا توجد لافتة" },
+  "popup_activity_banner_refused_fallback": { "message": "تم رفض اللافتة" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "للتو" },
+  "popup_time_minutes_ago": {
+    "message": "منذ $MINUTES$ دقيقة",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "منذ $HOURS$ ساعة",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "منذ يوم واحد" },
+  "popup_time_days_ago": {
+    "message": "منذ $DAYS$ أيام",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "يتم الاحتفاظ بها على هذا الجهاز فقط، لمدة سبعة أيام. لا يتم إرسالها إلى أي مكان أبدًا."
+  },
+  "popup_activity_clear": { "message": "مسح هذه القائمة" },
+
+  "popup_milestones_label": { "message": "الإنجازات" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "تنزيل صورة الإحصائيات →" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "ارفض لافتة أولاً"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "حفظ صورة PNG قابلة للمشاركة لإحصائياتك في مجلد التنزيلات"
+  },
+  "popup_footer_report": { "message": "الإبلاغ عن موقع معطل →" },
+  "popup_footer_rate": { "message": "تقييم BannerBye →" },
+  "popup_footer_rate_title": {
+    "message": "اترك تقييمًا — فهذا يبقي BannerBye مرئيًا"
+  },
+
+  "popup_modal_title": { "message": "الإبلاغ عن موقع معطل" },
+  "popup_modal_close_aria": { "message": "إغلاق" },
+  "popup_modal_sent": {
+    "message": "شكرًا. سنلقي نظرة على $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "سنرسل اسم المضيف $HOST$ إلى BannerBye. اختياري: أضف وصفًا للمشكلة.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "ما الذي يحدث؟ (اختياري)"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "أرسل لي بريدًا إلكترونيًّا عند إصلاح المشكلة (اختياري)"
+  },
+  "popup_modal_fineprint": {
+    "message": "اترك هذا الحقل فارغًا لتبقى مجهول الهوية تمامًا. إذا أضفت بريدك، فسنستخدمه فقط لإرسال إشعار واحد عند معالجة هذه اللافتة."
+  },
+  "popup_modal_error": {
+    "message": "تعذر الإرسال: $ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "إرسال البلاغ" },
+  "popup_modal_sending": { "message": "جارٍ الإرسال…" },
+  "popup_modal_try_again": { "message": "حاول مرة أخرى" },
+
+  "popup_celebration_label": { "message": "تم فتح إنجاز" },
+  "popup_celebration_share_aria": { "message": "تنزيل بطاقة المشاركة" },
+  "popup_celebration_dismiss_aria": { "message": "تجاهل" },
+
+  "popup_reportfixed_label": { "message": "لافتة أبلغت عنها" },
+  "popup_reportfixed_text": {
+    "message": "تم حظرها الآن على $HOST$",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "طلب لمرة واحدة" },
+  "popup_reviewask_title": { "message": "هل تستمتع بالهدوء؟" },
+  "popup_reviewask_text": {
+    "message": "تقييم قصير يجعل من السهل العثور على BannerBye. نطلب ذلك مرة واحدة — ولن نطلبه مرة أخرى أبدًا."
+  },
+  "popup_reviewask_cta": { "message": "تقييم BannerBye →" },
+  "popup_reviewask_dismiss_aria": { "message": "لا، شكرًا" },
+  "popup_reviewask_dismiss_title": { "message": "لا، شكرًا — لن نطلب ذلك مرة أخرى" },
+
+  "onboarding_eyebrow": { "message": "إعداد سريع — أنت محمي بالفعل" },
+  "onboarding_headline_1": { "message": "لافتات ملفات تعريف الارتباط، تم حظرها." },
+  "onboarding_headline_2": { "message": "قبل أن يتم تحميلها." },
+  "onboarding_body": {
+    "message": "لا حاجة إلى أي إعدادات. BannerBye يقوم بذلك بالفعل، في هذه اللحظة:"
+  },
+  "onboarding_check1_title": { "message": "يرفض على كل موقع" },
+  "onboarding_check1_desc": {
+    "message": "يرسل «رفض الموافقة» تلقائيًا وبشكل قانوني، قبل أن تتاح للافتة فرصة السؤال."
+  },
+  "onboarding_check2_title": { "message": "يعمل بصمت" },
+  "onboarding_check2_desc": {
+    "message": "لن تسمع منا مرة أخرى. انقر على أيقونة الدرع في شريط الأدوات في أي وقت لترى عدد اللافتات التي رفضناها."
+  },
+  "onboarding_check3_title": { "message": "قابل للإلغاء على أي موقع" },
+  "onboarding_check3_desc": {
+    "message": "الخدمات المصرفية، وأدوات العمل، وتسجيلات الدخول — إذا بدا أحدها معطلاً، افتح أيقونة الدرع واضغط على «إيقاف مؤقت على هذا الموقع»."
+  },
+  "onboarding_tip": {
+    "message": "نصيحة: ثبّت الأيقونة للوصول بنقرة واحدة — أيقونة قطعة الأحجية في شريط الأدوات، ابحث عن BannerBye، وانقر على دبوس التثبيت."
+  },
+  "onboarding_cta": { "message": "ابدأ التصفح →" },
+
+  "milestone_first_banner": { "message": "أول لافتة تم حظرها" },
+  "milestone_first_steps": { "message": "الخطوات الأولى" },
+  "milestone_cookie_crusher": { "message": "محطم ملفات تعريف الارتباط" },
+  "milestone_banner_bye_master": { "message": "سيد وداع اللافتات" },
+  "milestone_privacy_champion": { "message": "بطل الخصوصية" },
+  "milestone_cookie_diet_month": { "message": "حمية ملفات تعريف الارتباط · الشهر الأول" },
+  "milestone_cookie_diet_year": { "message": "حمية ملفات تعريف الارتباط · السنة الأولى" },
+
+  "share_milestone_unlocked_label": { "message": "تم فتح إنجاز" },
+  "share_tagline": { "message": "لافتات ملفات تعريف الارتباط، تم حظرها. قبل أن يتم تحميلها." },
+  "share_counter_singular": {
+    "message": "تم رفض $COUNT$ لافتة ملفات تعريف ارتباط",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "تم رفض $COUNT$ لافتة ملفات تعريف ارتباط",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "قصتك مع BannerBye" },
+  "share_milestones_unlocked": {
+    "message": "تم فتح $COUNT$ من $TOTAL$ إنجازات",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "منذ $DATE$",
+    "placeholders": { "date": { "content": "$1" } }
+  }
+}

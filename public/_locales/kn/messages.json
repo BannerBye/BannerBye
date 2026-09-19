@@ -1,0 +1,180 @@
+{
+  "extName": {
+    "message": "BannerBye — ಲೋಡ್ ಆಗುವ ಮೊದಲೇ ಕುಕೀ ಬ್ಯಾನರ್‌ಗಳನ್ನು ತಡೆಯುತ್ತದೆ"
+  },
+  "extDesc": {
+    "message": "ಕುಕೀ ಬ್ಯಾನರ್‌ಗಳು ಲೋಡ್ ಆಗುವ ಮೊದಲೇ ತಡೆಯಲ್ಪಡುತ್ತವೆ. ನಿಮ್ಮ ಗೌಪ್ಯತೆಯನ್ನು ಒಮ್ಮೆ ಹೊಂದಿಸಿ — ಉಳಿದದ್ದನ್ನು BannerBye ಪ್ರತಿ ಸೈಟ್‌ನಲ್ಲೂ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ನಿರ್ವಹಿಸುತ್ತದೆ."
+  },
+
+  "popup_loading": { "message": "ಲೋಡ್ ಆಗುತ್ತಿದೆ…" },
+
+  "popup_status_off": { "message": "BannerBye ಎಲ್ಲೆಡೆ ಆಫ್ ಆಗಿದೆ." },
+  "popup_status_no_site": { "message": "ಕಾರ್ಯನಿರ್ವಹಿಸಲು ಯಾವುದೇ ಸೈಟ್ ಇಲ್ಲ." },
+  "popup_status_paused": {
+    "message": "$HOST$ ನಲ್ಲಿ ವಿರಾಮಗೊಳಿಸಲಾಗಿದೆ.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "$HOST$ ನಲ್ಲಿ ಸಕ್ರಿಯವಾಗಿದೆ.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "ಸಕ್ರಿಯ" },
+  "popup_status_dot_inactive_aria": { "message": "ನಿಷ್ಕ್ರಿಯ" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "ಆನ್" },
+  "popup_toggle_off": { "message": "ಆಫ್" },
+  "popup_pause_site": { "message": "ಈ ಸೈಟ್‌ನಲ್ಲಿ ವಿರಾಮಗೊಳಿಸಿ" },
+  "popup_resume_site": { "message": "ಈ ಸೈಟ್‌ನಲ್ಲಿ ಮರುಪ್ರಾರಂಭಿಸಿ" },
+
+  "popup_stat_label": { "message": "ಬ್ಯಾನರ್‌ಗಳನ್ನು ನಿರಾಕರಿಸಲಾಗಿದೆ" },
+
+  "popup_activity_show": { "message": "ಸಾಕ್ಷ್ಯವನ್ನು ತೋರಿಸಿ" },
+  "popup_activity_hide": { "message": "ಸಾಕ್ಷ್ಯವನ್ನು ಮರೆಮಾಡಿ" },
+  "popup_activity_no_banner": { "message": "ಯಾವುದೇ ಬ್ಯಾನರ್ ಇಲ್ಲ" },
+  "popup_activity_banner_refused_fallback": { "message": "ಬ್ಯಾನರ್ ನಿರಾಕರಿಸಲಾಗಿದೆ" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "ಈಗಷ್ಟೇ" },
+  "popup_time_minutes_ago": {
+    "message": "$MINUTES$ ನಿಮಿಷಗಳ ಹಿಂದೆ",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "$HOURS$ ಗಂಟೆಗಳ ಹಿಂದೆ",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "1 ದಿನದ ಹಿಂದೆ" },
+  "popup_time_days_ago": {
+    "message": "$DAYS$ ದಿನಗಳ ಹಿಂದೆ",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "ಈ ಸಾಧನದಲ್ಲಿ ಮಾತ್ರ, ಏಳು ದಿನಗಳ ಕಾಲ ಸಂಗ್ರಹಿಸಲಾಗುತ್ತದೆ. ಎಲ್ಲಿಗೂ ಕಳುಹಿಸಲಾಗುವುದಿಲ್ಲ."
+  },
+  "popup_activity_clear": { "message": "ಈ ಪಟ್ಟಿಯನ್ನು ತೆರವುಗೊಳಿಸಿ" },
+
+  "popup_milestones_label": { "message": "ಮೈಲಿಗಲ್ಲುಗಳು" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "ಅಂಕಿಅಂಶದ ಚಿತ್ರವನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ →" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "ಮೊದಲು ಒಂದು ಬ್ಯಾನರ್ ನಿರಾಕರಿಸಿ"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "ನಿಮ್ಮ ಅಂಕಿಅಂಶಗಳ ಹಂಚಿಕೊಳ್ಳಬಹುದಾದ PNG ಚಿತ್ರವನ್ನು ನಿಮ್ಮ ಡೌನ್‌ಲೋಡ್ ಫೋಲ್ಡರ್‌ಗೆ ಉಳಿಸುತ್ತದೆ"
+  },
+  "popup_footer_report": { "message": "ಕೆಟ್ಟುಹೋದ ಸೈಟ್ ವರದಿ ಮಾಡಿ →" },
+  "popup_footer_rate": { "message": "BannerBye ಗೆ ರೇಟಿಂಗ್ ನೀಡಿ →" },
+  "popup_footer_rate_title": {
+    "message": "ವಿಮರ್ಶೆ ಬರೆಯಿರಿ — ಇದು BannerBye ಅನ್ನು ಗೋಚರವಾಗಿ ಇರಿಸುತ್ತದೆ"
+  },
+
+  "popup_modal_title": { "message": "ಕೆಟ್ಟುಹೋದ ಸೈಟ್ ವರದಿ ಮಾಡಿ" },
+  "popup_modal_close_aria": { "message": "ಮುಚ್ಚಿ" },
+  "popup_modal_sent": {
+    "message": "ಧನ್ಯವಾದಗಳು. ನಾವು $HOST$ ಅನ್ನು ಪರಿಶೀಲಿಸುತ್ತೇವೆ.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "ನಾವು ಹೋಸ್ಟ್‌ನೇಮ್ $HOST$ ಅನ್ನು BannerBye ಗೆ ಕಳುಹಿಸುತ್ತೇವೆ. ಐಚ್ಛಿಕ: ಏನು ತಪ್ಪಾಗುತ್ತಿದೆ ಎಂದು ಸೇರಿಸಿ.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "ಏನಾಗುತ್ತಿದೆ? (ಐಚ್ಛಿಕ)"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "ಸರಿಪಡಿಸಿದಾಗ ನನಗೆ ಇಮೇಲ್ ಕಳುಹಿಸಿ (ಐಚ್ಛಿಕ)"
+  },
+  "popup_modal_fineprint": {
+    "message": "ಸಂಪೂರ್ಣವಾಗಿ ಅನಾಮಧೇಯರಾಗಿ ಉಳಿಯಲು ಇದನ್ನು ಖಾಲಿ ಬಿಡಿ. ನೀವು ಸೇರಿಸಿದರೆ, ಈ ಬ್ಯಾನರ್ ಸರಿಪಡಿಸಿದಾಗ ಒಂದು ಸೂಚನೆ ಕಳುಹಿಸಲು ಮಾತ್ರ ನಾವು ಅದನ್ನು ಬಳಸುತ್ತೇವೆ."
+  },
+  "popup_modal_error": {
+    "message": "ಕಳುಹಿಸಲಾಗಲಿಲ್ಲ: $ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "ವರದಿ ಕಳುಹಿಸಿ" },
+  "popup_modal_sending": { "message": "ಕಳುಹಿಸಲಾಗುತ್ತಿದೆ…" },
+  "popup_modal_try_again": { "message": "ಮತ್ತೊಮ್ಮೆ ಪ್ರಯತ್ನಿಸಿ" },
+
+  "popup_celebration_label": { "message": "ಮೈಲಿಗಲ್ಲು ಅನ್‌ಲಾಕ್ ಆಗಿದೆ" },
+  "popup_celebration_share_aria": { "message": "ಶೇರ್ ಕಾರ್ಡ್ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ" },
+  "popup_celebration_dismiss_aria": { "message": "ಮುಚ್ಚಿ" },
+
+  "popup_reportfixed_label": { "message": "ನೀವು ವರದಿ ಮಾಡಿದ ಬ್ಯಾನರ್" },
+  "popup_reportfixed_text": {
+    "message": "ಈಗ $HOST$ ನಲ್ಲಿ ತಡೆಯಲಾಗಿದೆ",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "ಒಮ್ಮೆ ಮಾತ್ರ ಕೇಳುವ ವಿನಂತಿ" },
+  "popup_reviewask_title": { "message": "ಶಾಂತಿಯನ್ನು ಆನಂದಿಸುತ್ತಿದ್ದೀರಾ?" },
+  "popup_reviewask_text": {
+    "message": "ಸಣ್ಣ ವಿಮರ್ಶೆ ಇತರರಿಗೆ BannerBye ಕಂಡುಹಿಡಿಯಲು ಸಹಾಯ ಮಾಡುತ್ತದೆ. ನಾವು ಒಮ್ಮೆ ಮಾತ್ರ ಕೇಳುತ್ತೇವೆ — ಮತ್ತೆಂದೂ ಕೇಳುವುದಿಲ್ಲ."
+  },
+  "popup_reviewask_cta": { "message": "BannerBye ಗೆ ರೇಟಿಂಗ್ ನೀಡಿ →" },
+  "popup_reviewask_dismiss_aria": { "message": "ಬೇಡ, ಧನ್ಯವಾದ" },
+  "popup_reviewask_dismiss_title": { "message": "ಬೇಡ, ಧನ್ಯವಾದ — ನಾವು ಮತ್ತೊಮ್ಮೆ ಕೇಳುವುದಿಲ್ಲ" },
+
+  "onboarding_eyebrow": { "message": "ತ್ವರಿತ ಸೆಟಪ್ — ನೀವು ಈಗಾಗಲೇ ರಕ್ಷಿತರಾಗಿದ್ದೀರಿ" },
+  "onboarding_headline_1": { "message": "ಕುಕೀ ಬ್ಯಾನರ್‌ಗಳು, ತಡೆಯಲ್ಪಟ್ಟಿವೆ." },
+  "onboarding_headline_2": { "message": "ಅವು ಲೋಡ್ ಆಗುವ ಮೊದಲೇ." },
+  "onboarding_body": {
+    "message": "ಯಾವುದೇ ಕಾನ್ಫಿಗರೇಶನ್ ಅಗತ್ಯವಿಲ್ಲ. BannerBye ಈಗಾಗಲೇ ಇದನ್ನು ಮಾಡುತ್ತಿದೆ, ಈಗಲೇ:"
+  },
+  "onboarding_check1_title": { "message": "ಪ್ರತಿ ಸೈಟ್‌ನಲ್ಲಿ ನಿರಾಕರಿಸುತ್ತದೆ" },
+  "onboarding_check1_desc": {
+    "message": "ಬ್ಯಾನರ್‌ಗೆ ಕೇಳುವ ಅವಕಾಶ ಸಿಗುವ ಮೊದಲೇ, ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಮತ್ತು ಕಾನೂನುಬದ್ಧವಾಗಿ „ಸಮ್ಮತಿ ಇಲ್ಲ” ಎಂದು ಕಳುಹಿಸುತ್ತದೆ."
+  },
+  "onboarding_check2_title": { "message": "ಶಾಂತವಾಗಿ ಕೆಲಸ ಮಾಡುತ್ತದೆ" },
+  "onboarding_check2_desc": {
+    "message": "ನೀವು ನಮ್ಮಿಂದ ಮತ್ತೆ ಏನನ್ನೂ ಕೇಳುವುದಿಲ್ಲ. ನಾವು ಎಷ್ಟು ಬ್ಯಾನರ್‌ಗಳನ್ನು ನಿರಾಕರಿಸಿದ್ದೇವೆ ಎಂದು ನೋಡಲು ಯಾವಾಗ ಬೇಕಾದರೂ ನಿಮ್ಮ ಟೂಲ್‌ಬಾರ್‌ನಲ್ಲಿ ಶೀಲ್ಡ್ ಐಕಾನ್ ಕ್ಲಿಕ್ ಮಾಡಿ."
+  },
+  "onboarding_check3_title": { "message": "ಯಾವುದೇ ಸೈಟ್‌ನಲ್ಲಿ ಹಿಂತಿರುಗಿಸಬಹುದು" },
+  "onboarding_check3_desc": {
+    "message": "ಬ್ಯಾಂಕಿಂಗ್, ಕೆಲಸದ ಉಪಕರಣಗಳು, ಲಾಗಿನ್‌ಗಳು — ಏನಾದರೂ ಸರಿಯಾಗಿ ಕೆಲಸ ಮಾಡದಿದ್ದರೆ, ಶೀಲ್ಡ್ ಐಕಾನ್ ತೆರೆದು „ಈ ಸೈಟ್‌ನಲ್ಲಿ ವಿರಾಮಗೊಳಿಸಿ” ಕ್ಲಿಕ್ ಮಾಡಿ."
+  },
+  "onboarding_tip": {
+    "message": "ಸಲಹೆ: ಒಂದೇ ಕ್ಲಿಕ್‌ನಲ್ಲಿ ಪ್ರವೇಶಕ್ಕಾಗಿ ಐಕಾನ್ ಪಿನ್ ಮಾಡಿ — ಟೂಲ್‌ಬಾರ್‌ನಲ್ಲಿ ಪಜಲ್ ಪೀಸ್ ಕ್ಲಿಕ್ ಮಾಡಿ, BannerBye ಅನ್ನು ಹುಡುಕಿ, ಪಿನ್ ಕ್ಲಿಕ್ ಮಾಡಿ."
+  },
+  "onboarding_cta": { "message": "ಬ್ರೌಸಿಂಗ್ ಪ್ರಾರಂಭಿಸಿ →" },
+
+  "milestone_first_banner": { "message": "ಮೊದಲ ಬ್ಯಾನರ್ ತಡೆಯಲಾಗಿದೆ" },
+  "milestone_first_steps": { "message": "ಮೊದಲ ಹೆಜ್ಜೆಗಳು" },
+  "milestone_cookie_crusher": { "message": "ಕುಕೀ ಕ್ರಶರ್" },
+  "milestone_banner_bye_master": { "message": "ಬ್ಯಾನರ್ ಬೈ-ಬೈ ಮಾಸ್ಟರ್" },
+  "milestone_privacy_champion": { "message": "ಗೌಪ್ಯತೆ ಚಾಂಪಿಯನ್" },
+  "milestone_cookie_diet_month": { "message": "ಕುಕೀ ಡಯಟ್ · ಮೊದಲ ತಿಂಗಳು" },
+  "milestone_cookie_diet_year": { "message": "ಕುಕೀ ಡಯಟ್ · ಮೊದಲ ವರ್ಷ" },
+
+  "share_milestone_unlocked_label": { "message": "ಮೈಲಿಗಲ್ಲು ಅನ್‌ಲಾಕ್ ಆಗಿದೆ" },
+  "share_tagline": { "message": "ಕುಕೀ ಬ್ಯಾನರ್‌ಗಳು, ತಡೆಯಲ್ಪಟ್ಟಿವೆ. ಅವು ಲೋಡ್ ಆಗುವ ಮೊದಲೇ." },
+  "share_counter_singular": {
+    "message": "$COUNT$ ಕುಕೀ ಬ್ಯಾನರ್ ನಿರಾಕರಿಸಲಾಗಿದೆ",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "$COUNT$ ಕುಕೀ ಬ್ಯಾನರ್‌ಗಳನ್ನು ನಿರಾಕರಿಸಲಾಗಿದೆ",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "ನಿಮ್ಮ BannerBye ಕಥೆ" },
+  "share_milestones_unlocked": {
+    "message": "$TOTAL$ ರಲ್ಲಿ $COUNT$ ಮೈಲಿಗಲ್ಲುಗಳು ಅನ್‌ಲಾಕ್ ಆಗಿವೆ",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "$DATE$ ರಿಂದ",
+    "placeholders": { "date": { "content": "$1" } }
+  }
+}

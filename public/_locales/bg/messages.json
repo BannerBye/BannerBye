@@ -1,0 +1,180 @@
+{
+  "extName": {
+    "message": "BannerBye — банери за бисквитки, блокирани преди зареждане"
+  },
+  "extDesc": {
+    "message": "Банерите за бисквитки се блокират още преди да се заредят. Настройте поверителността си веднъж — BannerBye се грижи за останалото автоматично, на всеки сайт."
+  },
+
+  "popup_loading": { "message": "Зареждане…" },
+
+  "popup_status_off": { "message": "BannerBye е изключен навсякъде." },
+  "popup_status_no_site": { "message": "Няма сайт, върху който да се действа." },
+  "popup_status_paused": {
+    "message": "В пауза на $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "Активен на $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "Активен" },
+  "popup_status_dot_inactive_aria": { "message": "Неактивен" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "Включен" },
+  "popup_toggle_off": { "message": "Изключен" },
+  "popup_pause_site": { "message": "Пауза на този сайт" },
+  "popup_resume_site": { "message": "Възобновяване на този сайт" },
+
+  "popup_stat_label": { "message": "отхвърлени банера" },
+
+  "popup_activity_show": { "message": "Покажи доказателствата" },
+  "popup_activity_hide": { "message": "Скрий доказателствата" },
+  "popup_activity_no_banner": { "message": "Няма банер" },
+  "popup_activity_banner_refused_fallback": { "message": "Банерът е отхвърлен" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "току-що" },
+  "popup_time_minutes_ago": {
+    "message": "преди $MINUTES$ мин.",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "преди $HOURS$ ч.",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "преди 1 ден" },
+  "popup_time_days_ago": {
+    "message": "преди $DAYS$ дни",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "Съхранява се само на това устройство в продължение на седем дни. Никога не се изпраща никъде."
+  },
+  "popup_activity_clear": { "message": "Изчисти този списък" },
+
+  "popup_milestones_label": { "message": "Постижения" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "Изтегли изображение със статистиката →" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "Първо отхвърлете банер"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "Запазва споделяемо PNG изображение на статистиката ви в папката с изтеглени файлове"
+  },
+  "popup_footer_report": { "message": "Докладвай за неработещ сайт →" },
+  "popup_footer_rate": { "message": "Оцени BannerBye →" },
+  "popup_footer_rate_title": {
+    "message": "Оставете отзив — така BannerBye остава видим"
+  },
+
+  "popup_modal_title": { "message": "Докладване за неработещ сайт" },
+  "popup_modal_close_aria": { "message": "Затвори" },
+  "popup_modal_sent": {
+    "message": "Благодарим ви. Ще разгледаме $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "Ще изпратим името на хоста $HOST$ до BannerBye. По избор: добавете какво не работи.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "Какво се случва? (по избор)"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "Изпратете ми имейл, когато проблемът бъде отстранен (по избор)"
+  },
+  "popup_modal_fineprint": {
+    "message": "Оставете полето празно, за да останете напълно анонимни. Ако го попълните, ще го използваме само за да ви изпратим едно уведомление, когато този банер бъде обработен."
+  },
+  "popup_modal_error": {
+    "message": "Изпращането е неуспешно: $ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "Изпрати сигнала" },
+  "popup_modal_sending": { "message": "Изпращане…" },
+  "popup_modal_try_again": { "message": "Опитайте отново" },
+
+  "popup_celebration_label": { "message": "Отключено постижение" },
+  "popup_celebration_share_aria": { "message": "Изтегли карта за споделяне" },
+  "popup_celebration_dismiss_aria": { "message": "Затвори" },
+
+  "popup_reportfixed_label": { "message": "Банер, за който подадохте сигнал" },
+  "popup_reportfixed_text": {
+    "message": "Вече е блокиран на $HOST$",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "Еднократна молба" },
+  "popup_reviewask_title": { "message": "Наслаждавате ли се на тишината?" },
+  "popup_reviewask_text": {
+    "message": "Кратък отзив помага на другите да откриват BannerBye. Молим ви само веднъж — повече няма да ви питаме."
+  },
+  "popup_reviewask_cta": { "message": "Оценете BannerBye →" },
+  "popup_reviewask_dismiss_aria": { "message": "Не, благодаря" },
+  "popup_reviewask_dismiss_title": { "message": "Не, благодаря — няма да питаме отново" },
+
+  "onboarding_eyebrow": { "message": "Бърза настройка — вече сте защитени" },
+  "onboarding_headline_1": { "message": "Банери за бисквитки, блокирани." },
+  "onboarding_headline_2": { "message": "Преди да се заредят." },
+  "onboarding_body": {
+    "message": "Няма какво да конфигурирате. BannerBye вече прави това, точно в този момент:"
+  },
+  "onboarding_check1_title": { "message": "Отказва на всеки сайт" },
+  "onboarding_check1_desc": {
+    "message": "Изпраща „липса на съгласие“ автоматично и законно, преди банерът да успее да попита."
+  },
+  "onboarding_check2_title": { "message": "Работи безшумно" },
+  "onboarding_check2_desc": {
+    "message": "Няма да чуете повече от нас. Кликнете върху иконата на щита в лентата с инструменти по всяко време, за да видите колко банера сме отхвърлили."
+  },
+  "onboarding_check3_title": { "message": "Може да се отмени на всеки сайт" },
+  "onboarding_check3_desc": {
+    "message": "Банкиране, работни инструменти, влизане в профили — ако нещо изглежда развалено, отворете иконата с щита и натиснете „Пауза на този сайт“."
+  },
+  "onboarding_tip": {
+    "message": "Съвет: закрепете иконата за достъп с едно кликване — парченцето от пъзела в лентата с инструменти, намерете BannerBye, кликнете върху иконката за закрепване."
+  },
+  "onboarding_cta": { "message": "Започнете да сърфирате →" },
+
+  "milestone_first_banner": { "message": "Първи блокиран банер" },
+  "milestone_first_steps": { "message": "Първи стъпки" },
+  "milestone_cookie_crusher": { "message": "Унищожител на бисквитки" },
+  "milestone_banner_bye_master": { "message": "Майстор на „Сбогом, банери“" },
+  "milestone_privacy_champion": { "message": "Шампион по поверителност" },
+  "milestone_cookie_diet_month": { "message": "Диета за бисквитки · първи месец" },
+  "milestone_cookie_diet_year": { "message": "Диета за бисквитки · първа година" },
+
+  "share_milestone_unlocked_label": { "message": "ОТКЛЮЧЕНО ПОСТИЖЕНИЕ" },
+  "share_tagline": { "message": "Банери за бисквитки, блокирани. Преди да се заредят." },
+  "share_counter_singular": {
+    "message": "$COUNT$ отхвърлен банер за бисквитки",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "$COUNT$ отхвърлени банера за бисквитки",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "ВАШАТА ИСТОРИЯ С BANNERBYE" },
+  "share_milestones_unlocked": {
+    "message": "Отключени $COUNT$ от $TOTAL$ постижения",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "от $DATE$",
+    "placeholders": { "date": { "content": "$1" } }
+  }
+}

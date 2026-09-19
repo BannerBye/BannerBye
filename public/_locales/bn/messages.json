@@ -1,0 +1,180 @@
+{
+  "extName": {
+    "message": "BannerBye — কুকি ব্যানার লোড হওয়ার আগেই ব্লক"
+  },
+  "extDesc": {
+    "message": "কুকি ব্যানার লোড হওয়ার আগেই ব্লক হয়ে যায়। একবার আপনার গোপনীয়তা সেট করুন — বাকিটা BannerBye প্রতিটি সাইটে স্বয়ংক্রিয়ভাবে সামলায়।"
+  },
+
+  "popup_loading": { "message": "লোড হচ্ছে…" },
+
+  "popup_status_off": { "message": "BannerBye সর্বত্র বন্ধ আছে।" },
+  "popup_status_no_site": { "message": "কাজ করার মতো কোনো সাইট নেই।" },
+  "popup_status_paused": {
+    "message": "$HOST$-এ বিরতি দেওয়া হয়েছে।",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "$HOST$-এ সক্রিয়।",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "সক্রিয়" },
+  "popup_status_dot_inactive_aria": { "message": "নিষ্ক্রিয়" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "চালু" },
+  "popup_toggle_off": { "message": "বন্ধ" },
+  "popup_pause_site": { "message": "এই সাইটে বিরতি দিন" },
+  "popup_resume_site": { "message": "এই সাইটে পুনরায় চালু করুন" },
+
+  "popup_stat_label": { "message": "ব্যানার প্রত্যাখ্যাত" },
+
+  "popup_activity_show": { "message": "প্রমাণ দেখান" },
+  "popup_activity_hide": { "message": "প্রমাণ লুকান" },
+  "popup_activity_no_banner": { "message": "কোনো ব্যানার নেই" },
+  "popup_activity_banner_refused_fallback": { "message": "ব্যানার প্রত্যাখ্যাত" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "এইমাত্র" },
+  "popup_time_minutes_ago": {
+    "message": "$MINUTES$ মিনিট আগে",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "$HOURS$ ঘণ্টা আগে",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "1 দিন আগে" },
+  "popup_time_days_ago": {
+    "message": "$DAYS$ দিন আগে",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "শুধুমাত্র এই ডিভাইসে, সাত দিনের জন্য রাখা হয়। কোথাও পাঠানো হয় না।"
+  },
+  "popup_activity_clear": { "message": "এই তালিকা মুছুন" },
+
+  "popup_milestones_label": { "message": "মাইলফলক" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "পরিসংখ্যানের ছবি ডাউনলোড করুন →" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "প্রথমে একটি ব্যানার প্রত্যাখ্যান করুন"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "আপনার পরিসংখ্যানের একটি শেয়ারযোগ্য PNG ছবি আপনার ডাউনলোড ফোল্ডারে সংরক্ষণ করে"
+  },
+  "popup_footer_report": { "message": "ত্রুটিপূর্ণ সাইট রিপোর্ট করুন →" },
+  "popup_footer_rate": { "message": "BannerBye-কে রেট করুন →" },
+  "popup_footer_rate_title": {
+    "message": "একটি পর্যালোচনা দিন — এটি BannerBye-কে দৃশ্যমান রাখে"
+  },
+
+  "popup_modal_title": { "message": "ত্রুটিপূর্ণ সাইট রিপোর্ট করুন" },
+  "popup_modal_close_aria": { "message": "বন্ধ করুন" },
+  "popup_modal_sent": {
+    "message": "ধন্যবাদ। আমরা $HOST$ দেখে নেব।",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "আমরা হোস্টনেম $HOST$ BannerBye-তে পাঠাব। ঐচ্ছিক: কী সমস্যা হচ্ছে তা যোগ করুন।",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "কী ঘটছে? (ঐচ্ছিক)"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "মেরামত হলে আমাকে ইমেইল করুন (ঐচ্ছিক)"
+  },
+  "popup_modal_fineprint": {
+    "message": "সম্পূর্ণ অজ্ঞাতনামা থাকতে এটি খালি রাখুন। আপনি যদি এটি যোগ করেন, এই ব্যানারটি সমাধান হলে একবার জানানোর জন্যই আমরা এটি ব্যবহার করব।"
+  },
+  "popup_modal_error": {
+    "message": "পাঠানো যায়নি: $ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "রিপোর্ট পাঠান" },
+  "popup_modal_sending": { "message": "পাঠানো হচ্ছে…" },
+  "popup_modal_try_again": { "message": "আবার চেষ্টা করুন" },
+
+  "popup_celebration_label": { "message": "মাইলফলক আনলক হয়েছে" },
+  "popup_celebration_share_aria": { "message": "শেয়ার কার্ড ডাউনলোড করুন" },
+  "popup_celebration_dismiss_aria": { "message": "বাতিল করুন" },
+
+  "popup_reportfixed_label": { "message": "আপনার রিপোর্ট করা একটি ব্যানার" },
+  "popup_reportfixed_text": {
+    "message": "এখন $HOST$-এ ব্লক করা হয়েছে",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "এককালীন অনুরোধ" },
+  "popup_reviewask_title": { "message": "শান্তি উপভোগ করছেন?" },
+  "popup_reviewask_text": {
+    "message": "একটি সংক্ষিপ্ত পর্যালোচনা অন্যদের BannerBye খুঁজে পেতে সাহায্য করে। আমরা একবারই জিজ্ঞাসা করি — আর কখনও নয়।"
+  },
+  "popup_reviewask_cta": { "message": "BannerBye-কে রেট করুন →" },
+  "popup_reviewask_dismiss_aria": { "message": "না, ধন্যবাদ" },
+  "popup_reviewask_dismiss_title": { "message": "না, ধন্যবাদ — আমরা আর জিজ্ঞাসা করব না" },
+
+  "onboarding_eyebrow": { "message": "দ্রুত সেটআপ — আপনি ইতিমধ্যেই সুরক্ষিত" },
+  "onboarding_headline_1": { "message": "কুকি ব্যানার, ব্লক করা হয়েছে।" },
+  "onboarding_headline_2": { "message": "লোড হওয়ার আগেই।" },
+  "onboarding_body": {
+    "message": "কনফিগার করার কিছু নেই। BannerBye ইতিমধ্যেই এটি করছে, এই মুহূর্তে:"
+  },
+  "onboarding_check1_title": { "message": "প্রতিটি সাইটে প্রত্যাখ্যান করে" },
+  "onboarding_check1_desc": {
+    "message": "কোনো ব্যানার জিজ্ঞাসা করার সুযোগ পাওয়ার আগেই স্বয়ংক্রিয়ভাবে ও আইনসম্মতভাবে „কোনো সম্মতি নেই” পাঠায়।"
+  },
+  "onboarding_check2_title": { "message": "নীরবে কাজ করে" },
+  "onboarding_check2_desc": {
+    "message": "আপনি আর আমাদের কাছ থেকে কোনো খবর পাবেন না। আমরা কতগুলো ব্যানার প্রত্যাখ্যান করেছি তা দেখতে যে কোনো সময় আপনার টুলবারের ঢাল আইকনে ক্লিক করুন।"
+  },
+  "onboarding_check3_title": { "message": "যেকোনো সাইটে ফিরিয়ে নেওয়া যায়" },
+  "onboarding_check3_desc": {
+    "message": "ব্যাংকিং, কাজের সরঞ্জাম, লগইন — যদি কিছু ঠিকমতো কাজ না করে, ঢাল আইকনটি খুলুন এবং „এই সাইটে বিরতি দিন”-এ ক্লিক করুন।"
+  },
+  "onboarding_tip": {
+    "message": "টিপ: এক-ক্লিক অ্যাক্সেসের জন্য আইকনটি পিন করুন — টুলবারের পাজল পিস আইকনে ক্লিক করুন, BannerBye খুঁজে বের করুন, পিনে ক্লিক করুন।"
+  },
+  "onboarding_cta": { "message": "ব্রাউজিং শুরু করুন →" },
+
+  "milestone_first_banner": { "message": "প্রথম ব্যানার ব্লক" },
+  "milestone_first_steps": { "message": "প্রথম ধাপ" },
+  "milestone_cookie_crusher": { "message": "কুকি ক্রাশার" },
+  "milestone_banner_bye_master": { "message": "ব্যানার বাই-বাই মাস্টার" },
+  "milestone_privacy_champion": { "message": "গোপনীয়তা চ্যাম্পিয়ন" },
+  "milestone_cookie_diet_month": { "message": "কুকি ডায়েট · প্রথম মাস" },
+  "milestone_cookie_diet_year": { "message": "কুকি ডায়েট · প্রথম বছর" },
+
+  "share_milestone_unlocked_label": { "message": "মাইলফলক আনলক হয়েছে" },
+  "share_tagline": { "message": "কুকি ব্যানার, ব্লক করা হয়েছে। লোড হওয়ার আগেই।" },
+  "share_counter_singular": {
+    "message": "$COUNT$ কুকি ব্যানার প্রত্যাখ্যাত",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "$COUNT$ কুকি ব্যানার প্রত্যাখ্যাত",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "আপনার BannerBye গল্প" },
+  "share_milestones_unlocked": {
+    "message": "মোট $TOTAL$ মাইলফলকের মধ্যে $COUNT$ আনলক হয়েছে",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "$DATE$ থেকে",
+    "placeholders": { "date": { "content": "$1" } }
+  }
+}

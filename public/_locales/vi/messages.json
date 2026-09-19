@@ -1,0 +1,180 @@
+{
+  "extName": {
+    "message": "BannerBye — chặn banner cookie trước khi chúng tải"
+  },
+  "extDesc": {
+    "message": "Banner cookie bị chặn trước khi chúng tải. Thiết lập quyền riêng tư một lần — BannerBye tự động từ chối trên mọi trang web."
+  },
+
+  "popup_loading": { "message": "Đang tải…" },
+
+  "popup_status_off": { "message": "BannerBye đã bị tắt ở mọi nơi." },
+  "popup_status_no_site": { "message": "Không có trang web nào cần bảo vệ." },
+  "popup_status_paused": {
+    "message": "Đang tạm dừng trên $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "Đang hoạt động trên $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "Đang hoạt động" },
+  "popup_status_dot_inactive_aria": { "message": "Không hoạt động" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "Bật" },
+  "popup_toggle_off": { "message": "Tắt" },
+  "popup_pause_site": { "message": "Tạm dừng trên trang web này" },
+  "popup_resume_site": { "message": "Tiếp tục trên trang web này" },
+
+  "popup_stat_label": { "message": "banner bị từ chối" },
+
+  "popup_activity_show": { "message": "Hiển thị bằng chứng" },
+  "popup_activity_hide": { "message": "Ẩn bằng chứng" },
+  "popup_activity_no_banner": { "message": "Không có banner" },
+  "popup_activity_banner_refused_fallback": { "message": "Banner bị từ chối" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "vừa rồi" },
+  "popup_time_minutes_ago": {
+    "message": "$MINUTES$ phút trước",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "$HOURS$ giờ trước",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "1 ngày trước" },
+  "popup_time_days_ago": {
+    "message": "$DAYS$ ngày trước",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "Chỉ được lưu trên thiết bị này trong bảy ngày. Không bao giờ được gửi đi đâu cả."
+  },
+  "popup_activity_clear": { "message": "Xóa danh sách này" },
+
+  "popup_milestones_label": { "message": "Cột mốc" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "Tải xuống hình ảnh thống kê →" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "Hãy từ chối một banner trước đã"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "Lưu hình ảnh PNG có thể chia sẻ về thống kê của bạn vào thư mục tải xuống"
+  },
+  "popup_footer_report": { "message": "Báo cáo trang web bị lỗi →" },
+  "popup_footer_rate": { "message": "Đánh giá BannerBye →" },
+  "popup_footer_rate_title": {
+    "message": "Để lại đánh giá — điều này giúp BannerBye tiếp tục được hiển thị"
+  },
+
+  "popup_modal_title": { "message": "Báo cáo trang web bị lỗi" },
+  "popup_modal_close_aria": { "message": "Đóng" },
+  "popup_modal_sent": {
+    "message": "Cảm ơn. Chúng tôi sẽ kiểm tra $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "Chúng tôi sẽ gửi tên máy chủ $HOST$ đến BannerBye. Tùy chọn: mô tả vấn đề.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "Có vấn đề gì vậy? (tùy chọn)"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "Gửi email cho tôi khi sự cố được khắc phục (tùy chọn)"
+  },
+  "popup_modal_fineprint": {
+    "message": "Để trống ô này để duy trì tính ẩn danh hoàn toàn. Nếu bạn điền vào, chúng tôi chỉ sử dụng thông tin này để gửi cho bạn một thông báo duy nhất khi banner này đã được khắc phục."
+  },
+  "popup_modal_error": {
+    "message": "Không thể gửi: $ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "Gửi báo cáo" },
+  "popup_modal_sending": { "message": "Đang gửi…" },
+  "popup_modal_try_again": { "message": "Thử lại" },
+
+  "popup_celebration_label": { "message": "Cột mốc đã mở khóa" },
+  "popup_celebration_share_aria": { "message": "Tải xuống thẻ chia sẻ" },
+  "popup_celebration_dismiss_aria": { "message": "Đóng" },
+
+  "popup_reportfixed_label": { "message": "Một banner mà bạn đã báo cáo" },
+  "popup_reportfixed_text": {
+    "message": "Hiện đã bị từ chối trên $HOST$",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "Yêu cầu một lần duy nhất" },
+  "popup_reviewask_title": { "message": "Thích sự yên tĩnh?" },
+  "popup_reviewask_text": {
+    "message": "Một đánh giá nhanh giúp mọi người tìm thấy BannerBye. Chúng tôi chỉ hỏi một lần — sẽ không bao giờ hỏi lại."
+  },
+  "popup_reviewask_cta": { "message": "Đánh giá BannerBye →" },
+  "popup_reviewask_dismiss_aria": { "message": "Không, cảm ơn" },
+  "popup_reviewask_dismiss_title": { "message": "Không, cảm ơn — chúng tôi sẽ không hỏi lại" },
+
+  "onboarding_eyebrow": { "message": "Cài đặt nhanh — bạn đã được bảo vệ" },
+  "onboarding_headline_1": { "message": "Banner cookie, bị chặn." },
+  "onboarding_headline_2": { "message": "Trước khi chúng được tải." },
+  "onboarding_body": {
+    "message": "Không cần thiết lập gì cả. BannerBye đã thực hiện điều này ngay lúc này:"
+  },
+  "onboarding_check1_title": { "message": "Từ chối trên mọi trang web" },
+  "onboarding_check1_desc": {
+    "message": "Tự động gửi thông báo „không đồng ý” theo cách hợp pháp, trước khi banner kịp yêu cầu sự đồng ý của bạn."
+  },
+  "onboarding_check2_title": { "message": "Hoạt động âm thầm" },
+  "onboarding_check2_desc": {
+    "message": "Bạn sẽ không nhận được thông báo nào từ chúng tôi nữa. Nhấp vào biểu tượng lá chắn trên thanh công cụ bất cứ lúc nào để xem chúng tôi đã từ chối bao nhiêu banner."
+  },
+  "onboarding_check3_title": { "message": "Có thể hoàn tác trên mọi trang web" },
+  "onboarding_check3_desc": {
+    "message": "Ngân hàng, công cụ làm việc, đăng nhập — nếu có gì đó trông không hoạt động bình thường, hãy mở biểu tượng lá chắn và nhấn „Tạm dừng trên trang web này”."
+  },
+  "onboarding_tip": {
+    "message": "Mẹo: Ghim biểu tượng để truy cập chỉ với một cú nhấp — tìm hình mảnh ghép trên thanh công cụ, chọn BannerBye, nhấp vào biểu tượng ghim."
+  },
+  "onboarding_cta": { "message": "Bắt đầu duyệt web →" },
+
+  "milestone_first_banner": { "message": "Banner đầu tiên bị chặn" },
+  "milestone_first_steps": { "message": "Những bước đầu tiên" },
+  "milestone_cookie_crusher": { "message": "Kẻ tiêu diệt cookie" },
+  "milestone_banner_bye_master": { "message": "Bậc thầy banner" },
+  "milestone_privacy_champion": { "message": "Nhà vô địch quyền riêng tư" },
+  "milestone_cookie_diet_month": { "message": "Chế độ ăn kiêng cookie · tháng đầu tiên" },
+  "milestone_cookie_diet_year": { "message": "Chế độ ăn kiêng cookie · năm đầu tiên" },
+
+  "share_milestone_unlocked_label": { "message": "CỘT MỐC ĐÃ MỞ KHÓA" },
+  "share_tagline": { "message": "Banner cookie, bị chặn. Trước khi chúng được tải." },
+  "share_counter_singular": {
+    "message": "$COUNT$ banner cookie bị từ chối",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "$COUNT$ banner cookie bị từ chối",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "CÂU CHUYỆN BANNERBYE CỦA BẠN" },
+  "share_milestones_unlocked": {
+    "message": "Đã mở khóa $COUNT$ trong số $TOTAL$ cột mốc",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "kể từ $DATE$",
+    "placeholders": { "date": { "content": "$1" } }
+  }
+}

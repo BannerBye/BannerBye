@@ -1,0 +1,180 @@
+{
+  "extName": {
+    "message": "BannerBye — 在載入前阻擋 Cookie 橫幅"
+  },
+  "extDesc": {
+    "message": "Cookie 橫幅在載入前就被阻擋。隱私權選項只需設定一次，其餘交給 BannerBye — 在每個網站上自動處理。"
+  },
+
+  "popup_loading": { "message": "載入中…" },
+
+  "popup_status_off": { "message": "BannerBye 在所有網站上皆已關閉。" },
+  "popup_status_no_site": { "message": "無網站可處理。" },
+  "popup_status_paused": {
+    "message": "已在 $HOST$ 上暫停。",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "已在 $HOST$ 上啟用。",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "啟用" },
+  "popup_status_dot_inactive_aria": { "message": "停用" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "開啟" },
+  "popup_toggle_off": { "message": "關閉" },
+  "popup_pause_site": { "message": "在此網站上暫停" },
+  "popup_resume_site": { "message": "在此網站上恢復" },
+
+  "popup_stat_label": { "message": "個橫幅已拒絕" },
+
+  "popup_activity_show": { "message": "顯示證據" },
+  "popup_activity_hide": { "message": "隱藏證據" },
+  "popup_activity_no_banner": { "message": "無橫幅" },
+  "popup_activity_banner_refused_fallback": { "message": "橫幅已拒絕" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "剛剛" },
+  "popup_time_minutes_ago": {
+    "message": "$MINUTES$ 分鐘前",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "$HOURS$ 小時前",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "1 天前" },
+  "popup_time_days_ago": {
+    "message": "$DAYS$ 天前",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "僅保留於本裝置七天，絕不傳送至任何地方。"
+  },
+  "popup_activity_clear": { "message": "清除此清單" },
+
+  "popup_milestones_label": { "message": "里程碑" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "下載統計圖像 →" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "請先拒絕一個橫幅"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "將您的統計數據以可分享的 PNG 圖像儲存至下載資料夾"
+  },
+  "popup_footer_report": { "message": "回報網站異常 →" },
+  "popup_footer_rate": { "message": "為 BannerBye 評分 →" },
+  "popup_footer_rate_title": {
+    "message": "留下評論 — 這能讓 BannerBye 持續被看見"
+  },
+
+  "popup_modal_title": { "message": "回報網站異常" },
+  "popup_modal_close_aria": { "message": "關閉" },
+  "popup_modal_sent": {
+    "message": "感謝您。我們將檢視 $HOST$。",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "我們將把主機名稱 $HOST$ 傳送至 BannerBye。可選：請說明問題所在。",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "發生什麼事了？（可選）"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "修復後請寄電子郵件通知我（可選）"
+  },
+  "popup_modal_fineprint": {
+    "message": "留空即可完全匿名。若您填寫此欄位，我們僅會於處理此橫幅時，發送一次通知給您。"
+  },
+  "popup_modal_error": {
+    "message": "無法傳送：$ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "傳送回報" },
+  "popup_modal_sending": { "message": "傳送中…" },
+  "popup_modal_try_again": { "message": "再試一次" },
+
+  "popup_celebration_label": { "message": "里程碑已解鎖" },
+  "popup_celebration_share_aria": { "message": "下載分享卡" },
+  "popup_celebration_dismiss_aria": { "message": "關閉" },
+
+  "popup_reportfixed_label": { "message": "您回報過的橫幅" },
+  "popup_reportfixed_text": {
+    "message": "現已在 $HOST$ 上阻擋",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "一次性請求" },
+  "popup_reviewask_title": { "message": "享受這份寧靜嗎？" },
+  "popup_reviewask_text": {
+    "message": "寫個簡短評論，讓 BannerBye 更容易被找到。我們只問一次——絕不再問。"
+  },
+  "popup_reviewask_cta": { "message": "為 BannerBye 評分 →" },
+  "popup_reviewask_dismiss_aria": { "message": "不用了，謝謝" },
+  "popup_reviewask_dismiss_title": { "message": "不用了，謝謝——我們不會再問了" },
+
+  "onboarding_eyebrow": { "message": "快速設定——您已經受到保護" },
+  "onboarding_headline_1": { "message": "Cookie 橫幅，已阻擋。" },
+  "onboarding_headline_2": { "message": "在它們載入之前。" },
+  "onboarding_body": {
+    "message": "無需任何設定。BannerBye 此刻已在自動執行："
+  },
+  "onboarding_check1_title": { "message": "在每個網站上皆予以拒絕" },
+  "onboarding_check1_desc": {
+    "message": "在橫幅有機會詢問之前，自動且合法地傳送「不同意」。"
+  },
+  "onboarding_check2_title": { "message": "靜默運作" },
+  "onboarding_check2_desc": {
+    "message": "您將不再收到我們的通知。隨時點擊工具列中的盾牌圖示，即可查看我們已拒絕了多少個橫幅。"
+  },
+  "onboarding_check3_title": { "message": "任何網站皆可還原" },
+  "onboarding_check3_desc": {
+    "message": "銀行、工作工具、登入頁面——若某個網站顯示異常，請開啟盾牌圖示並點擊「在此網站上暫停」。"
+  },
+  "onboarding_tip": {
+    "message": "小技巧：將圖示釘選即可一鍵存取——在工具列的拼圖圖示中找到 BannerBye，點擊釘選圖示。"
+  },
+  "onboarding_cta": { "message": "開始瀏覽 →" },
+
+  "milestone_first_banner": { "message": "阻擋首個橫幅" },
+  "milestone_first_steps": { "message": "第一步" },
+  "milestone_cookie_crusher": { "message": "Cookie 粉碎機" },
+  "milestone_banner_bye_master": { "message": "橫幅告別大師" },
+  "milestone_privacy_champion": { "message": "隱私衛士" },
+  "milestone_cookie_diet_month": { "message": "Cookie 減重計畫 · 第一個月" },
+  "milestone_cookie_diet_year": { "message": "Cookie 減重計畫 · 第一年" },
+
+  "share_milestone_unlocked_label": { "message": "里程碑已解鎖" },
+  "share_tagline": { "message": "Cookie 橫幅，已阻擋。在它們載入之前。" },
+  "share_counter_singular": {
+    "message": "已拒絕 $COUNT$ 個 Cookie 橫幅",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "已拒絕 $COUNT$ 個 Cookie 橫幅",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "您的 BannerBye 故事" },
+  "share_milestones_unlocked": {
+    "message": "已解鎖 $TOTAL$ 個里程碑中的 $COUNT$ 個",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "自 $DATE$ 起",
+    "placeholders": { "date": { "content": "$1" } }
+  }
+}

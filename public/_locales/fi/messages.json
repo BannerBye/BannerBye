@@ -1,0 +1,180 @@
+{
+  "extName": {
+    "message": "BannerBye — estää evästebannerit ennen latautumista"
+  },
+  "extDesc": {
+    "message": "Evästebannerit estetty ennen kuin ne latautuvat. Aseta yksityisyytesi kerran — BannerBye kieltäytyy automaattisesti joka sivustolla."
+  },
+
+  "popup_loading": { "message": "Ladataan…" },
+
+  "popup_status_off": { "message": "BannerBye on pois päältä kaikkialla." },
+  "popup_status_no_site": { "message": "Suojattavaa sivustoa ei ole." },
+  "popup_status_paused": {
+    "message": "Keskeytetty sivustolla $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "Aktiivinen sivustolla $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "Aktiivinen" },
+  "popup_status_dot_inactive_aria": { "message": "Passiivinen" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "Päällä" },
+  "popup_toggle_off": { "message": "Pois päältä" },
+  "popup_pause_site": { "message": "Keskeytä tällä sivustolla" },
+  "popup_resume_site": { "message": "Jatka tällä sivustolla" },
+
+  "popup_stat_label": { "message": "banneria hylätty" },
+
+  "popup_activity_show": { "message": "Näytä todisteet" },
+  "popup_activity_hide": { "message": "Piilota todisteet" },
+  "popup_activity_no_banner": { "message": "Ei banneria" },
+  "popup_activity_banner_refused_fallback": { "message": "Banneri hylätty" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "juuri äsken" },
+  "popup_time_minutes_ago": {
+    "message": "$MINUTES$ min sitten",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "$HOURS$ t sitten",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "1 päivä sitten" },
+  "popup_time_days_ago": {
+    "message": "$DAYS$ päivää sitten",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "Tallennettu vain tälle laitteelle seitsemäksi päiväksi. Ei lähetetä minnekään."
+  },
+  "popup_activity_clear": { "message": "Tyhjennä tämä luettelo" },
+
+  "popup_milestones_label": { "message": "Virstanpylväät" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "Lataa tilastokuva →" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "Hylkää banneri ensin"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "Tallentaa jaettavan PNG-kuvan tilastoistasi latauskansioosi"
+  },
+  "popup_footer_report": { "message": "Ilmoita toimimattomasta sivustosta →" },
+  "popup_footer_rate": { "message": "Arvioi BannerBye →" },
+  "popup_footer_rate_title": {
+    "message": "Jätä arvostelu — se auttaa pitämään BannerByen näkyvissä"
+  },
+
+  "popup_modal_title": { "message": "Ilmoita toimimattomasta sivustosta" },
+  "popup_modal_close_aria": { "message": "Sulje" },
+  "popup_modal_sent": {
+    "message": "Kiitos. Tarkistamme sivuston $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "Lähetämme isäntänimen $HOST$ BannerByelle. Valinnainen: lisää, mikä on vialla.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "Mitä tapahtuu? (valinnainen)"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "Lähetä minulle sähköpostia, kun vika on korjattu (valinnainen)"
+  },
+  "popup_modal_fineprint": {
+    "message": "Jätä tämä kenttä tyhjäksi, jos haluat pysyä täysin nimettömänä. Jos täytät kentän, käytämme sitä vain lähettääksemme sinulle kertaluonteisen ilmoituksen, kun tämä banneri on korjattu."
+  },
+  "popup_modal_error": {
+    "message": "Lähetys epäonnistui: $ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "Lähetä ilmoitus" },
+  "popup_modal_sending": { "message": "Lähetetään…" },
+  "popup_modal_try_again": { "message": "Yritä uudelleen" },
+
+  "popup_celebration_label": { "message": "Virstanpylväs avattu" },
+  "popup_celebration_share_aria": { "message": "Lataa jakokortti" },
+  "popup_celebration_dismiss_aria": { "message": "Sulje" },
+
+  "popup_reportfixed_label": { "message": "Ilmoittamasi banneri" },
+  "popup_reportfixed_text": {
+    "message": "Nyt hylätty sivustolla $HOST$",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "Kertaluonteinen pyyntö" },
+  "popup_reviewask_title": { "message": "Nautitko hiljaisuudesta?" },
+  "popup_reviewask_text": {
+    "message": "Lyhyt arvostelu auttaa muita löytämään BannerByen. Kysymme tämän kerran — emme enää koskaan."
+  },
+  "popup_reviewask_cta": { "message": "Arvioi BannerBye →" },
+  "popup_reviewask_dismiss_aria": { "message": "Ei, kiitos" },
+  "popup_reviewask_dismiss_title": { "message": "Ei, kiitos — emme kysy enää uudelleen" },
+
+  "onboarding_eyebrow": { "message": "Nopea asennus — olet jo suojattu" },
+  "onboarding_headline_1": { "message": "Evästebannerit, estetty." },
+  "onboarding_headline_2": { "message": "Ennen kuin ne latautuvat." },
+  "onboarding_body": {
+    "message": "Mitään ei tarvitse asettaa. BannerBye hoitaa tämän jo nyt:"
+  },
+  "onboarding_check1_title": { "message": "Kieltäytyy jokaisella sivustolla" },
+  "onboarding_check1_desc": {
+    "message": "Lähettää automaattisesti ”ei suostumusta” laillisesti pätevällä tavalla, ennen kuin bannerilla on edes mahdollisuutta kysyä sinulta."
+  },
+  "onboarding_check2_title": { "message": "Toimii huomaamattomasti" },
+  "onboarding_check2_desc": {
+    "message": "Et kuule meistä enää mitään. Napsauta työkalurivin kilpikuvaketta milloin tahansa nähdäksesi, kuinka monta banneria olemme hylänneet."
+  },
+  "onboarding_check3_title": { "message": "Voidaan peruuttaa millä tahansa sivustolla" },
+  "onboarding_check3_desc": {
+    "message": "Pankkiasiat, työvälineet, kirjautumiset — jos jokin näyttää toimimattomalta, avaa kilpikuvake ja valitse ”Keskeytä tällä sivustolla”."
+  },
+  "onboarding_tip": {
+    "message": "Vinkki: kiinnitä kuvake, jotta pääset siihen yhdellä napsautuksella — palapelin pala työkalurivillä, valitse BannerBye ja napsauta kiinnityskuvaketta."
+  },
+  "onboarding_cta": { "message": "Aloita selailu →" },
+
+  "milestone_first_banner": { "message": "Ensimmäinen banneri estetty" },
+  "milestone_first_steps": { "message": "Ensimmäiset askeleet" },
+  "milestone_cookie_crusher": { "message": "Evästeiden murskaaja" },
+  "milestone_banner_bye_master": { "message": "Bannerien mestari" },
+  "milestone_privacy_champion": { "message": "Yksityisyyden puolustaja" },
+  "milestone_cookie_diet_month": { "message": "Evästedieetti · ensimmäinen kuukausi" },
+  "milestone_cookie_diet_year": { "message": "Evästedieetti · ensimmäinen vuosi" },
+
+  "share_milestone_unlocked_label": { "message": "VIRSTANPYLVÄS AVATTU" },
+  "share_tagline": { "message": "Evästebannerit, estetty. Ennen kuin ne latautuvat." },
+  "share_counter_singular": {
+    "message": "$COUNT$ evästebanneri hylätty",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "$COUNT$ evästebanneria hylätty",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "OMA BANNERBYE-TARINASI" },
+  "share_milestones_unlocked": {
+    "message": "$COUNT$/$TOTAL$ virstanpylvästä avattu",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "alkaen $DATE$",
+    "placeholders": { "date": { "content": "$1" } }
+  }
+}

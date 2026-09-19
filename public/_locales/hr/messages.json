@@ -1,0 +1,180 @@
+{
+  "extName": {
+    "message": "BannerBye — baneri o kolačićima blokirani prije učitavanja"
+  },
+  "extDesc": {
+    "message": "Baneri o kolačićima blokirani su prije nego što se učitaju. Postavite privatnost jednom — o ostalom se brine BannerBye, automatski i na svakoj stranici."
+  },
+
+  "popup_loading": { "message": "Učitavanje…" },
+
+  "popup_status_off": { "message": "BannerBye je svugdje isključen." },
+  "popup_status_no_site": { "message": "Nema stranice na kojoj bi se moglo djelovati." },
+  "popup_status_paused": {
+    "message": "Pauzirano na $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "Aktivno na $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "Aktivno" },
+  "popup_status_dot_inactive_aria": { "message": "Neaktivno" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "Uključeno" },
+  "popup_toggle_off": { "message": "Isključeno" },
+  "popup_pause_site": { "message": "Pauziraj na ovoj stranici" },
+  "popup_resume_site": { "message": "Nastavi na ovoj stranici" },
+
+  "popup_stat_label": { "message": "odbijenih banera" },
+
+  "popup_activity_show": { "message": "Prikaži dokaze" },
+  "popup_activity_hide": { "message": "Sakrij dokaze" },
+  "popup_activity_no_banner": { "message": "Nema banera" },
+  "popup_activity_banner_refused_fallback": { "message": "Baner odbijen" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "upravo sada" },
+  "popup_time_minutes_ago": {
+    "message": "prije $MINUTES$ min",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "prije $HOURS$ h",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "prije 1 dan" },
+  "popup_time_days_ago": {
+    "message": "prije $DAYS$ dana",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "Čuva se samo na ovom uređaju, sedam dana. Nikada se nikamo ne šalje."
+  },
+  "popup_activity_clear": { "message": "Očisti ovaj popis" },
+
+  "popup_milestones_label": { "message": "Prekretnice" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "Preuzmi sliku sa statistikom →" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "Prvo odbijte neki baner"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "Sprema PNG sliku vaše statistike za dijeljenje u mapu preuzimanja"
+  },
+  "popup_footer_report": { "message": "Prijavi neispravnu stranicu →" },
+  "popup_footer_rate": { "message": "Ocijeni BannerBye →" },
+  "popup_footer_rate_title": {
+    "message": "Ostavite recenziju — tako BannerBye ostaje vidljiv"
+  },
+
+  "popup_modal_title": { "message": "Prijava neispravne stranice" },
+  "popup_modal_close_aria": { "message": "Zatvori" },
+  "popup_modal_sent": {
+    "message": "Hvala. Pogledat ćemo $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "Poslat ćemo naziv poslužitelja $HOST$ u BannerBye. Po želji: dodajte što nije u redu.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "Što se događa? (po želji)"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "Pošaljite mi e-poštu kada bude popravljeno (po želji)"
+  },
+  "popup_modal_fineprint": {
+    "message": "Ostavite prazno kako biste ostali potpuno anonimni. Ako ga dodate, koristit ćemo ga samo da vam pošaljemo jednu obavijest kada ovaj baner bude riješen."
+  },
+  "popup_modal_error": {
+    "message": "Slanje nije uspjelo: $ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "Pošalji prijavu" },
+  "popup_modal_sending": { "message": "Slanje…" },
+  "popup_modal_try_again": { "message": "Pokušaj ponovno" },
+
+  "popup_celebration_label": { "message": "Prekretnica otključana" },
+  "popup_celebration_share_aria": { "message": "Preuzmi karticu za dijeljenje" },
+  "popup_celebration_dismiss_aria": { "message": "Zatvori" },
+
+  "popup_reportfixed_label": { "message": "Baner koji ste prijavili" },
+  "popup_reportfixed_text": {
+    "message": "Sada je blokiran na $HOST$",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "Jednokratna molba" },
+  "popup_reviewask_title": { "message": "Uživate u miru?" },
+  "popup_reviewask_text": {
+    "message": "Kratka recenzija pomaže drugima pronaći BannerBye. Pitamo samo jednom — nikad više."
+  },
+  "popup_reviewask_cta": { "message": "Ocijeni BannerBye →" },
+  "popup_reviewask_dismiss_aria": { "message": "Ne, hvala" },
+  "popup_reviewask_dismiss_title": { "message": "Ne, hvala — nećemo vas više pitati" },
+
+  "onboarding_eyebrow": { "message": "Brzo postavljanje — već ste zaštićeni" },
+  "onboarding_headline_1": { "message": "Baneri o kolačićima, blokirani." },
+  "onboarding_headline_2": { "message": "Prije nego što se učitaju." },
+  "onboarding_body": {
+    "message": "Nema ništa za podesiti. BannerBye to već radi, upravo sada:"
+  },
+  "onboarding_check1_title": { "message": "Odbija na svakoj stranici" },
+  "onboarding_check1_desc": {
+    "message": "Automatski i zakonito šalje „ne pristajem”, prije nego što baner uopće dobije priliku pitati."
+  },
+  "onboarding_check2_title": { "message": "Radi neprimjetno" },
+  "onboarding_check2_desc": {
+    "message": "Nećete nas više čuti. Kliknite ikonu štita u alatnoj traci u bilo kojem trenutku kako biste vidjeli koliko smo banera odbili."
+  },
+  "onboarding_check3_title": { "message": "Može se poništiti na bilo kojoj stranici" },
+  "onboarding_check3_desc": {
+    "message": "Bankarstvo, radni alati, prijave — ako nešto izgleda neispravno, otvorite ikonu štita i kliknite „Pauziraj na ovoj stranici”."
+  },
+  "onboarding_tip": {
+    "message": "Savjet: pričvrstite ikonu za pristup jednim klikom — kliknite slagalicu u alatnoj traci, pronađite BannerBye i kliknite pribadaču."
+  },
+  "onboarding_cta": { "message": "Počnite pregledavati →" },
+
+  "milestone_first_banner": { "message": "Prvi blokirani baner" },
+  "milestone_first_steps": { "message": "Prvi koraci" },
+  "milestone_cookie_crusher": { "message": "Drobilica kolačića" },
+  "milestone_banner_bye_master": { "message": "Majstor opraštanja od banera" },
+  "milestone_privacy_champion": { "message": "Prvak privatnosti" },
+  "milestone_cookie_diet_month": { "message": "Dijeta bez kolačića · prvi mjesec" },
+  "milestone_cookie_diet_year": { "message": "Dijeta bez kolačića · prva godina" },
+
+  "share_milestone_unlocked_label": { "message": "PREKRETNICA OTKLJUČANA" },
+  "share_tagline": { "message": "Baneri o kolačićima, blokirani. Prije nego što se učitaju." },
+  "share_counter_singular": {
+    "message": "$COUNT$ odbijen baner o kolačićima",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "$COUNT$ odbijenih banera o kolačićima",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "VAŠA BANNERBYE PRIČA" },
+  "share_milestones_unlocked": {
+    "message": "$COUNT$ od $TOTAL$ prekretnica otključano",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "od $DATE$",
+    "placeholders": { "date": { "content": "$1" } }
+  }
+}

@@ -1,0 +1,180 @@
+{
+  "extName": {
+    "message": "BannerBye — küpsisebännerid blokeeritud enne laadimist"
+  },
+  "extDesc": {
+    "message": "Küpsisebännerid blokeeritakse juba enne, kui need laaditakse. Määra privaatsus üks kord — ülejäänu teeb BannerBye automaatselt, igal veebisaidil."
+  },
+
+  "popup_loading": { "message": "Laaditakse…" },
+
+  "popup_status_off": { "message": "BannerBye on kõikjal välja lülitatud." },
+  "popup_status_no_site": { "message": "Pole veebisaiti, mille suhtes tegutseda." },
+  "popup_status_paused": {
+    "message": "Peatatud saidil $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "Aktiivne saidil $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "Aktiivne" },
+  "popup_status_dot_inactive_aria": { "message": "Mitteaktiivne" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "Sees" },
+  "popup_toggle_off": { "message": "Väljas" },
+  "popup_pause_site": { "message": "Peata sellel saidil" },
+  "popup_resume_site": { "message": "Jätka sellel saidil" },
+
+  "popup_stat_label": { "message": "bännerit tagasi lükatud" },
+
+  "popup_activity_show": { "message": "Näita tõendeid" },
+  "popup_activity_hide": { "message": "Peida tõendid" },
+  "popup_activity_no_banner": { "message": "Bännerit pole" },
+  "popup_activity_banner_refused_fallback": { "message": "Bänner lükati tagasi" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "just äsja" },
+  "popup_time_minutes_ago": {
+    "message": "$MINUTES$ min tagasi",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "$HOURS$ t tagasi",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "1 päev tagasi" },
+  "popup_time_days_ago": {
+    "message": "$DAYS$ päeva tagasi",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "Säilitatakse ainult selles seadmes, seitse päeva. Ei saadeta kunagi kuhugi."
+  },
+  "popup_activity_clear": { "message": "Tühjenda see nimekiri" },
+
+  "popup_milestones_label": { "message": "Verstapostid" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "Laadi alla statistikapilt →" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "Lükka esmalt mõni bänner tagasi"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "Salvestab sinu statistikast jagatava PNG-pildi allalaadimiste kausta"
+  },
+  "popup_footer_report": { "message": "Teata rikkis saidist →" },
+  "popup_footer_rate": { "message": "Hinda BannerBye'd →" },
+  "popup_footer_rate_title": {
+    "message": "Jäta arvustus — see hoiab BannerBye'd nähtaval"
+  },
+
+  "popup_modal_title": { "message": "Teata rikkis saidist" },
+  "popup_modal_close_aria": { "message": "Sulge" },
+  "popup_modal_sent": {
+    "message": "Täname. Vaatame $HOST$ üle.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "Saadame hostinime $HOST$ BannerBye'le. Valikuline: lisa, mis valesti läheb.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "Mis toimub? (valikuline)"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "Saada mulle e-kiri, kui probleem on lahendatud (valikuline)"
+  },
+  "popup_modal_fineprint": {
+    "message": "Jäta see tühjaks, et jääda täiesti anonüümseks. Kui lisad selle, kasutame seda ainult ühe teate saatmiseks, kui see bänner on lahendatud."
+  },
+  "popup_modal_error": {
+    "message": "Saatmine ebaõnnestus: $ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "Saada teade" },
+  "popup_modal_sending": { "message": "Saadetakse…" },
+  "popup_modal_try_again": { "message": "Proovi uuesti" },
+
+  "popup_celebration_label": { "message": "Verstapost saavutatud" },
+  "popup_celebration_share_aria": { "message": "Laadi jagamiskaart alla" },
+  "popup_celebration_dismiss_aria": { "message": "Sulge" },
+
+  "popup_reportfixed_label": { "message": "Bänner, millest sa teatasid" },
+  "popup_reportfixed_text": {
+    "message": "Nüüd blokeeritud saidil $HOST$",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "Ühekordne palve" },
+  "popup_reviewask_title": { "message": "Kas naudid vaikust?" },
+  "popup_reviewask_text": {
+    "message": "Lühike arvustus aitab teistel BannerBye'd leida. Küsime seda vaid üks kord — enam kunagi."
+  },
+  "popup_reviewask_cta": { "message": "Hinda BannerBye'd →" },
+  "popup_reviewask_dismiss_aria": { "message": "Ei, aitäh" },
+  "popup_reviewask_dismiss_title": { "message": "Ei, aitäh — me ei küsi enam" },
+
+  "onboarding_eyebrow": { "message": "Kiire seadistus — oled juba kaitstud" },
+  "onboarding_headline_1": { "message": "Küpsisebännerid, blokeeritud." },
+  "onboarding_headline_2": { "message": "Enne, kui need laaditakse." },
+  "onboarding_body": {
+    "message": "Midagi pole vaja seadistada. BannerBye teeb seda juba praegu:"
+  },
+  "onboarding_check1_title": { "message": "Keeldub igal saidil" },
+  "onboarding_check1_desc": {
+    "message": "Saadab automaatselt ja seaduslikult „nõusolek puudub”, enne kui bänner jõuab küsida."
+  },
+  "onboarding_check2_title": { "message": "Töötab vaikselt" },
+  "onboarding_check2_desc": {
+    "message": "Meilt sa enam midagi ei kuule. Klõpsa igal ajal tööriistaribal kilbiikoonil, et näha, kui palju bännereid oleme tagasi lükanud."
+  },
+  "onboarding_check3_title": { "message": "Igal saidil tagasipööratav" },
+  "onboarding_check3_desc": {
+    "message": "Pangandus, töövahendid, sisselogimised — kui midagi ei tööta, ava kilbiikoon ja klõpsa „Peata sellel saidil”."
+  },
+  "onboarding_tip": {
+    "message": "Näpunäide: kinnita ikoon ühe klõpsuga juurdepääsuks — klõpsa tööriistaribal pusletükil, leia BannerBye ja klõpsa nõelal."
+  },
+  "onboarding_cta": { "message": "Alusta sirvimist →" },
+
+  "milestone_first_banner": { "message": "Esimene bänner blokeeritud" },
+  "milestone_first_steps": { "message": "Esimesed sammud" },
+  "milestone_cookie_crusher": { "message": "Küpsiste purustaja" },
+  "milestone_banner_bye_master": { "message": "Bänneritega hüvastijätu meister" },
+  "milestone_privacy_champion": { "message": "Privaatsuse eestvõitleja" },
+  "milestone_cookie_diet_month": { "message": "Küpsisedieet · esimene kuu" },
+  "milestone_cookie_diet_year": { "message": "Küpsisedieet · esimene aasta" },
+
+  "share_milestone_unlocked_label": { "message": "VERSTAPOST SAAVUTATUD" },
+  "share_tagline": { "message": "Küpsisebännerid, blokeeritud. Enne, kui need laaditakse." },
+  "share_counter_singular": {
+    "message": "$COUNT$ küpsisebänner tagasi lükatud",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "$COUNT$ küpsisebännerit tagasi lükatud",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "SINU BANNERBYE LUGU" },
+  "share_milestones_unlocked": {
+    "message": "$COUNT$ verstaposti $TOTAL$-st saavutatud",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "alates $DATE$",
+    "placeholders": { "date": { "content": "$1" } }
+  }
+}

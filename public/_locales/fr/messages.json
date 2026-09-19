@@ -4,5 +4,177 @@
   },
   "extDesc": {
     "message": "Bannières de cookies bloquées avant leur chargement. Réglez votre vie privée une fois — BannerBye refuse tout, sur chaque site."
+  },
+
+  "popup_loading": { "message": "Chargement…" },
+
+  "popup_status_off": { "message": "BannerBye est désactivé partout." },
+  "popup_status_no_site": { "message": "Aucun site à protéger." },
+  "popup_status_paused": {
+    "message": "En pause sur $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "Actif sur $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "Actif" },
+  "popup_status_dot_inactive_aria": { "message": "Inactif" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "Activé" },
+  "popup_toggle_off": { "message": "Désactivé" },
+  "popup_pause_site": { "message": "Mettre en pause sur ce site" },
+  "popup_resume_site": { "message": "Reprendre sur ce site" },
+
+  "popup_stat_label": { "message": "bannières refusées" },
+
+  "popup_activity_show": { "message": "Afficher les preuves" },
+  "popup_activity_hide": { "message": "Masquer les preuves" },
+  "popup_activity_no_banner": { "message": "Pas de bannière" },
+  "popup_activity_banner_refused_fallback": { "message": "Bannière refusée" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "à l'instant" },
+  "popup_time_minutes_ago": {
+    "message": "il y a $MINUTES$ min",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "il y a $HOURS$ h",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "il y a 1 jour" },
+  "popup_time_days_ago": {
+    "message": "il y a $DAYS$ jours",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "Conservées uniquement sur cet appareil, pendant sept jours. Jamais envoyées ailleurs."
+  },
+  "popup_activity_clear": { "message": "Effacer cette liste" },
+
+  "popup_milestones_label": { "message": "Jalons" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "Télécharger l'image des statistiques →" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "Refusez d'abord une bannière"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "Enregistre une image PNG partageable de vos statistiques dans vos téléchargements"
+  },
+  "popup_footer_report": { "message": "Signaler un site hors service →" },
+  "popup_footer_rate": { "message": "Évaluez BannerBye →" },
+  "popup_footer_rate_title": {
+    "message": "Laissez un avis — cela permet à BannerBye de rester visible"
+  },
+
+  "popup_modal_title": { "message": "Signaler un site hors service" },
+  "popup_modal_close_aria": { "message": "Fermer" },
+  "popup_modal_sent": {
+    "message": "Merci. Nous allons examiner $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "Nous enverrons le nom d'hôte $HOST$ à BannerBye. Facultatif : précisez le problème rencontré.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "Que se passe-t-il ? (facultatif)"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "Envoyez-moi un e-mail une fois le problème résolu (facultatif)"
+  },
+  "popup_modal_fineprint": {
+    "message": "Laissez ce champ vide pour rester totalement anonyme. Si vous le remplissez, nous l'utiliserons uniquement pour vous envoyer une notification lorsque cette bannière aura été traitée."
+  },
+  "popup_modal_error": {
+    "message": "Échec de l'envoi : $ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "Envoyer le signalement" },
+  "popup_modal_sending": { "message": "Envoi en cours…" },
+  "popup_modal_try_again": { "message": "Réessayer" },
+
+  "popup_celebration_label": { "message": "Jalon débloqué" },
+  "popup_celebration_share_aria": { "message": "Télécharger la carte de partage" },
+  "popup_celebration_dismiss_aria": { "message": "Fermer" },
+
+  "popup_reportfixed_label": { "message": "Une bannière que vous avez signalée" },
+  "popup_reportfixed_text": {
+    "message": "Désormais refusée sur $HOST$",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "Une demande unique" },
+  "popup_reviewask_title": { "message": "Vous appréciez le calme ?" },
+  "popup_reviewask_text": {
+    "message": "Un petit avis permet de retrouver facilement BannerBye. Demandez-le une fois, et vous n'aurez plus jamais à le refaire."
+  },
+  "popup_reviewask_cta": { "message": "Évaluez BannerBye →" },
+  "popup_reviewask_dismiss_aria": { "message": "Non merci" },
+  "popup_reviewask_dismiss_title": { "message": "Non merci — nous ne vous le demanderons plus" },
+
+  "onboarding_eyebrow": { "message": "Configuration rapide — vous êtes déjà protégé" },
+  "onboarding_headline_1": { "message": "Bannières de cookies, bloquées." },
+  "onboarding_headline_2": { "message": "Avant qu'elles ne chargent." },
+  "onboarding_body": {
+    "message": "Rien à configurer. BannerBye s'en charge déjà, dès maintenant :"
+  },
+  "onboarding_check1_title": { "message": "Refus systématique sur tous les sites" },
+  "onboarding_check1_desc": {
+    "message": "Envoie automatiquement un « refus de consentement », en toute légalité, avant même qu'une bannière n'ait le temps de vous le demander."
+  },
+  "onboarding_check2_title": { "message": "Fonctionne en silence" },
+  "onboarding_check2_desc": {
+    "message": "Vous n'entendrez plus parler de nous. Cliquez à tout moment sur l'icône en forme de bouclier dans votre barre d'outils pour voir combien de bannières nous avons refusées."
+  },
+  "onboarding_check3_title": { "message": "Réversible sur n'importe quel site" },
+  "onboarding_check3_desc": {
+    "message": "Services bancaires, outils de travail, connexions : si un élément semble ne pas fonctionner, ouvrez l'icône en forme de bouclier et cliquez sur « Mettre en pause sur ce site »."
+  },
+  "onboarding_tip": {
+    "message": "Astuce : épinglez l'icône pour y accéder en un clic — pièce de puzzle dans la barre d'outils → trouvez BannerBye → cliquez sur l'épingle."
+  },
+  "onboarding_cta": { "message": "Commencez à naviguer →" },
+
+  "milestone_first_banner": { "message": "Première bannière éliminée" },
+  "milestone_first_steps": { "message": "Premiers pas" },
+  "milestone_cookie_crusher": { "message": "Broyeur de cookies" },
+  "milestone_banner_bye_master": { "message": "Grand maître des bannières" },
+  "milestone_privacy_champion": { "message": "Champion de la vie privée" },
+  "milestone_cookie_diet_month": { "message": "Régime anti-cookies · premier mois" },
+  "milestone_cookie_diet_year": { "message": "Régime anti-cookies · première année" },
+
+  "share_milestone_unlocked_label": { "message": "JALON DÉBLOQUÉ" },
+  "share_tagline": { "message": "Bannières de cookies, bloquées. Avant qu'elles ne chargent." },
+  "share_counter_singular": {
+    "message": "$COUNT$ bannière de cookie refusée",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "$COUNT$ bannières de cookies refusées",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "VOTRE HISTOIRE AVEC BANNERBYE" },
+  "share_milestones_unlocked": {
+    "message": "$COUNT$ sur $TOTAL$ jalons débloqués",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "depuis le $DATE$",
+    "placeholders": { "date": { "content": "$1" } }
   }
 }

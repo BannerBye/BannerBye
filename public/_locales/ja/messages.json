@@ -1,0 +1,180 @@
+{
+  "extName": {
+    "message": "BannerBye — 読み込まれる前にクッキーバナーをブロック"
+  },
+  "extDesc": {
+    "message": "クッキーバナーを読み込まれる前にブロック。プライバシー設定は一度だけ — BannerByeがすべてのサイトで自動的に拒否します。"
+  },
+
+  "popup_loading": { "message": "読み込み中…" },
+
+  "popup_status_off": { "message": "BannerByeはすべての場所で無効になっています。" },
+  "popup_status_no_site": { "message": "保護対象のサイトがありません。" },
+  "popup_status_paused": {
+    "message": "$HOST$で一時停止中。",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "$HOST$で有効。",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "有効" },
+  "popup_status_dot_inactive_aria": { "message": "無効" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "オン" },
+  "popup_toggle_off": { "message": "オフ" },
+  "popup_pause_site": { "message": "このサイトで一時停止" },
+  "popup_resume_site": { "message": "このサイトで再開" },
+
+  "popup_stat_label": { "message": "件のバナーを拒否" },
+
+  "popup_activity_show": { "message": "証拠を表示" },
+  "popup_activity_hide": { "message": "証拠を非表示" },
+  "popup_activity_no_banner": { "message": "バナーなし" },
+  "popup_activity_banner_refused_fallback": { "message": "バナー拒否済み" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "ついさっき" },
+  "popup_time_minutes_ago": {
+    "message": "$MINUTES$ 分前",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "$HOURS$ 時間前",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "1 日前" },
+  "popup_time_days_ago": {
+    "message": "$DAYS$ 日前",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "このデバイスにのみ 7 日間保存されます。外部へ送信されることはありません。"
+  },
+  "popup_activity_clear": { "message": "このリストを消去" },
+
+  "popup_milestones_label": { "message": "マイルストーン" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "統計画像をダウンロード →" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "まずバナーを拒否してください"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "統計情報を共有可能なPNG画像としてダウンロードフォルダに保存します"
+  },
+  "popup_footer_report": { "message": "サイトの不具合を報告 →" },
+  "popup_footer_rate": { "message": "BannerByeを評価 →" },
+  "popup_footer_rate_title": {
+    "message": "レビューを投稿 — BannerByeの認知度維持に役立ちます"
+  },
+
+  "popup_modal_title": { "message": "サイトの不具合を報告" },
+  "popup_modal_close_aria": { "message": "閉じる" },
+  "popup_modal_sent": {
+    "message": "ありがとうございます。$HOST$ を確認いたします。",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "ホスト名 $HOST$ を BannerBye に送信します。任意：問題点を追加してください。",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "どのような状況ですか？（任意）"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "修正されたらメールで通知する（任意）"
+  },
+  "popup_modal_fineprint": {
+    "message": "完全に匿名でいたい場合は、ここを空白のままにしてください。入力した場合、このバナーが修正された際に一度だけ通知を送る目的でのみ使用します。"
+  },
+  "popup_modal_error": {
+    "message": "送信できませんでした：$ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "報告を送信" },
+  "popup_modal_sending": { "message": "送信中…" },
+  "popup_modal_try_again": { "message": "再試行" },
+
+  "popup_celebration_label": { "message": "マイルストーン解除" },
+  "popup_celebration_share_aria": { "message": "シェアカードをダウンロード" },
+  "popup_celebration_dismiss_aria": { "message": "閉じる" },
+
+  "popup_reportfixed_label": { "message": "あなたが報告したバナー" },
+  "popup_reportfixed_text": {
+    "message": "$HOST$ では現在拒否されています",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "1回限りの依頼" },
+  "popup_reviewask_title": { "message": "静かな環境を楽しんでいますか？" },
+  "popup_reviewask_text": {
+    "message": "簡単なレビューを投稿していただくと、他の方が BannerBye を見つけやすくなります。お願いするのは1回限りです。二度とお尋ねしません。"
+  },
+  "popup_reviewask_cta": { "message": "BannerByeを評価 →" },
+  "popup_reviewask_dismiss_aria": { "message": "いいえ、結構です" },
+  "popup_reviewask_dismiss_title": { "message": "いいえ、結構です — 今後お尋ねすることはありません" },
+
+  "onboarding_eyebrow": { "message": "セットアップは簡単 — すでに保護されています" },
+  "onboarding_headline_1": { "message": "クッキーバナーをブロック。" },
+  "onboarding_headline_2": { "message": "読み込まれる前に。" },
+  "onboarding_body": {
+    "message": "設定は一切不要。BannerByeが今すぐ自動的に処理します："
+  },
+  "onboarding_check1_title": { "message": "すべてのサイトで拒否" },
+  "onboarding_check1_desc": {
+    "message": "バナーが同意を求める前に、法的に有効な方法で自動的に「同意しない」という回答を送信します。"
+  },
+  "onboarding_check2_title": { "message": "目立たず動作" },
+  "onboarding_check2_desc": {
+    "message": "これ以上の通知はありません。ツールバーの盾のアイコンをいつでもクリックすれば、これまでに拒否したバナーの数を確認できます。"
+  },
+  "onboarding_check3_title": { "message": "どのサイトでも元に戻せます" },
+  "onboarding_check3_desc": {
+    "message": "銀行サイト、仕事用ツール、ログインページなど、何か不具合があるように見えたら、盾のアイコンを開き、「このサイトで一時停止」をクリックしてください。"
+  },
+  "onboarding_tip": {
+    "message": "ヒント：アイコンをピン留めしてワンクリックでアクセスしましょう。ツールバーのパズルピースアイコンから「BannerBye」を探し、ピンマークをクリックしてください。"
+  },
+  "onboarding_cta": { "message": "ブラウジングを開始 →" },
+
+  "milestone_first_banner": { "message": "最初のバナーをブロック" },
+  "milestone_first_steps": { "message": "最初のステップ" },
+  "milestone_cookie_crusher": { "message": "クッキークラッシャー" },
+  "milestone_banner_bye_master": { "message": "バナーの達人" },
+  "milestone_privacy_champion": { "message": "プライバシーチャンピオン" },
+  "milestone_cookie_diet_month": { "message": "クッキーダイエット · 1ヶ月目" },
+  "milestone_cookie_diet_year": { "message": "クッキーダイエット · 1年目" },
+
+  "share_milestone_unlocked_label": { "message": "マイルストーン解除" },
+  "share_tagline": { "message": "クッキーバナーをブロック。読み込まれる前に。" },
+  "share_counter_singular": {
+    "message": "$COUNT$件のクッキーバナーを拒否",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "$COUNT$件のクッキーバナーを拒否",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "あなたのBannerByeストーリー" },
+  "share_milestones_unlocked": {
+    "message": "$TOTAL$個中$COUNT$個のマイルストーンを解除",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "$DATE$以来",
+    "placeholders": { "date": { "content": "$1" } }
+  }
+}

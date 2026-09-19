@@ -1,0 +1,180 @@
+{
+  "extName": {
+    "message": "BannerBye — sīkdatņu baneri bloķēti pirms ielādes"
+  },
+  "extDesc": {
+    "message": "Sīkdatņu baneri tiek bloķēti, pirms tie paspēj ielādēties. Vienreiz iestatiet privātuma izvēles — par pārējo parūpēsies BannerBye, automātiski un katrā vietnē."
+  },
+
+  "popup_loading": { "message": "Ielādējas…" },
+
+  "popup_status_off": { "message": "BannerBye ir izslēgts visur." },
+  "popup_status_no_site": { "message": "Nav vietnes, kurā rīkoties." },
+  "popup_status_paused": {
+    "message": "Pauzēts vietnē $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "Aktīvs vietnē $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "Aktīvs" },
+  "popup_status_dot_inactive_aria": { "message": "Neaktīvs" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "Ieslēgts" },
+  "popup_toggle_off": { "message": "Izslēgts" },
+  "popup_pause_site": { "message": "Pauzēt šajā vietnē" },
+  "popup_resume_site": { "message": "Turpināt šajā vietnē" },
+
+  "popup_stat_label": { "message": "baneri noraidīti" },
+
+  "popup_activity_show": { "message": "Rādīt pierādījumus" },
+  "popup_activity_hide": { "message": "Paslēpt pierādījumus" },
+  "popup_activity_no_banner": { "message": "Nav banera" },
+  "popup_activity_banner_refused_fallback": { "message": "Baneris noraidīts" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "tikko" },
+  "popup_time_minutes_ago": {
+    "message": "pirms $MINUTES$ min",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "pirms $HOURS$ h",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "pirms 1 dienas" },
+  "popup_time_days_ago": {
+    "message": "pirms $DAYS$ dienām",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "Saglabāts tikai šajā ierīcē, septiņas dienas. Nekad netiek nekur nosūtīts."
+  },
+  "popup_activity_clear": { "message": "Dzēst šo sarakstu" },
+
+  "popup_milestones_label": { "message": "Sasniegumi" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "Lejupielādēt statistikas attēlu →" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "Vispirms noraidiet kādu baneri"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "Saglabā kopīgojamu PNG attēlu ar jūsu statistiku lejupielāžu mapē"
+  },
+  "popup_footer_report": { "message": "Ziņot par nedarbojošos vietni →" },
+  "popup_footer_rate": { "message": "Novērtēt BannerBye →" },
+  "popup_footer_rate_title": {
+    "message": "Atstājiet atsauksmi — tā palīdz BannerBye palikt redzamam"
+  },
+
+  "popup_modal_title": { "message": "Ziņot par nedarbojošos vietni" },
+  "popup_modal_close_aria": { "message": "Aizvērt" },
+  "popup_modal_sent": {
+    "message": "Paldies. Mēs apskatīsim $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "Mēs nosūtīsim resursdatora nosaukumu $HOST$ uz BannerBye. Pēc izvēles: pievienojiet informāciju par to, kas nedarbojas.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "Kas notiek? (pēc izvēles)"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "Nosūtiet man e-pastu, kad problēma būs novērsta (pēc izvēles)"
+  },
+  "popup_modal_fineprint": {
+    "message": "Atstājiet šo lauku tukšu, lai saglabātu pilnīgu anonimitāti. Ja to aizpildīsiet, mēs to izmantosim tikai, lai nosūtītu vienu paziņojumu, kad šis baneris tiks atrisināts."
+  },
+  "popup_modal_error": {
+    "message": "Neizdevās nosūtīt: $ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "Nosūtīt ziņojumu" },
+  "popup_modal_sending": { "message": "Notiek nosūtīšana…" },
+  "popup_modal_try_again": { "message": "Mēģināt vēlreiz" },
+
+  "popup_celebration_label": { "message": "Sasniegums atbloķēts" },
+  "popup_celebration_share_aria": { "message": "Lejupielādēt kopīgošanas karti" },
+  "popup_celebration_dismiss_aria": { "message": "Aizvērt" },
+
+  "popup_reportfixed_label": { "message": "Baneris, par kuru ziņojāt" },
+  "popup_reportfixed_text": {
+    "message": "Tagad bloķēts vietnē $HOST$",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "Vienreizējs lūgums" },
+  "popup_reviewask_title": { "message": "Izbaudāt klusumu?" },
+  "popup_reviewask_text": {
+    "message": "Īsa atsauksme palīdz citiem atrast BannerBye. Mēs jautājam vienreiz — nekad vairs."
+  },
+  "popup_reviewask_cta": { "message": "Novērtēt BannerBye →" },
+  "popup_reviewask_dismiss_aria": { "message": "Nē, paldies" },
+  "popup_reviewask_dismiss_title": { "message": "Nē, paldies — mēs vairs nejautāsim" },
+
+  "onboarding_eyebrow": { "message": "Ātra uzstādīšana — jūs jau esat aizsargāti" },
+  "onboarding_headline_1": { "message": "Sīkdatņu baneri, bloķēti." },
+  "onboarding_headline_2": { "message": "Pirms tie paspēj ielādēties." },
+  "onboarding_body": {
+    "message": "Nav nekas jākonfigurē. BannerBye to jau dara, tieši šobrīd:"
+  },
+  "onboarding_check1_title": { "message": "Atsaka katrā vietnē" },
+  "onboarding_check1_desc": {
+    "message": "Automātiski un likumīgi nosūta „nav piekrišanas”, pirms baneris paspēj to pajautāt."
+  },
+  "onboarding_check2_title": { "message": "Darbojas klusi" },
+  "onboarding_check2_desc": {
+    "message": "Vairs neko no mums nedzirdēsiet. Jebkurā brīdī noklikšķiniet uz vairoga ikonas rīkjoslā, lai redzētu, cik daudz baneru esam noraidījuši."
+  },
+  "onboarding_check3_title": { "message": "Atceļams jebkurā vietnē" },
+  "onboarding_check3_desc": {
+    "message": "Banku pakalpojumi, darba rīki, pieteikšanās — ja kaut kas nedarbojas, atveriet vairoga ikonu un noklikšķiniet uz „Pauzēt šajā vietnē”."
+  },
+  "onboarding_tip": {
+    "message": "Padoms: piespraudiet ikonu, lai tai piekļūtu ar vienu klikšķi — rīkjoslā noklikšķiniet uz puzles gabaliņa, atrodiet BannerBye un noklikšķiniet uz piespraudes."
+  },
+  "onboarding_cta": { "message": "Sāciet pārlūkošanu →" },
+
+  "milestone_first_banner": { "message": "Pirmais bloķētais baneris" },
+  "milestone_first_steps": { "message": "Pirmie soļi" },
+  "milestone_cookie_crusher": { "message": "Sīkdatņu iznīcinātājs" },
+  "milestone_banner_bye_master": { "message": "Banneru atvadu meistars" },
+  "milestone_privacy_champion": { "message": "Privātuma čempions" },
+  "milestone_cookie_diet_month": { "message": "Sīkdatņu diēta · pirmais mēnesis" },
+  "milestone_cookie_diet_year": { "message": "Sīkdatņu diēta · pirmais gads" },
+
+  "share_milestone_unlocked_label": { "message": "SASNIEGUMS ATBLOĶĒTS" },
+  "share_tagline": { "message": "Sīkdatņu baneri, bloķēti. Pirms tie paspēj ielādēties." },
+  "share_counter_singular": {
+    "message": "$COUNT$ noraidīts sīkdatņu baneris",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "$COUNT$ noraidīti sīkdatņu baneri",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "JŪSU BANNERBYE STĀSTS" },
+  "share_milestones_unlocked": {
+    "message": "Atbloķēti $COUNT$ no $TOTAL$ sasniegumiem",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "kopš $DATE$",
+    "placeholders": { "date": { "content": "$1" } }
+  }
+}

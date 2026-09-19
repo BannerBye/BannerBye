@@ -1,0 +1,180 @@
+{
+  "extName": {
+    "message": "BannerBye — çerez banner'larını yüklenmeden önce engeller"
+  },
+  "extDesc": {
+    "message": "Çerez banner'ları yüklenmeden önce engellenir. Gizliliğinizi bir kez ayarlayın — BannerBye her sitede otomatik olarak reddeder."
+  },
+
+  "popup_loading": { "message": "Yükleniyor…" },
+
+  "popup_status_off": { "message": "BannerBye her yerde kapalı." },
+  "popup_status_no_site": { "message": "Korunacak site yok." },
+  "popup_status_paused": {
+    "message": "Duraklatıldı: $HOST$",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "Etkin: $HOST$",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "Etkin" },
+  "popup_status_dot_inactive_aria": { "message": "Etkin değil" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "Açık" },
+  "popup_toggle_off": { "message": "Kapalı" },
+  "popup_pause_site": { "message": "Bu sitede duraklat" },
+  "popup_resume_site": { "message": "Bu sitede devam et" },
+
+  "popup_stat_label": { "message": "banner reddedildi" },
+
+  "popup_activity_show": { "message": "Kanıtı göster" },
+  "popup_activity_hide": { "message": "Kanıtı gizle" },
+  "popup_activity_no_banner": { "message": "Banner yok" },
+  "popup_activity_banner_refused_fallback": { "message": "Banner reddedildi" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "az önce" },
+  "popup_time_minutes_ago": {
+    "message": "$MINUTES$ dakika önce",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "$HOURS$ saat önce",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "1 gün önce" },
+  "popup_time_days_ago": {
+    "message": "$DAYS$ gün önce",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "Yalnızca bu cihazda, yedi gün boyunca saklanır. Hiçbir yere gönderilmez."
+  },
+  "popup_activity_clear": { "message": "Bu listeyi temizle" },
+
+  "popup_milestones_label": { "message": "Kilometre taşları" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "İstatistik resmini indir →" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "Önce bir banner reddedin"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "İstatistiklerinizin paylaşılabilir bir PNG resmini indirilenler klasörünüze kaydeder"
+  },
+  "popup_footer_report": { "message": "Çalışmayan siteyi bildir →" },
+  "popup_footer_rate": { "message": "BannerBye'yi değerlendir →" },
+  "popup_footer_rate_title": {
+    "message": "Yorum bırakın — bu, BannerBye'nin görünür kalmasına yardımcı olur"
+  },
+
+  "popup_modal_title": { "message": "Çalışmayan bir siteyi bildir" },
+  "popup_modal_close_aria": { "message": "Kapat" },
+  "popup_modal_sent": {
+    "message": "Teşekkürler. $HOST$ adresini inceleyeceğiz.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "$HOST$ ana bilgisayar adını BannerBye'ye göndereceğiz. İsteğe bağlı: sorunun ne olduğunu ekleyin.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "Ne oluyor? (isteğe bağlı)"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "Sorun giderildiğinde bana e-posta gönder (isteğe bağlı)"
+  },
+  "popup_modal_fineprint": {
+    "message": "Tamamen anonim kalmak için bu alanı boş bırakın. Bilgiyi girerseniz, bu banner düzeltildiğinde size tek seferlik bir bildirim göndermek için kullanacağız."
+  },
+  "popup_modal_error": {
+    "message": "Gönderilemedi: $ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "Raporu gönder" },
+  "popup_modal_sending": { "message": "Gönderiliyor…" },
+  "popup_modal_try_again": { "message": "Tekrar dene" },
+
+  "popup_celebration_label": { "message": "Kilometre taşı açıldı" },
+  "popup_celebration_share_aria": { "message": "Paylaşım kartını indir" },
+  "popup_celebration_dismiss_aria": { "message": "Kapat" },
+
+  "popup_reportfixed_label": { "message": "Bildirdiğiniz bir banner" },
+  "popup_reportfixed_text": {
+    "message": "Artık $HOST$ adresinde reddediliyor",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "Tek seferlik bir istek" },
+  "popup_reviewask_title": { "message": "Sessizliğin tadını mı çıkarıyorsunuz?" },
+  "popup_reviewask_text": {
+    "message": "Hızlı bir değerlendirme, insanların BannerBye'yi bulmasına yardımcı olur. Bir kez sorarız — bir daha asla."
+  },
+  "popup_reviewask_cta": { "message": "BannerBye'yi değerlendir →" },
+  "popup_reviewask_dismiss_aria": { "message": "Hayır, teşekkürler" },
+  "popup_reviewask_dismiss_title": { "message": "Hayır, teşekkürler — bir daha sormayacağız" },
+
+  "onboarding_eyebrow": { "message": "Hızlı kurulum — zaten korunuyorsunuz" },
+  "onboarding_headline_1": { "message": "Çerez banner'ları, engellendi." },
+  "onboarding_headline_2": { "message": "Yüklenmeden önce." },
+  "onboarding_body": {
+    "message": "Ayarlamanız gereken hiçbir şey yok. BannerBye bunu şu anda zaten yapıyor:"
+  },
+  "onboarding_check1_title": { "message": "Her sitede reddediyor" },
+  "onboarding_check1_desc": {
+    "message": "Bir banner size sormaya fırsat bulamadan, yasal olarak geçerli bir şekilde otomatik olarak „onay yok” mesajını gönderir."
+  },
+  "onboarding_check2_title": { "message": "Sessizce çalışır" },
+  "onboarding_check2_desc": {
+    "message": "Bir daha bizden haber almayacaksınız. Kaç banner reddettiğimizi görmek için istediğiniz zaman araç çubuğunuzdaki kalkan simgesine tıklayın."
+  },
+  "onboarding_check3_title": { "message": "Herhangi bir sitede geri alınabilir" },
+  "onboarding_check3_desc": {
+    "message": "Bankacılık, iş araçları, oturum açma sayfaları — bir şey düzgün çalışmıyorsa, kalkan simgesini açın ve „Bu sitede duraklat” seçeneğine tıklayın."
+  },
+  "onboarding_tip": {
+    "message": "İpucu: Tek tıklamayla erişim için simgeyi sabitleyin — araç çubuğunuzdaki yapboz parçasını bulun, BannerBye'yi seçin, sabitleme simgesine tıklayın."
+  },
+  "onboarding_cta": { "message": "Gezintiye başlayın →" },
+
+  "milestone_first_banner": { "message": "İlk banner engellendi" },
+  "milestone_first_steps": { "message": "İlk adımlar" },
+  "milestone_cookie_crusher": { "message": "Çerez ezici" },
+  "milestone_banner_bye_master": { "message": "Banner ustası" },
+  "milestone_privacy_champion": { "message": "Gizlilik şampiyonu" },
+  "milestone_cookie_diet_month": { "message": "Çerez diyeti · ilk ay" },
+  "milestone_cookie_diet_year": { "message": "Çerez diyeti · ilk yıl" },
+
+  "share_milestone_unlocked_label": { "message": "KİLOMETRE TAŞI AÇILDI" },
+  "share_tagline": { "message": "Çerez banner'ları, engellendi. Yüklenmeden önce." },
+  "share_counter_singular": {
+    "message": "$COUNT$ çerez banner'ı reddedildi",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "$COUNT$ çerez banner'ı reddedildi",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "BANNERBYE HİKAYENİZ" },
+  "share_milestones_unlocked": {
+    "message": "$TOTAL$ kilometre taşından $COUNT$ tanesi açıldı",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "$DATE$ tarihinden beri",
+    "placeholders": { "date": { "content": "$1" } }
+  }
+}

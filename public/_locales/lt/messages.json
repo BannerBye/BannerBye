@@ -1,0 +1,180 @@
+{
+  "extName": {
+    "message": "BannerBye — slapukų juostos blokuojamos prieš įkeliant"
+  },
+  "extDesc": {
+    "message": "Slapukų juostos blokuojamos dar prieš joms įsikeliant. Privatumo parametrus nustatykite vieną kartą — visa kita BannerBye padarys automatiškai, kiekvienoje svetainėje."
+  },
+
+  "popup_loading": { "message": "Įkeliama…" },
+
+  "popup_status_off": { "message": "BannerBye visur išjungtas." },
+  "popup_status_no_site": { "message": "Nėra svetainės, kurioje būtų galima imtis veiksmų." },
+  "popup_status_paused": {
+    "message": "Sustabdyta svetainėje $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "Aktyvu svetainėje $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "Aktyvu" },
+  "popup_status_dot_inactive_aria": { "message": "Neaktyvu" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "Įjungta" },
+  "popup_toggle_off": { "message": "Išjungta" },
+  "popup_pause_site": { "message": "Sustabdyti šioje svetainėje" },
+  "popup_resume_site": { "message": "Tęsti šioje svetainėje" },
+
+  "popup_stat_label": { "message": "juostų atmesta" },
+
+  "popup_activity_show": { "message": "Rodyti įrodymus" },
+  "popup_activity_hide": { "message": "Paslėpti įrodymus" },
+  "popup_activity_no_banner": { "message": "Juostos nėra" },
+  "popup_activity_banner_refused_fallback": { "message": "Juosta atmesta" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "ką tik" },
+  "popup_time_minutes_ago": {
+    "message": "prieš $MINUTES$ min.",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "prieš $HOURS$ val.",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "prieš 1 dieną" },
+  "popup_time_days_ago": {
+    "message": "prieš $DAYS$ d.",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "Saugoma tik šiame įrenginyje, septynias dienas. Niekur nesiunčiama."
+  },
+  "popup_activity_clear": { "message": "Išvalyti šį sąrašą" },
+
+  "popup_milestones_label": { "message": "Pasiekimai" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "Atsisiųsti statistikos paveikslėlį →" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "Pirmiausia atmeskite kokią nors juostą"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "Išsaugo bendrinamą jūsų statistikos PNG paveikslėlį atsisiuntimų aplanke"
+  },
+  "popup_footer_report": { "message": "Pranešti apie neveikiančią svetainę →" },
+  "popup_footer_rate": { "message": "Įvertinti BannerBye →" },
+  "popup_footer_rate_title": {
+    "message": "Palikite atsiliepimą — tai padės BannerBye išlikti matomam"
+  },
+
+  "popup_modal_title": { "message": "Pranešti apie neveikiančią svetainę" },
+  "popup_modal_close_aria": { "message": "Uždaryti" },
+  "popup_modal_sent": {
+    "message": "Ačiū. Patikrinsime $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "Siųsime serverio vardą $HOST$ į BannerBye. Pasirinktinai: pridėkite, kas neveikia.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "Kas vyksta? (pasirinktinai)"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "Praneškite man el. paštu, kai problema bus išspręsta (pasirinktinai)"
+  },
+  "popup_modal_fineprint": {
+    "message": "Palikite laukelį tuščią, jei norite išlikti visiškai anonimiški. Jei jį užpildysite, naudosime jį tik tam, kad atsiųstume vieną pranešimą, kai ši juosta bus sutvarkyta."
+  },
+  "popup_modal_error": {
+    "message": "Nepavyko išsiųsti: $ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "Siųsti pranešimą" },
+  "popup_modal_sending": { "message": "Siunčiama…" },
+  "popup_modal_try_again": { "message": "Bandyti dar kartą" },
+
+  "popup_celebration_label": { "message": "Pasiekimas atrakintas" },
+  "popup_celebration_share_aria": { "message": "Atsisiųsti dalinimosi kortelę" },
+  "popup_celebration_dismiss_aria": { "message": "Uždaryti" },
+
+  "popup_reportfixed_label": { "message": "Juosta, apie kurią pranešėte" },
+  "popup_reportfixed_text": {
+    "message": "Dabar užblokuota svetainėje $HOST$",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "Vienkartinis prašymas" },
+  "popup_reviewask_title": { "message": "Mėgaujatės ramybe?" },
+  "popup_reviewask_text": {
+    "message": "Trumpas atsiliepimas padeda kitiems rasti BannerBye. Prašome tik vieną kartą — daugiau nebeklausime."
+  },
+  "popup_reviewask_cta": { "message": "Įvertinti BannerBye →" },
+  "popup_reviewask_dismiss_aria": { "message": "Ne, ačiū" },
+  "popup_reviewask_dismiss_title": { "message": "Ne, ačiū — daugiau nebeklausime" },
+
+  "onboarding_eyebrow": { "message": "Greitas nustatymas — jau esate apsaugoti" },
+  "onboarding_headline_1": { "message": "Slapukų juostos, užblokuotos." },
+  "onboarding_headline_2": { "message": "Dar prieš joms įsikeliant." },
+  "onboarding_body": {
+    "message": "Nereikia nieko konfigūruoti. BannerBye tai daro jau dabar:"
+  },
+  "onboarding_check1_title": { "message": "Atsisako kiekvienoje svetainėje" },
+  "onboarding_check1_desc": {
+    "message": "Automatiškai ir teisėtai siunčia „nesutinku“, kol juosta dar nespėjo paklausti."
+  },
+  "onboarding_check2_title": { "message": "Veikia tyliai" },
+  "onboarding_check2_desc": {
+    "message": "Daugiau iš mūsų negirdėsite. Bet kuriuo metu spustelėkite skydo piktogramą įrankių juostoje ir pamatysite, kiek juostų atmetėme."
+  },
+  "onboarding_check3_title": { "message": "Galima atšaukti bet kurioje svetainėje" },
+  "onboarding_check3_desc": {
+    "message": "Bankininkystė, darbo įrankiai, prisijungimai — jei kas nors neveikia, atidarykite skydo piktogramą ir spustelėkite „Sustabdyti šioje svetainėje“."
+  },
+  "onboarding_tip": {
+    "message": "Patarimas: prisekite piktogramą, kad pasiektumėte vienu spustelėjimu — įrankių juostoje spustelėkite dėlionės dalį, raskite BannerBye ir spustelėkite smeigtuką."
+  },
+  "onboarding_cta": { "message": "Pradėkite naršyti →" },
+
+  "milestone_first_banner": { "message": "Pirmoji užblokuota juosta" },
+  "milestone_first_steps": { "message": "Pirmieji žingsniai" },
+  "milestone_cookie_crusher": { "message": "Slapukų naikintojas" },
+  "milestone_banner_bye_master": { "message": "Atsisveikinimo su juostomis meistras" },
+  "milestone_privacy_champion": { "message": "Privatumo čempionas" },
+  "milestone_cookie_diet_month": { "message": "Slapukų dieta · pirmasis mėnuo" },
+  "milestone_cookie_diet_year": { "message": "Slapukų dieta · pirmieji metai" },
+
+  "share_milestone_unlocked_label": { "message": "PASIEKIMAS ATRAKINTAS" },
+  "share_tagline": { "message": "Slapukų juostos, užblokuotos. Dar prieš joms įsikeliant." },
+  "share_counter_singular": {
+    "message": "Atmesta $COUNT$ slapukų juosta",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "Atmesta $COUNT$ slapukų juostų",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "JŪSŲ BANNERBYE ISTORIJA" },
+  "share_milestones_unlocked": {
+    "message": "Atrakinta $COUNT$ iš $TOTAL$ pasiekimų",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "nuo $DATE$",
+    "placeholders": { "date": { "content": "$1" } }
+  }
+}

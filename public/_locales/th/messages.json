@@ -1,0 +1,180 @@
+{
+  "extName": {
+    "message": "BannerBye — บล็อกแบนเนอร์คุกกี้ก่อนที่จะโหลด"
+  },
+  "extDesc": {
+    "message": "แบนเนอร์คุกกี้ถูกบล็อกก่อนที่จะโหลด ตั้งค่าความเป็นส่วนตัวเพียงครั้งเดียว แล้ว BannerBye จะจัดการที่เหลือให้อัตโนมัติบนทุกเว็บไซต์"
+  },
+
+  "popup_loading": { "message": "กำลังโหลด…" },
+
+  "popup_status_off": { "message": "BannerBye ปิดอยู่ทุกที่" },
+  "popup_status_no_site": { "message": "ไม่มีเว็บไซต์ให้ทำงาน" },
+  "popup_status_paused": {
+    "message": "หยุดชั่วคราวบน $HOST$",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "ใช้งานอยู่บน $HOST$",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "ใช้งานอยู่" },
+  "popup_status_dot_inactive_aria": { "message": "ไม่ได้ใช้งาน" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "เปิด" },
+  "popup_toggle_off": { "message": "ปิด" },
+  "popup_pause_site": { "message": "หยุดชั่วคราวในเว็บไซต์นี้" },
+  "popup_resume_site": { "message": "ดำเนินการต่อในเว็บไซต์นี้" },
+
+  "popup_stat_label": { "message": "แบนเนอร์ถูกปฏิเสธ" },
+
+  "popup_activity_show": { "message": "แสดงหลักฐาน" },
+  "popup_activity_hide": { "message": "ซ่อนหลักฐาน" },
+  "popup_activity_no_banner": { "message": "ไม่มีแบนเนอร์" },
+  "popup_activity_banner_refused_fallback": { "message": "แบนเนอร์ถูกปฏิเสธ" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "เมื่อสักครู่" },
+  "popup_time_minutes_ago": {
+    "message": "$MINUTES$ นาทีที่แล้ว",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "$HOURS$ ชั่วโมงที่แล้ว",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "1 วันที่แล้ว" },
+  "popup_time_days_ago": {
+    "message": "$DAYS$ วันที่แล้ว",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "เก็บไว้เฉพาะในอุปกรณ์นี้เป็นเวลาเจ็ดวัน ไม่เคยส่งไปที่ใด"
+  },
+  "popup_activity_clear": { "message": "ล้างรายการนี้" },
+
+  "popup_milestones_label": { "message": "ความสำเร็จ" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "ดาวน์โหลดภาพสถิติ →" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "ปฏิเสธแบนเนอร์ก่อน"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "บันทึกภาพ PNG ของสถิติที่แชร์ได้ลงในโฟลเดอร์ดาวน์โหลดของคุณ"
+  },
+  "popup_footer_report": { "message": "รายงานเว็บไซต์ที่มีปัญหา →" },
+  "popup_footer_rate": { "message": "ให้คะแนน BannerBye →" },
+  "popup_footer_rate_title": {
+    "message": "เขียนรีวิว — จะช่วยให้ผู้อื่นพบ BannerBye ได้ง่ายขึ้น"
+  },
+
+  "popup_modal_title": { "message": "รายงานเว็บไซต์ที่มีปัญหา" },
+  "popup_modal_close_aria": { "message": "ปิด" },
+  "popup_modal_sent": {
+    "message": "ขอบคุณ เราจะตรวจสอบ $HOST$",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "เราจะส่งชื่อโฮสต์ $HOST$ ไปให้ BannerBye ไม่บังคับ: เพิ่มรายละเอียดว่ามีอะไรผิดพลาด",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "เกิดอะไรขึ้น? (ไม่บังคับ)"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "ส่งอีเมลแจ้งเมื่อแก้ไขแล้ว (ไม่บังคับ)"
+  },
+  "popup_modal_fineprint": {
+    "message": "ปล่อยว่างไว้เพื่อไม่ระบุตัวตนโดยสมบูรณ์ หากกรอก เราจะใช้เพียงเพื่อส่งแจ้งเตือนครั้งเดียวเมื่อแบนเนอร์นี้ถูกจัดการแล้ว"
+  },
+  "popup_modal_error": {
+    "message": "ส่งไม่สำเร็จ: $ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "ส่งรายงาน" },
+  "popup_modal_sending": { "message": "กำลังส่ง…" },
+  "popup_modal_try_again": { "message": "ลองอีกครั้ง" },
+
+  "popup_celebration_label": { "message": "ปลดล็อกความสำเร็จแล้ว" },
+  "popup_celebration_share_aria": { "message": "ดาวน์โหลดการ์ดแชร์" },
+  "popup_celebration_dismiss_aria": { "message": "ปิด" },
+
+  "popup_reportfixed_label": { "message": "แบนเนอร์ที่คุณรายงาน" },
+  "popup_reportfixed_text": {
+    "message": "ตอนนี้ถูกบล็อกบน $HOST$ แล้ว",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "ขอครั้งเดียว" },
+  "popup_reviewask_title": { "message": "สนุกกับความสงบไหม?" },
+  "popup_reviewask_text": {
+    "message": "รีวิวสั้น ๆ จะช่วยให้คนอื่นหา BannerBye เจอง่ายขึ้น เราขอครั้งเดียว — ไม่ถามอีกเลย"
+  },
+  "popup_reviewask_cta": { "message": "ให้คะแนน BannerBye →" },
+  "popup_reviewask_dismiss_aria": { "message": "ไม่ ขอบคุณ" },
+  "popup_reviewask_dismiss_title": { "message": "ไม่ ขอบคุณ — เราจะไม่ถามอีก" },
+
+  "onboarding_eyebrow": { "message": "ตั้งค่าได้เร็ว — คุณได้รับการปกป้องแล้ว" },
+  "onboarding_headline_1": { "message": "แบนเนอร์คุกกี้ ถูกบล็อก" },
+  "onboarding_headline_2": { "message": "ก่อนที่จะโหลด" },
+  "onboarding_body": {
+    "message": "ไม่ต้องตั้งค่าอะไรเลย BannerBye ทำสิ่งนี้ให้คุณอยู่แล้ว ตอนนี้:"
+  },
+  "onboarding_check1_title": { "message": "ปฏิเสธในทุกเว็บไซต์" },
+  "onboarding_check1_desc": {
+    "message": "ส่ง “ไม่ยินยอม” โดยอัตโนมัติและถูกกฎหมาย ก่อนที่แบนเนอร์จะมีโอกาสถาม"
+  },
+  "onboarding_check2_title": { "message": "ทำงานอย่างเงียบ ๆ" },
+  "onboarding_check2_desc": {
+    "message": "คุณจะไม่ได้ยินจากเราอีก คลิกไอคอนโล่ในแถบเครื่องมือเมื่อไหร่ก็ได้เพื่อดูว่าเราปฏิเสธแบนเนอร์ไปกี่อัน"
+  },
+  "onboarding_check3_title": { "message": "ยกเลิกได้ในทุกเว็บไซต์" },
+  "onboarding_check3_desc": {
+    "message": "ธนาคาร เครื่องมือทำงาน หน้าเข้าสู่ระบบ — ถ้าอันไหนดูผิดปกติ ให้เปิดไอคอนโล่แล้วคลิก “หยุดชั่วคราวในเว็บไซต์นี้”"
+  },
+  "onboarding_tip": {
+    "message": "เคล็ดลับ: ปักหมุดไอคอนเพื่อเข้าถึงด้วยคลิกเดียว — คลิกชิ้นส่วนปริศนาในแถบเครื่องมือ หา BannerBye แล้วคลิกหมุด"
+  },
+  "onboarding_cta": { "message": "เริ่มท่องเว็บ →" },
+
+  "milestone_first_banner": { "message": "แบนเนอร์แรกที่ถูกบล็อก" },
+  "milestone_first_steps": { "message": "ก้าวแรก" },
+  "milestone_cookie_crusher": { "message": "เครื่องบดคุกกี้" },
+  "milestone_banner_bye_master": { "message": "มือโปรบ๊ายบายแบนเนอร์" },
+  "milestone_privacy_champion": { "message": "แชมป์ความเป็นส่วนตัว" },
+  "milestone_cookie_diet_month": { "message": "ไดเอทคุกกี้ · เดือนแรก" },
+  "milestone_cookie_diet_year": { "message": "ไดเอทคุกกี้ · ปีแรก" },
+
+  "share_milestone_unlocked_label": { "message": "ปลดล็อกความสำเร็จแล้ว" },
+  "share_tagline": { "message": "แบนเนอร์คุกกี้ ถูกบล็อก ก่อนที่จะโหลด" },
+  "share_counter_singular": {
+    "message": "ปฏิเสธแบนเนอร์คุกกี้ไป $COUNT$ อัน",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "ปฏิเสธแบนเนอร์คุกกี้ไป $COUNT$ อัน",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "เรื่องราว BannerBye ของคุณ" },
+  "share_milestones_unlocked": {
+    "message": "ปลดล็อกความสำเร็จ $COUNT$ จากทั้งหมด $TOTAL$",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "ตั้งแต่ $DATE$",
+    "placeholders": { "date": { "content": "$1" } }
+  }
+}

@@ -1,0 +1,180 @@
+{
+  "extName": {
+    "message": "BannerBye — കുക്കി ബാനറുകൾ ലോഡ് ആകും മുൻപേ തടയുന്നു"
+  },
+  "extDesc": {
+    "message": "കുക്കി ബാനറുകൾ ലോഡ് ആകുന്നതിന് മുൻപേ തടയപ്പെടുന്നു. നിങ്ങളുടെ സ്വകാര്യത ഒരിക്കൽ സജ്ജീകരിക്കുക — ബാക്കിയുള്ളത് BannerBye ഓരോ സൈറ്റിലും സ്വയമേവ ചെയ്യും."
+  },
+
+  "popup_loading": { "message": "ലോഡ് ചെയ്യുന്നു…" },
+
+  "popup_status_off": { "message": "എല്ലായിടത്തും BannerBye ഓഫ് ആണ്." },
+  "popup_status_no_site": { "message": "പ്രവർത്തിക്കാൻ സൈറ്റില്ല." },
+  "popup_status_paused": {
+    "message": "$HOST$-ൽ നിർത്തിവെച്ചിരിക്കുന്നു.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "$HOST$-ൽ സജീവമാണ്.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "സജീവം" },
+  "popup_status_dot_inactive_aria": { "message": "നിഷ്ക്രിയം" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "ഓൺ" },
+  "popup_toggle_off": { "message": "ഓഫ്" },
+  "popup_pause_site": { "message": "ഈ സൈറ്റിൽ നിർത്തിവയ്ക്കുക" },
+  "popup_resume_site": { "message": "ഈ സൈറ്റിൽ പുനരാരംഭിക്കുക" },
+
+  "popup_stat_label": { "message": "ബാനറുകൾ നിരസിച്ചു" },
+
+  "popup_activity_show": { "message": "തെളിവ് കാണിക്കുക" },
+  "popup_activity_hide": { "message": "തെളിവ് മറയ്ക്കുക" },
+  "popup_activity_no_banner": { "message": "ബാനർ ഇല്ല" },
+  "popup_activity_banner_refused_fallback": { "message": "ബാനർ നിരസിച്ചു" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "ഇപ്പോൾ" },
+  "popup_time_minutes_ago": {
+    "message": "$MINUTES$ മിനിറ്റ് മുൻപ്",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "$HOURS$ മണിക്കൂർ മുൻപ്",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "1 ദിവസം മുൻപ്" },
+  "popup_time_days_ago": {
+    "message": "$DAYS$ ദിവസം മുൻപ്",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "ഈ ഉപകരണത്തിൽ മാത്രം, ഏഴ് ദിവസത്തേക്ക് സൂക്ഷിക്കുന്നു. എങ്ങോട്ടും അയക്കുന്നില്ല."
+  },
+  "popup_activity_clear": { "message": "ഈ ലിസ്റ്റ് മായ്ക്കുക" },
+
+  "popup_milestones_label": { "message": "നാഴികക്കല്ലുകൾ" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "സ്ഥിതിവിവരക്കണക്ക് ചിത്രം ഡൗൺലോഡ് ചെയ്യുക →" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "ആദ്യം ഒരു ബാനർ നിരസിക്കുക"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "നിങ്ങളുടെ സ്ഥിതിവിവരക്കണക്കിന്റെ ഷെയർ ചെയ്യാവുന്ന PNG ചിത്രം ഡൗൺലോഡ് ഫോൾഡറിൽ സേവ് ചെയ്യുന്നു"
+  },
+  "popup_footer_report": { "message": "തകരാറിലുള്ള സൈറ്റ് റിപ്പോർട്ട് ചെയ്യുക →" },
+  "popup_footer_rate": { "message": "BannerBye-യെ റേറ്റ് ചെയ്യുക →" },
+  "popup_footer_rate_title": {
+    "message": "ഒരു റിവ്യൂ നൽകുക — ഇത് BannerBye-യെ ദൃശ്യമാക്കി നിർത്തുന്നു"
+  },
+
+  "popup_modal_title": { "message": "തകരാറിലുള്ള സൈറ്റ് റിപ്പോർട്ട് ചെയ്യുക" },
+  "popup_modal_close_aria": { "message": "അടയ്ക്കുക" },
+  "popup_modal_sent": {
+    "message": "നന്ദി. ഞങ്ങൾ $HOST$ പരിശോധിക്കാം.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "ഞങ്ങൾ ഹോസ്റ്റ്നെയിം $HOST$ BannerBye-ലേക്ക് അയയ്ക്കും. ഓപ്ഷണൽ: എന്താണ് പ്രശ്നമെന്ന് ചേർക്കുക.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "എന്താണ് സംഭവിക്കുന്നത്? (ഓപ്ഷണൽ)"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "ശരിയാക്കുമ്പോൾ എനിക്ക് ഇമെയിൽ അയക്കുക (ഓപ്ഷണൽ)"
+  },
+  "popup_modal_fineprint": {
+    "message": "പൂർണ്ണമായും അജ്ഞാതനായി തുടരാൻ ഇത് ഒഴിച്ചിടുക. നിങ്ങൾ ഇത് ചേർത്താൽ, ഈ ബാനർ പരിഹരിക്കുമ്പോൾ ഒരു അറിയിപ്പ് അയക്കാൻ മാത്രമേ ഞങ്ങൾ ഇത് ഉപയോഗിക്കുകയുള്ളൂ."
+  },
+  "popup_modal_error": {
+    "message": "അയയ്ക്കാനായില്ല: $ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "റിപ്പോർട്ട് അയയ്ക്കുക" },
+  "popup_modal_sending": { "message": "അയയ്ക്കുന്നു…" },
+  "popup_modal_try_again": { "message": "വീണ്ടും ശ്രമിക്കുക" },
+
+  "popup_celebration_label": { "message": "നാഴികക്കല്ല് അൺലോക്ക് ചെയ്തു" },
+  "popup_celebration_share_aria": { "message": "ഷെയർ കാർഡ് ഡൗൺലോഡ് ചെയ്യുക" },
+  "popup_celebration_dismiss_aria": { "message": "അടയ്ക്കുക" },
+
+  "popup_reportfixed_label": { "message": "നിങ്ങൾ റിപ്പോർട്ട് ചെയ്ത ഒരു ബാനർ" },
+  "popup_reportfixed_text": {
+    "message": "ഇപ്പോൾ $HOST$-ൽ തടഞ്ഞിരിക്കുന്നു",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "ഒറ്റത്തവണത്തെ അഭ്യർത്ഥന" },
+  "popup_reviewask_title": { "message": "ശാന്തത ആസ്വദിക്കുകയാണോ?" },
+  "popup_reviewask_text": {
+    "message": "ഒരു ചെറിയ അവലോകനം മറ്റുള്ളവർക്ക് BannerBye കണ്ടെത്താൻ സഹായിക്കും. ഞങ്ങൾ ഒരിക്കൽ മാത്രം ചോദിക്കുന്നു — പിന്നീട് ഒരിക്കലുമില്ല."
+  },
+  "popup_reviewask_cta": { "message": "BannerBye-യെ റേറ്റ് ചെയ്യുക →" },
+  "popup_reviewask_dismiss_aria": { "message": "വേണ്ട, നന്ദി" },
+  "popup_reviewask_dismiss_title": { "message": "വേണ്ട, നന്ദി — ഞങ്ങൾ വീണ്ടും ചോദിക്കില്ല" },
+
+  "onboarding_eyebrow": { "message": "വേഗത്തിലുള്ള സജ്ജീകരണം — നിങ്ങൾ ഇതിനകം സുരക്ഷിതരാണ്" },
+  "onboarding_headline_1": { "message": "കുക്കി ബാനറുകൾ, തടഞ്ഞു." },
+  "onboarding_headline_2": { "message": "അവ ലോഡ് ആകുന്നതിന് മുൻപേ." },
+  "onboarding_body": {
+    "message": "കോൺഫിഗർ ചെയ്യാൻ ഒന്നുമില്ല. BannerBye ഇത് ഇപ്പോൾത്തന്നെ ചെയ്യുന്നുണ്ട്:"
+  },
+  "onboarding_check1_title": { "message": "എല്ലാ സൈറ്റുകളിലും നിരസിക്കുന്നു" },
+  "onboarding_check1_desc": {
+    "message": "ഒരു ബാനറിന് ചോദിക്കാൻ അവസരം ലഭിക്കുന്നതിന് മുൻപേ, സ്വയമേവയും നിയമപരമായും „അനുമതി ഇല്ല” എന്ന് അയക്കുന്നു."
+  },
+  "onboarding_check2_title": { "message": "നിശ്ശബ്ദമായി പ്രവർത്തിക്കുന്നു" },
+  "onboarding_check2_desc": {
+    "message": "ഞങ്ങൾ നിങ്ങളെ വീണ്ടും ശല്യപ്പെടുത്തില്ല. ഞങ്ങൾ എത്ര ബാനറുകൾ നിരസിച്ചു എന്ന് കാണാൻ, നിങ്ങളുടെ ടൂൾബാറിലെ ഷീൽഡ് ഐക്കണിൽ എപ്പോൾ വേണമെങ്കിലും ക്ലിക്ക് ചെയ്യുക."
+  },
+  "onboarding_check3_title": { "message": "ഏത് സൈറ്റിലും പഴയപടിയാക്കാം" },
+  "onboarding_check3_desc": {
+    "message": "ബാങ്കിംഗ്, വർക്ക് ടൂളുകൾ, ലോഗിനുകൾ — ഏതെങ്കിലും ഒന്ന് പ്രവർത്തിക്കാതെ വന്നാൽ, ഷീൽഡ് ഐക്കൺ തുറന്ന് „ഈ സൈറ്റിൽ നിർത്തിവയ്ക്കുക” എന്നതിൽ ക്ലിക്ക് ചെയ്യുക."
+  },
+  "onboarding_tip": {
+    "message": "നുറുങ്ങ്: ഒറ്റ ക്ലിക്കിൽ ആക്‌സസ് ചെയ്യാൻ ഐക്കൺ പിൻ ചെയ്യുക — ടൂൾബാറിലെ പസിൽ പീസിൽ ക്ലിക്ക് ചെയ്ത്, BannerBye കണ്ടെത്തി, പിന്നിൽ ക്ലിക്ക് ചെയ്യുക."
+  },
+  "onboarding_cta": { "message": "ബ്രൗസിംഗ് ആരംഭിക്കുക →" },
+
+  "milestone_first_banner": { "message": "ആദ്യത്തെ ബാനർ തടഞ്ഞു" },
+  "milestone_first_steps": { "message": "ആദ്യ ചുവടുകൾ" },
+  "milestone_cookie_crusher": { "message": "കുക്കി ക്രഷർ" },
+  "milestone_banner_bye_master": { "message": "ബാനർ ബൈ-ബൈ മാസ്റ്റർ" },
+  "milestone_privacy_champion": { "message": "സ്വകാര്യതാ ചാമ്പ്യൻ" },
+  "milestone_cookie_diet_month": { "message": "കുക്കി ഡയറ്റ് · ഒന്നാം മാസം" },
+  "milestone_cookie_diet_year": { "message": "കുക്കി ഡയറ്റ് · ഒന്നാം വർഷം" },
+
+  "share_milestone_unlocked_label": { "message": "നാഴികക്കല്ല് അൺലോക്ക് ചെയ്തു" },
+  "share_tagline": { "message": "കുക്കി ബാനറുകൾ, തടഞ്ഞു. അവ ലോഡ് ആകുന്നതിന് മുൻപേ." },
+  "share_counter_singular": {
+    "message": "$COUNT$ കുക്കി ബാനർ നിരസിച്ചു",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "$COUNT$ കുക്കി ബാനറുകൾ നിരസിച്ചു",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "നിങ്ങളുടെ BannerBye കഥ" },
+  "share_milestones_unlocked": {
+    "message": "$TOTAL$ നാഴികക്കല്ലുകളിൽ $COUNT$ അൺലോക്ക് ചെയ്തു",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "$DATE$ മുതൽ",
+    "placeholders": { "date": { "content": "$1" } }
+  }
+}

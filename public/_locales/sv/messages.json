@@ -4,5 +4,177 @@
   },
   "extDesc": {
     "message": "Cookiebanners stoppade innan de laddas. Ställ in din integritet en gång — BannerBye nekar automatiskt på varje webbplats."
+  },
+
+  "popup_loading": { "message": "Laddar…" },
+
+  "popup_status_off": { "message": "BannerBye är avstängd överallt." },
+  "popup_status_no_site": { "message": "Ingen webbplats att skydda." },
+  "popup_status_paused": {
+    "message": "Pausad på $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "Aktiv på $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "Aktiv" },
+  "popup_status_dot_inactive_aria": { "message": "Inaktiv" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "På" },
+  "popup_toggle_off": { "message": "Av" },
+  "popup_pause_site": { "message": "Pausa på den här webbplatsen" },
+  "popup_resume_site": { "message": "Återuppta på den här webbplatsen" },
+
+  "popup_stat_label": { "message": "banners nekade" },
+
+  "popup_activity_show": { "message": "Visa bevisen" },
+  "popup_activity_hide": { "message": "Dölj bevisen" },
+  "popup_activity_no_banner": { "message": "Ingen banner" },
+  "popup_activity_banner_refused_fallback": { "message": "Banner nekad" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "nyss" },
+  "popup_time_minutes_ago": {
+    "message": "$MINUTES$ min sedan",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "$HOURS$ h sedan",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "1 dag sedan" },
+  "popup_time_days_ago": {
+    "message": "$DAYS$ dagar sedan",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "Lagras endast på den här enheten, i sju dagar. Skickas aldrig någonstans."
+  },
+  "popup_activity_clear": { "message": "Rensa den här listan" },
+
+  "popup_milestones_label": { "message": "Milstolpar" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "Ladda ner statistikbild →" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "Neka en banner först"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "Sparar en delbar PNG-bild av din statistik till dina nedladdningar"
+  },
+  "popup_footer_report": { "message": "Rapportera trasig webbplats →" },
+  "popup_footer_rate": { "message": "Betygsätt BannerBye →" },
+  "popup_footer_rate_title": {
+    "message": "Lämna en recension — det hjälper till att hålla BannerBye synlig"
+  },
+
+  "popup_modal_title": { "message": "Rapportera en trasig webbplats" },
+  "popup_modal_close_aria": { "message": "Stäng" },
+  "popup_modal_sent": {
+    "message": "Tack. Vi ska ta en titt på $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "Vi skickar värdnamnet $HOST$ till BannerBye. Valfritt: lägg till vad som är fel.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "Vad händer? (valfritt)"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "Maila mig när det är fixat (valfritt)"
+  },
+  "popup_modal_fineprint": {
+    "message": "Lämna detta tomt för att vara helt anonym. Om du lägger till det kommer vi bara att använda det för att skicka en engångsanteckning till dig när den här bannern har fixats."
+  },
+  "popup_modal_error": {
+    "message": "Kunde inte skicka: $ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "Skicka rapport" },
+  "popup_modal_sending": { "message": "Skickar…" },
+  "popup_modal_try_again": { "message": "Försök igen" },
+
+  "popup_celebration_label": { "message": "Milstolpe upplåst" },
+  "popup_celebration_share_aria": { "message": "Ladda ner delningskort" },
+  "popup_celebration_dismiss_aria": { "message": "Stäng" },
+
+  "popup_reportfixed_label": { "message": "En banner du rapporterade" },
+  "popup_reportfixed_text": {
+    "message": "Nu nekad på $HOST$",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "En engångsfråga" },
+  "popup_reviewask_title": { "message": "Njuter du av tystnaden?" },
+  "popup_reviewask_text": {
+    "message": "En snabb recension hjälper andra att hitta BannerBye. Vi frågar en gång — aldrig mer."
+  },
+  "popup_reviewask_cta": { "message": "Betygsätt BannerBye →" },
+  "popup_reviewask_dismiss_aria": { "message": "Nej, tack" },
+  "popup_reviewask_dismiss_title": { "message": "Nej, tack — vi frågar inte igen" },
+
+  "onboarding_eyebrow": { "message": "Snabb installation — du är redan skyddad" },
+  "onboarding_headline_1": { "message": "Cookiebanners, stoppade." },
+  "onboarding_headline_2": { "message": "Innan de laddas." },
+  "onboarding_body": {
+    "message": "Inget att ställa in. BannerBye gör redan detta, just nu:"
+  },
+  "onboarding_check1_title": { "message": "Nekar på varje webbplats" },
+  "onboarding_check1_desc": {
+    "message": "Skickar automatiskt \"inget samtycke\" på ett juridiskt giltigt sätt, innan en banner ens får chansen att fråga dig."
+  },
+  "onboarding_check2_title": { "message": "Fungerar i det tysta" },
+  "onboarding_check2_desc": {
+    "message": "Du kommer inte att höra från oss igen. Klicka på sköldikonen i verktygsfältet när som helst för att se hur många banners vi har nekat."
+  },
+  "onboarding_check3_title": { "message": "Vändbar på vilken webbplats som helst" },
+  "onboarding_check3_desc": {
+    "message": "Bankverksamhet, arbetsverktyg, inloggningar — om något ser trasigt ut, öppna sköldikonen och tryck på \"Pausa på den här webbplatsen\"."
+  },
+  "onboarding_tip": {
+    "message": "Tips: fäst ikonen för åtkomst med ett klick — pusselbit i verktygsfältet → hitta BannerBye → klicka på nålen."
+  },
+  "onboarding_cta": { "message": "Börja surfa →" },
+
+  "milestone_first_banner": { "message": "Första bannern blockerad" },
+  "milestone_first_steps": { "message": "Första stegen" },
+  "milestone_cookie_crusher": { "message": "Cookie-krossare" },
+  "milestone_banner_bye_master": { "message": "Bannermästare" },
+  "milestone_privacy_champion": { "message": "Integritetsförespråkare" },
+  "milestone_cookie_diet_month": { "message": "Cookie-diet · första månaden" },
+  "milestone_cookie_diet_year": { "message": "Cookie-diet · första året" },
+
+  "share_milestone_unlocked_label": { "message": "MILSTOLPE UPPLÅST" },
+  "share_tagline": { "message": "Cookiebanners, stoppade. Innan de laddas." },
+  "share_counter_singular": {
+    "message": "$COUNT$ cookiebanner nekad",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "$COUNT$ cookiebanners nekade",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "DIN BANNERBYE-BERÄTTELSE" },
+  "share_milestones_unlocked": {
+    "message": "$COUNT$ av $TOTAL$ milstolpar upplåsta",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "sedan $DATE$",
+    "placeholders": { "date": { "content": "$1" } }
   }
 }

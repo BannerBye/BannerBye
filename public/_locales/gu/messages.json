@@ -1,0 +1,180 @@
+{
+  "extName": {
+    "message": "BannerBye — કૂકી બેનર લોડ થાય તે પહેલાં જ બ્લોક"
+  },
+  "extDesc": {
+    "message": "કૂકી બેનર લોડ થાય તે પહેલાં જ બ્લોક થઈ જાય છે. તમારી ગોપનીયતા એકવાર સેટ કરો — બાકીનું BannerBye દરેક સાઇટ પર આપમેળે સંભાળે છે."
+  },
+
+  "popup_loading": { "message": "લોડ થઈ રહ્યું છે…" },
+
+  "popup_status_off": { "message": "BannerBye દરેક જગ્યાએ બંધ છે." },
+  "popup_status_no_site": { "message": "કાર્ય કરવા માટે કોઈ સાઇટ નથી." },
+  "popup_status_paused": {
+    "message": "$HOST$ પર અટકાવવામાં આવ્યું છે.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "$HOST$ પર સક્રિય છે.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "સક્રિય" },
+  "popup_status_dot_inactive_aria": { "message": "નિષ્ક્રિય" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "ચાલુ" },
+  "popup_toggle_off": { "message": "બંધ" },
+  "popup_pause_site": { "message": "આ સાઇટ પર વિરામ આપો" },
+  "popup_resume_site": { "message": "આ સાઇટ પર ફરી શરૂ કરો" },
+
+  "popup_stat_label": { "message": "બેનર નકારવામાં આવ્યાં" },
+
+  "popup_activity_show": { "message": "પુરાવો બતાવો" },
+  "popup_activity_hide": { "message": "પુરાવો છુપાવો" },
+  "popup_activity_no_banner": { "message": "કોઈ બેનર નથી" },
+  "popup_activity_banner_refused_fallback": { "message": "બેનર નકારવામાં આવ્યું" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "હમણાં જ" },
+  "popup_time_minutes_ago": {
+    "message": "$MINUTES$ મિનિટ પહેલાં",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "$HOURS$ કલાક પહેલાં",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "1 દિવસ પહેલાં" },
+  "popup_time_days_ago": {
+    "message": "$DAYS$ દિવસ પહેલાં",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "ફક્ત આ ઉપકરણ પર, સાત દિવસ માટે સંગ્રહિત. ક્યારેય ક્યાંય મોકલવામાં આવતું નથી."
+  },
+  "popup_activity_clear": { "message": "આ સૂચિ સાફ કરો" },
+
+  "popup_milestones_label": { "message": "માઇલસ્ટોન" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "આંકડાની છબી ડાઉનલોડ કરો →" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "પહેલાં એક બેનર નકારો"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "તમારા આંકડાઓની શેર કરી શકાય તેવી PNG છબી તમારા ડાઉનલોડ ફોલ્ડરમાં સાચવે છે"
+  },
+  "popup_footer_report": { "message": "ખામીવાળી સાઇટની જાણ કરો →" },
+  "popup_footer_rate": { "message": "BannerBye ને રેટ કરો →" },
+  "popup_footer_rate_title": {
+    "message": "સમીક્ષા આપો — તે BannerBye ને દૃશ્યમાન રાખે છે"
+  },
+
+  "popup_modal_title": { "message": "ખામીવાળી સાઇટની જાણ કરો" },
+  "popup_modal_close_aria": { "message": "બંધ કરો" },
+  "popup_modal_sent": {
+    "message": "આભાર. અમે $HOST$ તપાસીશું.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "અમે હોસ્ટનેમ $HOST$ BannerBye ને મોકલીશું. વૈકલ્પિક: શું ખોટું થઈ રહ્યું છે તે ઉમેરો.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "શું થઈ રહ્યું છે? (વૈકલ્પિક)"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "તે ઠીક થાય ત્યારે મને ઈમેલ કરો (વૈકલ્પિક)"
+  },
+  "popup_modal_fineprint": {
+    "message": "સંપૂર્ણપણે અનામી રહેવા માટે તેને ખાલી છોડો. જો તમે તે ઉમેરો, તો આ બેનર ઠીક થાય ત્યારે તમને એક સૂચના મોકલવા માટે જ અમે તેનો ઉપયોગ કરીશું."
+  },
+  "popup_modal_error": {
+    "message": "મોકલી શકાયું નહીં: $ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "અહેવાલ મોકલો" },
+  "popup_modal_sending": { "message": "મોકલાઈ રહ્યું છે…" },
+  "popup_modal_try_again": { "message": "ફરીથી પ્રયાસ કરો" },
+
+  "popup_celebration_label": { "message": "માઇલસ્ટોન અનલોક થયું" },
+  "popup_celebration_share_aria": { "message": "શેર કાર્ડ ડાઉનલોડ કરો" },
+  "popup_celebration_dismiss_aria": { "message": "બંધ કરો" },
+
+  "popup_reportfixed_label": { "message": "તમે જાણ કરેલું બેનર" },
+  "popup_reportfixed_text": {
+    "message": "હવે $HOST$ પર બ્લોક થયેલું છે",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "એકવારની વિનંતી" },
+  "popup_reviewask_title": { "message": "શાંતિનો આનંદ માણો છો?" },
+  "popup_reviewask_text": {
+    "message": "એક ટૂંકી સમીક્ષા બીજાઓને BannerBye શોધવામાં મદદ કરે છે. અમે એકવાર પૂછીએ છીએ — ફરી ક્યારેય નહીં."
+  },
+  "popup_reviewask_cta": { "message": "BannerBye ને રેટ કરો →" },
+  "popup_reviewask_dismiss_aria": { "message": "નહીં, આભાર" },
+  "popup_reviewask_dismiss_title": { "message": "નહીં, આભાર — અમે ફરીથી નહીં પૂછીએ" },
+
+  "onboarding_eyebrow": { "message": "ઝડપી સેટઅપ — તમે પહેલેથી જ સુરક્ષિત છો" },
+  "onboarding_headline_1": { "message": "કૂકી બેનર, બ્લોક." },
+  "onboarding_headline_2": { "message": "તે લોડ થાય તે પહેલાં." },
+  "onboarding_body": {
+    "message": "ગોઠવવા માટે કંઈ નથી. BannerBye પહેલેથી જ આ કરે છે, હમણાં જ:"
+  },
+  "onboarding_check1_title": { "message": "દરેક સાઇટ પર ઇનકાર કરે છે" },
+  "onboarding_check1_desc": {
+    "message": "બેનરને પૂછવાની તક મળે તે પહેલાં જ, આપમેળે અને કાયદેસર રીતે „સંમતિ નહીં” મોકલે છે."
+  },
+  "onboarding_check2_title": { "message": "શાંતિથી કામ કરે છે" },
+  "onboarding_check2_desc": {
+    "message": "અમે ફરીથી સંપર્ક નહીં કરીએ. અમે કેટલાં બેનર નકાર્યાં છે તે જોવા માટે કોઈપણ સમયે તમારા ટૂલબારમાં શીલ્ડ આઇકન પર ક્લિક કરો."
+  },
+  "onboarding_check3_title": { "message": "કોઈપણ સાઇટ પર પાછું ફેરવી શકાય" },
+  "onboarding_check3_desc": {
+    "message": "બેંકિંગ, કામનાં સાધનો, લૉગિન — જો કંઈ બરાબર કામ ન કરતું લાગે, તો શીલ્ડ આઇકન ખોલો અને „આ સાઇટ પર વિરામ આપો” પર ક્લિક કરો."
+  },
+  "onboarding_tip": {
+    "message": "ટીપ: એક-ક્લિક ઍક્સેસ માટે આઇકનને પિન કરો — ટૂલબારમાં પઝલ પીસ પર ક્લિક કરો, BannerBye શોધો, પછી પિન પર ક્લિક કરો."
+  },
+  "onboarding_cta": { "message": "બ્રાઉઝિંગ શરૂ કરો →" },
+
+  "milestone_first_banner": { "message": "પ્રથમ બેનર બ્લોક થયું" },
+  "milestone_first_steps": { "message": "પ્રથમ પગલાં" },
+  "milestone_cookie_crusher": { "message": "કૂકી ક્રશર" },
+  "milestone_banner_bye_master": { "message": "બેનર બાય-બાય માસ્ટર" },
+  "milestone_privacy_champion": { "message": "ગોપનીયતા ચેમ્પિયન" },
+  "milestone_cookie_diet_month": { "message": "કૂકી ડાયટ · પ્રથમ મહિનો" },
+  "milestone_cookie_diet_year": { "message": "કૂકી ડાયટ · પ્રથમ વર્ષ" },
+
+  "share_milestone_unlocked_label": { "message": "માઇલસ્ટોન અનલોક થયું" },
+  "share_tagline": { "message": "કૂકી બેનર, બ્લોક. તે લોડ થાય તે પહેલાં." },
+  "share_counter_singular": {
+    "message": "$COUNT$ કૂકી બેનર નકારવામાં આવ્યું",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "$COUNT$ કૂકી બેનર નકારવામાં આવ્યાં",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "તમારી BannerBye સ્ટોરી" },
+  "share_milestones_unlocked": {
+    "message": "$TOTAL$ માંથી $COUNT$ માઇલસ્ટોન અનલોક થયાં",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "$DATE$ થી",
+    "placeholders": { "date": { "content": "$1" } }
+  }
+}

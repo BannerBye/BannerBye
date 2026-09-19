@@ -27,13 +27,13 @@ export type { Milestone, MilestoneThreshold } from './types.ts';
  * ook als wij de display-naam later herschrijven. NOOIT id's veranderen.
  */
 export const MILESTONES: readonly Milestone[] = [
-  { id: 'first-banner',       threshold: { type: 'banners', count: 1 },      name: 'Pop your first' },
-  { id: 'first-steps',        threshold: { type: 'banners', count: 10 },     name: 'First steps' },
-  { id: 'cookie-crusher',     threshold: { type: 'banners', count: 100 },    name: 'Cookie crusher' },
-  { id: 'banner-bye-master',  threshold: { type: 'banners', count: 1000 },   name: 'Banner bye-bye master' },
-  { id: 'privacy-champion',   threshold: { type: 'banners', count: 10000 },  name: 'Privacy champion' },
-  { id: 'cookie-diet-month',  threshold: { type: 'days', count: 30 },        name: 'Cookie diet · month one' },
-  { id: 'cookie-diet-year',   threshold: { type: 'days', count: 365 },       name: 'Cookie diet · year one' },
+  { id: 'first-banner',       threshold: { type: 'banners', count: 1 },      name: 'Pop your first',            nameKey: 'milestone_first_banner' },
+  { id: 'first-steps',        threshold: { type: 'banners', count: 10 },     name: 'First steps',                nameKey: 'milestone_first_steps' },
+  { id: 'cookie-crusher',     threshold: { type: 'banners', count: 100 },    name: 'Cookie crusher',             nameKey: 'milestone_cookie_crusher' },
+  { id: 'banner-bye-master',  threshold: { type: 'banners', count: 1000 },   name: 'Banner bye-bye master',      nameKey: 'milestone_banner_bye_master' },
+  { id: 'privacy-champion',   threshold: { type: 'banners', count: 10000 },  name: 'Privacy champion',           nameKey: 'milestone_privacy_champion' },
+  { id: 'cookie-diet-month',  threshold: { type: 'days', count: 30 },        name: 'Cookie diet · month one',    nameKey: 'milestone_cookie_diet_month' },
+  { id: 'cookie-diet-year',   threshold: { type: 'days', count: 365 },       name: 'Cookie diet · year one',     nameKey: 'milestone_cookie_diet_year' },
 ];
 
 /**

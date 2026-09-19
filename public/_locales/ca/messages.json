@@ -1,0 +1,180 @@
+{
+  "extName": {
+    "message": "BannerBye — bàners de galetes bloquejats abans de carregar-se"
+  },
+  "extDesc": {
+    "message": "Els bàners de galetes es bloquegen abans que es carreguin. Configura la teva privacitat un sol cop — BannerBye s'encarrega de la resta, automàticament i a tots els llocs."
+  },
+
+  "popup_loading": { "message": "Carregant…" },
+
+  "popup_status_off": { "message": "BannerBye està desactivat a tot arreu." },
+  "popup_status_no_site": { "message": "Cap lloc sobre el qual actuar." },
+  "popup_status_paused": {
+    "message": "Aturat a $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "Actiu a $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "Actiu" },
+  "popup_status_dot_inactive_aria": { "message": "Inactiu" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "Activat" },
+  "popup_toggle_off": { "message": "Desactivat" },
+  "popup_pause_site": { "message": "Atura en aquest lloc" },
+  "popup_resume_site": { "message": "Reprèn en aquest lloc" },
+
+  "popup_stat_label": { "message": "bàners rebutjats" },
+
+  "popup_activity_show": { "message": "Mostra les proves" },
+  "popup_activity_hide": { "message": "Amaga les proves" },
+  "popup_activity_no_banner": { "message": "Cap bàner" },
+  "popup_activity_banner_refused_fallback": { "message": "Bàner rebutjat" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "ara mateix" },
+  "popup_time_minutes_ago": {
+    "message": "fa $MINUTES$ min",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "fa $HOURS$ h",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "fa 1 dia" },
+  "popup_time_days_ago": {
+    "message": "fa $DAYS$ dies",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "Desat només en aquest dispositiu, durant set dies. Mai no s'envia enlloc."
+  },
+  "popup_activity_clear": { "message": "Esborra aquesta llista" },
+
+  "popup_milestones_label": { "message": "Fites" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "Descarrega la imatge d'estadístiques →" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "Rebutja primer un bàner"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "Desa una imatge PNG de les teves estadístiques per compartir a la carpeta de descàrregues"
+  },
+  "popup_footer_report": { "message": "Informa d'un lloc que no funciona →" },
+  "popup_footer_rate": { "message": "Valora BannerBye →" },
+  "popup_footer_rate_title": {
+    "message": "Deixa una ressenya — així BannerBye continua sent visible"
+  },
+
+  "popup_modal_title": { "message": "Informa d'un lloc que no funciona" },
+  "popup_modal_close_aria": { "message": "Tanca" },
+  "popup_modal_sent": {
+    "message": "Gràcies. Donarem un cop d'ull a $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "Enviarem el nom d'amfitrió $HOST$ a BannerBye. Opcional: afegeix què falla.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "Què està passant? (opcional)"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "Envia'm un correu quan estigui solucionat (opcional)"
+  },
+  "popup_modal_fineprint": {
+    "message": "Deixa-ho en blanc per mantenir-te completament anònim. Si l'afegeixes, només l'utilitzarem per enviar-te un avís quan s'hagi resolt aquest bàner."
+  },
+  "popup_modal_error": {
+    "message": "No s'ha pogut enviar: $ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "Envia l'informe" },
+  "popup_modal_sending": { "message": "S'està enviant…" },
+  "popup_modal_try_again": { "message": "Torna-ho a provar" },
+
+  "popup_celebration_label": { "message": "Fita desbloquejada" },
+  "popup_celebration_share_aria": { "message": "Descarrega la targeta per compartir" },
+  "popup_celebration_dismiss_aria": { "message": "Descarta" },
+
+  "popup_reportfixed_label": { "message": "Un bàner que vas reportar" },
+  "popup_reportfixed_text": {
+    "message": "Ara bloquejat a $HOST$",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "Una petició única" },
+  "popup_reviewask_title": { "message": "Gaudeixes de la tranquil·litat?" },
+  "popup_reviewask_text": {
+    "message": "Una breu ressenya ajuda els altres a trobar BannerBye. T'ho demanem una vegada — mai més."
+  },
+  "popup_reviewask_cta": { "message": "Valora BannerBye →" },
+  "popup_reviewask_dismiss_aria": { "message": "No, gràcies" },
+  "popup_reviewask_dismiss_title": { "message": "No, gràcies — no t'ho tornarem a preguntar" },
+
+  "onboarding_eyebrow": { "message": "Configuració ràpida — ja estàs protegit" },
+  "onboarding_headline_1": { "message": "Bàners de galetes, bloquejats." },
+  "onboarding_headline_2": { "message": "Abans que es carreguin." },
+  "onboarding_body": {
+    "message": "No cal configurar res. BannerBye ja ho fa, ara mateix:"
+  },
+  "onboarding_check1_title": { "message": "Rebutja a tots els llocs" },
+  "onboarding_check1_desc": {
+    "message": "Envia «sense consentiment» de manera automàtica i legal, abans que un bàner tingui l'oportunitat de demanar-t'ho."
+  },
+  "onboarding_check2_title": { "message": "Funciona en silenci" },
+  "onboarding_check2_desc": {
+    "message": "No tornaràs a saber res de nosaltres. Fes clic a la icona de l'escut de la barra d'eines quan vulguis per veure quants bàners hem rebutjat."
+  },
+  "onboarding_check3_title": { "message": "Reversible a qualsevol lloc" },
+  "onboarding_check3_desc": {
+    "message": "Serveis bancaris, eines de feina, inicis de sessió — si alguna cosa sembla que no funciona, obre la icona de l'escut i fes clic a «Atura en aquest lloc»."
+  },
+  "onboarding_tip": {
+    "message": "Consell: fixa la icona per accedir-hi amb un sol clic — fes clic a la peça del trencaclosques de la barra d'eines, troba BannerBye i fes clic a l'agulla."
+  },
+  "onboarding_cta": { "message": "Comença a navegar →" },
+
+  "milestone_first_banner": { "message": "Primer bàner bloquejat" },
+  "milestone_first_steps": { "message": "Primers passos" },
+  "milestone_cookie_crusher": { "message": "Esmicolador de galetes" },
+  "milestone_banner_bye_master": { "message": "Mestre de l'adéu als bàners" },
+  "milestone_privacy_champion": { "message": "Campió de la privacitat" },
+  "milestone_cookie_diet_month": { "message": "Dieta de galetes · primer mes" },
+  "milestone_cookie_diet_year": { "message": "Dieta de galetes · primer any" },
+
+  "share_milestone_unlocked_label": { "message": "FITA DESBLOQUEJADA" },
+  "share_tagline": { "message": "Bàners de galetes, bloquejats. Abans que es carreguin." },
+  "share_counter_singular": {
+    "message": "$COUNT$ bàner de galetes rebutjat",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "$COUNT$ bàners de galetes rebutjats",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "LA TEVA HISTÒRIA AMB BANNERBYE" },
+  "share_milestones_unlocked": {
+    "message": "$COUNT$ de $TOTAL$ fites desbloquejades",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "des de $DATE$",
+    "placeholders": { "date": { "content": "$1" } }
+  }
+}

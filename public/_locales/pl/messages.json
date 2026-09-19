@@ -4,5 +4,177 @@
   },
   "extDesc": {
     "message": "Banery cookie zablokowane, zanim się załadują. Ustaw prywatność raz — BannerBye automatycznie odmawia na każdej stronie."
+  },
+
+  "popup_loading": { "message": "Ładowanie…" },
+
+  "popup_status_off": { "message": "BannerBye jest wyłączone wszędzie." },
+  "popup_status_no_site": { "message": "Brak strony do ochrony." },
+  "popup_status_paused": {
+    "message": "Wstrzymane na $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "Aktywne na $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "Aktywne" },
+  "popup_status_dot_inactive_aria": { "message": "Nieaktywne" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "Włączone" },
+  "popup_toggle_off": { "message": "Wyłączone" },
+  "popup_pause_site": { "message": "Wstrzymaj na tej stronie" },
+  "popup_resume_site": { "message": "Wznów na tej stronie" },
+
+  "popup_stat_label": { "message": "banerów odrzuconych" },
+
+  "popup_activity_show": { "message": "Pokaż dowody" },
+  "popup_activity_hide": { "message": "Ukryj dowody" },
+  "popup_activity_no_banner": { "message": "Brak banera" },
+  "popup_activity_banner_refused_fallback": { "message": "Baner odrzucony" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "przed chwilą" },
+  "popup_time_minutes_ago": {
+    "message": "$MINUTES$ min temu",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "$HOURS$ godz. temu",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "1 dzień temu" },
+  "popup_time_days_ago": {
+    "message": "$DAYS$ dni temu",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "Przechowywane wyłącznie na tym urządzeniu przez siedem dni. Nigdy nigdzie nie wysyłane."
+  },
+  "popup_activity_clear": { "message": "Wyczyść tę listę" },
+
+  "popup_milestones_label": { "message": "Kamienie milowe" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "Pobierz obrazek ze statystykami →" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "Najpierw odrzuć baner"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "Zapisuje obrazek PNG ze statystykami, który można udostępniać, w folderze pobranych plików"
+  },
+  "popup_footer_report": { "message": "Zgłoś niedziałającą stronę →" },
+  "popup_footer_rate": { "message": "Oceń BannerBye →" },
+  "popup_footer_rate_title": {
+    "message": "Napisz recenzję — dzięki temu BannerBye pozostanie widoczne"
+  },
+
+  "popup_modal_title": { "message": "Zgłoś niedziałającą stronę" },
+  "popup_modal_close_aria": { "message": "Zamknij" },
+  "popup_modal_sent": {
+    "message": "Dziękujemy. Przyjrzymy się stronie $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "Wyślemy nazwę hosta $HOST$ do BannerBye. Opcjonalnie: dodaj opis problemu.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "Co się dzieje? (opcjonalnie)"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "Wyślij mi e-mail, gdy problem zostanie naprawiony (opcjonalnie)"
+  },
+  "popup_modal_fineprint": {
+    "message": "Pozostaw to pole puste, aby zachować pełną anonimowość. Jeśli je wypełnisz, wykorzystamy ten adres wyłącznie do wysłania jednego powiadomienia, gdy baner zostanie naprawiony."
+  },
+  "popup_modal_error": {
+    "message": "Nie udało się wysłać: $ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "Wyślij zgłoszenie" },
+  "popup_modal_sending": { "message": "Wysyłanie…" },
+  "popup_modal_try_again": { "message": "Spróbuj ponownie" },
+
+  "popup_celebration_label": { "message": "Kamień milowy odblokowany" },
+  "popup_celebration_share_aria": { "message": "Pobierz kartę udostępniania" },
+  "popup_celebration_dismiss_aria": { "message": "Zamknij" },
+
+  "popup_reportfixed_label": { "message": "Baner zgłoszony przez Ciebie" },
+  "popup_reportfixed_text": {
+    "message": "Teraz odrzucony na $HOST$",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "Jednorazowa prośba" },
+  "popup_reviewask_title": { "message": "Cieszysz się ciszą?" },
+  "popup_reviewask_text": {
+    "message": "Krótka recenzja pomaga innym znaleźć BannerBye. Zapytamy raz — nigdy więcej."
+  },
+  "popup_reviewask_cta": { "message": "Oceń BannerBye →" },
+  "popup_reviewask_dismiss_aria": { "message": "Nie, dziękuję" },
+  "popup_reviewask_dismiss_title": { "message": "Nie, dziękuję — nie będziemy pytać ponownie" },
+
+  "onboarding_eyebrow": { "message": "Szybka konfiguracja — jesteś już chroniony" },
+  "onboarding_headline_1": { "message": "Banery cookie, zablokowane." },
+  "onboarding_headline_2": { "message": "Zanim się załadują." },
+  "onboarding_body": {
+    "message": "Nie musisz niczego konfigurować. BannerBye już to robi, od tej chwili:"
+  },
+  "onboarding_check1_title": { "message": "Odrzuca je na każdej stronie" },
+  "onboarding_check1_desc": {
+    "message": "Automatycznie wysyła „brak zgody” zgodnie z prawem, zanim baner zdąży o nią poprosić."
+  },
+  "onboarding_check2_title": { "message": "Działa w tle" },
+  "onboarding_check2_desc": {
+    "message": "Nie usłyszysz już od nas ani słowa. Kliknij ikonę tarczy na pasku narzędzi w dowolnym momencie, aby sprawdzić, ile banerów odrzuciliśmy."
+  },
+  "onboarding_check3_title": { "message": "Odwracalne na dowolnej stronie" },
+  "onboarding_check3_desc": {
+    "message": "Bankowość, narzędzia do pracy, logowanie — jeśli coś wygląda na zepsute, otwórz ikonę tarczy i naciśnij „Wstrzymaj na tej stronie”."
+  },
+  "onboarding_tip": {
+    "message": "Wskazówka: przypnij ikonę, aby mieć do niej dostęp jednym kliknięciem — element układanki na pasku narzędzi → znajdź BannerBye → kliknij pinezkę."
+  },
+  "onboarding_cta": { "message": "Zacznij przeglądać →" },
+
+  "milestone_first_banner": { "message": "Pierwszy zablokowany baner" },
+  "milestone_first_steps": { "message": "Pierwsze kroki" },
+  "milestone_cookie_crusher": { "message": "Niszczyciel plików cookie" },
+  "milestone_banner_bye_master": { "message": "Mistrz banerów" },
+  "milestone_privacy_champion": { "message": "Bohater prywatności" },
+  "milestone_cookie_diet_month": { "message": "Dieta plików cookie · pierwszy miesiąc" },
+  "milestone_cookie_diet_year": { "message": "Dieta plików cookie · pierwszy rok" },
+
+  "share_milestone_unlocked_label": { "message": "KAMIEŃ MILOWY ODBLOKOWANY" },
+  "share_tagline": { "message": "Banery cookie, zablokowane. Zanim się załadują." },
+  "share_counter_singular": {
+    "message": "Odrzucono $COUNT$ baner dotyczący plików cookie",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "Odrzucono $COUNT$ banerów dotyczących plików cookie",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "TWOJA HISTORIA Z BANNERBYE" },
+  "share_milestones_unlocked": {
+    "message": "$COUNT$ z $TOTAL$ kamieni milowych odblokowanych",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "od $DATE$",
+    "placeholders": { "date": { "content": "$1" } }
   }
 }

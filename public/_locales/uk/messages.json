@@ -1,0 +1,180 @@
+{
+  "extName": {
+    "message": "BannerBye — блокує банери файлів cookie до їх завантаження"
+  },
+  "extDesc": {
+    "message": "Банери файлів cookie заблоковано ще до завантаження. Налаштуйте конфіденційність один раз — BannerBye автоматично відхиляє на кожному сайті."
+  },
+
+  "popup_loading": { "message": "Завантаження…" },
+
+  "popup_status_off": { "message": "BannerBye вимкнено скрізь." },
+  "popup_status_no_site": { "message": "Немає сайту, який потрібно захищати." },
+  "popup_status_paused": {
+    "message": "Призупинено на $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "Активно на $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "Активно" },
+  "popup_status_dot_inactive_aria": { "message": "Неактивно" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "Увімкнено" },
+  "popup_toggle_off": { "message": "Вимкнено" },
+  "popup_pause_site": { "message": "Призупинити на цьому сайті" },
+  "popup_resume_site": { "message": "Продовжити на цьому сайті" },
+
+  "popup_stat_label": { "message": "банерів відхилено" },
+
+  "popup_activity_show": { "message": "Показати докази" },
+  "popup_activity_hide": { "message": "Приховати докази" },
+  "popup_activity_no_banner": { "message": "Банер відсутній" },
+  "popup_activity_banner_refused_fallback": { "message": "Банер відхилено" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "щойно" },
+  "popup_time_minutes_ago": {
+    "message": "$MINUTES$ хв тому",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "$HOURS$ год тому",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "1 день тому" },
+  "popup_time_days_ago": {
+    "message": "$DAYS$ днів тому",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "Зберігається лише на цьому пристрої протягом семи днів. Ніколи нікуди не надсилається."
+  },
+  "popup_activity_clear": { "message": "Очистити цей список" },
+
+  "popup_milestones_label": { "message": "Віхи" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "Завантажити зображення статистики →" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "Спочатку відхиліть банер"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "Зберігає PNG-зображення вашої статистики, яким можна поділитися, у папці «Завантаження»"
+  },
+  "popup_footer_report": { "message": "Повідомити про несправний сайт →" },
+  "popup_footer_rate": { "message": "Оцінити BannerBye →" },
+  "popup_footer_rate_title": {
+    "message": "Залиште відгук — це допоможе BannerBye залишатися помітним"
+  },
+
+  "popup_modal_title": { "message": "Повідомити про несправний сайт" },
+  "popup_modal_close_aria": { "message": "Закрити" },
+  "popup_modal_sent": {
+    "message": "Дякуємо. Ми перевіримо $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "Ми надішлемо ім’я хосту $HOST$ до BannerBye. Необов’язково: додайте, що саме не працює.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "Що відбувається? (необов’язково)"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "Надішліть мені e-mail, коли проблему буде виправлено (необов’язково)"
+  },
+  "popup_modal_fineprint": {
+    "message": "Залиште це поле порожнім, щоб зберегти повну анонімність. Якщо ви вкажете адресу, ми використаємо її лише для того, щоб надіслати вам одноразове повідомлення, коли цей банер буде виправлено."
+  },
+  "popup_modal_error": {
+    "message": "Не вдалося надіслати: $ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "Надіслати звіт" },
+  "popup_modal_sending": { "message": "Надсилання…" },
+  "popup_modal_try_again": { "message": "Спробувати ще раз" },
+
+  "popup_celebration_label": { "message": "Віху розблоковано" },
+  "popup_celebration_share_aria": { "message": "Завантажити картку для поширення" },
+  "popup_celebration_dismiss_aria": { "message": "Закрити" },
+
+  "popup_reportfixed_label": { "message": "Банер, про який ви повідомили" },
+  "popup_reportfixed_text": {
+    "message": "Тепер відхилено на $HOST$",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "Одноразове прохання" },
+  "popup_reviewask_title": { "message": "Насолоджуєтеся тишею?" },
+  "popup_reviewask_text": {
+    "message": "Короткий відгук допоможе іншим знайти BannerBye. Ми просимо лише один раз — більше ніколи."
+  },
+  "popup_reviewask_cta": { "message": "Оцінити BannerBye →" },
+  "popup_reviewask_dismiss_aria": { "message": "Ні, дякую" },
+  "popup_reviewask_dismiss_title": { "message": "Ні, дякую — ми більше не будемо просити" },
+
+  "onboarding_eyebrow": { "message": "Швидке налаштування — ви вже захищені" },
+  "onboarding_headline_1": { "message": "Банери файлів cookie, заблоковано." },
+  "onboarding_headline_2": { "message": "Ще до їх завантаження." },
+  "onboarding_body": {
+    "message": "Нічого налаштовувати не потрібно. BannerBye вже робить це прямо зараз:"
+  },
+  "onboarding_check1_title": { "message": "Відхиляє запити на кожному сайті" },
+  "onboarding_check1_desc": {
+    "message": "Автоматично надсилає «відмову від згоди» у юридично обґрунтованій формі ще до того, як банер встигне вас про це запитати."
+  },
+  "onboarding_check2_title": { "message": "Працює непомітно" },
+  "onboarding_check2_desc": {
+    "message": "Ви більше про нас не почуєте. У будь-який момент натисніть на іконку щита на панелі інструментів, щоб побачити, скільки банерів ми відхилили."
+  },
+  "onboarding_check3_title": { "message": "Можна скасувати на будь-якому сайті" },
+  "onboarding_check3_desc": {
+    "message": "Банківські сервіси, робочі інструменти, входи — якщо щось виглядає не так, відкрийте іконку щита та натисніть «Призупинити на цьому сайті»."
+  },
+  "onboarding_tip": {
+    "message": "Порада: закріпіть іконку для доступу в один клік — фрагмент пазла на панелі інструментів, знайдіть BannerBye, натисніть на шпильку."
+  },
+  "onboarding_cta": { "message": "Почніть перегляд →" },
+
+  "milestone_first_banner": { "message": "Перший заблокований банер" },
+  "milestone_first_steps": { "message": "Перші кроки" },
+  "milestone_cookie_crusher": { "message": "Знищувач файлів cookie" },
+  "milestone_banner_bye_master": { "message": "Майстер банерів" },
+  "milestone_privacy_champion": { "message": "Чемпіон конфіденційності" },
+  "milestone_cookie_diet_month": { "message": "Дієта без cookie · перший місяць" },
+  "milestone_cookie_diet_year": { "message": "Дієта без cookie · перший рік" },
+
+  "share_milestone_unlocked_label": { "message": "ВІХУ РОЗБЛОКОВАНО" },
+  "share_tagline": { "message": "Банери файлів cookie, заблоковано. Ще до їх завантаження." },
+  "share_counter_singular": {
+    "message": "$COUNT$ банер файлів cookie відхилено",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "$COUNT$ банерів файлів cookie відхилено",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "ВАША ІСТОРІЯ З BANNERBYE" },
+  "share_milestones_unlocked": {
+    "message": "$COUNT$ із $TOTAL$ віх розблоковано",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "з $DATE$",
+    "placeholders": { "date": { "content": "$1" } }
+  }
+}

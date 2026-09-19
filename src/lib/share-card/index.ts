@@ -20,6 +20,14 @@
  */
 
 import type { Milestone } from '../milestones/types.ts';
+import { MILESTONES } from '../milestones/index.ts';
+import { t } from '../i18n/t.ts';
+
+// v0.4.5 (vertaalronde 19-09-2026): alle canvas-tekst loopt nu via t().
+// Bekende beperking: canvas 2D text-rendering doet geen bidi/RTL-reshaping.
+// Voor Arabisch/Hebreeuws/Urdu/Perzisch kan de tekstrichting hierdoor visueel
+// fout ogen op de gedownloade PNG — een DOM-gebaseerde kaart zou dit correct
+// renderen, canvas niet. Geaccepteerde beperking voor v1 van deze vertaalronde.
 
 const WIDTH = 1200;
 const HEIGHT = 630;
@@ -70,32 +78,36 @@ export function generateShareCard(
   ctx.textAlign = 'center';
   ctx.font = '500 22px "JetBrains Mono", "Menlo", monospace';
   ctx.fillStyle = COLOR_SMOKE;
-  ctx.fillText('MILESTONE UNLOCKED', WIDTH / 2, 220);
+  ctx.fillText(t('share_milestone_unlocked_label'), WIDTH / 2, 220);
 
   // === MILESTONE NAAM ===
-  // Auto-scale font op basis van lengte van de naam zodat lange namen
-  // ("Banner bye-bye master") niet de canvas overlopen.
+  // Auto-scale font op basis van lengte van de vertaalde naam zodat lange
+  // teksten (in sommige talen langer dan het Engelse origineel) niet de
+  // canvas overlopen.
+  const milestoneName = t(milestone.nameKey);
   ctx.fillStyle = COLOR_INK;
   let nameSize = 96;
   ctx.font = `700 ${nameSize}px "Helvetica Neue", "Arial", sans-serif`;
-  while (ctx.measureText(milestone.name).width > WIDTH - 160 && nameSize > 48) {
+  while (ctx.measureText(milestoneName).width > WIDTH - 160 && nameSize > 48) {
     nameSize -= 4;
     ctx.font = `700 ${nameSize}px "Helvetica Neue", "Arial", sans-serif`;
   }
-  ctx.fillText(milestone.name, WIDTH / 2, 270);
+  ctx.fillText(milestoneName, WIDTH / 2, 270);
 
   // === COUNTER ===
   ctx.font = '400 32px "Helvetica Neue", "Arial", sans-serif';
   ctx.fillStyle = COLOR_SMOKE;
-  const counterText = `${blockedCount.toLocaleString('en-US')} cookie banner${
-    blockedCount === 1 ? '' : 's'
-  } refused`;
+  const countStr = blockedCount.toLocaleString('en-US');
+  const counterText = t(
+    blockedCount === 1 ? 'share_counter_singular' : 'share_counter_plural',
+    countStr,
+  );
   ctx.fillText(counterText, WIDTH / 2, 400);
 
   // === TAGLINE ===
   ctx.font = '500 24px "Helvetica Neue", "Arial", sans-serif';
   ctx.fillStyle = COLOR_INK;
-  ctx.fillText('Cookie banners, killed. Before they load.', WIDTH / 2, 500);
+  ctx.fillText(t('share_tagline'), WIDTH / 2, 500);
 
   // === URL ===
   ctx.font = '500 20px "JetBrains Mono", "Menlo", monospace';
@@ -158,7 +170,7 @@ export function generateStatsCard(
   ctx.textAlign = 'center';
   ctx.font = '500 22px "JetBrains Mono", "Menlo", monospace';
   ctx.fillStyle = COLOR_SMOKE;
-  ctx.fillText('YOUR BANNERBYE STORY', WIDTH / 2, 200);
+  ctx.fillText(t('share_stats_label'), WIDTH / 2, 200);
 
   // === BLOCKED COUNT (groot) ===
   ctx.font = '700 144px "Helvetica Neue", "Arial", sans-serif';
@@ -166,19 +178,26 @@ export function generateStatsCard(
   ctx.fillText(blockedCount.toLocaleString('en-US'), WIDTH / 2, 240);
 
   // === COUNTER LABEL ===
+  // De counter-strings ("$COUNT$ cookie banner(s) refused") bevatten zelf al
+  // een $COUNT$-placeholder, maar het grote getal erboven staat al los
+  // getoond — hier gebruiken we dezelfde sleutel enkel voor het label-deel,
+  // dus de placeholder-waarde is gelijk aan het al zichtbare getal.
   ctx.font = '400 28px "Helvetica Neue", "Arial", sans-serif';
   ctx.fillStyle = COLOR_INK;
-  ctx.fillText(
-    `cookie banner${blockedCount === 1 ? '' : 's'} refused`,
-    WIDTH / 2,
-    400,
+  const statsCounterText = t(
+    blockedCount === 1 ? 'share_counter_singular' : 'share_counter_plural',
+    blockedCount.toLocaleString('en-US'),
   );
+  ctx.fillText(statsCounterText, WIDTH / 2, 400);
 
   // === MILESTONES LINE ===
   ctx.font = '500 24px "Helvetica Neue", "Arial", sans-serif';
   ctx.fillStyle = COLOR_SMOKE;
   ctx.fillText(
-    `${unlockedMilestones} of 7 milestones unlocked`,
+    t('share_milestones_unlocked', [
+      String(unlockedMilestones),
+      String(MILESTONES.length),
+    ]),
     WIDTH / 2,
     455,
   );
@@ -186,19 +205,22 @@ export function generateStatsCard(
   // === SINCE-LINE ===
   if (installedAt > 0) {
     const since = new Date(installedAt);
-    const sinceText = since.toLocaleDateString('en-US', {
+    // Locale-aware: gebruikt de UI-taal van de browser/extensie in plaats
+    // van hardcoded 'en-US', zodat de maandnaam meevertaalt.
+    const uiLocale = chrome.i18n.getUILanguage();
+    const sinceText = since.toLocaleDateString(uiLocale, {
       month: 'long',
       year: 'numeric',
     });
     ctx.font = '400 20px "Helvetica Neue", "Arial", sans-serif';
     ctx.fillStyle = COLOR_SMOKE;
-    ctx.fillText(`since ${sinceText}`, WIDTH / 2, 495);
+    ctx.fillText(t('share_since', sinceText), WIDTH / 2, 495);
   }
 
   // === TAGLINE ===
   ctx.font = '500 22px "Helvetica Neue", "Arial", sans-serif';
   ctx.fillStyle = COLOR_INK;
-  ctx.fillText('Cookie banners, killed. Before they load.', WIDTH / 2, 555);
+  ctx.fillText(t('share_tagline'), WIDTH / 2, 555);
 
   // === URL ===
   ctx.font = '500 18px "JetBrains Mono", "Menlo", monospace';

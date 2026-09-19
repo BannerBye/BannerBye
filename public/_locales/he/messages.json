@@ -1,0 +1,180 @@
+{
+  "extName": {
+    "message": "BannerBye — חוסם באנרים של עוגיות לפני שהם נטענים"
+  },
+  "extDesc": {
+    "message": "באנרים של עוגיות נחסמים לפני שהם נטענים. הגדר את הפרטיות שלך פעם אחת — BannerBye דוחה אוטומטית בכל אתר."
+  },
+
+  "popup_loading": { "message": "טוען…" },
+
+  "popup_status_off": { "message": "BannerBye כבוי בכל מקום." },
+  "popup_status_no_site": { "message": "אין אתר להגן עליו." },
+  "popup_status_paused": {
+    "message": "בהשהיה ב-$HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "פעיל ב-$HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "פעיל" },
+  "popup_status_dot_inactive_aria": { "message": "לא פעיל" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "מופעל" },
+  "popup_toggle_off": { "message": "כבוי" },
+  "popup_pause_site": { "message": "השהה באתר זה" },
+  "popup_resume_site": { "message": "המשך באתר זה" },
+
+  "popup_stat_label": { "message": "באנרים נדחו" },
+
+  "popup_activity_show": { "message": "הצג את הראיות" },
+  "popup_activity_hide": { "message": "הסתר את הראיות" },
+  "popup_activity_no_banner": { "message": "אין באנר" },
+  "popup_activity_banner_refused_fallback": { "message": "באנר נדחה" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "הרגע" },
+  "popup_time_minutes_ago": {
+    "message": "לפני $MINUTES$ דקות",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "לפני $HOURS$ שעות",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "לפני יום אחד" },
+  "popup_time_days_ago": {
+    "message": "לפני $DAYS$ ימים",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "מאוחסן במכשיר זה בלבד, למשך שבעה ימים. לא נשלח לשום מקום."
+  },
+  "popup_activity_clear": { "message": "נקה רשימה זו" },
+
+  "popup_milestones_label": { "message": "אבני דרך" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "הורד תמונת סטטיסטיקה →" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "דחה באנר תחילה"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "שומר תמונת PNG של הסטטיסטיקה שלך, שניתן לשתף, בתיקיית ההורדות שלך"
+  },
+  "popup_footer_report": { "message": "דווח על אתר שבור →" },
+  "popup_footer_rate": { "message": "דרג את BannerBye →" },
+  "popup_footer_rate_title": {
+    "message": "השאר ביקורת — זה עוזר לשמור על הנראות של BannerBye"
+  },
+
+  "popup_modal_title": { "message": "דווח על אתר שבור" },
+  "popup_modal_close_aria": { "message": "סגור" },
+  "popup_modal_sent": {
+    "message": "תודה. נבדוק את $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "נשלח את שם המארח $HOST$ ל-BannerBye. אופציונלי: הוסף מה לא בסדר.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "מה קורה? (אופציונלי)"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "שלח לי דוא\"ל כשהבעיה תתוקן (אופציונלי)"
+  },
+  "popup_modal_fineprint": {
+    "message": "השאר שדה זה ריק כדי להישאר אנונימי לחלוטין. אם תוסיף אותו, נשתמש בו רק כדי לשלוח לך הודעה חד-פעמית כאשר הבאנר הזה יתוקן."
+  },
+  "popup_modal_error": {
+    "message": "לא ניתן לשלוח: $ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "שלח דיווח" },
+  "popup_modal_sending": { "message": "שולח…" },
+  "popup_modal_try_again": { "message": "נסה שוב" },
+
+  "popup_celebration_label": { "message": "אבן דרך נפתחה" },
+  "popup_celebration_share_aria": { "message": "הורד כרטיס שיתוף" },
+  "popup_celebration_dismiss_aria": { "message": "סגור" },
+
+  "popup_reportfixed_label": { "message": "באנר שדיווחת עליו" },
+  "popup_reportfixed_text": {
+    "message": "כעת נדחה ב-$HOST$",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "בקשה חד-פעמית" },
+  "popup_reviewask_title": { "message": "נהנה מהשקט?" },
+  "popup_reviewask_text": {
+    "message": "ביקורת קצרה עוזרת לאנשים למצוא את BannerBye. אנחנו מבקשים פעם אחת — לעולם לא שוב."
+  },
+  "popup_reviewask_cta": { "message": "דרג את BannerBye →" },
+  "popup_reviewask_dismiss_aria": { "message": "לא, תודה" },
+  "popup_reviewask_dismiss_title": { "message": "לא, תודה — לא נבקש שוב" },
+
+  "onboarding_eyebrow": { "message": "התקנה מהירה — אתה כבר מוגן" },
+  "onboarding_headline_1": { "message": "באנרים של עוגיות, נחסמו." },
+  "onboarding_headline_2": { "message": "עוד לפני שהם נטענים." },
+  "onboarding_body": {
+    "message": "אין צורך בהגדרות. BannerBye כבר עושה את זה, כבר עכשיו:"
+  },
+  "onboarding_check1_title": { "message": "מסרב בכל אתר" },
+  "onboarding_check1_desc": {
+    "message": "שולח אוטומטית „אי-הסכמה” באופן חוקי, עוד לפני שבאנר מספיק לבקש ממך."
+  },
+  "onboarding_check2_title": { "message": "פועל בשקט" },
+  "onboarding_check2_desc": {
+    "message": "לא תשמע מאיתנו שוב. לחץ על סמל המגן בסרגל הכלים בכל עת כדי לראות כמה באנרים דחינו."
+  },
+  "onboarding_check3_title": { "message": "ניתן לביטול בכל אתר" },
+  "onboarding_check3_desc": {
+    "message": "בנקאות, כלי עבודה, כניסות — אם משהו נראה לא תקין, פתח את סמל המגן ולחץ על „השהה באתר זה”."
+  },
+  "onboarding_tip": {
+    "message": "טיפ: הצמד את הסמל לגישה בלחיצה אחת — חתיכת הפאזל בסרגל הכלים שלך, מצא את BannerBye, לחץ על הסיכה."
+  },
+  "onboarding_cta": { "message": "התחל לגלוש →" },
+
+  "milestone_first_banner": { "message": "הבאנר הראשון נחסם" },
+  "milestone_first_steps": { "message": "הצעדים הראשונים" },
+  "milestone_cookie_crusher": { "message": "מחסל העוגיות" },
+  "milestone_banner_bye_master": { "message": "אמן הבאנרים" },
+  "milestone_privacy_champion": { "message": "אלוף הפרטיות" },
+  "milestone_cookie_diet_month": { "message": "דיאטת עוגיות · החודש הראשון" },
+  "milestone_cookie_diet_year": { "message": "דיאטת עוגיות · השנה הראשונה" },
+
+  "share_milestone_unlocked_label": { "message": "אבן דרך נפתחה" },
+  "share_tagline": { "message": "באנרים של עוגיות, נחסמו. עוד לפני שהם נטענים." },
+  "share_counter_singular": {
+    "message": "$COUNT$ באנר עוגיות נדחה",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "$COUNT$ באנרים של עוגיות נדחו",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "הסיפור שלך עם BannerBye" },
+  "share_milestones_unlocked": {
+    "message": "$COUNT$ מתוך $TOTAL$ אבני דרך נפתחו",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "מאז $DATE$",
+    "placeholders": { "date": { "content": "$1" } }
+  }
+}

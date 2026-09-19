@@ -1,0 +1,180 @@
+{
+  "extName": {
+    "message": "BannerBye — 在加载前拦截 Cookie 横幅"
+  },
+  "extDesc": {
+    "message": "Cookie 横幅在加载前就被拦截。只需设置一次隐私选项，剩下的交给 BannerBye — 在每个网站上自动处理。"
+  },
+
+  "popup_loading": { "message": "正在加载……" },
+
+  "popup_status_off": { "message": "BannerBye 在所有网站上均已关闭。" },
+  "popup_status_no_site": { "message": "无网站可操作。" },
+  "popup_status_paused": {
+    "message": "已在 $HOST$ 上暂停。",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "已在 $HOST$ 上启用。",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "启用" },
+  "popup_status_dot_inactive_aria": { "message": "停用" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "开启" },
+  "popup_toggle_off": { "message": "关闭" },
+  "popup_pause_site": { "message": "在此网站上暂停" },
+  "popup_resume_site": { "message": "在此网站上恢复" },
+
+  "popup_stat_label": { "message": "个横幅已拒绝" },
+
+  "popup_activity_show": { "message": "显示证据" },
+  "popup_activity_hide": { "message": "隐藏证据" },
+  "popup_activity_no_banner": { "message": "无横幅" },
+  "popup_activity_banner_refused_fallback": { "message": "横幅已拒绝" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "刚刚" },
+  "popup_time_minutes_ago": {
+    "message": "$MINUTES$ 分钟前",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "$HOURS$ 小时前",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "1 天前" },
+  "popup_time_days_ago": {
+    "message": "$DAYS$ 天前",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "仅保存在本设备上，保存七天。绝不发送至任何地方。"
+  },
+  "popup_activity_clear": { "message": "清空此列表" },
+
+  "popup_milestones_label": { "message": "里程碑" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "下载统计图 →" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "请先拒绝一个横幅"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "将您的统计数据保存为可分享的 PNG 图片并存入下载文件夹"
+  },
+  "popup_footer_report": { "message": "报告网站故障 →" },
+  "popup_footer_rate": { "message": "评价 BannerBye →" },
+  "popup_footer_rate_title": {
+    "message": "留下评论——这能让 BannerBye 保持可见"
+  },
+
+  "popup_modal_title": { "message": "报告网站故障" },
+  "popup_modal_close_aria": { "message": "关闭" },
+  "popup_modal_sent": {
+    "message": "谢谢。我们会查看 $HOST$。",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "我们将把主机名 $HOST$ 发送给 BannerBye。可选：补充出现的问题。",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "发生了什么？（可选）"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "修复后发邮件通知我（可选）"
+  },
+  "popup_modal_fineprint": {
+    "message": "留空可保持完全匿名。若填写此项，我们仅会在该横幅被处理时发送一次通知。"
+  },
+  "popup_modal_error": {
+    "message": "发送失败：$ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "发送报告" },
+  "popup_modal_sending": { "message": "正在发送……" },
+  "popup_modal_try_again": { "message": "重试" },
+
+  "popup_celebration_label": { "message": "里程碑已解锁" },
+  "popup_celebration_share_aria": { "message": "下载分享卡" },
+  "popup_celebration_dismiss_aria": { "message": "关闭" },
+
+  "popup_reportfixed_label": { "message": "您报告过的横幅" },
+  "popup_reportfixed_text": {
+    "message": "现已在 $HOST$ 上拦截",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "一次性请求" },
+  "popup_reviewask_title": { "message": "享受这份宁静了吗？" },
+  "popup_reviewask_text": {
+    "message": "写个简短的评价，让 BannerBye 更容易被发现。我们只问一次——此后永不再问。"
+  },
+  "popup_reviewask_cta": { "message": "评价 BannerBye →" },
+  "popup_reviewask_dismiss_aria": { "message": "不用了" },
+  "popup_reviewask_dismiss_title": { "message": "不用了——我们不会再问了" },
+
+  "onboarding_eyebrow": { "message": "快速设置——您已受到保护" },
+  "onboarding_headline_1": { "message": "Cookie 横幅，已拦截。" },
+  "onboarding_headline_2": { "message": "在它们加载之前。" },
+  "onboarding_body": {
+    "message": "无需任何配置。BannerBye 此刻已在自动执行："
+  },
+  "onboarding_check1_title": { "message": "在每个网站上拒绝" },
+  "onboarding_check1_desc": {
+    "message": "在横幅有机会询问之前，自动且合法地发送“不同意”。"
+  },
+  "onboarding_check2_title": { "message": "默默运行" },
+  "onboarding_check2_desc": {
+    "message": "您不会再收到我们的通知。随时点击工具栏中的盾牌图标，查看我们已拒绝了多少个横幅。"
+  },
+  "onboarding_check3_title": { "message": "可在任何网站上撤销" },
+  "onboarding_check3_desc": {
+    "message": "银行、办公工具、登录页面——如果某个网站显示异常，打开盾牌图标并点击“在此网站上暂停”。"
+  },
+  "onboarding_tip": {
+    "message": "提示：固定图标即可一键访问——在工具栏的拼图图标中找到 BannerBye，点击固定图标。"
+  },
+  "onboarding_cta": { "message": "开始浏览 →" },
+
+  "milestone_first_banner": { "message": "拦截首个横幅" },
+  "milestone_first_steps": { "message": "第一步" },
+  "milestone_cookie_crusher": { "message": "Cookie 粉碎机" },
+  "milestone_banner_bye_master": { "message": "横幅告别大师" },
+  "milestone_privacy_champion": { "message": "隐私卫士" },
+  "milestone_cookie_diet_month": { "message": "Cookie 节食 · 第一个月" },
+  "milestone_cookie_diet_year": { "message": "Cookie 节食 · 第一年" },
+
+  "share_milestone_unlocked_label": { "message": "里程碑已解锁" },
+  "share_tagline": { "message": "Cookie 横幅，已拦截。在它们加载之前。" },
+  "share_counter_singular": {
+    "message": "已拒绝 $COUNT$ 个 Cookie 横幅",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "已拒绝 $COUNT$ 个 Cookie 横幅",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "您的 BannerBye 故事" },
+  "share_milestones_unlocked": {
+    "message": "已解锁 $TOTAL$ 个里程碑中的 $COUNT$ 个",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "自 $DATE$ 以来",
+    "placeholders": { "date": { "content": "$1" } }
+  }
+}

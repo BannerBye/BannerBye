@@ -1,0 +1,180 @@
+{
+  "extName": {
+    "message": "BannerBye — blochează bannerele de cookie-uri înainte să se încarce"
+  },
+  "extDesc": {
+    "message": "Bannere de cookie-uri blocate înainte să se încarce. Setează-ți confidențialitatea o singură dată — BannerBye refuză automat pe fiecare site."
+  },
+
+  "popup_loading": { "message": "Se încarcă…" },
+
+  "popup_status_off": { "message": "BannerBye este dezactivat peste tot." },
+  "popup_status_no_site": { "message": "Nu există niciun site de protejat." },
+  "popup_status_paused": {
+    "message": "În pauză pe $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "Activ pe $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "Activ" },
+  "popup_status_dot_inactive_aria": { "message": "Inactiv" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "Activat" },
+  "popup_toggle_off": { "message": "Dezactivat" },
+  "popup_pause_site": { "message": "Pune în pauză pe acest site" },
+  "popup_resume_site": { "message": "Reia pe acest site" },
+
+  "popup_stat_label": { "message": "bannere refuzate" },
+
+  "popup_activity_show": { "message": "Afișează dovezile" },
+  "popup_activity_hide": { "message": "Ascunde dovezile" },
+  "popup_activity_no_banner": { "message": "Fără banner" },
+  "popup_activity_banner_refused_fallback": { "message": "Banner refuzat" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "chiar acum" },
+  "popup_time_minutes_ago": {
+    "message": "acum $MINUTES$ min",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "acum $HOURS$ h",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "acum 1 zi" },
+  "popup_time_days_ago": {
+    "message": "acum $DAYS$ zile",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "Stocate numai pe acest dispozitiv, timp de șapte zile. Nu sunt trimise nicăieri."
+  },
+  "popup_activity_clear": { "message": "Șterge această listă" },
+
+  "popup_milestones_label": { "message": "Repere" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "Descarcă imaginea cu statistici →" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "Refuză mai întâi un banner"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "Salvează în folderul de descărcări o imagine PNG a statisticilor tale, care poate fi partajată"
+  },
+  "popup_footer_report": { "message": "Raportează un site nefuncțional →" },
+  "popup_footer_rate": { "message": "Evaluează BannerBye →" },
+  "popup_footer_rate_title": {
+    "message": "Lasă o recenzie — ajută la menținerea vizibilității BannerBye"
+  },
+
+  "popup_modal_title": { "message": "Raportează un site nefuncțional" },
+  "popup_modal_close_aria": { "message": "Închide" },
+  "popup_modal_sent": {
+    "message": "Mulțumim. Vom verifica $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "Vom trimite numele de gazdă $HOST$ către BannerBye. Opțional: adaugă ce nu funcționează.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "Ce se întâmplă? (opțional)"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "Trimite-mi un e-mail când se remediază problema (opțional)"
+  },
+  "popup_modal_fineprint": {
+    "message": "Lasă acest câmp necompletat pentru a rămâne complet anonim. Dacă îl completezi, îl vom folosi doar pentru a-ți trimite o singură notificare când acest banner va fi remediat."
+  },
+  "popup_modal_error": {
+    "message": "Nu s-a putut trimite: $ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "Trimite raportul" },
+  "popup_modal_sending": { "message": "Se trimite…" },
+  "popup_modal_try_again": { "message": "Încearcă din nou" },
+
+  "popup_celebration_label": { "message": "Reper deblocat" },
+  "popup_celebration_share_aria": { "message": "Descarcă cardul de partajare" },
+  "popup_celebration_dismiss_aria": { "message": "Închide" },
+
+  "popup_reportfixed_label": { "message": "Un banner pe care l-ai raportat" },
+  "popup_reportfixed_text": {
+    "message": "Acum refuzat pe $HOST$",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "O singură solicitare" },
+  "popup_reviewask_title": { "message": "Te bucuri de liniște?" },
+  "popup_reviewask_text": {
+    "message": "O recenzie rapidă îi ajută pe oameni să găsească BannerBye. Te întrebăm o singură dată — niciodată din nou."
+  },
+  "popup_reviewask_cta": { "message": "Evaluează BannerBye →" },
+  "popup_reviewask_dismiss_aria": { "message": "Nu, mulțumesc" },
+  "popup_reviewask_dismiss_title": { "message": "Nu, mulțumesc — nu te vom mai întreba" },
+
+  "onboarding_eyebrow": { "message": "Configurare rapidă — ești deja protejat" },
+  "onboarding_headline_1": { "message": "Bannere de cookie-uri, blocate." },
+  "onboarding_headline_2": { "message": "Înainte să se încarce." },
+  "onboarding_body": {
+    "message": "Nu trebuie să configurezi nimic. BannerBye se ocupă deja de asta, chiar acum:"
+  },
+  "onboarding_check1_title": { "message": "Refuză pe fiecare site" },
+  "onboarding_check1_desc": {
+    "message": "Trimite automat „fără consimțământ” într-un mod valabil din punct de vedere legal, înainte ca un banner să apuce măcar să te întrebe."
+  },
+  "onboarding_check2_title": { "message": "Funcționează discret" },
+  "onboarding_check2_desc": {
+    "message": "Nu vei mai auzi de noi. Dă clic oricând pe pictograma scut din bara de instrumente pentru a vedea câte bannere am refuzat."
+  },
+  "onboarding_check3_title": { "message": "Reversibil pe orice site" },
+  "onboarding_check3_desc": {
+    "message": "Servicii bancare, instrumente de lucru, autentificări — dacă ceva pare să nu funcționeze corect, deschide pictograma scut și apasă „Pune în pauză pe acest site”."
+  },
+  "onboarding_tip": {
+    "message": "Sfat: fixează pictograma pentru acces cu un singur clic — piesa de puzzle din bara de instrumente, găsește BannerBye, dă clic pe pin."
+  },
+  "onboarding_cta": { "message": "Începe navigarea →" },
+
+  "milestone_first_banner": { "message": "Primul banner blocat" },
+  "milestone_first_steps": { "message": "Primii pași" },
+  "milestone_cookie_crusher": { "message": "Distrugător de cookie-uri" },
+  "milestone_banner_bye_master": { "message": "Maestrul bannerelor" },
+  "milestone_privacy_champion": { "message": "Campionul confidențialității" },
+  "milestone_cookie_diet_month": { "message": "Dieta de cookie-uri · prima lună" },
+  "milestone_cookie_diet_year": { "message": "Dieta de cookie-uri · primul an" },
+
+  "share_milestone_unlocked_label": { "message": "REPER DEBLOCAT" },
+  "share_tagline": { "message": "Bannere de cookie-uri, blocate. Înainte să se încarce." },
+  "share_counter_singular": {
+    "message": "$COUNT$ banner de cookie-uri refuzat",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "$COUNT$ bannere de cookie-uri refuzate",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "POVESTEA TA CU BANNERBYE" },
+  "share_milestones_unlocked": {
+    "message": "$COUNT$ din $TOTAL$ repere deblocate",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "de la $DATE$",
+    "placeholders": { "date": { "content": "$1" } }
+  }
+}

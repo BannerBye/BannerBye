@@ -4,5 +4,177 @@
   },
   "extDesc": {
     "message": "Cookiebannere stoppet, før de indlæses. Indstil dit privatliv én gang — BannerBye afviser automatisk på alle websteder."
+  },
+
+  "popup_loading": { "message": "Indlæser…" },
+
+  "popup_status_off": { "message": "BannerBye er slukket overalt." },
+  "popup_status_no_site": { "message": "Intet websted at beskytte." },
+  "popup_status_paused": {
+    "message": "Sat på pause på $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "Aktiv på $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "Aktiv" },
+  "popup_status_dot_inactive_aria": { "message": "Inaktiv" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "På" },
+  "popup_toggle_off": { "message": "Af" },
+  "popup_pause_site": { "message": "Pause på dette websted" },
+  "popup_resume_site": { "message": "Genoptag på dette websted" },
+
+  "popup_stat_label": { "message": "bannere afvist" },
+
+  "popup_activity_show": { "message": "Vis beviserne" },
+  "popup_activity_hide": { "message": "Skjul beviserne" },
+  "popup_activity_no_banner": { "message": "Ingen banner" },
+  "popup_activity_banner_refused_fallback": { "message": "Banner afvist" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "lige nu" },
+  "popup_time_minutes_ago": {
+    "message": "$MINUTES$ min. siden",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "$HOURS$ t siden",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "1 dag siden" },
+  "popup_time_days_ago": {
+    "message": "$DAYS$ dage siden",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "Opbevares kun på denne enhed i syv dage. Aldrig sendt nogen steder."
+  },
+  "popup_activity_clear": { "message": "Ryd denne liste" },
+
+  "popup_milestones_label": { "message": "Milepæle" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "Download statistikbillede →" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "Afvis et banner først"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "Gemmer et delbart PNG-billede af dine statistikker til dine downloads"
+  },
+  "popup_footer_report": { "message": "Rapporter ødelagt websted →" },
+  "popup_footer_rate": { "message": "Bedøm BannerBye →" },
+  "popup_footer_rate_title": {
+    "message": "Skriv en anmeldelse — det hjælper med at holde BannerBye synlig"
+  },
+
+  "popup_modal_title": { "message": "Rapporter et ødelagt websted" },
+  "popup_modal_close_aria": { "message": "Luk" },
+  "popup_modal_sent": {
+    "message": "Tak. Vi tager et kig på $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "Vi sender værtsnavnet $HOST$ til BannerBye. Valgfrit: Tilføj, hvad der er galt.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "Hvad sker der? (valgfrit)"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "Send mig en e-mail, når det er rettet (valgfrit)"
+  },
+  "popup_modal_fineprint": {
+    "message": "Lad dette stå tomt for at forblive helt anonym. Hvis du tilføjer det, bruger vi det kun til at sende dig en engangsnote, når dette banner er blevet rettet."
+  },
+  "popup_modal_error": {
+    "message": "Kunne ikke sende: $ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "Send rapport" },
+  "popup_modal_sending": { "message": "Sender…" },
+  "popup_modal_try_again": { "message": "Prøv igen" },
+
+  "popup_celebration_label": { "message": "Milepæl låst op" },
+  "popup_celebration_share_aria": { "message": "Download delekort" },
+  "popup_celebration_dismiss_aria": { "message": "Luk" },
+
+  "popup_reportfixed_label": { "message": "Et banner, du har rapporteret" },
+  "popup_reportfixed_text": {
+    "message": "Nu afvist på $HOST$",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "Et engangsspørgsmål" },
+  "popup_reviewask_title": { "message": "Nyder du stilheden?" },
+  "popup_reviewask_text": {
+    "message": "En hurtig anmeldelse hjælper andre med at finde BannerBye. Vi spørger én gang — aldrig igen."
+  },
+  "popup_reviewask_cta": { "message": "Bedøm BannerBye →" },
+  "popup_reviewask_dismiss_aria": { "message": "Nej tak" },
+  "popup_reviewask_dismiss_title": { "message": "Nej tak — vi spørger ikke igen" },
+
+  "onboarding_eyebrow": { "message": "Hurtig opsætning — du er allerede beskyttet" },
+  "onboarding_headline_1": { "message": "Cookiebannere, stoppet." },
+  "onboarding_headline_2": { "message": "Før de indlæses." },
+  "onboarding_body": {
+    "message": "Intet at sætte op. BannerBye gør allerede dette lige nu:"
+  },
+  "onboarding_check1_title": { "message": "Afviser på alle websteder" },
+  "onboarding_check1_desc": {
+    "message": "Sender automatisk \"ingen samtykke\" på en juridisk gyldig måde, før et banner overhovedet får chancen for at spørge dig."
+  },
+  "onboarding_check2_title": { "message": "Fungerer diskret" },
+  "onboarding_check2_desc": {
+    "message": "Du hører ikke fra os igen. Klik på skjoldikonet på din værktøjslinje til enhver tid for at se, hvor mange bannere vi har afvist."
+  },
+  "onboarding_check3_title": { "message": "Vendbar på ethvert websted" },
+  "onboarding_check3_desc": {
+    "message": "Bankvirksomhed, arbejdsredskaber, logins — hvis noget ser ødelagt ud, skal du åbne skjoldikonet og trykke på \"Pause på dette websted\"."
+  },
+  "onboarding_tip": {
+    "message": "Tip: Fastgør ikonet for adgang med et enkelt klik — puslespil i din værktøjslinje → find BannerBye → klik på knappenålen."
+  },
+  "onboarding_cta": { "message": "Begynd at browse →" },
+
+  "milestone_first_banner": { "message": "Første banner blokeret" },
+  "milestone_first_steps": { "message": "Første skridt" },
+  "milestone_cookie_crusher": { "message": "Cookie-knuser" },
+  "milestone_banner_bye_master": { "message": "Bannermester" },
+  "milestone_privacy_champion": { "message": "Privatlivets forkæmper" },
+  "milestone_cookie_diet_month": { "message": "Cookie-diæt · første måned" },
+  "milestone_cookie_diet_year": { "message": "Cookie-diæt · første år" },
+
+  "share_milestone_unlocked_label": { "message": "MILEPÆL LÅST OP" },
+  "share_tagline": { "message": "Cookiebannere, stoppet. Før de indlæses." },
+  "share_counter_singular": {
+    "message": "$COUNT$ cookiebanner afvist",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "$COUNT$ cookiebannere afvist",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "DIN BANNERBYE-HISTORIE" },
+  "share_milestones_unlocked": {
+    "message": "$COUNT$ af $TOTAL$ milepæle låst op",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "siden $DATE$",
+    "placeholders": { "date": { "content": "$1" } }
   }
 }

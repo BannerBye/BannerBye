@@ -27,6 +27,7 @@ import {
 import { isHostPaused, normalizeHost } from '@/lib/host';
 import { getMilestoneById, MILESTONES, type Milestone } from '@/lib/milestones';
 import { downloadShareCard, downloadStatsCard } from '@/lib/share-card';
+import { t } from '@/lib/i18n/t';
 import type {
   ActivityEntry,
   LocalStats,
@@ -94,12 +95,14 @@ interface PopupState {
 /** "3 min ago" / "2 days ago" — kort en zonder bibliotheek. */
 function timeAgo(ts: number): string {
   const mins = Math.floor((Date.now() - ts) / 60000);
-  if (mins < 1) return 'just now';
-  if (mins < 60) return `${mins}m ago`;
+  if (mins < 1) return t('popup_time_just_now');
+  if (mins < 60) return t('popup_time_minutes_ago', String(mins));
   const hours = Math.floor(mins / 60);
-  if (hours < 24) return `${hours}h ago`;
+  if (hours < 24) return t('popup_time_hours_ago', String(hours));
   const days = Math.floor(hours / 24);
-  return days === 1 ? '1 day ago' : `${days} days ago`;
+  return days === 1
+    ? t('popup_time_one_day_ago')
+    : t('popup_time_days_ago', String(days));
 }
 
 /** Losse, tolerante e-mailcheck — alleen om onzin te weren, niet streng. */
@@ -354,7 +357,7 @@ export function App() {
   }
 
   if (state.loading) {
-    return <div className="bb-loading">Loading…</div>;
+    return <div className="bb-loading">{t('popup_loading')}</div>;
   }
 
   return (
@@ -365,15 +368,15 @@ export function App() {
             className="bb-modal"
             onClick={(e) => e.stopPropagation()}
             role="dialog"
-            aria-label="Report broken site"
+            aria-label={t('popup_modal_title')}
           >
             <header className="bb-modal-header">
-              <p className="bb-modal-title">Report broken site</p>
+              <p className="bb-modal-title">{t('popup_modal_title')}</p>
               <button
                 type="button"
                 className="bb-modal-close"
                 onClick={closeReportModal}
-                aria-label="Close"
+                aria-label={t('popup_modal_close_aria')}
               >
                 ✕
               </button>
@@ -381,18 +384,16 @@ export function App() {
 
             {state.reportModal.status === 'sent' ? (
               <p className="bb-modal-sent">
-                Thanks. We'll take a look at <span className="bb-modal-email">{state.reportModal.hostname}</span>.
+                {t('popup_modal_sent', state.reportModal.hostname)}
               </p>
             ) : (
               <>
                 <p className="bb-modal-help">
-                  We'll send the hostname{' '}
-                  <span className="bb-modal-email">{state.reportModal.hostname}</span>{' '}
-                  to BannerBye. Optional: add what's going wrong.
+                  {t('popup_modal_help', state.reportModal.hostname)}
                 </p>
                 <textarea
                   className="bb-modal-textarea"
-                  placeholder="What's happening? (optional)"
+                  placeholder={t('popup_modal_placeholder_message')}
                   value={state.reportModal.message}
                   onChange={(e) => updateReportMessage(e.target.value)}
                   rows={4}
@@ -402,7 +403,7 @@ export function App() {
                 <input
                   className="bb-modal-input"
                   type="email"
-                  placeholder="Email me when it's fixed (optional)"
+                  placeholder={t('popup_modal_placeholder_email')}
                   value={state.reportModal.email}
                   onChange={(e) => updateReportEmail(e.target.value)}
                   maxLength={254}
@@ -410,12 +411,11 @@ export function App() {
                   disabled={state.reportModal.status === 'sending'}
                 />
                 <p className="bb-modal-fineprint">
-                  Leave it blank to stay fully anonymous. If you add it, we only
-                  use it to send one heads-up when this banner is handled.
+                  {t('popup_modal_fineprint')}
                 </p>
                 {state.reportModal.status === 'error' && (
                   <p className="bb-modal-error">
-                    Couldn't send: {state.reportModal.errorText}
+                    {t('popup_modal_error', state.reportModal.errorText)}
                   </p>
                 )}
                 <button
@@ -425,10 +425,10 @@ export function App() {
                   disabled={state.reportModal.status === 'sending'}
                 >
                   {state.reportModal.status === 'sending'
-                    ? 'Sending…'
+                    ? t('popup_modal_sending')
                     : state.reportModal.status === 'error'
-                      ? 'Try again'
-                      : 'Send report'}
+                      ? t('popup_modal_try_again')
+                      : t('popup_modal_send')}
                 </button>
               </>
             )}
@@ -443,7 +443,11 @@ export function App() {
         </span>
         <span
           className={`bb-status-dot ${isActiveOnSite ? 'active' : 'inactive'}`}
-          aria-label={isActiveOnSite ? 'Active' : 'Inactive'}
+          aria-label={
+            isActiveOnSite
+              ? t('popup_status_dot_active_aria')
+              : t('popup_status_dot_inactive_aria')
+          }
         />
       </header>
 
@@ -451,15 +455,15 @@ export function App() {
         <section className="bb-celebration" aria-live="polite">
           <span className="bb-celebration-emoji" aria-hidden="true">🎉</span>
           <div className="bb-celebration-body">
-            <p className="bb-celebration-label">Milestone unlocked</p>
-            <p className="bb-celebration-name">{currentCelebration.name}</p>
+            <p className="bb-celebration-label">{t('popup_celebration_label')}</p>
+            <p className="bb-celebration-name">{t(currentCelebration.nameKey)}</p>
           </div>
           <button
             type="button"
             className="bb-celebration-share"
             onClick={() => shareCelebration()}
-            aria-label="Download share card"
-            title="Download share card"
+            aria-label={t('popup_celebration_share_aria')}
+            title={t('popup_celebration_share_aria')}
           >
             ↓
           </button>
@@ -467,7 +471,7 @@ export function App() {
             type="button"
             className="bb-celebration-dismiss"
             onClick={() => void dismissCelebration()}
-            aria-label="Dismiss"
+            aria-label={t('popup_celebration_dismiss_aria')}
           >
             ✕
           </button>
@@ -478,17 +482,16 @@ export function App() {
         <section className="bb-celebration bb-celebration-fixed" aria-live="polite">
           <span className="bb-celebration-emoji" aria-hidden="true">✓</span>
           <div className="bb-celebration-body">
-            <p className="bb-celebration-label">A banner you reported</p>
+            <p className="bb-celebration-label">{t('popup_reportfixed_label')}</p>
             <p className="bb-celebration-name">
-              Now killed on{' '}
-              <span className="bb-host">{currentReportFixed}</span>
+              {t('popup_reportfixed_text', currentReportFixed)}
             </p>
           </div>
           <button
             type="button"
             className="bb-celebration-dismiss"
             onClick={() => void dismissReportFixed()}
-            aria-label="Dismiss"
+            aria-label={t('popup_celebration_dismiss_aria')}
           >
             ✕
           </button>
@@ -499,26 +502,23 @@ export function App() {
         <section className="bb-celebration bb-celebration-review" aria-live="polite">
           <span className="bb-celebration-emoji" aria-hidden="true">★</span>
           <div className="bb-celebration-body">
-            <p className="bb-celebration-label">A one-time ask</p>
-            <p className="bb-celebration-name">Enjoying the quiet?</p>
-            <p className="bb-review-text">
-              A short review keeps BannerBye easy to find. Ask once — never
-              again.
-            </p>
+            <p className="bb-celebration-label">{t('popup_reviewask_label')}</p>
+            <p className="bb-celebration-name">{t('popup_reviewask_title')}</p>
+            <p className="bb-review-text">{t('popup_reviewask_text')}</p>
             <button
               type="button"
               className="bb-review-cta"
               onClick={acceptReviewAsk}
             >
-              Rate BannerBye →
+              {t('popup_reviewask_cta')}
             </button>
           </div>
           <button
             type="button"
             className="bb-celebration-dismiss"
             onClick={() => void dismissReviewAsk()}
-            aria-label="No thanks"
-            title="No thanks — we won't ask again"
+            aria-label={t('popup_reviewask_dismiss_aria')}
+            title={t('popup_reviewask_dismiss_title')}
           >
             ✕
           </button>
@@ -527,16 +527,16 @@ export function App() {
 
       <section className="bb-status">
         {!state.settings.enabled ? (
-          <p className="bb-status-text">BannerBye is off everywhere.</p>
+          <p className="bb-status-text">{t('popup_status_off')}</p>
         ) : !state.hostname ? (
-          <p className="bb-status-text">No site to act on.</p>
+          <p className="bb-status-text">{t('popup_status_no_site')}</p>
         ) : isSitePaused ? (
           <p className="bb-status-text">
-            Paused on <span className="bb-host">{state.hostname}</span>.
+            {t('popup_status_paused', state.hostname)}
           </p>
         ) : (
           <p className="bb-status-text">
-            Active on <span className="bb-host">{state.hostname}</span>.
+            {t('popup_status_active', state.hostname)}
           </p>
         )}
       </section>
@@ -547,9 +547,9 @@ export function App() {
           className={`bb-toggle ${state.settings.enabled ? 'on' : 'off'}`}
           onClick={toggleGlobal}
         >
-          <span className="bb-toggle-label">BannerBye</span>
+          <span className="bb-toggle-label">{t('popup_toggle_label')}</span>
           <span className="bb-toggle-state">
-            {state.settings.enabled ? 'On' : 'Off'}
+            {state.settings.enabled ? t('popup_toggle_on') : t('popup_toggle_off')}
           </span>
         </button>
 
@@ -559,7 +559,7 @@ export function App() {
             className="bb-pause"
             onClick={togglePauseSite}
           >
-            {isSitePaused ? 'Resume on this site' : 'Pause on this site'}
+            {isSitePaused ? t('popup_resume_site') : t('popup_pause_site')}
           </button>
         )}
       </section>
@@ -568,7 +568,7 @@ export function App() {
         <span className="bb-stat-number">
           {state.stats.blocked.toLocaleString('en-US')}
         </span>
-        <span className="bb-stat-label">banners refused</span>
+        <span className="bb-stat-label">{t('popup_stat_label')}</span>
 
         {state.activity.length > 0 && (
           <>
@@ -582,7 +582,9 @@ export function App() {
               <span className="bb-activity-caret" aria-hidden="true">
                 {state.activityOpen ? '▾' : '▸'}
               </span>
-              {state.activityOpen ? 'Hide the evidence' : 'Show the evidence'}
+              {state.activityOpen
+                ? t('popup_activity_hide')
+                : t('popup_activity_show')}
             </button>
 
             {state.activityOpen && (
@@ -601,9 +603,11 @@ export function App() {
                       </span>
                       <span className="bb-activity-meta">
                         {entry.outcome === 'refused'
-                          ? (entry.platform ?? 'Banner refused')
-                          : 'No banner'}
-                        {entry.count > 1 ? ` · ${entry.count}×` : ''}
+                          ? (entry.platform ?? t('popup_activity_banner_refused_fallback'))
+                          : t('popup_activity_no_banner')}
+                        {entry.count > 1
+                          ? t('popup_activity_count_suffix', String(entry.count))
+                          : ''}
                       </span>
                       <span className="bb-activity-time">
                         {timeAgo(entry.lastAt)}
@@ -611,15 +615,13 @@ export function App() {
                     </li>
                   ))}
                 </ul>
-                <p className="bb-activity-note">
-                  Kept on this device only, for seven days. Never sent anywhere.
-                </p>
+                <p className="bb-activity-note">{t('popup_activity_note')}</p>
                 <button
                   type="button"
                   className="bb-activity-clear"
                   onClick={wipeActivity}
                 >
-                  Clear this list
+                  {t('popup_activity_clear')}
                 </button>
               </div>
             )}
@@ -629,12 +631,16 @@ export function App() {
 
       <section className="bb-milestones">
         <header className="bb-milestones-header">
-          <p className="bb-milestones-label">Milestones</p>
+          <p className="bb-milestones-label">{t('popup_milestones_label')}</p>
           <p className="bb-milestones-count">
-            {MILESTONES.filter((m) =>
-              state.stats.unlockedMilestones.includes(m.id),
-            ).length}
-            /{MILESTONES.length}
+            {t('popup_milestones_count', [
+              String(
+                MILESTONES.filter((m) =>
+                  state.stats.unlockedMilestones.includes(m.id),
+                ).length,
+              ),
+              String(MILESTONES.length),
+            ])}
           </p>
         </header>
         <ul className="bb-milestones-list">
@@ -648,7 +654,7 @@ export function App() {
                 <span className="bb-milestone-marker" aria-hidden="true">
                   {unlocked ? '✓' : '○'}
                 </span>
-                <span className="bb-milestone-name">{m.name}</span>
+                <span className="bb-milestone-name">{t(m.nameKey)}</span>
               </li>
             );
           })}
@@ -661,25 +667,29 @@ export function App() {
           className="bb-link"
           onClick={shareStats}
           disabled={state.stats.blocked === 0}
-          title={state.stats.blocked === 0 ? 'Refuse a banner first' : 'Saves a shareable PNG image of your stats to your downloads'}
+          title={
+            state.stats.blocked === 0
+              ? t('popup_footer_download_stats_disabled_title')
+              : t('popup_footer_download_stats_title')
+          }
         >
-          Download stats image →
+          {t('popup_footer_download_stats')}
         </button>
         <button
           type="button"
           className="bb-link"
           onClick={reportBrokenSite}
         >
-          Report broken site →
+          {t('popup_footer_report')}
         </button>
         {state.stats.blocked >= REVIEW_THRESHOLD && (
           <button
             type="button"
             className="bb-link"
             onClick={openReview}
-            title="Leave a review — it keeps BannerBye visible"
+            title={t('popup_footer_rate_title')}
           >
-            Rate BannerBye →
+            {t('popup_footer_rate')}
           </button>
         )}
       </footer>

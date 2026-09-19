@@ -18,6 +18,7 @@
 
 import { useState } from 'react';
 import { updateSettings } from '@/lib/storage';
+import { t } from '@/lib/i18n/t';
 
 export function App() {
   const [closing, setClosing] = useState(false);
@@ -54,53 +55,38 @@ export function App() {
 
         <main className="bb-content">
           <div className="bb-screen">
-            <p className="bb-eyebrow">Quick setup — you're already protected</p>
+            <p className="bb-eyebrow">{t('onboarding_eyebrow')}</p>
             <h1 className="bb-headline">
-              Cookie banners, killed.<br />
-              <em>Before they load.</em>
+              {t('onboarding_headline_1')}<br />
+              <em>{t('onboarding_headline_2')}</em>
             </h1>
-            <p className="bb-body">
-              Nothing to configure. BannerBye already does this, right now:
-            </p>
+            <p className="bb-body">{t('onboarding_body')}</p>
 
             <ul className="bb-checklist">
               <li className="bb-check-item">
                 <span className="bb-check-mark" aria-hidden="true">✓</span>
                 <div>
-                  <p className="bb-check-title">Refusing on every site</p>
-                  <p className="bb-check-desc">
-                    Sends "no consent" automatically, legally, before a
-                    banner gets the chance to ask.
-                  </p>
+                  <p className="bb-check-title">{t('onboarding_check1_title')}</p>
+                  <p className="bb-check-desc">{t('onboarding_check1_desc')}</p>
                 </div>
               </li>
               <li className="bb-check-item">
                 <span className="bb-check-mark" aria-hidden="true">✓</span>
                 <div>
-                  <p className="bb-check-title">Working silently</p>
-                  <p className="bb-check-desc">
-                    You won't hear from us again. Click the shield icon{' '}
-                    <span className="bb-mono">↗</span> in your toolbar any
-                    time to see how many banners we've refused.
-                  </p>
+                  <p className="bb-check-title">{t('onboarding_check2_title')}</p>
+                  <p className="bb-check-desc">{t('onboarding_check2_desc')}</p>
                 </div>
               </li>
               <li className="bb-check-item">
                 <span className="bb-check-mark" aria-hidden="true">✓</span>
                 <div>
-                  <p className="bb-check-title">Reversible on any site</p>
-                  <p className="bb-check-desc">
-                    Banking, work tools, logins — if one looks broken, open
-                    the shield icon and hit <strong>Pause on this site</strong>.
-                  </p>
+                  <p className="bb-check-title">{t('onboarding_check3_title')}</p>
+                  <p className="bb-check-desc">{t('onboarding_check3_desc')}</p>
                 </div>
               </li>
             </ul>
 
-            <p className="bb-tip">
-              Tip: pin the icon for one-click access — toolbar puzzle piece →
-              find BannerBye → click the pin.
-            </p>
+            <p className="bb-tip">{t('onboarding_tip')}</p>
           </div>
         </main>
 
@@ -111,7 +97,7 @@ export function App() {
             onClick={() => void complete()}
             disabled={closing}
           >
-            Start browsing →
+            {t('onboarding_cta')}
           </button>
         </footer>
       </div>

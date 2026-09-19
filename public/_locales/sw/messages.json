@@ -1,0 +1,180 @@
+{
+  "extName": {
+    "message": "BannerBye — huzuia mabango ya vidakuzi kabla hayajapakiwa"
+  },
+  "extDesc": {
+    "message": "Mabango ya vidakuzi huzuiwa kabla hayajapakiwa. Weka faragha yako mara moja — BannerBye hushughulikia yote mengine kiotomatiki, kwenye kila tovuti."
+  },
+
+  "popup_loading": { "message": "Inapakia…" },
+
+  "popup_status_off": { "message": "BannerBye imezimwa kila mahali." },
+  "popup_status_no_site": { "message": "Hakuna tovuti ya kuchukua hatua." },
+  "popup_status_paused": {
+    "message": "Imesitishwa kwenye $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "Inafanya kazi kwenye $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "Inafanya kazi" },
+  "popup_status_dot_inactive_aria": { "message": "Haifanyi kazi" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "Imewashwa" },
+  "popup_toggle_off": { "message": "Imezimwa" },
+  "popup_pause_site": { "message": "Simamisha kwenye tovuti hii" },
+  "popup_resume_site": { "message": "Endelea kwenye tovuti hii" },
+
+  "popup_stat_label": { "message": "mabango yaliyokataliwa" },
+
+  "popup_activity_show": { "message": "Onyesha ushahidi" },
+  "popup_activity_hide": { "message": "Ficha ushahidi" },
+  "popup_activity_no_banner": { "message": "Hakuna bango" },
+  "popup_activity_banner_refused_fallback": { "message": "Bango limekataliwa" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "sasa hivi" },
+  "popup_time_minutes_ago": {
+    "message": "dakika $MINUTES$ zilizopita",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "saa $HOURS$ zilizopita",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "siku 1 iliyopita" },
+  "popup_time_days_ago": {
+    "message": "siku $DAYS$ zilizopita",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "Huhifadhiwa kwenye kifaa hiki pekee, kwa siku saba. Haitumwi popote kamwe."
+  },
+  "popup_activity_clear": { "message": "Futa orodha hii" },
+
+  "popup_milestones_label": { "message": "Hatua muhimu" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "Pakua picha ya takwimu →" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "Kataa bango kwanza"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "Huhifadhi picha ya PNG ya takwimu zako inayoweza kushirikiwa kwenye folda ya vipakuliwa"
+  },
+  "popup_footer_report": { "message": "Ripoti tovuti iliyoharibika →" },
+  "popup_footer_rate": { "message": "Tathmini BannerBye →" },
+  "popup_footer_rate_title": {
+    "message": "Acha maoni — husaidia BannerBye ionekane"
+  },
+
+  "popup_modal_title": { "message": "Ripoti tovuti iliyoharibika" },
+  "popup_modal_close_aria": { "message": "Funga" },
+  "popup_modal_sent": {
+    "message": "Asante. Tutaangalia $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "Tutatuma jina la seva $HOST$ kwa BannerBye. Hiari: ongeza kinachoenda vibaya.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "Nini kinaendelea? (hiari)"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "Nitumie barua pepe itakaporekebishwa (hiari)"
+  },
+  "popup_modal_fineprint": {
+    "message": "Acha tupu ili uendelee kutojulikana kabisa. Ukiiongeza, tutaitumia tu kukutumia taarifa moja wakati bango hili litakaposhughulikiwa."
+  },
+  "popup_modal_error": {
+    "message": "Imeshindwa kutuma: $ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "Tuma ripoti" },
+  "popup_modal_sending": { "message": "Inatuma…" },
+  "popup_modal_try_again": { "message": "Jaribu tena" },
+
+  "popup_celebration_label": { "message": "Hatua muhimu imefunguliwa" },
+  "popup_celebration_share_aria": { "message": "Pakua kadi ya kushiriki" },
+  "popup_celebration_dismiss_aria": { "message": "Ondoa" },
+
+  "popup_reportfixed_label": { "message": "Bango uliloripoti" },
+  "popup_reportfixed_text": {
+    "message": "Sasa limezuiwa kwenye $HOST$",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "Ombi la mara moja tu" },
+  "popup_reviewask_title": { "message": "Unafurahia utulivu?" },
+  "popup_reviewask_text": {
+    "message": "Maoni mafupi husaidia wengine kupata BannerBye. Tunauliza mara moja tu — kamwe tena."
+  },
+  "popup_reviewask_cta": { "message": "Tathmini BannerBye →" },
+  "popup_reviewask_dismiss_aria": { "message": "Hapana, asante" },
+  "popup_reviewask_dismiss_title": { "message": "Hapana, asante — hatutauliza tena" },
+
+  "onboarding_eyebrow": { "message": "Usanidi wa haraka — tayari umelindwa" },
+  "onboarding_headline_1": { "message": "Mabango ya vidakuzi, yamezuiwa." },
+  "onboarding_headline_2": { "message": "Kabla hayajapakiwa." },
+  "onboarding_body": {
+    "message": "Hakuna cha kusanidi. BannerBye tayari inafanya hivi, sasa hivi:"
+  },
+  "onboarding_check1_title": { "message": "Hukataa kwenye kila tovuti" },
+  "onboarding_check1_desc": {
+    "message": "Hutuma „hakuna ridhaa” kiotomatiki na kisheria, kabla bango halijapata fursa ya kuuliza."
+  },
+  "onboarding_check2_title": { "message": "Hufanya kazi kimya kimya" },
+  "onboarding_check2_desc": {
+    "message": "Hutatusikia tena. Bofya ikoni ya ngao kwenye upau wako wa zana wakati wowote ili kuona ni mabango mangapi tumekataa."
+  },
+  "onboarding_check3_title": { "message": "Inaweza kubatilishwa kwenye tovuti yoyote" },
+  "onboarding_check3_desc": {
+    "message": "Huduma za kibenki, zana za kazi, maingilio — ikiwa kitu kinaonekana kimeharibika, fungua ikoni ya ngao na ubofye „Simamisha kwenye tovuti hii”."
+  },
+  "onboarding_tip": {
+    "message": "Dokezo: bandika ikoni ili uifikie kwa mbofyo mmoja — bofya kipande cha fumbo kwenye upau wa zana, tafuta BannerBye, bofya pini."
+  },
+  "onboarding_cta": { "message": "Anza kuvinjari →" },
+
+  "milestone_first_banner": { "message": "Bango la kwanza limezuiwa" },
+  "milestone_first_steps": { "message": "Hatua za kwanza" },
+  "milestone_cookie_crusher": { "message": "Msagaji wa vidakuzi" },
+  "milestone_banner_bye_master": { "message": "Bingwa wa kuaga mabango" },
+  "milestone_privacy_champion": { "message": "Bingwa wa faragha" },
+  "milestone_cookie_diet_month": { "message": "Lishe ya vidakuzi · mwezi wa kwanza" },
+  "milestone_cookie_diet_year": { "message": "Lishe ya vidakuzi · mwaka wa kwanza" },
+
+  "share_milestone_unlocked_label": { "message": "HATUA MUHIMU IMEFUNGULIWA" },
+  "share_tagline": { "message": "Mabango ya vidakuzi, yamezuiwa. Kabla hayajapakiwa." },
+  "share_counter_singular": {
+    "message": "Bango $COUNT$ la vidakuzi limekataliwa",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "Mabango $COUNT$ ya vidakuzi yamekataliwa",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "HADITHI YAKO YA BANNERBYE" },
+  "share_milestones_unlocked": {
+    "message": "Hatua muhimu $COUNT$ kati ya $TOTAL$ zimefunguliwa",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "tangu $DATE$",
+    "placeholders": { "date": { "content": "$1" } }
+  }
+}

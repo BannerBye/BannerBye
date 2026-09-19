@@ -1,0 +1,180 @@
+{
+  "extName": {
+    "message": "BannerBye — ஏற்றப்படும் முன்பே குக்கீ பேனர்களைத் தடுக்கிறது"
+  },
+  "extDesc": {
+    "message": "குக்கீ பேனர்கள் ஏற்றப்படுவதற்கு முன்பே தடுக்கப்படுகின்றன. உங்கள் தனியுரிமையை ஒருமுறை அமைக்கவும் — மற்றவற்றை BannerBye ஒவ்வொரு தளத்திலும் தானாகவே கவனித்துக் கொள்ளும்."
+  },
+
+  "popup_loading": { "message": "ஏற்றப்படுகிறது…" },
+
+  "popup_status_off": { "message": "BannerBye எல்லா இடங்களிலும் முடக்கப்பட்டுள்ளது." },
+  "popup_status_no_site": { "message": "செயல்பட தளம் எதுவும் இல்லை." },
+  "popup_status_paused": {
+    "message": "$HOST$-இல் இடைநிறுத்தப்பட்டுள்ளது.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "$HOST$-இல் செயல்படுகிறது.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "செயல்படுகிறது" },
+  "popup_status_dot_inactive_aria": { "message": "செயலற்றது" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "ஆன்" },
+  "popup_toggle_off": { "message": "ஆஃப்" },
+  "popup_pause_site": { "message": "இந்தத் தளத்தில் இடைநிறுத்து" },
+  "popup_resume_site": { "message": "இந்தத் தளத்தில் மீண்டும் தொடங்கு" },
+
+  "popup_stat_label": { "message": "பேனர்கள் நிராகரிக்கப்பட்டன" },
+
+  "popup_activity_show": { "message": "ஆதாரத்தைக் காட்டு" },
+  "popup_activity_hide": { "message": "ஆதாரத்தை மறை" },
+  "popup_activity_no_banner": { "message": "பேனர் இல்லை" },
+  "popup_activity_banner_refused_fallback": { "message": "பேனர் நிராகரிக்கப்பட்டது" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "இப்போதுதான்" },
+  "popup_time_minutes_ago": {
+    "message": "$MINUTES$ நிமிடங்களுக்கு முன்பு",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "$HOURS$ மணிநேரத்திற்கு முன்பு",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "1 நாள் முன்பு" },
+  "popup_time_days_ago": {
+    "message": "$DAYS$ நாட்களுக்கு முன்பு",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "இந்தச் சாதனத்தில் மட்டும், ஏழு நாட்களுக்குச் சேமிக்கப்படுகிறது. எங்கும் அனுப்பப்படுவதில்லை."
+  },
+  "popup_activity_clear": { "message": "இந்தப் பட்டியலை அழிக்கவும்" },
+
+  "popup_milestones_label": { "message": "மைல்கற்கள்" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "புள்ளிவிவரப் படத்தைப் பதிவிறக்கவும் →" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "முதலில் ஒரு பேனரை நிராகரிக்கவும்"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "உங்கள் புள்ளிவிவரங்களின் பகிரக்கூடிய PNG படத்தை உங்கள் பதிவிறக்கக் கோப்புறையில் சேமிக்கிறது"
+  },
+  "popup_footer_report": { "message": "செயலிழந்த தளத்தைப் புகாரளிக்கவும் →" },
+  "popup_footer_rate": { "message": "BannerBye-ஐ மதிப்பிடவும் →" },
+  "popup_footer_rate_title": {
+    "message": "ஒரு மதிப்பாய்வை இடவும் — இது BannerBye-ஐ பார்வையில் வைத்திருக்கும்"
+  },
+
+  "popup_modal_title": { "message": "செயலிழந்த தளத்தைப் புகாரளிக்கவும்" },
+  "popup_modal_close_aria": { "message": "மூடுக" },
+  "popup_modal_sent": {
+    "message": "நன்றி. நாங்கள் $HOST$-ஐப் பார்க்கிறோம்.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "ஹோஸ்ட்பெயர் $HOST$-ஐ BannerBye-க்கு அனுப்புவோம். விருப்பத்தேர்வு: என்ன தவறாகிறது என்பதைச் சேர்க்கவும்.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "என்ன நடக்கிறது? (விருப்பத்தேர்வு)"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "சரிசெய்யப்பட்டதும் எனக்கு மின்னஞ்சல் அனுப்புங்கள் (விருப்பத்தேர்வு)"
+  },
+  "popup_modal_fineprint": {
+    "message": "முழுமையாக அநாமதேயமாக இருக்க இதைக் காலியாக விடுங்கள். நீங்கள் இதைச் சேர்த்தால், இந்தப் பேனர் சரிசெய்யப்படும்போது உங்களுக்கு ஒரு முறை மட்டும் அறிவிக்கவே நாங்கள் அதைப் பயன்படுத்துவோம்."
+  },
+  "popup_modal_error": {
+    "message": "அனுப்ப முடியவில்லை: $ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "அறிக்கையை அனுப்பு" },
+  "popup_modal_sending": { "message": "அனுப்பப்படுகிறது…" },
+  "popup_modal_try_again": { "message": "மீண்டும் முயற்சிக்கவும்" },
+
+  "popup_celebration_label": { "message": "மைல்கல் திறக்கப்பட்டது" },
+  "popup_celebration_share_aria": { "message": "பகிரும் அட்டையைப் பதிவிறக்கவும்" },
+  "popup_celebration_dismiss_aria": { "message": "மூடு" },
+
+  "popup_reportfixed_label": { "message": "நீங்கள் புகாரளித்த ஒரு பேனர்" },
+  "popup_reportfixed_text": {
+    "message": "இப்போது $HOST$-இல் தடுக்கப்பட்டுள்ளது",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "ஒரு முறை மட்டும் கேட்கிறோம்" },
+  "popup_reviewask_title": { "message": "அமைதியை ரசிக்கிறீர்களா?" },
+  "popup_reviewask_text": {
+    "message": "ஒரு சிறிய மதிப்புரை BannerBye-ஐ மற்றவர்கள் கண்டறிய உதவும். நாங்கள் ஒரு முறை மட்டுமே கேட்போம் — மீண்டும் ஒருபோதும் கேட்க மாட்டோம்."
+  },
+  "popup_reviewask_cta": { "message": "BannerBye-ஐ மதிப்பிடவும் →" },
+  "popup_reviewask_dismiss_aria": { "message": "வேண்டாம்" },
+  "popup_reviewask_dismiss_title": { "message": "வேண்டாம் — நாங்கள் மீண்டும் கேட்க மாட்டோம்" },
+
+  "onboarding_eyebrow": { "message": "விரைவான அமைப்பு — நீங்கள் ஏற்கனவே பாதுகாக்கப்படுகிறீர்கள்" },
+  "onboarding_headline_1": { "message": "குக்கீ பேனர்கள், தடுக்கப்பட்டன." },
+  "onboarding_headline_2": { "message": "அவை ஏற்றப்படுவதற்கு முன்பே." },
+  "onboarding_body": {
+    "message": "கட்டமைக்க எதுவும் இல்லை. BannerBye ஏற்கனவே இதைச் செய்கிறது, இப்போதே:"
+  },
+  "onboarding_check1_title": { "message": "ஒவ்வொரு தளத்திலும் மறுக்கிறது" },
+  "onboarding_check1_desc": {
+    "message": "ஒரு பேனர் கேட்கும் வாய்ப்பைப் பெறுவதற்கு முன்பே, தானாகவும் சட்டப்பூர்வமாகவும் „ஒப்புதல் இல்லை” என்று அனுப்புகிறது."
+  },
+  "onboarding_check2_title": { "message": "அமைதியாகச் செயல்படுகிறது" },
+  "onboarding_check2_desc": {
+    "message": "எங்களிடமிருந்து உங்களுக்கு மீண்டும் எந்தத் தகவலும் வராது. நாங்கள் எத்தனை பேனர்களை மறுத்துள்ளோம் என்பதைப் பார்க்க, உங்கள் கருவிப்பட்டையில் உள்ள கவசச் சின்னத்தை எப்போது வேண்டுமானாலும் கிளிக் செய்யவும்."
+  },
+  "onboarding_check3_title": { "message": "எந்தத் தளத்திலும் மாற்றியமைக்கக்கூடியது" },
+  "onboarding_check3_desc": {
+    "message": "வங்கிச் சேவைகள், பணிக் கருவிகள், உள்நுழைவுகள் — ஏதேனும் ஒன்று பழுதடைந்ததாகத் தோன்றினால், கவசச் சின்னத்தைத் திறந்து „இந்தத் தளத்தில் இடைநிறுத்து” என்பதைக் கிளிக் செய்யவும்."
+  },
+  "onboarding_tip": {
+    "message": "குறிப்பு: ஒரே கிளிக்கில் அணுக ஐகானைப் பின் செய்யவும் — கருவிப்பட்டையில் உள்ள புதிர்த் துண்டைக் கிளிக் செய்து, BannerBye-ஐக் கண்டுபிடித்து, பின்னை அழுத்தவும்."
+  },
+  "onboarding_cta": { "message": "உலாவத் தொடங்குங்கள் →" },
+
+  "milestone_first_banner": { "message": "முதல் பேனர் தடுக்கப்பட்டது" },
+  "milestone_first_steps": { "message": "முதல் படிகள்" },
+  "milestone_cookie_crusher": { "message": "குக்கீ நசுக்கி" },
+  "milestone_banner_bye_master": { "message": "பேனர் பை-பை மாஸ்டர்" },
+  "milestone_privacy_champion": { "message": "தனியுரிமை சாம்பியன்" },
+  "milestone_cookie_diet_month": { "message": "குக்கீ டயட் · முதல் மாதம்" },
+  "milestone_cookie_diet_year": { "message": "குக்கீ டயட் · முதல் ஆண்டு" },
+
+  "share_milestone_unlocked_label": { "message": "மைல்கல் திறக்கப்பட்டது" },
+  "share_tagline": { "message": "குக்கீ பேனர்கள், தடுக்கப்பட்டன. அவை ஏற்றப்படுவதற்கு முன்பே." },
+  "share_counter_singular": {
+    "message": "$COUNT$ குக்கீ பேனர் நிராகரிக்கப்பட்டது",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "$COUNT$ குக்கீ பேனர்கள் நிராகரிக்கப்பட்டன",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "உங்கள் BannerBye கதை" },
+  "share_milestones_unlocked": {
+    "message": "$TOTAL$ மைல்கற்களில் $COUNT$ திறக்கப்பட்டன",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "$DATE$ முதல்",
+    "placeholders": { "date": { "content": "$1" } }
+  }
+}

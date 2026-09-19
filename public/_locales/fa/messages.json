@@ -1,0 +1,180 @@
+{
+  "extName": {
+    "message": "BannerBye — مسدود کردن بنرهای کوکی پیش از بارگیری"
+  },
+  "extDesc": {
+    "message": "بنرهای کوکی پیش از بارگیری مسدود می‌شوند. حریم خصوصی خود را یک بار تنظیم کنید — BannerBye بقیه کارها را به‌صورت خودکار و در تمام سایت‌ها انجام می‌دهد."
+  },
+
+  "popup_loading": { "message": "در حال بارگیری…" },
+
+  "popup_status_off": { "message": "BannerBye در همه جا غیرفعال است." },
+  "popup_status_no_site": { "message": "سایتی برای اقدام وجود ندارد." },
+  "popup_status_paused": {
+    "message": "در $HOST$ متوقف شده است.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "در $HOST$ فعال است.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "فعال" },
+  "popup_status_dot_inactive_aria": { "message": "غیرفعال" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "روشن" },
+  "popup_toggle_off": { "message": "خاموش" },
+  "popup_pause_site": { "message": "توقف در این سایت" },
+  "popup_resume_site": { "message": "از سرگیری در این سایت" },
+
+  "popup_stat_label": { "message": "بنر رد شده" },
+
+  "popup_activity_show": { "message": "نمایش شواهد" },
+  "popup_activity_hide": { "message": "پنهان کردن شواهد" },
+  "popup_activity_no_banner": { "message": "بدون بنر" },
+  "popup_activity_banner_refused_fallback": { "message": "بنر رد شد" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "همین الان" },
+  "popup_time_minutes_ago": {
+    "message": "$MINUTES$ دقیقه پیش",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "$HOURS$ ساعت پیش",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "1 روز پیش" },
+  "popup_time_days_ago": {
+    "message": "$DAYS$ روز پیش",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "فقط روی این دستگاه و به مدت هفت روز نگه داشته می‌شود. هرگز به هیچ‌جا ارسال نمی‌شود."
+  },
+  "popup_activity_clear": { "message": "پاک کردن این فهرست" },
+
+  "popup_milestones_label": { "message": "نقاط عطف" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "دانلود تصویر آمار ←" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "ابتدا یک بنر را رد کنید"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "یک تصویر PNG قابل اشتراک‌گذاری از آمار شما را در پوشه دانلودها ذخیره می‌کند"
+  },
+  "popup_footer_report": { "message": "گزارش سایت خراب ←" },
+  "popup_footer_rate": { "message": "امتیازدهی به BannerBye ←" },
+  "popup_footer_rate_title": {
+    "message": "یک نقد بنویسید — این کار باعث می‌شود BannerBye همچنان دیده شود"
+  },
+
+  "popup_modal_title": { "message": "گزارش سایت خراب" },
+  "popup_modal_close_aria": { "message": "بستن" },
+  "popup_modal_sent": {
+    "message": "متشکریم. ما به $HOST$ نگاهی خواهیم انداخت.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "ما نام میزبان $HOST$ را به BannerBye ارسال خواهیم کرد. اختیاری: توضیح دهید مشکل از کجاست.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "چه اتفاقی می‌افتد؟ (اختیاری)"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "وقتی مشکل برطرف شد به من ایمیل بزنید (اختیاری)"
+  },
+  "popup_modal_fineprint": {
+    "message": "برای اینکه کاملاً ناشناس بمانید آن را خالی بگذارید. اگر آن را وارد کنید، تنها برای ارسال یک اطلاع‌رسانی — زمانی که این بنر رفع شد — از آن استفاده خواهیم کرد."
+  },
+  "popup_modal_error": {
+    "message": "ارسال نشد: $ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "ارسال گزارش" },
+  "popup_modal_sending": { "message": "در حال ارسال…" },
+  "popup_modal_try_again": { "message": "دوباره امتحان کنید" },
+
+  "popup_celebration_label": { "message": "نقطه عطف باز شد" },
+  "popup_celebration_share_aria": { "message": "دانلود کارت اشتراک‌گذاری" },
+  "popup_celebration_dismiss_aria": { "message": "بستن" },
+
+  "popup_reportfixed_label": { "message": "بنری که گزارش کردید" },
+  "popup_reportfixed_text": {
+    "message": "اکنون در $HOST$ مسدود شده است",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "یک درخواست یک‌باره" },
+  "popup_reviewask_title": { "message": "از سکوت لذت می‌برید؟" },
+  "popup_reviewask_text": {
+    "message": "یک نقد کوتاه به دیگران کمک می‌کند BannerBye را پیدا کنند. ما فقط یک بار می‌پرسیم — دیگر هرگز."
+  },
+  "popup_reviewask_cta": { "message": "امتیازدهی به BannerBye ←" },
+  "popup_reviewask_dismiss_aria": { "message": "نه، ممنون" },
+  "popup_reviewask_dismiss_title": { "message": "نه، ممنون — دوباره نمی‌پرسیم" },
+
+  "onboarding_eyebrow": { "message": "راه‌اندازی سریع — شما از قبل محافظت می‌شوید" },
+  "onboarding_headline_1": { "message": "بنرهای کوکی، مسدود شدند." },
+  "onboarding_headline_2": { "message": "پیش از آنکه بارگیری شوند." },
+  "onboarding_body": {
+    "message": "چیزی برای پیکربندی وجود ندارد. BannerBye همین حالا این کار را انجام می‌دهد:"
+  },
+  "onboarding_check1_title": { "message": "رد کردن در همه سایت‌ها" },
+  "onboarding_check1_desc": {
+    "message": "به‌طور خودکار و قانونی «عدم رضایت» را ارسال می‌کند، پیش از آنکه بنر فرصت پرسیدن پیدا کند."
+  },
+  "onboarding_check2_title": { "message": "بی‌صدا کار می‌کند" },
+  "onboarding_check2_desc": {
+    "message": "دیگر از ما خبری نخواهید شنید. هر زمان خواستید روی آیکون سپر در نوار ابزار کلیک کنید تا ببینید چه تعداد بنر را رد کرده‌ایم."
+  },
+  "onboarding_check3_title": { "message": "قابل بازگشت در هر سایتی" },
+  "onboarding_check3_desc": {
+    "message": "بانکداری، ابزارهای کاری، ورود به حساب — اگر چیزی درست کار نمی‌کند، آیکون سپر را باز کنید و روی «توقف در این سایت» کلیک کنید."
+  },
+  "onboarding_tip": {
+    "message": "نکته: آیکون را سنجاق کنید تا با یک کلیک در دسترس باشد — در نوار ابزار روی قطعه پازل کلیک کنید، BannerBye را بیابید و روی سنجاق کلیک کنید."
+  },
+  "onboarding_cta": { "message": "شروع مرور ←" },
+
+  "milestone_first_banner": { "message": "اولین بنر مسدود شده" },
+  "milestone_first_steps": { "message": "اولین قدم‌ها" },
+  "milestone_cookie_crusher": { "message": "کوکی‌شکن" },
+  "milestone_banner_bye_master": { "message": "استاد خداحافظی با بنرها" },
+  "milestone_privacy_champion": { "message": "قهرمان حریم خصوصی" },
+  "milestone_cookie_diet_month": { "message": "رژیم کوکی · ماه اول" },
+  "milestone_cookie_diet_year": { "message": "رژیم کوکی · سال اول" },
+
+  "share_milestone_unlocked_label": { "message": "نقطه عطف باز شد" },
+  "share_tagline": { "message": "بنرهای کوکی، مسدود شدند. پیش از آنکه بارگیری شوند." },
+  "share_counter_singular": {
+    "message": "$COUNT$ بنر کوکی رد شد",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "$COUNT$ بنر کوکی رد شد",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "داستان BannerBye شما" },
+  "share_milestones_unlocked": {
+    "message": "$COUNT$ از $TOTAL$ نقطه عطف باز شد",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "از $DATE$",
+    "placeholders": { "date": { "content": "$1" } }
+  }
+}

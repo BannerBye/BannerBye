@@ -1,0 +1,180 @@
+{
+  "extName": {
+    "message": "BannerBye — የኩኪ ባነሮችን ከመጫናቸው በፊት ያግዳል"
+  },
+  "extDesc": {
+    "message": "የኩኪ ባነሮች ከመጫናቸው በፊት ይታገዳሉ። ግላዊነትዎን አንድ ጊዜ ያዘጋጁ — የቀረውን BannerBye በእያንዳንዱ ጣቢያ ላይ በራስ-ሰር ይንከባከባል።"
+  },
+
+  "popup_loading": { "message": "በመጫን ላይ…" },
+
+  "popup_status_off": { "message": "BannerBye በሁሉም ቦታ ጠፍቷል።" },
+  "popup_status_no_site": { "message": "እርምጃ የሚወሰድበት ጣቢያ የለም።" },
+  "popup_status_paused": {
+    "message": "በ$HOST$ ላይ ለአፍታ ቆሟል።",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "በ$HOST$ ላይ ንቁ ነው።",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "ንቁ" },
+  "popup_status_dot_inactive_aria": { "message": "እንቅስቃሴ-አልባ" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "በርቷል" },
+  "popup_toggle_off": { "message": "ጠፍቷል" },
+  "popup_pause_site": { "message": "በዚህ ጣቢያ ላይ ለአፍታ አቁም" },
+  "popup_resume_site": { "message": "በዚህ ጣቢያ ላይ ከቆመበት ቀጥል" },
+
+  "popup_stat_label": { "message": "ባነሮች ውድቅ ተደርገዋል" },
+
+  "popup_activity_show": { "message": "ማስረጃውን አሳይ" },
+  "popup_activity_hide": { "message": "ማስረጃውን ደብቅ" },
+  "popup_activity_no_banner": { "message": "ባነር የለም" },
+  "popup_activity_banner_refused_fallback": { "message": "ባነር ውድቅ ተደርጓል" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "ልክ አሁን" },
+  "popup_time_minutes_ago": {
+    "message": "ከ$MINUTES$ ደቂቃዎች በፊት",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "ከ$HOURS$ ሰዓታት በፊት",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "ከ1 ቀን በፊት" },
+  "popup_time_days_ago": {
+    "message": "ከ$DAYS$ ቀናት በፊት",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "በዚህ መሣሪያ ላይ ብቻ፣ ለሰባት ቀናት ይቀመጣል። ወደ የትም አይላክም።"
+  },
+  "popup_activity_clear": { "message": "ይህንን ዝርዝር አጽዳ" },
+
+  "popup_milestones_label": { "message": "ወሳኝ ምዕራፎች" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "የስታቲስቲክስ ምስል ያውርዱ →" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "መጀመሪያ አንድ ባነር ውድቅ ያድርጉ"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "የእርስዎን ስታቲስቲክስ ሊጋራ የሚችል PNG ምስል ወደ ውርዶች አቃፊዎ ያስቀምጣል"
+  },
+  "popup_footer_report": { "message": "የተበላሸ ጣቢያ ሪፖርት ያድርጉ →" },
+  "popup_footer_rate": { "message": "BannerBye ደረጃ ይስጡ →" },
+  "popup_footer_rate_title": {
+    "message": "ግምገማ ይስጡ — ይህ BannerBye እንዲታይ ይረዳል"
+  },
+
+  "popup_modal_title": { "message": "የተበላሸ ጣቢያ ሪፖርት ያድርጉ" },
+  "popup_modal_close_aria": { "message": "ዝጋ" },
+  "popup_modal_sent": {
+    "message": "አመሰግናለሁ። $HOST$ እንመለከታለን።",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "የአስተናጋጅ ስም $HOST$ ወደ BannerBye እንልካለን። አማራጭ፦ ምን ችግር እንዳለ ያብራሩ።",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "ምን እየተፈጠረ ነው? (አማራጭ)"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "ሲስተካከል ኢሜል ይላኩልኝ (አማራጭ)"
+  },
+  "popup_modal_fineprint": {
+    "message": "ማንነትዎ ሙሉ በሙሉ እንዳይታወቅ ባዶ ይተዉት። ካከሉት፣ ይህ ባነር ሲስተካከል አንድ ማሳወቂያ ለመላክ ብቻ እንጠቀምበታለን።"
+  },
+  "popup_modal_error": {
+    "message": "መላክ አልተቻለም፦ $ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "ሪፖርት ላክ" },
+  "popup_modal_sending": { "message": "በመላክ ላይ…" },
+  "popup_modal_try_again": { "message": "ዳግም ይሞክሩ" },
+
+  "popup_celebration_label": { "message": "ወሳኝ ምዕራፍ ተከፍቷል" },
+  "popup_celebration_share_aria": { "message": "የማጋሪያ ካርድ አውርድ" },
+  "popup_celebration_dismiss_aria": { "message": "አሰናብት" },
+
+  "popup_reportfixed_label": { "message": "ሪፖርት ያደረጉት ባነር" },
+  "popup_reportfixed_text": {
+    "message": "አሁን በ$HOST$ ላይ ታግዷል",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "የአንድ ጊዜ ጥያቄ" },
+  "popup_reviewask_title": { "message": "ጸጥታውን እየተደሰቱበት ነው?" },
+  "popup_reviewask_text": {
+    "message": "አጭር ግምገማ ሌሎች BannerBye እንዲያገኙ ይረዳቸዋል። አንድ ጊዜ ብቻ እንጠይቃለን — ዳግም በጭራሽ።"
+  },
+  "popup_reviewask_cta": { "message": "BannerBye ደረጃ ይስጡ →" },
+  "popup_reviewask_dismiss_aria": { "message": "አይ፣ አመሰግናለሁ" },
+  "popup_reviewask_dismiss_title": { "message": "አይ፣ አመሰግናለሁ — ዳግም አንጠይቅም" },
+
+  "onboarding_eyebrow": { "message": "ፈጣን ማዋቀር — አስቀድመው ተጠብቀዋል" },
+  "onboarding_headline_1": { "message": "የኩኪ ባነሮች፣ ታግደዋል።" },
+  "onboarding_headline_2": { "message": "ከመጫናቸው በፊት።" },
+  "onboarding_body": {
+    "message": "ምንም ማዋቀር አያስፈልግም። BannerBye አሁኑኑ ይህንን እያደረገ ነው፦"
+  },
+  "onboarding_check1_title": { "message": "በእያንዳንዱ ጣቢያ ላይ ውድቅ ያደርጋል" },
+  "onboarding_check1_desc": {
+    "message": "ባነሩ ለመጠየቅ ዕድል ከማግኘቱ በፊት፣ በራስ-ሰር እና በሕጋዊ መንገድ „ምንም ፈቃድ የለም” ይልካል።"
+  },
+  "onboarding_check2_title": { "message": "በጸጥታ ይሠራል" },
+  "onboarding_check2_desc": {
+    "message": "ከእኛ ዳግም አይሰሙም። ምን ያህል ባነሮችን ውድቅ እንዳደረግን ለማየት በማንኛውም ጊዜ በመሣሪያ አሞሌዎ ላይ ያለውን የጋሻ አዶ ጠቅ ያድርጉ።"
+  },
+  "onboarding_check3_title": { "message": "በማንኛውም ጣቢያ ላይ ሊቀለበስ የሚችል" },
+  "onboarding_check3_desc": {
+    "message": "ባንክ፣ የሥራ መሣሪያዎች፣ መግቢያዎች — የሆነ ነገር የተበላሸ መስሎ ከታየ የጋሻውን አዶ ይክፈቱ እና „በዚህ ጣቢያ ላይ ለአፍታ አቁም” የሚለውን ይጫኑ።"
+  },
+  "onboarding_tip": {
+    "message": "ጠቃሚ ምክር፦ በአንድ ጠቅታ ለመድረስ አዶውን ይሰኩት — በመሣሪያ አሞሌዎ ውስጥ ያለውን የእንቆቅልሽ ክፍል ጠቅ ያድርጉ፣ BannerBye ያግኙ፣ ፒኑን ጠቅ ያድርጉ።"
+  },
+  "onboarding_cta": { "message": "ማሰስ ይጀምሩ →" },
+
+  "milestone_first_banner": { "message": "የመጀመሪያው ባነር ታግዷል" },
+  "milestone_first_steps": { "message": "የመጀመሪያ እርምጃዎች" },
+  "milestone_cookie_crusher": { "message": "የኩኪ መፍጫ" },
+  "milestone_banner_bye_master": { "message": "የባነር ደህና ሁን ዋና" },
+  "milestone_privacy_champion": { "message": "የግላዊነት ሻምፒዮን" },
+  "milestone_cookie_diet_month": { "message": "የኩኪ አመጋገብ · የመጀመሪያ ወር" },
+  "milestone_cookie_diet_year": { "message": "የኩኪ አመጋገብ · የመጀመሪያ ዓመት" },
+
+  "share_milestone_unlocked_label": { "message": "ወሳኝ ምዕራፍ ተከፍቷል" },
+  "share_tagline": { "message": "የኩኪ ባነሮች፣ ታግደዋል። ከመጫናቸው በፊት።" },
+  "share_counter_singular": {
+    "message": "$COUNT$ የኩኪ ባነር ውድቅ ተደርጓል",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "$COUNT$ የኩኪ ባነሮች ውድቅ ተደርገዋል",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "የእርስዎ BannerBye ታሪክ" },
+  "share_milestones_unlocked": {
+    "message": "ከ$TOTAL$ ወሳኝ ምዕራፎች $COUNT$ ተከፍተዋል",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "ከ$DATE$ ጀምሮ",
+    "placeholders": { "date": { "content": "$1" } }
+  }
+}

@@ -1,0 +1,180 @@
+{
+  "extName": {
+    "message": "BannerBye — hinaharang ang cookie banners bago mag-load"
+  },
+  "extDesc": {
+    "message": "Hinaharang ang mga cookie banner bago pa man mag-load. Itakda ang iyong privacy nang isang beses — ang BannerBye na ang bahala sa iba pa, awtomatiko at sa bawat site."
+  },
+
+  "popup_loading": { "message": "Naglo-load…" },
+
+  "popup_status_off": { "message": "Naka-off ang BannerBye sa lahat ng site." },
+  "popup_status_no_site": { "message": "Walang site na maaaring aksyunan." },
+  "popup_status_paused": {
+    "message": "Naka-pause sa $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "Aktibo sa $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "Aktibo" },
+  "popup_status_dot_inactive_aria": { "message": "Hindi aktibo" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "Naka-on" },
+  "popup_toggle_off": { "message": "Naka-off" },
+  "popup_pause_site": { "message": "I-pause sa site na ito" },
+  "popup_resume_site": { "message": "Ipagpatuloy sa site na ito" },
+
+  "popup_stat_label": { "message": "banner ang tinanggihan" },
+
+  "popup_activity_show": { "message": "Ipakita ang ebidensya" },
+  "popup_activity_hide": { "message": "Itago ang ebidensya" },
+  "popup_activity_no_banner": { "message": "Walang banner" },
+  "popup_activity_banner_refused_fallback": { "message": "Tinanggihan ang banner" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "ngayon lang" },
+  "popup_time_minutes_ago": {
+    "message": "$MINUTES$ min ang nakalipas",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "$HOURS$ oras ang nakalipas",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "1 araw ang nakalipas" },
+  "popup_time_days_ago": {
+    "message": "$DAYS$ araw ang nakalipas",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "Nananatili lamang sa device na ito, sa loob ng pitong araw. Hindi kailanman ipinapadala kahit saan."
+  },
+  "popup_activity_clear": { "message": "Burahin ang listahang ito" },
+
+  "popup_milestones_label": { "message": "Mga milestone" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "I-download ang imahe ng stats →" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "Tanggihan muna ang isang banner"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "Nagse-save ng shareable na PNG na imahe ng iyong stats sa iyong mga download"
+  },
+  "popup_footer_report": { "message": "I-report ang sirang site →" },
+  "popup_footer_rate": { "message": "I-rate ang BannerBye →" },
+  "popup_footer_rate_title": {
+    "message": "Mag-iwan ng review — tumutulong itong manatiling nakikita ang BannerBye"
+  },
+
+  "popup_modal_title": { "message": "I-report ang sirang site" },
+  "popup_modal_close_aria": { "message": "Isara" },
+  "popup_modal_sent": {
+    "message": "Salamat. Titingnan namin ang $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "Ipapadala namin ang hostname na $HOST$ sa BannerBye. Opsyonal: idagdag kung ano ang problema.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "Ano ang nangyayari? (opsyonal)"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "I-email mo ako kapag naayos na (opsyonal)"
+  },
+  "popup_modal_fineprint": {
+    "message": "Iwanang blangko para manatiling ganap na anonymous. Kung idaragdag mo ito, gagamitin lang namin ito para magpadala ng isang paalala kapag naayos na ang banner na ito."
+  },
+  "popup_modal_error": {
+    "message": "Hindi naipadala: $ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "Ipadala ang ulat" },
+  "popup_modal_sending": { "message": "Ipinapadala…" },
+  "popup_modal_try_again": { "message": "Subukan muli" },
+
+  "popup_celebration_label": { "message": "Na-unlock ang milestone" },
+  "popup_celebration_share_aria": { "message": "I-download ang share card" },
+  "popup_celebration_dismiss_aria": { "message": "Isara" },
+
+  "popup_reportfixed_label": { "message": "Isang banner na iniulat mo" },
+  "popup_reportfixed_text": {
+    "message": "Naka-block na ngayon sa $HOST$",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "Isang beses na hiling" },
+  "popup_reviewask_title": { "message": "Nasisiyahan ka ba sa katahimikan?" },
+  "popup_reviewask_text": {
+    "message": "Ang maikling review ay tumutulong sa iba na makahanap ng BannerBye. Minsan lang kami hihiling — hindi na uulit."
+  },
+  "popup_reviewask_cta": { "message": "I-rate ang BannerBye →" },
+  "popup_reviewask_dismiss_aria": { "message": "Hindi na, salamat" },
+  "popup_reviewask_dismiss_title": { "message": "Hindi na, salamat — hindi na kami hihiling muli" },
+
+  "onboarding_eyebrow": { "message": "Mabilis na setup — protektado ka na" },
+  "onboarding_headline_1": { "message": "Mga cookie banner, hinarang." },
+  "onboarding_headline_2": { "message": "Bago pa man sila mag-load." },
+  "onboarding_body": {
+    "message": "Walang kailangang i-configure. Ginagawa na ito ng BannerBye, ngayon din:"
+  },
+  "onboarding_check1_title": { "message": "Tumatanggi sa bawat site" },
+  "onboarding_check1_desc": {
+    "message": "Awtomatiko at legal na nagpapadala ng „walang pahintulot”, bago pa man magkaroon ng pagkakataong magtanong ang isang banner."
+  },
+  "onboarding_check2_title": { "message": "Tahimik na gumagana" },
+  "onboarding_check2_desc": {
+    "message": "Hindi ka na namin iistorbohin muli. I-click ang icon ng kalasag sa iyong toolbar anumang oras para makita kung ilang banner ang tinanggihan namin."
+  },
+  "onboarding_check3_title": { "message": "Maibabalik sa anumang site" },
+  "onboarding_check3_desc": {
+    "message": "Banking, mga gamit sa trabaho, pag-log in — kung may mukhang sira, buksan ang icon ng kalasag at i-click ang „I-pause sa site na ito”."
+  },
+  "onboarding_tip": {
+    "message": "Tip: i-pin ang icon para sa one-click na access — i-click ang piraso ng palaisipan sa toolbar, hanapin ang BannerBye, i-click ang pin."
+  },
+  "onboarding_cta": { "message": "Magsimula nang mag-browse →" },
+
+  "milestone_first_banner": { "message": "Unang banner na hinarang" },
+  "milestone_first_steps": { "message": "Mga unang hakbang" },
+  "milestone_cookie_crusher": { "message": "Pandurog ng cookie" },
+  "milestone_banner_bye_master": { "message": "Maestro ng paalam sa banner" },
+  "milestone_privacy_champion": { "message": "Kampeon ng privacy" },
+  "milestone_cookie_diet_month": { "message": "Cookie diet · unang buwan" },
+  "milestone_cookie_diet_year": { "message": "Cookie diet · unang taon" },
+
+  "share_milestone_unlocked_label": { "message": "NA-UNLOCK ANG MILESTONE" },
+  "share_tagline": { "message": "Mga cookie banner, hinarang. Bago pa man sila mag-load." },
+  "share_counter_singular": {
+    "message": "$COUNT$ cookie banner ang tinanggihan",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "$COUNT$ na cookie banner ang tinanggihan",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "ANG KWENTO MO SA BANNERBYE" },
+  "share_milestones_unlocked": {
+    "message": "$COUNT$ sa $TOTAL$ na milestone ang na-unlock",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "mula noong $DATE$",
+    "placeholders": { "date": { "content": "$1" } }
+  }
+}

@@ -1,0 +1,180 @@
+{
+  "extName": {
+    "message": "BannerBye — αποκλείει τα banner cookies πριν φορτωθούν"
+  },
+  "extDesc": {
+    "message": "Banner cookies αποκλεισμένα πριν καν φορτωθούν. Ρυθμίστε το απόρρητό σας μία φορά — το BannerBye απορρίπτει αυτόματα σε κάθε ιστότοπο."
+  },
+
+  "popup_loading": { "message": "Φόρτωση…" },
+
+  "popup_status_off": { "message": "Το BannerBye είναι απενεργοποιημένο παντού." },
+  "popup_status_no_site": { "message": "Δεν υπάρχει ιστότοπος προς προστασία." },
+  "popup_status_paused": {
+    "message": "Σε παύση στο $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "Ενεργό στο $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "Ενεργό" },
+  "popup_status_dot_inactive_aria": { "message": "Ανενεργό" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "Ενεργοποιημένο" },
+  "popup_toggle_off": { "message": "Απενεργοποιημένο" },
+  "popup_pause_site": { "message": "Παύση σε αυτόν τον ιστότοπο" },
+  "popup_resume_site": { "message": "Συνέχιση σε αυτόν τον ιστότοπο" },
+
+  "popup_stat_label": { "message": "banner απορρίφθηκαν" },
+
+  "popup_activity_show": { "message": "Εμφάνιση αποδεικτικών στοιχείων" },
+  "popup_activity_hide": { "message": "Απόκρυψη αποδεικτικών στοιχείων" },
+  "popup_activity_no_banner": { "message": "Χωρίς banner" },
+  "popup_activity_banner_refused_fallback": { "message": "Το banner απορρίφθηκε" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "μόλις τώρα" },
+  "popup_time_minutes_ago": {
+    "message": "πριν από $MINUTES$ λεπτά",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "πριν από $HOURS$ ώρες",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "πριν από 1 ημέρα" },
+  "popup_time_days_ago": {
+    "message": "πριν από $DAYS$ ημέρες",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "Αποθηκεύεται μόνο σε αυτή τη συσκευή, για επτά ημέρες. Δεν αποστέλλεται πουθενά."
+  },
+  "popup_activity_clear": { "message": "Εκκαθάριση αυτής της λίστας" },
+
+  "popup_milestones_label": { "message": "Ορόσημα" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "Λήψη εικόνας στατιστικών →" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "Απορρίψτε πρώτα ένα banner"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "Αποθηκεύει στα αρχεία λήψεών σας μια εικόνα PNG των στατιστικών σας, την οποία μπορείτε να μοιραστείτε"
+  },
+  "popup_footer_report": { "message": "Αναφορά ιστότοπου που δεν λειτουργεί →" },
+  "popup_footer_rate": { "message": "Αξιολόγηση του BannerBye →" },
+  "popup_footer_rate_title": {
+    "message": "Αφήστε μια κριτική — βοηθάει το BannerBye να παραμείνει ορατό"
+  },
+
+  "popup_modal_title": { "message": "Αναφορά ιστότοπου που δεν λειτουργεί" },
+  "popup_modal_close_aria": { "message": "Κλείσιμο" },
+  "popup_modal_sent": {
+    "message": "Ευχαριστούμε. Θα ρίξουμε μια ματιά στο $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "Θα στείλουμε το όνομα διακομιστή $HOST$ στο BannerBye. Προαιρετικά: προσθέστε τι δεν λειτουργεί σωστά.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "Τι συμβαίνει; (προαιρετικό)"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "Στείλτε μου email όταν διορθωθεί (προαιρετικό)"
+  },
+  "popup_modal_fineprint": {
+    "message": "Αφήστε αυτό το πεδίο κενό για να παραμείνετε εντελώς ανώνυμοι. Αν το συμπληρώσετε, θα το χρησιμοποιήσουμε μόνο για να σας στείλουμε ένα εφάπαξ μήνυμα όταν διορθωθεί αυτό το banner."
+  },
+  "popup_modal_error": {
+    "message": "Δεν ήταν δυνατή η αποστολή: $ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "Αποστολή αναφοράς" },
+  "popup_modal_sending": { "message": "Αποστολή…" },
+  "popup_modal_try_again": { "message": "Δοκιμάστε ξανά" },
+
+  "popup_celebration_label": { "message": "Ορόσημο ξεκλειδώθηκε" },
+  "popup_celebration_share_aria": { "message": "Λήψη κάρτας κοινοποίησης" },
+  "popup_celebration_dismiss_aria": { "message": "Κλείσιμο" },
+
+  "popup_reportfixed_label": { "message": "Ένα banner που αναφέρατε" },
+  "popup_reportfixed_text": {
+    "message": "Απορρίπτεται πλέον στο $HOST$",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "Μια εφάπαξ ερώτηση" },
+  "popup_reviewask_title": { "message": "Απολαμβάνετε την ησυχία;" },
+  "popup_reviewask_text": {
+    "message": "Μια γρήγορη κριτική βοηθά τους χρήστες να βρουν το BannerBye. Ρωτάμε μία φορά — ποτέ ξανά."
+  },
+  "popup_reviewask_cta": { "message": "Αξιολόγηση του BannerBye →" },
+  "popup_reviewask_dismiss_aria": { "message": "Όχι, ευχαριστώ" },
+  "popup_reviewask_dismiss_title": { "message": "Όχι, ευχαριστώ — δεν θα ξαναρωτήσουμε" },
+
+  "onboarding_eyebrow": { "message": "Γρήγορη ρύθμιση — είστε ήδη προστατευμένοι" },
+  "onboarding_headline_1": { "message": "Banner cookies, αποκλεισμένα." },
+  "onboarding_headline_2": { "message": "Πριν καν φορτωθούν." },
+  "onboarding_body": {
+    "message": "Δεν χρειάζεται καμία ρύθμιση. Το BannerBye το κάνει ήδη αυτό, αυτή τη στιγμή:"
+  },
+  "onboarding_check1_title": { "message": "Απορρίπτει σε κάθε ιστότοπο" },
+  "onboarding_check1_desc": {
+    "message": "Στέλνει αυτόματα «μη συγκατάθεση» με νομικά έγκυρο τρόπο, πριν καν προλάβει ένα banner να σας ρωτήσει."
+  },
+  "onboarding_check2_title": { "message": "Λειτουργεί αθόρυβα" },
+  "onboarding_check2_desc": {
+    "message": "Δεν θα ξανακούσετε νέα μας. Κάντε κλικ στο εικονίδιο της ασπίδας στη γραμμή εργαλείων σας οποιαδήποτε στιγμή για να δείτε πόσα banner έχουμε απορρίψει."
+  },
+  "onboarding_check3_title": { "message": "Αναστρέψιμο σε κάθε ιστότοπο" },
+  "onboarding_check3_desc": {
+    "message": "Τραπεζικές συναλλαγές, εργαλεία εργασίας, συνδέσεις — αν κάτι φαίνεται να μην λειτουργεί σωστά, ανοίξτε το εικονίδιο της ασπίδας και πατήστε «Παύση σε αυτόν τον ιστότοπο»."
+  },
+  "onboarding_tip": {
+    "message": "Συμβουλή: καρφιτσώστε το εικονίδιο για πρόσβαση με ένα κλικ — κομμάτι παζλ στη γραμμή εργαλείων σας, βρείτε το BannerBye, κάντε κλικ στην καρφίτσα."
+  },
+  "onboarding_cta": { "message": "Ξεκινήστε την περιήγηση →" },
+
+  "milestone_first_banner": { "message": "Πρώτο banner αποκλεισμένο" },
+  "milestone_first_steps": { "message": "Πρώτα βήματα" },
+  "milestone_cookie_crusher": { "message": "Καταστροφέας cookies" },
+  "milestone_banner_bye_master": { "message": "Άρχοντας των banner" },
+  "milestone_privacy_champion": { "message": "Πρωταθλητής απορρήτου" },
+  "milestone_cookie_diet_month": { "message": "Δίαιτα cookies · πρώτος μήνας" },
+  "milestone_cookie_diet_year": { "message": "Δίαιτα cookies · πρώτος χρόνος" },
+
+  "share_milestone_unlocked_label": { "message": "ΟΡΟΣΗΜΟ ΞΕΚΛΕΙΔΩΘΗΚΕ" },
+  "share_tagline": { "message": "Banner cookies, αποκλεισμένα. Πριν καν φορτωθούν." },
+  "share_counter_singular": {
+    "message": "$COUNT$ banner cookies απορρίφθηκε",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "$COUNT$ banner cookies απορρίφθηκαν",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "Η ΙΣΤΟΡΙΑ ΣΑΣ ΜΕ ΤΟ BANNERBYE" },
+  "share_milestones_unlocked": {
+    "message": "$COUNT$ από $TOTAL$ ορόσημα ξεκλειδώθηκαν",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "από $DATE$",
+    "placeholders": { "date": { "content": "$1" } }
+  }
+}

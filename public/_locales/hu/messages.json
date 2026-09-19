@@ -1,0 +1,180 @@
+{
+  "extName": {
+    "message": "BannerBye — blokkolja a sütibannereket, mielőtt betöltődnének"
+  },
+  "extDesc": {
+    "message": "Sütibannerek blokkolva, mielőtt betöltődnének. Állítsd be egyszer az adatvédelmet — a BannerBye minden webhelyen automatikusan elutasít."
+  },
+
+  "popup_loading": { "message": "Betöltés…" },
+
+  "popup_status_off": { "message": "A BannerBye mindenhol ki van kapcsolva." },
+  "popup_status_no_site": { "message": "Nincs védendő webhely." },
+  "popup_status_paused": {
+    "message": "Szüneteltetve a $HOST$ webhelyen.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "Aktív a $HOST$ webhelyen.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "Aktív" },
+  "popup_status_dot_inactive_aria": { "message": "Inaktív" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "Be" },
+  "popup_toggle_off": { "message": "Ki" },
+  "popup_pause_site": { "message": "Szüneteltetés ezen a webhelyen" },
+  "popup_resume_site": { "message": "Folytatás ezen a webhelyen" },
+
+  "popup_stat_label": { "message": "elutasított banner" },
+
+  "popup_activity_show": { "message": "Bizonyíték megjelenítése" },
+  "popup_activity_hide": { "message": "Bizonyíték elrejtése" },
+  "popup_activity_no_banner": { "message": "Nincs banner" },
+  "popup_activity_banner_refused_fallback": { "message": "Banner elutasítva" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "épp most" },
+  "popup_time_minutes_ago": {
+    "message": "$MINUTES$ perce",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "$HOURS$ órája",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "1 napja" },
+  "popup_time_days_ago": {
+    "message": "$DAYS$ napja",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "Csak ezen az eszközön tárolva, hét napig. Soha nem küldjük el sehova."
+  },
+  "popup_activity_clear": { "message": "Töröld ezt a listát" },
+
+  "popup_milestones_label": { "message": "Mérföldkövek" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "Statisztikai kép letöltése →" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "Előbb utasíts el egy bannert"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "A statisztikáidról egy megosztható PNG-képet ment a letöltések közé"
+  },
+  "popup_footer_report": { "message": "Hibás webhely jelentése →" },
+  "popup_footer_rate": { "message": "Értékeld a BannerBye-t →" },
+  "popup_footer_rate_title": {
+    "message": "Írj véleményt — ez segít a BannerBye láthatóságának fenntartásában"
+  },
+
+  "popup_modal_title": { "message": "Hibás webhely jelentése" },
+  "popup_modal_close_aria": { "message": "Bezárás" },
+  "popup_modal_sent": {
+    "message": "Köszönjük. Megnézzük a $HOST$ webhelyet.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "Elküldjük a $HOST$ hosztnevet a BannerBye-nek. Opcionális: írd meg, mi a probléma.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "Mi történik? (opcionális)"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "Értesíts e-mailben, ha kijavították (opcionális)"
+  },
+  "popup_modal_fineprint": {
+    "message": "Hagyd üresen, ha teljesen névtelen szeretnél maradni. Ha kitöltöd, csak arra használjuk, hogy egyszeri értesítést küldjünk neked, amikor ezt a bannert kijavították."
+  },
+  "popup_modal_error": {
+    "message": "Nem sikerült elküldeni: $ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "Jelentés elküldése" },
+  "popup_modal_sending": { "message": "Küldés…" },
+  "popup_modal_try_again": { "message": "Próbáld meg újra" },
+
+  "popup_celebration_label": { "message": "Mérföldkő feloldva" },
+  "popup_celebration_share_aria": { "message": "Megosztókártya letöltése" },
+  "popup_celebration_dismiss_aria": { "message": "Bezárás" },
+
+  "popup_reportfixed_label": { "message": "Egy általad bejelentett banner" },
+  "popup_reportfixed_text": {
+    "message": "Most elutasítva a $HOST$ webhelyen",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "Egyszeri kérés" },
+  "popup_reviewask_title": { "message": "Élvezed a csendet?" },
+  "popup_reviewask_text": {
+    "message": "Egy gyors értékelés segít másoknak megtalálni a BannerBye-t. Egyszer kérjük — többet nem."
+  },
+  "popup_reviewask_cta": { "message": "Értékeld a BannerBye-t →" },
+  "popup_reviewask_dismiss_aria": { "message": "Nem, köszönöm" },
+  "popup_reviewask_dismiss_title": { "message": "Nem, köszönöm — többet nem kérdezünk" },
+
+  "onboarding_eyebrow": { "message": "Gyors beállítás — máris védve vagy" },
+  "onboarding_headline_1": { "message": "Sütibannerek, blokkolva." },
+  "onboarding_headline_2": { "message": "Még mielőtt betöltődnének." },
+  "onboarding_body": {
+    "message": "Nincs mit beállítani. A BannerBye máris elvégzi ezt, éppen most:"
+  },
+  "onboarding_check1_title": { "message": "Minden webhelyen elutasítja" },
+  "onboarding_check1_desc": {
+    "message": "Jogi szempontból érvényes módon automatikusan elküldi a „nincs hozzájárulás” üzenetet, még mielőtt a bannernek esélye lenne megkérdezni téged."
+  },
+  "onboarding_check2_title": { "message": "Csendben működik" },
+  "onboarding_check2_desc": {
+    "message": "Többet nem hallasz rólunk. Bármikor rákattinthatsz az eszköztáron található pajzs ikonra, hogy megnézd, hány bannert utasítottunk el."
+  },
+  "onboarding_check3_title": { "message": "Bármely webhelyen visszaállítható" },
+  "onboarding_check3_desc": {
+    "message": "Banki ügyintézés, munkaeszközök, bejelentkezések — ha valami nem működik rendesen, nyisd meg a pajzs ikont, és kattints a „Szüneteltetés ezen a webhelyen” gombra."
+  },
+  "onboarding_tip": {
+    "message": "Tipp: rögzítsd az ikont az egykattintásos hozzáféréshez — az eszköztárban a puzzle-darab, keresd meg a BannerBye-t, kattints a rögzítőtűre."
+  },
+  "onboarding_cta": { "message": "Kezdd el a böngészést →" },
+
+  "milestone_first_banner": { "message": "Első blokkolt banner" },
+  "milestone_first_steps": { "message": "Első lépések" },
+  "milestone_cookie_crusher": { "message": "Sütizúzó" },
+  "milestone_banner_bye_master": { "message": "A bannerek mestere" },
+  "milestone_privacy_champion": { "message": "Az adatvédelem bajnoka" },
+  "milestone_cookie_diet_month": { "message": "Sütidiéta · első hónap" },
+  "milestone_cookie_diet_year": { "message": "Sütidiéta · első év" },
+
+  "share_milestone_unlocked_label": { "message": "MÉRFÖLDKŐ FELOLDVA" },
+  "share_tagline": { "message": "Sütibannerek, blokkolva. Még mielőtt betöltődnének." },
+  "share_counter_singular": {
+    "message": "$COUNT$ sütibanner elutasítva",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "$COUNT$ sütibanner elutasítva",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "A TE BANNERBYE-TÖRTÉNETED" },
+  "share_milestones_unlocked": {
+    "message": "$COUNT$ a $TOTAL$ mérföldkőből feloldva",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "$DATE$ óta",
+    "placeholders": { "date": { "content": "$1" } }
+  }
+}

@@ -1,0 +1,180 @@
+{
+  "extName": {
+    "message": "BannerBye — కుకీ బ్యానర్‌లు లోడ్ అవ్వక ముందే నిరోధిస్తుంది"
+  },
+  "extDesc": {
+    "message": "కుకీ బ్యానర్‌లు లోడ్ అవ్వక ముందే నిరోధించబడతాయి. మీ గోప్యతను ఒక్కసారి సెట్ చేయండి — మిగిలినది BannerBye ప్రతి సైట్‌లో స్వయంచాలకంగా చూసుకుంటుంది."
+  },
+
+  "popup_loading": { "message": "లోడ్ అవుతోంది…" },
+
+  "popup_status_off": { "message": "BannerBye ప్రతిచోటా ఆఫ్ చేయబడింది." },
+  "popup_status_no_site": { "message": "చర్య తీసుకోవడానికి సైట్ లేదు." },
+  "popup_status_paused": {
+    "message": "$HOST$లో నిలిపివేయబడింది.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "$HOST$లో యాక్టివ్‌గా ఉంది.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "యాక్టివ్" },
+  "popup_status_dot_inactive_aria": { "message": "నిష్క్రియం" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "ఆన్" },
+  "popup_toggle_off": { "message": "ఆఫ్" },
+  "popup_pause_site": { "message": "ఈ సైట్‌లో నిలిపివేయండి" },
+  "popup_resume_site": { "message": "ఈ సైట్‌లో తిరిగి ప్రారంభించండి" },
+
+  "popup_stat_label": { "message": "బ్యానర్‌లు తిరస్కరించబడ్డాయి" },
+
+  "popup_activity_show": { "message": "సాక్ష్యాన్ని చూపించు" },
+  "popup_activity_hide": { "message": "సాక్ష్యాన్ని దాచు" },
+  "popup_activity_no_banner": { "message": "బ్యానర్ లేదు" },
+  "popup_activity_banner_refused_fallback": { "message": "బ్యానర్ తిరస్కరించబడింది" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "ఇప్పుడే" },
+  "popup_time_minutes_ago": {
+    "message": "$MINUTES$ నిమిషాల క్రితం",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "$HOURS$ గంటల క్రితం",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "1 రోజు క్రితం" },
+  "popup_time_days_ago": {
+    "message": "$DAYS$ రోజుల క్రితం",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "ఈ పరికరంలో మాత్రమే, ఏడు రోజుల పాటు ఉంచబడుతుంది. ఎక్కడికీ పంపబడదు."
+  },
+  "popup_activity_clear": { "message": "ఈ జాబితాను తొలగించండి" },
+
+  "popup_milestones_label": { "message": "మైలురాళ్ళు" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "గణాంకాల చిత్రాన్ని డౌన్‌లోడ్ చేయండి →" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "ముందుగా ఒక బ్యానర్‌ను తిరస్కరించండి"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "మీ గణాంకాల పంచుకోగల PNG చిత్రాన్ని మీ డౌన్‌లోడ్‌ల ఫోల్డర్‌లో సేవ్ చేస్తుంది"
+  },
+  "popup_footer_report": { "message": "పని చేయని సైట్‌ను నివేదించండి →" },
+  "popup_footer_rate": { "message": "BannerByeకి రేటింగ్ ఇవ్వండి →" },
+  "popup_footer_rate_title": {
+    "message": "సమీక్ష రాయండి — ఇది BannerByeని కనిపించేలా ఉంచుతుంది"
+  },
+
+  "popup_modal_title": { "message": "పని చేయని సైట్‌ను నివేదించండి" },
+  "popup_modal_close_aria": { "message": "మూసివేయండి" },
+  "popup_modal_sent": {
+    "message": "ధన్యవాదాలు. మేము $HOST$ని పరిశీలిస్తాము.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "మేము హోస్ట్‌నేమ్ $HOST$ని BannerByeకి పంపుతాము. ఐచ్ఛికం: ఏమి తప్పు జరుగుతోందో జోడించండి.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "ఏమి జరుగుతోంది? (ఐచ్ఛికం)"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "సరిచేసినప్పుడు నాకు ఇమెయిల్ చేయండి (ఐచ్ఛికం)"
+  },
+  "popup_modal_fineprint": {
+    "message": "పూర్తిగా అజ్ఞాతంగా ఉండటానికి దీనిని ఖాళీగా వదిలేయండి. మీరు దీన్ని జోడిస్తే, ఈ బ్యానర్ పరిష్కరించబడినప్పుడు మీకు ఒక నోటిఫికేషన్ పంపడానికి మాత్రమే మేము దానిని ఉపయోగిస్తాము."
+  },
+  "popup_modal_error": {
+    "message": "పంపడం సాధ్యం కాలేదు: $ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "నివేదిక పంపండి" },
+  "popup_modal_sending": { "message": "పంపుతోంది…" },
+  "popup_modal_try_again": { "message": "మళ్ళీ ప్రయత్నించండి" },
+
+  "popup_celebration_label": { "message": "మైలురాయి అన్‌లాక్ అయింది" },
+  "popup_celebration_share_aria": { "message": "షేర్ కార్డ్‌ను డౌన్‌లోడ్ చేయండి" },
+  "popup_celebration_dismiss_aria": { "message": "మూసివేయండి" },
+
+  "popup_reportfixed_label": { "message": "మీరు నివేదించిన ఒక బ్యానర్" },
+  "popup_reportfixed_text": {
+    "message": "ఇప్పుడు $HOST$లో నిరోధించబడింది",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "ఒక్కసారి మాత్రమే అడుగుతున్నాము" },
+  "popup_reviewask_title": { "message": "నిశ్శబ్దాన్ని ఆస్వాదిస్తున్నారా?" },
+  "popup_reviewask_text": {
+    "message": "ఒక చిన్న సమీక్ష ఇతరులు BannerByeని కనుగొనడానికి సహాయపడుతుంది. మేము ఒక్కసారే అడుగుతాము — మళ్ళీ ఎప్పటికీ అడగము."
+  },
+  "popup_reviewask_cta": { "message": "BannerByeకి రేటింగ్ ఇవ్వండి →" },
+  "popup_reviewask_dismiss_aria": { "message": "వద్దు, ధన్యవాదాలు" },
+  "popup_reviewask_dismiss_title": { "message": "వద్దు, ధన్యవాదాలు — మళ్ళీ అడగము" },
+
+  "onboarding_eyebrow": { "message": "త్వరిత సెటప్ — మీరు ఇప్పటికే రక్షించబడ్డారు" },
+  "onboarding_headline_1": { "message": "కుకీ బ్యానర్‌లు, నిరోధించబడ్డాయి." },
+  "onboarding_headline_2": { "message": "అవి లోడ్ అవ్వక ముందే." },
+  "onboarding_body": {
+    "message": "కాన్ఫిగర్ చేయడానికి ఏమీ లేదు. BannerBye ఇప్పటికే ఇది చేస్తోంది, ఇప్పుడే:"
+  },
+  "onboarding_check1_title": { "message": "ప్రతి సైట్‌లో తిరస్కరిస్తుంది" },
+  "onboarding_check1_desc": {
+    "message": "ఒక బ్యానర్ అడగడానికి అవకాశం దొరకక ముందే, స్వయంచాలకంగా మరియు చట్టబద్ధంగా „సమ్మతి లేదు” అని పంపుతుంది."
+  },
+  "onboarding_check2_title": { "message": "నిశ్శబ్దంగా పనిచేస్తుంది" },
+  "onboarding_check2_desc": {
+    "message": "మా నుండి మీకు మళ్ళీ ఎలాంటి సందేశమూ రాదు. మేము ఎన్ని బ్యానర్‌లను తిరస్కరించామో చూడటానికి, మీ టూల్‌బార్‌లోని షీల్డ్ ఐకాన్‌పై ఎప్పుడైనా క్లిక్ చేయండి."
+  },
+  "onboarding_check3_title": { "message": "ఏ సైట్‌లోనైనా వెనక్కి తీసుకోవచ్చు" },
+  "onboarding_check3_desc": {
+    "message": "బ్యాంకింగ్, వర్క్ టూల్స్, లాగిన్‌లు — ఏదైనా పని చేయడం లేదని అనిపిస్తే, షీల్డ్ ఐకాన్‌ను తెరిచి „ఈ సైట్‌లో నిలిపివేయండి” పై క్లిక్ చేయండి."
+  },
+  "onboarding_tip": {
+    "message": "చిట్కా: ఒకే క్లిక్‌తో యాక్సెస్ కోసం ఐకాన్‌ను పిన్ చేయండి — టూల్‌బార్‌లోని పజిల్ పీస్‌పై క్లిక్ చేసి, BannerByeని కనుగొని, పిన్‌పై క్లిక్ చేయండి."
+  },
+  "onboarding_cta": { "message": "బ్రౌజింగ్ ప్రారంభించండి →" },
+
+  "milestone_first_banner": { "message": "మొదటి బ్యానర్ నిరోధించబడింది" },
+  "milestone_first_steps": { "message": "మొదటి అడుగులు" },
+  "milestone_cookie_crusher": { "message": "కుకీ క్రషర్" },
+  "milestone_banner_bye_master": { "message": "బ్యానర్ బై-బై మాస్టర్" },
+  "milestone_privacy_champion": { "message": "గోప్యతా ఛాంపియన్" },
+  "milestone_cookie_diet_month": { "message": "కుకీ డైట్ · మొదటి నెల" },
+  "milestone_cookie_diet_year": { "message": "కుకీ డైట్ · మొదటి సంవత్సరం" },
+
+  "share_milestone_unlocked_label": { "message": "మైలురాయి అన్‌లాక్ అయింది" },
+  "share_tagline": { "message": "కుకీ బ్యానర్‌లు, నిరోధించబడ్డాయి. అవి లోడ్ అవ్వక ముందే." },
+  "share_counter_singular": {
+    "message": "$COUNT$ కుకీ బ్యానర్ తిరస్కరించబడింది",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "$COUNT$ కుకీ బ్యానర్‌లు తిరస్కరించబడ్డాయి",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "మీ BannerBye కథ" },
+  "share_milestones_unlocked": {
+    "message": "$TOTAL$ మైలురాళ్ళలో $COUNT$ అన్‌లాక్ అయ్యాయి",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "$DATE$ నుండి",
+    "placeholders": { "date": { "content": "$1" } }
+  }
+}

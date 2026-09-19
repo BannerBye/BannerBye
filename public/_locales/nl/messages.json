@@ -4,5 +4,177 @@
   },
   "extDesc": {
     "message": "Cookiebanners uitgeschakeld vóór ze laden. Stel je privacy één keer in; BannerBye weigert de rest — automatisch, op elke site."
+  },
+
+  "popup_loading": { "message": "Laden…" },
+
+  "popup_status_off": { "message": "BannerBye is overal uitgeschakeld." },
+  "popup_status_no_site": { "message": "Geen site om te beschermen." },
+  "popup_status_paused": {
+    "message": "Gepauzeerd op $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "Actief op $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "Actief" },
+  "popup_status_dot_inactive_aria": { "message": "Inactief" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "Aan" },
+  "popup_toggle_off": { "message": "Uit" },
+  "popup_pause_site": { "message": "Pauzeren op deze site" },
+  "popup_resume_site": { "message": "Hervatten op deze site" },
+
+  "popup_stat_label": { "message": "banners geweigerd" },
+
+  "popup_activity_show": { "message": "Toon het bewijs" },
+  "popup_activity_hide": { "message": "Verberg het bewijs" },
+  "popup_activity_no_banner": { "message": "Geen banner" },
+  "popup_activity_banner_refused_fallback": { "message": "Banner geweigerd" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "zojuist" },
+  "popup_time_minutes_ago": {
+    "message": "$MINUTES$m geleden",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "$HOURS$u geleden",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "1 dag geleden" },
+  "popup_time_days_ago": {
+    "message": "$DAYS$ dagen geleden",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "Blijft zeven dagen lang alleen op dit apparaat. Wordt nooit ergens naartoe verstuurd."
+  },
+  "popup_activity_clear": { "message": "Wis deze lijst" },
+
+  "popup_milestones_label": { "message": "Mijlpalen" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "Statistieken downloaden →" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "Weiger eerst een banner"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "Slaat een deelbare PNG-afbeelding van je statistieken op in je downloads"
+  },
+  "popup_footer_report": { "message": "Defecte site melden →" },
+  "popup_footer_rate": { "message": "Beoordeel BannerBye →" },
+  "popup_footer_rate_title": {
+    "message": "Laat een recensie achter — zo blijft BannerBye zichtbaar"
+  },
+
+  "popup_modal_title": { "message": "Defecte site melden" },
+  "popup_modal_close_aria": { "message": "Sluiten" },
+  "popup_modal_sent": {
+    "message": "Bedankt. We kijken naar $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "We sturen de hostnaam $HOST$ naar BannerBye. Optioneel: voeg toe wat er misgaat.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "Wat is er aan de hand? (optioneel)"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "E-mail me zodra het is opgelost (optioneel)"
+  },
+  "popup_modal_fineprint": {
+    "message": "Laat dit veld leeg om volledig anoniem te blijven. Als je het invult, gebruiken we het alleen om je één keer een melding te sturen wanneer deze banner is verwerkt."
+  },
+  "popup_modal_error": {
+    "message": "Kon niet verzenden: $ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "Melding versturen" },
+  "popup_modal_sending": { "message": "Versturen…" },
+  "popup_modal_try_again": { "message": "Probeer het opnieuw" },
+
+  "popup_celebration_label": { "message": "Mijlpaal ontgrendeld" },
+  "popup_celebration_share_aria": { "message": "Deelkaart downloaden" },
+  "popup_celebration_dismiss_aria": { "message": "Sluiten" },
+
+  "popup_reportfixed_label": { "message": "Een banner die je hebt gemeld" },
+  "popup_reportfixed_text": {
+    "message": "Nu geweigerd op $HOST$",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "Een eenmalig verzoek" },
+  "popup_reviewask_title": { "message": "Geniet je van de rust?" },
+  "popup_reviewask_text": {
+    "message": "Een korte beoordeling zorgt ervoor dat BannerBye makkelijk te vinden blijft. Eén keer vragen — nooit meer."
+  },
+  "popup_reviewask_cta": { "message": "Beoordeel BannerBye →" },
+  "popup_reviewask_dismiss_aria": { "message": "Nee, bedankt" },
+  "popup_reviewask_dismiss_title": { "message": "Nee, bedankt — we vragen het niet nog een keer" },
+
+  "onboarding_eyebrow": { "message": "Snel ingesteld — je bent al beschermd" },
+  "onboarding_headline_1": { "message": "Cookiebanners, uitgeschakeld." },
+  "onboarding_headline_2": { "message": "Vóór ze laden." },
+  "onboarding_body": {
+    "message": "Je hoeft niets in te stellen. BannerBye doet dit al, op dit moment:"
+  },
+  "onboarding_check1_title": { "message": "Weigeren op elke site" },
+  "onboarding_check1_desc": {
+    "message": "Stuurt automatisch en legaal \"geen toestemming\" voordat een banner de kans krijgt om dit te vragen."
+  },
+  "onboarding_check2_title": { "message": "Werkt in stilte" },
+  "onboarding_check2_desc": {
+    "message": "Je hoort niets meer van ons. Klik op elk moment op het schildpictogram in je werkbalk om te zien hoeveel banners we hebben geweigerd."
+  },
+  "onboarding_check3_title": { "message": "Omkeerbaar op elke site" },
+  "onboarding_check3_desc": {
+    "message": "Bankzaken, werktools, inlogpagina's — ziet iets er kapot uit, open dan het schildpictogram en klik op Pauzeren op deze site."
+  },
+  "onboarding_tip": {
+    "message": "Tip: zet het pictogram vast voor toegang met één klik — puzzelstukje in de werkbalk → zoek BannerBye → klik op de punaise."
+  },
+  "onboarding_cta": { "message": "Begin met browsen →" },
+
+  "milestone_first_banner": { "message": "Eerste banner geblokkeerd" },
+  "milestone_first_steps": { "message": "Eerste stappen" },
+  "milestone_cookie_crusher": { "message": "Cookieverpletteraar" },
+  "milestone_banner_bye_master": { "message": "Banner-bye-bye-meester" },
+  "milestone_privacy_champion": { "message": "Privacykampioen" },
+  "milestone_cookie_diet_month": { "message": "Cookiedieet · maand één" },
+  "milestone_cookie_diet_year": { "message": "Cookiedieet · jaar één" },
+
+  "share_milestone_unlocked_label": { "message": "MIJLPAAL ONTGRENDELD" },
+  "share_tagline": { "message": "Cookiebanners, uitgeschakeld. Vóór ze laden." },
+  "share_counter_singular": {
+    "message": "$COUNT$ cookiebanner geweigerd",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "$COUNT$ cookiebanners geweigerd",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "JOUW BANNERBYE-VERHAAL" },
+  "share_milestones_unlocked": {
+    "message": "$COUNT$ van $TOTAL$ mijlpalen ontgrendeld",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "sinds $DATE$",
+    "placeholders": { "date": { "content": "$1" } }
   }
 }

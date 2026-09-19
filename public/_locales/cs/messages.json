@@ -4,5 +4,177 @@
   },
   "extDesc": {
     "message": "Cookie lišty zablokované dřív, než se načtou. Nastavte soukromí jednou — BannerBye odmítá automaticky na každém webu."
+  },
+
+  "popup_loading": { "message": "Načítání…" },
+
+  "popup_status_off": { "message": "BannerBye je všude vypnutý." },
+  "popup_status_no_site": { "message": "Žádný web k ochraně." },
+  "popup_status_paused": {
+    "message": "Pozastaveno na $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "Aktivní na $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "Aktivní" },
+  "popup_status_dot_inactive_aria": { "message": "Neaktivní" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "Zapnuto" },
+  "popup_toggle_off": { "message": "Vypnuto" },
+  "popup_pause_site": { "message": "Pozastavit na tomto webu" },
+  "popup_resume_site": { "message": "Pokračovat na tomto webu" },
+
+  "popup_stat_label": { "message": "bannery odmítnuty" },
+
+  "popup_activity_show": { "message": "Zobrazit důkazy" },
+  "popup_activity_hide": { "message": "Skrýt důkazy" },
+  "popup_activity_no_banner": { "message": "Žádný banner" },
+  "popup_activity_banner_refused_fallback": { "message": "Banner odmítnut" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "právě teď" },
+  "popup_time_minutes_ago": {
+    "message": "před $MINUTES$ min",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "před $HOURS$ h",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "před 1 dnem" },
+  "popup_time_days_ago": {
+    "message": "před $DAYS$ dny",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "Uloženo pouze na tomto zařízení po dobu sedmi dnů. Nikdy nikam neposláno."
+  },
+  "popup_activity_clear": { "message": "Vymazat tento seznam" },
+
+  "popup_milestones_label": { "message": "Milníky" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "Stáhnout obrázek statistik →" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "Nejprve odmítněte banner"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "Uloží sdílený PNG obrázek vašich statistik do vašich stažených souborů"
+  },
+  "popup_footer_report": { "message": "Nahlásit nefunkční web →" },
+  "popup_footer_rate": { "message": "Ohodnotit BannerBye →" },
+  "popup_footer_rate_title": {
+    "message": "Zanechte recenzi — pomáhá to udržet BannerBye viditelný"
+  },
+
+  "popup_modal_title": { "message": "Nahlásit nefunkční web" },
+  "popup_modal_close_aria": { "message": "Zavřít" },
+  "popup_modal_sent": {
+    "message": "Díky. Podíváme se na $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "Název hostitele $HOST$ odešleme BannerBye. Volitelné: přidejte, co je špatně.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "Co se děje? (volitelné)"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "Pošlete mi e-mail, až to bude opraveno (volitelné)"
+  },
+  "popup_modal_fineprint": {
+    "message": "Nechejte toto prázdné, chcete-li zůstat zcela anonymní. Pokud jej přidáte, použijeme jej pouze k zaslání jednorázové poznámky, až bude tento banner opraven."
+  },
+  "popup_modal_error": {
+    "message": "Nelze odeslat: $ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "Odeslat zprávu" },
+  "popup_modal_sending": { "message": "Odesílání…" },
+  "popup_modal_try_again": { "message": "Zkusit znovu" },
+
+  "popup_celebration_label": { "message": "Milník odemčen" },
+  "popup_celebration_share_aria": { "message": "Stáhnout kartu pro sdílení" },
+  "popup_celebration_dismiss_aria": { "message": "Zavřít" },
+
+  "popup_reportfixed_label": { "message": "Banner, který jste nahlásili" },
+  "popup_reportfixed_text": {
+    "message": "Nyní odmítnut na $HOST$",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "Jednorázový dotaz" },
+  "popup_reviewask_title": { "message": "Užíváte si klidu?" },
+  "popup_reviewask_text": {
+    "message": "Rychlá recenze pomůže lidem najít BannerBye. Zeptáme se jen jednou — už nikdy více."
+  },
+  "popup_reviewask_cta": { "message": "Ohodnotit BannerBye →" },
+  "popup_reviewask_dismiss_aria": { "message": "Ne, díky" },
+  "popup_reviewask_dismiss_title": { "message": "Ne, díky — už se ptát nebudeme" },
+
+  "onboarding_eyebrow": { "message": "Rychlé nastavení — již jste chráněni" },
+  "onboarding_headline_1": { "message": "Cookie lišty, zablokované." },
+  "onboarding_headline_2": { "message": "Než se načtou." },
+  "onboarding_body": {
+    "message": "Není co nastavovat. BannerBye to již dělá, právě teď:"
+  },
+  "onboarding_check1_title": { "message": "Odmítá na každém webu" },
+  "onboarding_check1_desc": {
+    "message": "Automaticky odešle „žádný souhlas“ právně platným způsobem ještě předtím, než banner vůbec dostane příležitost se vás zeptat."
+  },
+  "onboarding_check2_title": { "message": "Funguje tiše" },
+  "onboarding_check2_desc": {
+    "message": "Už o nás neuslyšíte. Kdykoli klikněte na ikonu štítu na panelu nástrojů, abyste viděli, kolik bannerů jsme odmítli."
+  },
+  "onboarding_check3_title": { "message": "Reverzibilní na jakémkoli webu" },
+  "onboarding_check3_desc": {
+    "message": "Bankovnictví, pracovní nástroje, přihlášení — pokud něco vypadá rozbité, otevřete ikonu štítu a klikněte na „Pozastavit na tomto webu“."
+  },
+  "onboarding_tip": {
+    "message": "Tip: Připněte ikonu pro přístup jedním kliknutím — dílek skládačky na panelu nástrojů → najděte BannerBye → klikněte na špendlík."
+  },
+  "onboarding_cta": { "message": "Začít procházet →" },
+
+  "milestone_first_banner": { "message": "První banner zablokován" },
+  "milestone_first_steps": { "message": "První kroky" },
+  "milestone_cookie_crusher": { "message": "Drtič cookies" },
+  "milestone_banner_bye_master": { "message": "Mistr bannerů" },
+  "milestone_privacy_champion": { "message": "Šampion ochrany soukromí" },
+  "milestone_cookie_diet_month": { "message": "Cookie dieta · první měsíc" },
+  "milestone_cookie_diet_year": { "message": "Cookie dieta · první rok" },
+
+  "share_milestone_unlocked_label": { "message": "MILNÍK ODEMČEN" },
+  "share_tagline": { "message": "Cookie lišty, zablokované. Než se načtou." },
+  "share_counter_singular": {
+    "message": "$COUNT$ cookie banner odmítnut",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "$COUNT$ cookie bannery odmítnuty",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "VÁŠ PŘÍBĚH BANNERBYE" },
+  "share_milestones_unlocked": {
+    "message": "$COUNT$ z $TOTAL$ milníků odemčeno",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "od $DATE$",
+    "placeholders": { "date": { "content": "$1" } }
   }
 }

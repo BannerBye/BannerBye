@@ -27,13 +27,17 @@ export type MilestoneThreshold =
  * Een unlockable milestone-definitie.
  *
  * `id` is stable identifier voor opslag (verandert nooit, ook al
- * herschrijven we de naam later). `name` is wat de UI toont.
+ * herschrijven we de naam later). `name` is de Engelse brontekst
+ * (fallback/documentatie). `nameKey` is de messages.json-sleutel die de
+ * UI daadwerkelijk toont via `t()` — vertaalronde 19-09-2026 (fix i18n).
  */
 export interface Milestone {
   /** Stable identifier voor opslag. Veranderen we nooit meer. */
   id: string;
   /** Wanneer hij ontgrendelt. */
   threshold: MilestoneThreshold;
-  /** Display-naam in popup / celebration card. */
+  /** Engelse brontekst — alleen fallback/documentatie, niet tonen in UI. */
   name: string;
+  /** messages.json-sleutel voor de daadwerkelijk getoonde, vertaalde naam. */
+  nameKey: string;
 }

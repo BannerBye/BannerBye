@@ -1,0 +1,180 @@
+{
+  "extName": {
+    "message": "BannerBye — memblokir banner cookie sebelum dimuat"
+  },
+  "extDesc": {
+    "message": "Banner cookie diblokir sebelum dimuat. Atur privasi Anda sekali — BannerBye menolak secara otomatis di setiap situs."
+  },
+
+  "popup_loading": { "message": "Sedang dimuat…" },
+
+  "popup_status_off": { "message": "BannerBye dinonaktifkan di semua tempat." },
+  "popup_status_no_site": { "message": "Tidak ada situs yang perlu dilindungi." },
+  "popup_status_paused": {
+    "message": "Dijeda di $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_active": {
+    "message": "Aktif di $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_status_dot_active_aria": { "message": "Aktif" },
+  "popup_status_dot_inactive_aria": { "message": "Tidak aktif" },
+
+  "popup_toggle_label": { "message": "BannerBye" },
+  "popup_toggle_on": { "message": "Aktif" },
+  "popup_toggle_off": { "message": "Nonaktif" },
+  "popup_pause_site": { "message": "Jeda di situs ini" },
+  "popup_resume_site": { "message": "Lanjutkan di situs ini" },
+
+  "popup_stat_label": { "message": "banner ditolak" },
+
+  "popup_activity_show": { "message": "Tampilkan bukti" },
+  "popup_activity_hide": { "message": "Sembunyikan bukti" },
+  "popup_activity_no_banner": { "message": "Tidak ada banner" },
+  "popup_activity_banner_refused_fallback": { "message": "Banner ditolak" },
+  "popup_activity_count_suffix": {
+    "message": " · $COUNT$×",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "popup_time_just_now": { "message": "baru saja" },
+  "popup_time_minutes_ago": {
+    "message": "$MINUTES$ menit yang lalu",
+    "placeholders": { "minutes": { "content": "$1" } }
+  },
+  "popup_time_hours_ago": {
+    "message": "$HOURS$ jam yang lalu",
+    "placeholders": { "hours": { "content": "$1" } }
+  },
+  "popup_time_one_day_ago": { "message": "1 hari yang lalu" },
+  "popup_time_days_ago": {
+    "message": "$DAYS$ hari yang lalu",
+    "placeholders": { "days": { "content": "$1" } }
+  },
+  "popup_activity_note": {
+    "message": "Disimpan hanya di perangkat ini, selama tujuh hari. Tidak pernah dikirim ke mana pun."
+  },
+  "popup_activity_clear": { "message": "Hapus daftar ini" },
+
+  "popup_milestones_label": { "message": "Tonggak pencapaian" },
+  "popup_milestones_count": {
+    "message": "$CURRENT$/$TOTAL$",
+    "placeholders": {
+      "current": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+
+  "popup_footer_download_stats": { "message": "Unduh gambar statistik →" },
+  "popup_footer_download_stats_disabled_title": {
+    "message": "Tolak sebuah banner terlebih dahulu"
+  },
+  "popup_footer_download_stats_title": {
+    "message": "Menyimpan gambar PNG statistik Anda yang dapat dibagikan ke folder unduhan"
+  },
+  "popup_footer_report": { "message": "Laporkan situs yang rusak →" },
+  "popup_footer_rate": { "message": "Beri peringkat BannerBye →" },
+  "popup_footer_rate_title": {
+    "message": "Tinggalkan ulasan — ini membantu menjaga BannerBye tetap terlihat"
+  },
+
+  "popup_modal_title": { "message": "Laporkan situs yang rusak" },
+  "popup_modal_close_aria": { "message": "Tutup" },
+  "popup_modal_sent": {
+    "message": "Terima kasih. Kami akan memeriksa $HOST$.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_help": {
+    "message": "Kami akan mengirimkan nama host $HOST$ ke BannerBye. Opsional: tambahkan apa yang salah.",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "popup_modal_placeholder_message": {
+    "message": "Apa yang terjadi? (opsional)"
+  },
+  "popup_modal_placeholder_email": {
+    "message": "Kirim email kepada saya saat sudah diperbaiki (opsional)"
+  },
+  "popup_modal_fineprint": {
+    "message": "Biarkan kosong untuk tetap sepenuhnya anonim. Jika Anda mengisinya, kami hanya akan menggunakannya untuk mengirimkan pemberitahuan satu kali kepada Anda saat banner ini telah diperbaiki."
+  },
+  "popup_modal_error": {
+    "message": "Gagal mengirim: $ERROR$",
+    "placeholders": { "error": { "content": "$1" } }
+  },
+  "popup_modal_send": { "message": "Kirim laporan" },
+  "popup_modal_sending": { "message": "Sedang mengirim…" },
+  "popup_modal_try_again": { "message": "Coba lagi" },
+
+  "popup_celebration_label": { "message": "Tonggak pencapaian dibuka" },
+  "popup_celebration_share_aria": { "message": "Unduh kartu berbagi" },
+  "popup_celebration_dismiss_aria": { "message": "Tutup" },
+
+  "popup_reportfixed_label": { "message": "Banner yang Anda laporkan" },
+  "popup_reportfixed_text": {
+    "message": "Kini ditolak di $HOST$",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+
+  "popup_reviewask_label": { "message": "Permintaan satu kali" },
+  "popup_reviewask_title": { "message": "Menikmati ketenangan?" },
+  "popup_reviewask_text": {
+    "message": "Ulasan singkat membantu orang lain menemukan BannerBye. Kami hanya meminta sekali — tidak akan pernah lagi."
+  },
+  "popup_reviewask_cta": { "message": "Beri peringkat BannerBye →" },
+  "popup_reviewask_dismiss_aria": { "message": "Tidak, terima kasih" },
+  "popup_reviewask_dismiss_title": { "message": "Tidak, terima kasih — kami tidak akan meminta lagi" },
+
+  "onboarding_eyebrow": { "message": "Pengaturan cepat — Anda sudah terlindungi" },
+  "onboarding_headline_1": { "message": "Banner cookie, diblokir." },
+  "onboarding_headline_2": { "message": "Sebelum dimuat." },
+  "onboarding_body": {
+    "message": "Tidak perlu pengaturan apa pun. BannerBye sudah melakukannya, sekarang juga:"
+  },
+  "onboarding_check1_title": { "message": "Menolak di setiap situs" },
+  "onboarding_check1_desc": {
+    "message": "Secara otomatis mengirimkan „tidak setuju” dengan cara yang sah secara hukum, bahkan sebelum banner sempat meminta izin Anda."
+  },
+  "onboarding_check2_title": { "message": "Bekerja tanpa mengganggu" },
+  "onboarding_check2_desc": {
+    "message": "Anda tidak akan mendengar kabar dari kami lagi. Klik ikon perisai di bilah alat Anda kapan saja untuk melihat berapa banyak banner yang telah kami tolak."
+  },
+  "onboarding_check3_title": { "message": "Dapat dibatalkan di situs mana pun" },
+  "onboarding_check3_desc": {
+    "message": "Perbankan, alat kerja, login — jika ada yang tampak bermasalah, buka ikon perisai dan tekan „Jeda di situs ini”."
+  },
+  "onboarding_tip": {
+    "message": "Tips: sematkan ikon untuk akses satu klik — cari potongan puzzle di bilah alat Anda, temukan BannerBye, lalu klik pin."
+  },
+  "onboarding_cta": { "message": "Mulai menjelajah →" },
+
+  "milestone_first_banner": { "message": "Banner pertama diblokir" },
+  "milestone_first_steps": { "message": "Langkah awal" },
+  "milestone_cookie_crusher": { "message": "Penghancur cookie" },
+  "milestone_banner_bye_master": { "message": "Ahli banner" },
+  "milestone_privacy_champion": { "message": "Juara privasi" },
+  "milestone_cookie_diet_month": { "message": "Diet cookie · bulan pertama" },
+  "milestone_cookie_diet_year": { "message": "Diet cookie · tahun pertama" },
+
+  "share_milestone_unlocked_label": { "message": "TONGGAK PENCAPAIAN DIBUKA" },
+  "share_tagline": { "message": "Banner cookie, diblokir. Sebelum dimuat." },
+  "share_counter_singular": {
+    "message": "$COUNT$ banner cookie ditolak",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_counter_plural": {
+    "message": "$COUNT$ banner cookie ditolak",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "share_stats_label": { "message": "KISAH BANNERBYE ANDA" },
+  "share_milestones_unlocked": {
+    "message": "$COUNT$ dari $TOTAL$ tonggak pencapaian dibuka",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "total": { "content": "$2" }
+    }
+  },
+  "share_since": {
+    "message": "sejak $DATE$",
+    "placeholders": { "date": { "content": "$1" } }
+  }
+}
