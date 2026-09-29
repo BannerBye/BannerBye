@@ -156,11 +156,46 @@ export function inlineSetFlag(state: ActiveState, flagKey: string): void {
 export function readActiveState(): ActiveState {
   try {
     const state = window[ACTIVE_FLAG_KEY];
-    if (state === 'disabled' || state === 'paused' || state === 'active') {
+    if (state === 'disabled' || state === 'paused') {
       return state;
     }
   } catch {
     // window-toegang faalt — onmogelijk maar safety net.
   }
+  // v0.4.6: tweede, synchroon leesbare bron voor de MV2-builds (Safari,
+  // Firefox). Daar staan TCF/CMP/GPC als statische manifest-scripts op
+  // <all_urls> en is er geen dynamisch geregistreerde flag-setter — per-site
+  // pauze en de globale schakelaar in de popup deden daardoor níets aan
+  // deze drie lagen (melding reactormag.com, Safari/iPadOS, 29-09-2026).
+  // bridge.content.ts schrijft deze marker per origin.
+  const marker = readStateMarker();
+  if (marker) return marker;
   return 'active';
+}
+
+/** localStorage-sleutel met de BannerBye-state voor deze origin. */
+export const STATE_MARKER_KEY = '__bannerbye_state';
+
+export function readStateMarker(): ActiveState | null {
+  try {
+    const v = window.localStorage.getItem(STATE_MARKER_KEY);
+    if (v === 'paused' || v === 'disabled') return v;
+  } catch {
+    // Sandboxed frame / opslag geblokkeerd — geen marker.
+  }
+  return null;
+}
+
+/**
+ * Schrijf (of wis) de marker voor de huidige origin. Zelfstandig — kan ook
+ * via executeScript geserialiseerd worden, dus geen verwijzingen naar
+ * module-scope.
+ */
+export function writeStateMarker(state: ActiveState, key: string): void {
+  try {
+    if (state === 'active') window.localStorage.removeItem(key);
+    else window.localStorage.setItem(key, state);
+  } catch {
+    // Niet kritiek.
+  }
 }

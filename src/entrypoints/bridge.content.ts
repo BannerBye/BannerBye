@@ -23,6 +23,7 @@
 
 import { defineContentScript } from 'wxt/sandbox';
 import { isPdfDocument } from '@/lib/pdf-guard.ts';
+import { STATE_MARKER_KEY, writeStateMarker, computeStateForHost } from '@/lib/active-flag.ts';
 
 export default defineContentScript({
   matches: ['<all_urls>'],
@@ -112,5 +113,15 @@ export default defineContentScript({
     // dispatchen op document zodat onze ISOLATED bridge ze ook hoort).
     document.addEventListener('bb:tcf-blocked', relay);
     document.addEventListener('bb:cmp-blocked', relay);
+
+    // v0.4.6: houd de synchrone state-marker voor deze origin gelijk aan de
+    // instellingen (per-site pauze + globale schakelaar), zodat de MAIN-world
+    // lagen op Safari/Firefox (statische manifest-scripts) die bij de
+    // volgende paginalaad kunnen lezen. Zie readActiveState() in active-flag.
+    void computeStateForHost(location.hostname)
+      .then((state) => writeStateMarker(state, STATE_MARKER_KEY))
+      .catch(() => {
+        // Opslag niet leesbaar — marker laten zoals hij is.
+      });
   },
 });
