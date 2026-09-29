@@ -29,7 +29,11 @@ const POLL_INTERVAL_MS = 50;
 interface OneTrustApi {
   RejectAll?: () => void;
   Close?: () => void;
+  IsAlertBoxClosed?: () => boolean;
 }
+
+/** Hoe lang we na SDK-load wachten tot de banner zichtbaar wordt. */
+const BANNER_WAIT_MS = 2500;
 
 declare global {
   interface Window {
@@ -57,6 +61,23 @@ export const onetrustHandler: CmpHandler = {
 
   async apply() {
     const ot = await waitForOneTrust();
+
+    // v0.4.6 (reactormag.com, melding 29-09-2026): alleen weigeren als er
+    // écht iets te weigeren valt. Vóór deze fix riep de handler bij élke
+    // paginalaad RejectAll() aan — ook als de bezoeker al gekozen had of als
+    // OneTrust (bv. het Amerikaanse CPRA-sjabloon dat GPC honoreert) helemaal
+    // geen banner toonde. Sites die bij een consentwijziging zelf
+    // location.reload() doen (reactormag.com) kwamen zo in een eindeloze
+    // herlaadlus: laden → RejectAll → reload → laden → RejectAll → …
+    if (ot && typeof ot.IsAlertBoxClosed === 'function') {
+      try {
+        if (ot.IsAlertBoxClosed()) return;
+      } catch {
+        // Onbekende SDK-versie — val door naar de zichtbaarheidscheck.
+      }
+    }
+    if (!(await waitForVisibleBanner())) return;
+
     if (ot && typeof ot.RejectAll === 'function') {
       try {
         ot.RejectAll();
@@ -93,6 +114,37 @@ function waitForOneTrust(): Promise<OneTrustApi | null> {
         resolve(null);
       }
     }, POLL_INTERVAL_MS);
+  });
+}
+
+function isBannerVisible(): boolean {
+  const el = document.getElementById('onetrust-banner-sdk');
+  if (!(el instanceof HTMLElement)) return false;
+  const style = window.getComputedStyle(el);
+  if (style.display === 'none' || style.visibility === 'hidden') return false;
+  if (Number(style.opacity) === 0) return false;
+  const rect = el.getBoundingClientRect();
+  return rect.width > 0 && rect.height > 0;
+}
+
+function waitForVisibleBanner(): Promise<boolean> {
+  return new Promise((resolve) => {
+    if (isBannerVisible()) {
+      resolve(true);
+      return;
+    }
+    const start = Date.now();
+    const intervalId = window.setInterval(() => {
+      if (isBannerVisible()) {
+        window.clearInterval(intervalId);
+        resolve(true);
+        return;
+      }
+      if (Date.now() - start >= BANNER_WAIT_MS) {
+        window.clearInterval(intervalId);
+        resolve(false);
+      }
+    }, 100);
   });
 }
 

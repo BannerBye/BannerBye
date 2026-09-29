@@ -97,6 +97,30 @@ export default defineContentScript({
   },
 });
 
+const RELOAD_GUARD_KEY = '__bannerbye_cmp_applied_at';
+const RELOAD_GUARD_MS = 30_000;
+
+function recentlyAppliedAndReloaded(): boolean {
+  try {
+    const nav = performance.getEntriesByType('navigation')[0] as
+      | PerformanceNavigationTiming
+      | undefined;
+    if (!nav || nav.type !== 'reload') return false;
+    const last = Number(window.sessionStorage.getItem(RELOAD_GUARD_KEY));
+    return Number.isFinite(last) && last > 0 && Date.now() - last < RELOAD_GUARD_MS;
+  } catch {
+    return false; // sessionStorage geblokkeerd — geen rem, oud gedrag.
+  }
+}
+
+function markApplied(): void {
+  try {
+    window.sessionStorage.setItem(RELOAD_GUARD_KEY, String(Date.now()));
+  } catch {
+    // Niet kritiek.
+  }
+}
+
 /** Hoe lang we na DOMContentLoaded blijven kijken of er een CMP verschijnt. */
 const DETECT_WINDOW_MS = 10_000;
 const DETECT_POLL_MS = 500;
@@ -117,7 +141,16 @@ async function runDetectedHandler(): Promise<boolean> {
     }
     if (!detected) continue;
 
+    // v0.4.6: herlaadlus-rem. Als wij op dit tabblad + deze origin zojuist
+    // (< RELOAD_GUARD_MS) een CMP-handler lieten weigeren en de pagina is
+    // daarna door een reload opnieuw geladen, dan reageert de site kennelijk
+    // op onze weigering met location.reload(). Nog een keer weigeren zou de
+    // lus in stand houden — dus niets doen. GPC-header en -property blijven
+    // gewoon aan. Geldt voor alle vijf handlers, niet alleen OneTrust.
+    if (recentlyAppliedAndReloaded()) return true;
+
     try {
+      markApplied();
       await handler.apply();
       // v0.2.0 (#114): rapporteer block voor teller. bridge.content.ts
       // pickt 'bb:cmp-blocked' op en stuurt 'bb:banner-blocked' naar background.
