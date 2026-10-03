@@ -40,6 +40,8 @@ import {
   getHostsToAnalyze,
   markAnalyzed,
   writeAnalysis,
+  recordPendingFix,
+  promotePendingFixes,
   type HostWork,
 } from './redis.ts';
 import { sendOwnerSummaryEmail } from './notify.ts';
@@ -361,6 +363,27 @@ async function main(): Promise<void> {
     stepIntoKeywords: rules.autoclick?.stepIntoKeywords ?? [],
   });
 
+  // Publieke changelog bijwerken: voorstellen uit eerdere runs die inmiddels
+  // door Robin zijn gemerged staan nu in rules.json en mogen naar /fixed.
+  // Dit gebeurt hier en niet op het moment van voorstellen, omdat sinds de
+  // security-audit niets meer automatisch wordt toegepast — zie recordPendingFix.
+  const liveKeywords = [
+    ...(rules.autoclick?.rejectKeywords ?? []),
+    ...(rules.autoclick?.ambiguousKeywords ?? []),
+    ...(rules.autoclick?.stepIntoKeywords ?? []),
+  ];
+  const promotion = await promotePendingFixes(redis, liveKeywords);
+  if (promotion.promoted.length) {
+    console.log(
+      `/fixed bijgewerkt: ${promotion.promoted.join(', ')} (${promotion.promoted.length})`,
+    );
+  }
+  if (promotion.dropped.length) {
+    console.log(
+      `Geparkeerde voorstellen vervallen (nooit gemerged): ${promotion.dropped.join(', ')}`,
+    );
+  }
+
   if (!hosts.length) {
     await writeFile('summary.md', 'Geen nieuwe meldingen om te analyseren.\n');
     await setOutput('has_proposals', 'false');
@@ -589,6 +612,22 @@ async function main(): Promise<void> {
     'proposals-to-stage.json',
     JSON.stringify(stageEntries, null, 2) + '\n',
   );
+
+  // Park de host/keyword-koppeling. rules.json gaat straks als enige bestand
+  // de PR in, dus na de merge is niet meer te zien welke host bij welk keyword
+  // hoorde. Een volgende run promoveert deze entries naar /fixed zodra het
+  // keyword daadwerkelijk live staat.
+  if (stageEntries.length) {
+    await recordPendingFix(
+      redis,
+      stageEntries.map((e) => ({
+        hostname: e.hostname,
+        keyword: e.keyword,
+        list: e.list,
+      })),
+    );
+  }
+
   if (stageEntries.length) {
     const prBody = buildPrBody(readyToMerge, needsExtraReview);
     await writeFile('pr-body.md', prBody + '\n');
