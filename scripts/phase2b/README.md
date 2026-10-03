@@ -49,6 +49,38 @@ classificeert. Twee losse Claude-calls, bewust gescheiden:
 Zo blijft de garantie overeind dat er nooit een ongecontroleerd voorstel
 live gaat, terwijl de taaldekking nu ook zonder gebruikersmelding kan groeien.
 
+## Codefixes op /fixed (`publish-fixed.ts`)
+
+De pijplijn hierboven dekt alleen keyword-fixes. Een site die met een
+codewijziging is gerepareerd — een CMP-handler, een iframe-guard, een
+PDF-uitzondering — raakt die pijplijn nooit en belandde daarom nooit in de
+publieke changelog op https://bannerbye.com/fixed. Dat werd elke release-golf
+met de hand rechtgezet, en drie keer op rij vergeten.
+
+Werkwijze nu: zet de site in **`fixed-sites.json`** in de repo-root, in
+hetzelfde commit als de versiebump. `.github/workflows/publish-fixed.yml`
+schrijft hem naar Redis zodra de opgegeven datum bereikt is (push op main,
+wekelijkse cron, of handmatig met een dry-run-knop).
+
+Drie vangrails in `publish-fixed.ts`:
+
+1. **Puur additief** — een hostnaam die al in `bb:fixed` staat wordt
+   overgeslagen, nooit overschreven. Keyword-fixes uit de pijplijn blijven met
+   rust, ook als dezelfde host per ongeluk in het manifest terechtkomt.
+2. **Geen toekomst** — een regel met een datum die nog niet bereikt is blijft
+   liggen tot de cron hem oppakt. Zo kun je het manifest invullen bij de bump
+   zonder iets te beloven wat nog in store-review ligt.
+3. **Harde validatie** — scheve hostnaam, onleesbare datum of dubbele regel
+   laat de run falen in plaats van rommel de publieke changelog in te schrijven.
+
+Lokaal controleren zonder te schrijven:
+
+```
+cd scripts/phase2b
+KV_REST_API_URL=... KV_REST_API_TOKEN=... \
+  node --experimental-strip-types publish-fixed.ts --dry-run
+```
+
 ## Lokaal draaien
 
 ```

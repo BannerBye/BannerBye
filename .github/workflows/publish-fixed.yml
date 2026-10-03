@@ -1,0 +1,61 @@
+name: Publiceer codefixes op /fixed
+
+# Keyword-fixes komen via de Phase 2B/2C-pijplijn op bannerbye.com/fixed terecht.
+# Codefixes niet — die raken die pijplijn nooit. Deze workflow dicht dat gat:
+# wat er in fixed-sites.json bij komt, staat kort daarna in de publieke
+# changelog, zonder handwerk per release-golf.
+#
+# Drie aanleidingen:
+#   push      — het manifest verandert op main (meestal in het bump-commit)
+#   schedule  — wekelijks, zodat regels met een datum in de toekomst alsnog
+#               vanzelf landen zodra die dag er is
+#   dispatch  — handmatig, met een dry-run-knop om eerst te kijken
+#
+# Het script is additief: bestaande regels worden nooit overschreven.
+
+on:
+  push:
+    branches: [main]
+    paths: ["fixed-sites.json", "scripts/phase2b/publish-fixed.ts"]
+  schedule:
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Alleen tonen wat er zou gebeuren"
+        type: boolean
+        required: false
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-fixed
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      # package-manager-cache uit: de root heeft packageManager pnpm, maar dit
+      # script draait op npm. Zie de toelichting in phase2b-analyze.yml.
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+          package-manager-cache: false
+
+      - name: Install deps
+        working-directory: scripts/phase2b
+        run: npm install --no-audit --no-fund
+
+      - name: Publiceer
+        working-directory: scripts/phase2b
+        env:
+          KV_REST_API_URL: ${{ secrets.KV_REST_API_URL }}
+          KV_REST_API_TOKEN: ${{ secrets.KV_REST_API_TOKEN }}
+        run: |
+          node --experimental-strip-types publish-fixed.ts \
+            ${{ github.event.inputs.dry_run == 'true' && '--dry-run' || '' }}

@@ -1,0 +1,34 @@
+{
+  "_lees_dit": [
+    "Sites die BannerBye met een CODEWIJZIGING heeft gerepareerd — dus zonder dat",
+    "er een nieuw keyword aan rules.json is toegevoegd. Die fixes lopen niet door",
+    "de Phase 2B/2C-pijplijn en belandden daarom nooit vanzelf in de publieke",
+    "changelog op https://bannerbye.com/fixed.",
+    "",
+    "WERKWIJZE per release-golf: zet de site hier in het bump-commit, met de",
+    "datum waarop de golf wordt uitgebracht. De GitHub Action publish-fixed",
+    "schrijft nieuwe regels naar Redis zodra die datum bereikt is. Een regel met",
+    "een datum in de toekomst blijft liggen tot de wekelijkse run hem oppakt.",
+    "",
+    "VELDEN",
+    "  hostname  kale hostnaam, geen protocol, geen www, kleine letters",
+    "  reason    wat er is opgelost — dit is wat bezoekers op /fixed lezen",
+    "  label     korte camelCase-categorie (cmpHandler, iframeSupport, pdfGuard …)",
+    "  version   extensieversie waarin de fix zit",
+    "  fixedAt   YYYY-MM-DD, uitgelegd als 12:00 UTC",
+    "",
+    "De Action is puur additief: een hostnaam die al in bb:fixed staat wordt",
+    "nooit overschreven. Keyword-fixes uit de pijplijn blijven dus met rust.",
+    "Codefixes van vóór 0.4.6 (pamo-design.de, bild.de) zijn destijds met de",
+    "hand toegevoegd en staan hier bewust niet in."
+  ],
+  "fixes": [
+    {
+      "hostname": "reactormag.com",
+      "reason": "OneTrust reload-loop fix (0.4.6)",
+      "label": "cmpHandler",
+      "version": "0.4.6",
+      "fixedAt": "2026-09-29"
+    }
+  ]
+}
