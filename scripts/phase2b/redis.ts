@@ -8,6 +8,9 @@
  * Hergebruikt de Phase 2A key-schema's; voegt twee eigen keys toe:
  *   bb:analyzed         SET    report-id's die al onderzocht zijn (idempotentie)
  *   bb:analysis:{host}  STRING (JSON) laatste analyse per host, TTL 180d
+ *   bb:fixed            ZSET   opgeloste hosts (score=fixedAt), publiek via /fixed
+ *   bb:fixed:meta:{h}   STRING (JSON) keyword + datum per host, GEEN TTL
+ *   bb:fixed:pending    HASH   voorgestelde fixes, wachtend op een merge
  *
  * Env: KV_REST_API_URL + KV_REST_API_TOKEN (zelfde als Vercel). fromEnv()
  * pakt ook UPSTASH_REDIS_REST_URL/TOKEN op.
@@ -122,20 +125,123 @@ export interface FixedEntry {
  */
 export async function recordFixed(
   redis: Redis,
+  entries: { hostname: string; keyword: string; list: string; fixedAt?: number }[],
+): Promise<void> {
+  if (!entries.length) return;
+  const now = Date.now();
+  const p = redis.pipeline();
+  for (const e of entries) {
+    const fixedAt = e.fixedAt ?? now;
+    p.zadd('bb:fixed', { score: fixedAt, member: e.hostname });
+    // GEEN TTL: de ZSET-vermelding verloopt ook niet. Stond de meta wel op
+    // 180 dagen, dan bleef de hostnaam staan terwijl keyword en datum
+    // verdwenen — /fixed toonde die regel dan met een lege reden en 1970 als
+    // datum. De changelog is publiek en permanent; laat beide samen leven.
+    p.set(`bb:fixed:meta:${e.hostname}`, {
+      hostname: e.hostname,
+      keyword: e.keyword,
+      list: e.list,
+      fixedAt,
+    });
+  }
+  await p.exec();
+}
+
+/**
+ * Een voorgestelde fix parkeren tot hij daadwerkelijk is uitgerold.
+ *
+ * Sinds de security-audit (2026-09-16) wordt geen enkel keyword meer direct
+ * toegepast: alles gaat via een PR die Robin zelf merget. "Opgelost" is dus
+ * niet het moment waarop de analyse een voorstel doet, maar het moment waarop
+ * het keyword live staat. Zou de pijplijn hier al `recordFixed` aanroepen,
+ * dan beloofde de publieke changelog fixes die nog afgekeurd konden worden.
+ *
+ * Daarom: hier parkeren op keyword, en `promotePendingFixes()` haalt het er
+ * bij een volgende run uit zodra het keyword echt in rules.json staat.
+ */
+export async function recordPendingFix(
+  redis: Redis,
   entries: { hostname: string; keyword: string; list: string }[],
 ): Promise<void> {
   if (!entries.length) return;
   const now = Date.now();
   const p = redis.pipeline();
   for (const e of entries) {
-    p.zadd('bb:fixed', { score: now, member: e.hostname });
-    p.set(
-      `bb:fixed:meta:${e.hostname}`,
-      { hostname: e.hostname, keyword: e.keyword, list: e.list, fixedAt: now },
-      { ex: ANALYSIS_TTL_SECONDS },
-    );
+    p.hset('bb:fixed:pending', {
+      [e.keyword.toLowerCase()]: {
+        hostname: e.hostname,
+        keyword: e.keyword,
+        list: e.list,
+        proposedAt: now,
+      },
+    });
   }
   await p.exec();
+}
+
+interface PendingFix {
+  hostname: string;
+  keyword: string;
+  list: string;
+  proposedAt: number;
+}
+
+/**
+ * Verhuis geparkeerde voorstellen naar de publieke changelog zodra hun keyword
+ * in de live regelset staat. Draait aan het begin van elke analyse-run, dus een
+ * PR die vandaag gemerged wordt verschijnt bij de eerstvolgende melding op
+ * /fixed. Een voorstel dat Robin afkeurt blijft staan en wordt nooit getoond;
+ * `maxAgeDays` ruimt die na verloop van tijd op.
+ */
+export async function promotePendingFixes(
+  redis: Redis,
+  liveKeywords: string[],
+  opts: { maxAgeDays?: number } = {},
+): Promise<{ promoted: string[]; dropped: string[] }> {
+  const live = new Set(liveKeywords.map((k) => k.toLowerCase()));
+  const promoted: string[] = [];
+  const dropped: string[] = [];
+  try {
+    const pending =
+      ((await redis.hgetall('bb:fixed:pending')) as Record<
+        string,
+        PendingFix
+      > | null) ?? {};
+    const keys = Object.keys(pending);
+    if (!keys.length) return { promoted, dropped };
+
+    const maxAgeMs = (opts.maxAgeDays ?? 120) * 24 * 60 * 60 * 1000;
+    const now = Date.now();
+    const toRecord: { hostname: string; keyword: string; list: string }[] = [];
+    const toDelete: string[] = [];
+
+    for (const key of keys) {
+      const entry = pending[key];
+      if (!entry?.hostname) {
+        toDelete.push(key);
+        continue;
+      }
+      if (live.has(key)) {
+        toRecord.push({
+          hostname: entry.hostname,
+          keyword: entry.keyword,
+          list: entry.list,
+        });
+        toDelete.push(key);
+        promoted.push(entry.hostname);
+      } else if (now - (entry.proposedAt ?? now) > maxAgeMs) {
+        toDelete.push(key);
+        dropped.push(entry.hostname);
+      }
+    }
+
+    if (toRecord.length) await recordFixed(redis, toRecord);
+    if (toDelete.length) await redis.hdel('bb:fixed:pending', ...toDelete);
+  } catch (err) {
+    // De changelog mag een analyse-run nooit laten vallen.
+    console.error('[redis] promotePendingFixes failed:', err);
+  }
+  return { promoted, dropped };
 }
 
 /**
