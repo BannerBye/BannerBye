@@ -29,6 +29,13 @@
       "label": "cmpHandler",
       "version": "0.4.6",
       "fixedAt": "2026-09-29"
+    },
+    {
+      "hostname": "duckduckgo.com",
+      "reason": "Reload loop on the German interface: BannerBye kept clicking the site's own Settings link (0.4.7)",
+      "label": "autoClickGuard",
+      "version": "0.4.7",
+      "fixedAt": "2026-10-04"
     }
   ]
 }

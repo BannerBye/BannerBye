@@ -254,14 +254,18 @@ function readAttributeTokens(el: HTMLElement): { tokens: string[]; raw: string }
  */
 function isSafeToClick(el: HTMLElement): boolean {
   const tag = el.tagName;
-  if (tag === 'BUTTON') return true;
-  if (tag === 'INPUT') return true;
-  if (el.getAttribute('role') === 'button') return true;
 
+  // Anchors eerst, vóór de role-check: een `<a role="button" href="/settings">`
+  // is nog steeds een link die wegnavigeert. Vóór v0.4.7 won de role-check,
+  // waardoor zo'n element alsnog door de vangrail glipte.
   if (tag === 'A') {
     const href = (el.getAttribute('href') ?? '').trim();
     return href === '' || href === '#' || href.toLowerCase().startsWith('javascript:');
   }
+
+  if (tag === 'BUTTON') return true;
+  if (tag === 'INPUT') return true;
+  if (el.getAttribute('role') === 'button') return true;
 
   return false;
 }
@@ -275,10 +279,23 @@ function isSafeToClick(el: HTMLElement): boolean {
  * Wordt door de orchestrator alleen aangeroepen als findRejectButton
  * niets vond — dus dit is laatste fallback voor dark-pattern-sites
  * (fok.nl, sommige news-sites) waar reject-actie verstopt zit.
+ *
+ * v0.4.7 — `isSafeToClick` erbij, en dat is geen detail. Een step-into-knop
+ * van een CMP opent een paneel ín de pagina; het is nooit een link naar een
+ * andere URL. Zonder die vangrail klikte deze pass op duckduckgo.com in het
+ * Duits de gewone menulink `<a href="/settings">Einstellungen</a>` aan:
+ * "einstellungen" staat als los woord in STEP_INTO_KEYWORDS, en DDG's
+ * zijmenu is een absoluut gepositioneerde container waarvan de tekst over
+ * cookie-pop-ups gaat — dus `isInCookieBanner` zei ja. Elke paginalading
+ * klikte de link opnieuw: zeventien navigaties per seconde, alleen te
+ * stoppen door het tabblad te forceren. De vangrail bestond al (zie
+ * `isSafeToClick` hierboven, geschreven voor exact dit risico) maar werd
+ * hier niet toegepast.
  */
 export function findStepIntoButton(): HTMLElement | null {
   for (const el of walkClickables(document)) {
     if (!isVisible(el)) continue;
+    if (!isSafeToClick(el)) continue;
     const text = readLabel(el);
     if (!text) continue;
     if (isStepIntoText(text) && isInCookieBanner(el)) return el;

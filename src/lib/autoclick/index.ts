@@ -43,6 +43,47 @@ const STEP_INTO_DELAY_MS = 500;
 /** Wachttijd ná een weiger-klik voordat we verifiëren of de banner echt weg is. */
 const VERIFY_DELAY_MS = 600;
 
+/**
+ * Herlaadlus-rem voor de step-into-pass (v0.4.7).
+ *
+ * Een step-into-klik hoort een paneel in dezelfde pagina te openen. Doet hij
+ * dat niet maar laadt het document opnieuw, dan is de kans groot dat wij die
+ * navigatie zelf veroorzaakten — en bij de volgende lading zouden we precies
+ * hetzelfde doen. Daarom: na een step-into-klik een tijdstempel wegschrijven,
+ * en binnen het venster hieronder geen tweede step-into proberen op dezelfde
+ * origin. De directe weiger-passes blijven gewoon draaien; alleen deze laatste
+ * redmiddel-pass wordt overgeslagen.
+ *
+ * Opzettelijk een tweede vangrail naast `isSafeToClick` in finder.ts: die
+ * dekt de bekende oorzaak (een link die wegnavigeert), deze dekt élke
+ * onbekende manier waarop een step-into-klik tot een nieuwe lading leidt.
+ * Zelfde gedachte als `recentlyAppliedAndReloaded()` in cmp.content.ts.
+ */
+const STEP_INTO_GUARD_KEY = '__bannerbye_stepinto';
+const STEP_INTO_GUARD_MS = 30_000;
+
+function stepIntoRecentlyNavigated(): boolean {
+  try {
+    const raw = sessionStorage.getItem(STEP_INTO_GUARD_KEY);
+    if (!raw) return false;
+    const at = Number(raw);
+    if (!Number.isFinite(at)) return false;
+    return Date.now() - at <= STEP_INTO_GUARD_MS;
+  } catch {
+    // sessionStorage kan gooien (private mode, afgeschermde origin).
+    // Dan liever gewoon doorgaan dan de pass helemaal verliezen.
+    return false;
+  }
+}
+
+function markStepInto(): void {
+  try {
+    sessionStorage.setItem(STEP_INTO_GUARD_KEY, String(Date.now()));
+  } catch {
+    // Zie hierboven: niet kunnen onthouden is geen reden om te stoppen.
+  }
+}
+
 export interface AutoClickResult {
   clicked: boolean;
   /**
@@ -165,10 +206,15 @@ export function startAutoClick(
       // frames waar de Autoconsent-laag het instellingenpaneel zelf beheert
       // (Sourcepoint) — zie __bbStepIntoBlocked in autoconsent-layer.ts.
       if (stepIntoClicked || w.__bbStepIntoBlocked) return;
+      // v0.4.7: zie STEP_INTO_GUARD_KEY hierboven. Deed een step-into-klik op
+      // deze origin zojuist een nieuwe paginalading ontstaan, dan slaan we de
+      // pass over in plaats van de lus opnieuw te starten.
+      if (stepIntoRecentlyNavigated()) return;
       const stepInto = findStepIntoButton();
       if (!stepInto) return;
 
       stepIntoClicked = true;
+      markStepInto();
       try {
         stepInto.click();
         // De click triggert DOM-mutaties die de observer pickt — maar we
