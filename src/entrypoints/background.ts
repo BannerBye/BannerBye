@@ -51,6 +51,13 @@ import {
 // zelfstandige functies). Alleen dít object wordt meegebundeld — de rest van
 // de library blijft in content-scripts/autoconsent-engine.js.
 import { evalSnippets } from '@duckduckgo/autoconsent';
+// v0.4.8: algemene herlaadrem boven alle lagen — zie lib/reload-brake.ts.
+import {
+  ReloadBrake,
+  applyStormPause,
+  pruneStormPauses,
+  STORM_PAUSE_RESTART_MIN_AGE_MS,
+} from '@/lib/reload-brake';
 
 const GPC_RULESET_ID = 'gpc-headers';
 // v0.3.2 (#158 hotfix): rules/gpc-headers.json beperkt Sec-GPC-header-injectie
@@ -502,6 +509,9 @@ export default defineBackground({
   // overschrijft bestaande scripts veilig (we unregisteren eerst).
   void (async () => {
     try {
+      // v0.4.8: verlopen rem-pauzes vrijgeven vóór de flag-scripts worden
+      // gesynct, zodat die hosts in dezelfde boot weer meedoen.
+      await pruneStormPauses();
       const settings = await getSettings();
       await syncGpcRuleset(settings.enabled);
       await syncFlagSetterScripts(settings);
@@ -510,6 +520,40 @@ export default defineBackground({
       console.warn('[BannerBye] boot sync failed:', err);
     }
   })();
+
+  // === HERLAADREM (v0.4.8) ===
+  // Telt hoofdframe-navigaties per tab en host. Boven de drempel gaat de
+  // host op de gewone pauzelijst (zelfde pad als "Pause on this site");
+  // storage.onChanged hieronder registreert dan de flag-scripts opnieuw,
+  // zodat de eerstvolgende herlading zónder BannerBye loopt. Niets wordt
+  // gemeld — de popup legt uit wat er gebeurde en biedt hervatten/melden.
+  // Geheel in-memory; de service worker mag tussendoor slapen (dan begint
+  // de telling opnieuw, wat alleen de reactietijd van de rem kost).
+  const brake = new ReloadBrake();
+  chrome.tabs.onUpdated.addListener((tabId, info, tab) => {
+    if (info.status !== 'loading') return;
+    const hit = brake.note(tabId, info.url ?? tab.url);
+    if (!hit) return;
+    void applyStormPause(hit.host, hit.loads).then((applied) => {
+      if (applied) {
+        console.warn(
+          `[BannerBye] ${hit.host} reloaded ${hit.loads}× in a few seconds — paused BannerBye there for this session.`,
+        );
+      }
+    });
+  });
+  chrome.tabs.onRemoved.addListener((tabId) => brake.forget(tabId));
+  // Bij een browserstart: rem-pauzes ouder dan een uur loslaten (er kan
+  // intussen een fix zijn uitgerold). Jongere blijven staan — wie herstartte
+  // ómdat een pagina bleef herladen, moet niet meteen weer vastlopen.
+  try {
+    chrome.runtime.onStartup.addListener(() => {
+      void pruneStormPauses({ minAgeMs: STORM_PAUSE_RESTART_MIN_AGE_MS });
+    });
+  } catch {
+    // onStartup ontbreekt op sommige MV2-platforms — de TTL-prune in de
+    // boot-sync dekt het dan.
+  }
 
   // === REMOTE RULES (alarm-based) ===
   // Periodieke fetch van keyword-updates van bannerbye.com.
@@ -615,6 +659,13 @@ export default defineBackground({
     if (area === 'sync') {
       const newSettings = changes.settings?.newValue as SyncedSettings | undefined;
       if (!newSettings) return;
+      // v0.4.8: hosts die van de pauzelijst af gaan (hervat door de
+      // gebruiker of verlopen rem-pauze) mag de rem weer tellen.
+      const oldSettings = changes.settings?.oldValue as SyncedSettings | undefined;
+      const stillPaused = new Set(newSettings.pausedSites ?? []);
+      for (const host of oldSettings?.pausedSites ?? []) {
+        if (!stillPaused.has(host)) brake.release(host);
+      }
       if (typeof newSettings.enabled === 'boolean') {
         await syncGpcRuleset(newSettings.enabled);
       }

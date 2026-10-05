@@ -25,6 +25,13 @@
   "popup_toggle_on": { "message": "Activé" },
   "popup_toggle_off": { "message": "Désactivé" },
   "popup_pause_site": { "message": "Mettre en pause sur ce site" },
+
+  "popup_storm_label": { "message": "BannerBye s'est mis en pause ici" },
+  "popup_storm_text": {
+    "message": "$HOST$ se rechargeait sans arrêt ($COUNT$ fois en quelques secondes), BannerBye s'est donc retiré de ce site. Reprenez pour réessayer, ou signalez-le pour que nous puissions corriger.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "Signaler ce site" },
   "popup_resume_site": { "message": "Reprendre sur ce site" },
 
   "popup_stat_label": { "message": "bannières refusées" },

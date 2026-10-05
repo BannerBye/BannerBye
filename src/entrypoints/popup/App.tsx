@@ -28,6 +28,8 @@ import { isHostPaused, normalizeHost } from '@/lib/host';
 import { getMilestoneById, MILESTONES, type Milestone } from '@/lib/milestones';
 import { downloadShareCard, downloadStatsCard } from '@/lib/share-card';
 import { t } from '@/lib/i18n/t';
+// v0.4.8: herlaadrem — uitleg + hervatten in de popup, zie lib/reload-brake.ts.
+import { clearStormPause, getStormPauses, type StormPause } from '@/lib/reload-brake';
 import type {
   ActivityEntry,
   LocalStats,
@@ -90,6 +92,8 @@ interface PopupState {
   activityOpen: boolean;
   /** v0.4.0: toon de eenmalige review-vraag (na dismiss van een viering). */
   reviewAsk: boolean;
+  /** v0.4.8: de herlaadrem pauzeerde deze host zelf — toon uitleg + hervatten. */
+  stormPause: StormPause | null;
 }
 
 /** "3 min ago" / "2 days ago" — kort en zonder bibliotheek. */
@@ -135,15 +139,17 @@ export function App() {
     activity: [],
     activityOpen: false,
     reviewAsk: false,
+    stormPause: null,
   });
 
   useEffect(() => {
     void (async () => {
-      const [settings, stats, hostname, activity] = await Promise.all([
+      const [settings, stats, hostname, activity, stormPauses] = await Promise.all([
         getSettings(),
         getStats(),
         getActiveTabHost(),
         getRecentActivity(),
+        getStormPauses(),
       ]);
       setState({
         settings,
@@ -154,6 +160,7 @@ export function App() {
         activity,
         activityOpen: false,
         reviewAsk: false,
+        stormPause: hostname ? (stormPauses[hostname] ?? null) : null,
       });
     })();
   }, []);
@@ -173,7 +180,10 @@ export function App() {
   async function togglePauseSite() {
     if (!state.hostname) return;
     const next = await setPausedForSite(state.hostname, !isSitePaused);
-    setState((s) => ({ ...s, settings: next }));
+    // v0.4.8: hervatten na een rem-pauze = de rem-notitie opruimen; de
+    // background laat de teller dan weer meelopen op deze host.
+    if (isSitePaused && state.stormPause) await clearStormPause(state.hostname);
+    setState((s) => ({ ...s, settings: next, stormPause: isSitePaused ? null : s.stormPause }));
   }
 
   /** v0.4.0: bewijs-paneel open/dicht. Puur lokale UI-state, niets opgeslagen. */
@@ -522,6 +532,26 @@ export function App() {
           >
             ✕
           </button>
+        </section>
+      )}
+
+      {state.settings.enabled && state.hostname && isSitePaused && state.stormPause && (
+        <section className="bb-celebration bb-celebration-fixed bb-storm" aria-live="polite">
+          <span className="bb-celebration-emoji" aria-hidden="true">↻</span>
+          <div className="bb-celebration-body">
+            <p className="bb-celebration-label">{t('popup_storm_label')}</p>
+            <p className="bb-review-text bb-storm-text">
+              {t('popup_storm_text', [state.hostname, String(state.stormPause.loads)])}
+            </p>
+            <div className="bb-storm-actions">
+              <button type="button" className="bb-review-cta" onClick={() => void togglePauseSite()}>
+                {t('popup_resume_site')}
+              </button>
+              <button type="button" className="bb-storm-report" onClick={reportBrokenSite}>
+                {t('popup_storm_report')}
+              </button>
+            </div>
+          </div>
         </section>
       )}
 

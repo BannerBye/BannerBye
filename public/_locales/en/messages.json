@@ -25,6 +25,13 @@
   "popup_toggle_on": { "message": "On" },
   "popup_toggle_off": { "message": "Off" },
   "popup_pause_site": { "message": "Pause on this site" },
+
+  "popup_storm_label": { "message": "BannerBye paused itself here" },
+  "popup_storm_text": {
+    "message": "$HOST$ kept reloading ($COUNT$ times in a few seconds), so BannerBye stepped back on this site. Resume to try again, or report it so we can fix it.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "Report this site" },
   "popup_resume_site": { "message": "Resume on this site" },
 
   "popup_stat_label": { "message": "banners refused" },

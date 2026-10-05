@@ -25,6 +25,13 @@
   "popup_toggle_on": { "message": "Aan" },
   "popup_toggle_off": { "message": "Uit" },
   "popup_pause_site": { "message": "Pauzeren op deze site" },
+
+  "popup_storm_label": { "message": "BannerBye heeft zichzelf hier gepauzeerd" },
+  "popup_storm_text": {
+    "message": "$HOST$ bleef herladen ($COUNT$ keer in een paar seconden), dus BannerBye heeft zich op deze site teruggetrokken. Hervat om het opnieuw te proberen, of meld het zodat wij het kunnen oplossen.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "Deze site melden" },
   "popup_resume_site": { "message": "Hervatten op deze site" },
 
   "popup_stat_label": { "message": "banners geweigerd" },

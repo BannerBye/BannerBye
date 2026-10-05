@@ -365,6 +365,36 @@ body {
   filter: brightness(1.08);
 }
 
+/* v0.4.8: herlaadrem-notitie — zelfde donkere kaart als #reward-1, met twee
+   acties: hervatten (ember) en melden (stille tekstknop). */
+.bb-storm .bb-celebration-emoji {
+  color: var(--ember);
+}
+.bb-storm-text {
+  color: rgba(250, 247, 240, 0.82);
+}
+.bb-storm-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+}
+.bb-storm-report {
+  margin-top: 10px;
+  padding: 7px 4px;
+  border: none;
+  background: transparent;
+  color: rgba(250, 247, 240, 0.75);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 12px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.bb-storm-report:hover {
+  color: var(--cream);
+}
+
 /* Status sentence */
 .bb-status {
   padding: 12px 14px;
