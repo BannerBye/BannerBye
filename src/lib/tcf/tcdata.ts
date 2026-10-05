@@ -15,7 +15,12 @@
  *   https://github.com/InteractiveAdvertisingBureau/GDPR-Transparency-and-Consent-Framework/blob/master/TCFv2/IAB%20Tech%20Lab%20-%20CMP%20API%20v2.md
  */
 
-import { generateNoConsentString, type TCStringOptions } from './tcstring.ts';
+import {
+  generateNoConsentString,
+  TCF_POLICY_VERSION,
+  UNREGISTERED_CMP_ID,
+  type TCStringOptions,
+} from './tcstring.ts';
 
 /** TCF v2.2 heeft 11 actieve purposes (purpose 12 is deprecated). */
 const TCF_PURPOSE_COUNT = 11;
@@ -79,8 +84,8 @@ export function buildNoConsentTCData(opts: TCStringOptions = {}): TCData {
 
   return {
     tcString,
-    tcfPolicyVersion: 5,
-    cmpId: opts.cmpId ?? 0,
+    tcfPolicyVersion: TCF_POLICY_VERSION,
+    cmpId: opts.cmpId ?? UNREGISTERED_CMP_ID,
     cmpVersion: opts.cmpVersion ?? 1,
     cmpStatus: 'loaded',
     // v0.4.2 (#170, 7 sep 2026): 'tcloaded', niet meer 'useractioncomplete'.
@@ -101,7 +106,8 @@ export function buildNoConsentTCData(opts: TCStringOptions = {}): TCData {
     // Autoconsent-laag (laag 3) vangt de rest. Een banner die tóch even
     // verschijnt is te verkiezen boven een pagina die nooit meer stilstaat.
     eventStatus: 'tcloaded',
-    isServiceSpecific: false,
+    // Moet gelijk zijn aan het IsServiceSpecific-bit in de string (true).
+    isServiceSpecific: true,
     useNonStandardStacks: false,
     publisherCC: opts.publisherCC ?? 'AA',
     purposeOneTreatment: false,

@@ -1,28 +1,27 @@
 /**
- * IAB TCF v2.2 TC-string generator.
+ * IAB TCF v2 TC-string generator (v2.2-formaat, v2.3-beleid).
  *
  * BannerBye stuurt naar elke pagina dezelfde "no-consent"-string:
  *  - Geen consent voor enige purpose (1..24)
  *  - Geen opt-in op enige special feature (1..12)
- *  - Geen vendor-consent (BitField met MaxVendorId=0)
+ *  - Geen vendor-consent (range-encoding, MaxVendorId=1000, 0 entries)
  *  - Geen vendor legitimate interest acknowledgement
  *  - Geen publisher restrictions
+ *  - Service-specifiek (global scope is sinds sept 2021 niet toegestaan)
+ *  - Een DisclosedVendors-segment zonder vendors (verplicht sinds v2.3
+ *    voor strings aangemaakt na 28 februari 2026)
  *
- * De string wordt aan sites geserveerd via `__tcfapi` (in een
- * volgende taak) en/of als `euconsent-v2`-cookie. Het IAB Europe
- * Transparency & Consent Framework verplicht CMP-compatible sites
- * om dit signal te respecteren.
+ * De string wordt aan sites geserveerd via `__tcfapi` en als
+ * `euconsent-v2`-cookie. Het IAB Europe Transparency & Consent
+ * Framework verplicht CMP-compatible sites om dit signal te respecteren.
  *
  * Format-spec:
  *   https://github.com/InteractiveAdvertisingBureau/GDPR-Transparency-and-Consent-Framework/blob/master/TCFv2/IAB%20Tech%20Lab%20-%20Consent%20string%20and%20vendor%20list%20formats%20v2.md
  *
- * TCF v2.2 wijzigingen tov v2.0/v2.1:
- *  - Policy version is 4 (was 2 voor v2.0, 3 voor v2.1)
- *  - Purpose 1 is herzien (geen "use limited data" meer)
- *  - Purposes-Consent blijft 24 bits (backward compat)
- *
- * Validatie: produceer een string en gooi 'm in https://iabtcf.com/#/decode
- * — alle velden moeten gelezen kunnen worden zonder errors.
+ * Validatie: `pnpm tcf:verify` decodeert de string met de officiële
+ * IAB Tech Lab-bibliotheek (`@iabtechlabtcf/core`) en controleert elk
+ * veld. Handmatig: https://iabtcf.com/#/decode — alle velden moeten
+ * gelezen kunnen worden zonder errors.
  */
 
 import { BitWriter } from './bitwriter.ts';
@@ -36,7 +35,7 @@ const TCF_VERSION = 2;
  * vendor-list-checking. Echte CMPs (OneTrust, Didomi) verwachten 5;
  * met 4 wordt onze string als "verlopen" gerejecteerd.
  */
-const TCF_POLICY_VERSION = 5;
+export const TCF_POLICY_VERSION = 5;
 
 /**
  * Realistische MaxVendorId voor de vendor-secties.
@@ -47,11 +46,33 @@ const TCF_POLICY_VERSION = 5;
  */
 const VENDOR_MAX_ID = 1000;
 
+/**
+ * Segment-type van het DisclosedVendors-segment (3 bits aan het begin van
+ * elk niet-core-segment). 0 = core (impliciet), 1 = DisclosedVendors,
+ * 2 = AllowedVendors (vervallen), 3 = PublisherTC.
+ */
+const SEGMENT_TYPE_DISCLOSED_VENDORS = 1;
+
+/**
+ * Sentinel-CMP-ID voor een niet bij IAB geregistreerde agent (v0.4.8).
+ *
+ * Waarom niet 0: de IAB Tech Lab-referentiedecoder (`@iabtechlabtcf/core`
+ * 1.5.22) weigert élke string met cmpId 0 of 1 — `invalid value 0 passed
+ * for cmpId` — en elke CMP of vendor die op die bibliotheek leunt, gooide
+ * onze string dus weg vóór hij één bit had gelezen (gemeten 5 okt 2026).
+ * 4095 is het maximum van het 12-bits veld, ligt ver boven de toegekende
+ * reeks (~450 op 5 okt 2026) en is daarmee ondubbelzinnig "geen
+ * geregistreerde CMP" zonder iemands ID te lenen. Registratie bij IAB
+ * Europe (https://iabeurope.eu/cmp-list/) blijft een losse beslissing;
+ * dan vervangt het toegekende nummer deze sentinel.
+ */
+export const UNREGISTERED_CMP_ID = 4095;
+
 export interface TCStringOptions {
   /**
-   * CMP ID toegekend door IAB Europe.
-   * 0 = niet-geregistreerde / test-CMP. Bij publieke launch:
-   * registreren via https://iabeurope.eu/cmp-list/ en assigned ID gebruiken.
+   * CMP ID toegekend door IAB Europe. Standaard UNREGISTERED_CMP_ID (zie
+   * daar). Waarden 0 en 1 worden door de referentiedecoder geweigerd en
+   * zijn dus geen geldige keuze.
    */
   cmpId?: number;
 
@@ -78,7 +99,7 @@ export interface TCStringOptions {
 }
 
 const DEFAULTS: Required<TCStringOptions> = {
-  cmpId: 0,
+  cmpId: UNREGISTERED_CMP_ID,
   cmpVersion: 1,
   // Realistische vendor-list-versie. De echte GVL wordt wekelijks
   // gepubliceerd; we kiezen een nummer dat "recent genoeg" oogt voor
@@ -91,14 +112,16 @@ const DEFAULTS: Required<TCStringOptions> = {
 };
 
 /**
- * Genereert een TCF v2.2 "no-consent" Core String.
+ * Genereert een TCF v2 "no-consent" TC-string: Core segment plus het
+ * DisclosedVendors-segment, met een punt ertussen.
  *
- * De Core String is het minimum dat nodig is — Disclosed Vendors,
- * Allowed Vendors en Publisher TC segmenten zijn optioneel en niet
- * relevant voor "weiger alles". Sites die meer segmenten verwachten
- * moeten omgaan met core-only strings (spec-vereiste).
+ * Het DisclosedVendors-segment was tot v2.2 optioneel; sinds v2.3 is het
+ * verplicht voor service-specifieke strings die na 28 februari 2026 zijn
+ * gemaakt. AllowedVendors (vervallen) en PublisherTC laten we weg — die
+ * zijn niet relevant voor "weiger alles".
  *
- * @returns base64url-encoded string zonder padding (~50-60 chars).
+ * @returns twee base64url-segmenten zonder padding, gescheiden door een
+ *          punt (~56 chars).
  */
 export function generateNoConsentString(opts: TCStringOptions = {}): string {
   const o = { ...DEFAULTS, ...opts };
@@ -117,8 +140,11 @@ export function generateNoConsentString(opts: TCStringOptions = {}): string {
   w.writeNumber(0, 6); // ConsentScreen — 0 = no UI shown to user (we don't ask)
   w.writeIsoLetters(o.consentLanguage); // ConsentLanguage (12 bits)
   w.writeNumber(o.vendorListVersion, 12); // VendorListVersion
-  w.writeNumber(TCF_POLICY_VERSION, 6); // TcfPolicyVersion (4 voor v2.2)
-  w.writeBool(false); // IsServiceSpecific — false = global scope
+  w.writeNumber(TCF_POLICY_VERSION, 6); // TcfPolicyVersion
+  // IsServiceSpecific — true = de string geldt alleen voor deze site.
+  // Global scope (false) is sinds september 2021 niet meer toegestaan in
+  // TCF v2; decoders die daarop controleren gooien zo'n string weg.
+  w.writeBool(true);
   w.writeBool(false); // UseNonStandardStacks — geen alternatieve stacks
   w.writeNumber(0, 12); // SpecialFeatureOptIns: 12 bits, all 0
   w.writeNumber(0, 24); // PurposesConsent: 24 bits, all 0
@@ -149,5 +175,20 @@ export function generateNoConsentString(opts: TCStringOptions = {}): string {
   // 12-bit NumPubRestrictions = 0, gevolgd door geen entries.
   w.writeNumber(0, 12);
 
-  return w.toBase64Url();
+  const core = w.toBase64Url();
+
+  // === DISCLOSED VENDORS SEGMENT ===
+  // Verplicht voor service-specifieke strings die na 28 februari 2026 zijn
+  // aangemaakt (TCF v2.3-beleid, IAB Europe). Het segment zegt welke
+  // vendors aan de gebruiker zijn getoond; wij tonen er geen, dus een
+  // range-encoding met MaxVendorId=1000 en NumEntries=0 — dezelfde vorm
+  // als de vendor-secties hierboven. Segmenten worden met een punt aan
+  // elkaar geplakt; elk niet-core-segment begint met 3 bits SegmentType.
+  const d = new BitWriter();
+  d.writeNumber(SEGMENT_TYPE_DISCLOSED_VENDORS, 3); // SegmentType
+  d.writeNumber(VENDOR_MAX_ID, 16); // MaxVendorId
+  d.writeBool(true); // IsRangeEncoding
+  d.writeNumber(0, 12); // NumEntries = 0 → geen vendor gedisclosed
+
+  return `${core}.${d.toBase64Url()}`;
 }

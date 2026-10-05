@@ -1,0 +1,50 @@
+name: CI — typecheck, TCF verify, build
+
+# Draait bij elke push en PR. Drie poorten:
+#  1. tsc --noEmit
+#  2. tcf:verify — decodeert onze no-consent TC-string met de officiële
+#     IAB Tech Lab-bibliotheek (@iabtechlabtcf/core) en controleert elk
+#     veld. Dit is de belofte op bannerbye.com/tcf-check ("every build is
+#     checked against the IAB Tech Lab reference library before it ships").
+#  3. wxt build voor de drie targets.
+# Geen secrets, geen deploy — alleen rood/groen.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm compile
+
+      - name: TCF string against the IAB reference decoder
+        run: pnpm tcf:verify
+
+      - name: Build all targets
+        run: pnpm build:all

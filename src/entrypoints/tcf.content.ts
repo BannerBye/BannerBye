@@ -155,12 +155,14 @@ export default defineContentScript({
     // === BUILD TCDATA ===
     // Wordt eenmalig opgebouwd bij script-start. De tcString embeddt
     // timestamps van nu — accuraat genoeg voor het hele page-leven.
+    // v0.4.8: geen cmpId/vendorListVersion meer meegeven. De oude
+    // overrides (cmpId 0, vendorListVersion 1) maakten de string ongeldig
+    // voor de IAB-referentiedecoder; de defaults in tcstring.ts zijn nu
+    // de enige bron van waarheid.
     const tcData = buildNoConsentTCData({
       consentLanguage: 'EN',
       publisherCC: 'AA',
-      cmpId: 0,
       cmpVersion: 1,
-      vendorListVersion: 1,
     });
 
     const listeners = new Map<number, TcfCallback>();
