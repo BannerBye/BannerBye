@@ -161,6 +161,7 @@
     "message": "Tipp: Hefte das Symbol an für Zugriff mit einem Klick — Puzzleteil in der Symbolleiste → suche BannerBye → klicke auf die Stecknadel."
   },
   "onboarding_cta": { "message": "Mit dem Surfen beginnen →" },
+  "onboarding_see_it": { "message": "Sieh es passieren" },
 
   "milestone_first_banner": { "message": "Erstes Banner blockiert" },
   "milestone_first_steps": { "message": "Erste Schritte" },

@@ -220,6 +220,15 @@ body {
   cursor: default;
   opacity: 0.5;
 }
+.bb-cta--ghost {
+  background: transparent;
+  color: var(--ink);
+  border-color: rgba(14, 17, 22, 0.18);
+}
+.bb-cta--ghost:hover {
+  opacity: 1;
+  border-color: var(--ink);
+}
 
 @media (max-width: 640px) {
   .bb-card {

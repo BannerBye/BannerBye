@@ -161,6 +161,7 @@
     "message": "Tip: zet het pictogram vast voor toegang met één klik — puzzelstukje in de werkbalk → zoek BannerBye → klik op de punaise."
   },
   "onboarding_cta": { "message": "Begin met browsen →" },
+  "onboarding_see_it": { "message": "Zie het gebeuren" },
 
   "milestone_first_banner": { "message": "Eerste banner geblokkeerd" },
   "milestone_first_steps": { "message": "Eerste stappen" },

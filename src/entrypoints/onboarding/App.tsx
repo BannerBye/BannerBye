@@ -43,6 +43,22 @@ export function App() {
     window.close();
   }
 
+  /**
+   * v0.4.8 (bouwpunt 8): "See it happen" — opent bannerbye.com/try, een
+   * pagina met een échte cookiebanner (reject achter een instellingen-stap)
+   * die BannerBye live weigert. De eerste vijf minuten na installatie
+   * beslissen of iemand de extensie houdt; dit laat het resultaat zien in
+   * plaats van het te beloven.
+   */
+  function seeItHappen(): void {
+    const url = 'https://bannerbye.com/try?from=onboarding';
+    try {
+      void chrome.tabs.create({ url });
+    } catch {
+      window.open(url, '_blank', 'noopener');
+    }
+  }
+
   return (
     <div className="bb-page">
       <div className="bb-card">
@@ -91,6 +107,9 @@ export function App() {
         </main>
 
         <footer className="bb-footer">
+          <button type="button" className="bb-cta bb-cta--ghost" onClick={seeItHappen}>
+            {t('onboarding_see_it')}
+          </button>
           <button
             type="button"
             className="bb-cta"

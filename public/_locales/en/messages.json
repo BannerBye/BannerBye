@@ -161,6 +161,7 @@
     "message": "Tip: pin the icon for one-click access — toolbar puzzle piece → find BannerBye → click the pin."
   },
   "onboarding_cta": { "message": "Start browsing →" },
+  "onboarding_see_it": { "message": "See it happen" },
 
   "milestone_first_banner": { "message": "Pop your first" },
   "milestone_first_steps": { "message": "First steps" },

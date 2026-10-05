@@ -161,6 +161,7 @@
     "message": "Astuce : épinglez l'icône pour y accéder en un clic — pièce de puzzle dans la barre d'outils → trouvez BannerBye → cliquez sur l'épingle."
   },
   "onboarding_cta": { "message": "Commencez à naviguer →" },
+  "onboarding_see_it": { "message": "Voyez-le en action" },
 
   "milestone_first_banner": { "message": "Première bannière éliminée" },
   "milestone_first_steps": { "message": "Premiers pas" },
