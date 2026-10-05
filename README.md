@@ -68,7 +68,8 @@ bannerbye/
 │   ├── lib/                 # TCF, autoclick engine, milestones, share-card, storage, rules
 │   └── public/state/        # MAIN-world flag-setter scripts (real-toggle)
 ├── rules/                   # declarativeNetRequest rule-sets
-├── scripts/                 # Build + TCF-sample validator
+├── scripts/                 # Build + TCF-sample validator + Phase 2B analyser
+├── packages/refuse/         # @bannerbye/refuse — the engine as a library (Playwright/Puppeteer) + MCP server
 ├── wxt.config.ts            # WXT 0.19 + Manifest V3 config
 ├── package.json
 ├── LICENSE                  # MIT
@@ -76,6 +77,10 @@ bannerbye/
 ```
 
 Built with [WXT](https://wxt.dev) 0.19 + Vite 6 + pnpm + TypeScript. Manifest V3 across Chrome, Firefox, and Safari (via WXT's `safari` target + Xcode wrapper).
+
+## Use the engine without the extension
+
+`packages/refuse` ships the same reject-button finder, keyword sets and TCF/GPC preparation as a small library: `await prepare(context); await refuse(page)` for Playwright or Puppeteer, and an MCP server (`npx @bannerbye/refuse`) with one tool, `refuse_cookie_banner({ url })`, so an agent gets the page instead of the banner. See [packages/refuse/README.md](packages/refuse/README.md).
 
 ## Build
 

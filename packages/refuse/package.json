@@ -1,0 +1,46 @@
+{
+  "name": "@bannerbye/refuse",
+  "version": "0.1.0",
+  "description": "refuse(page): the BannerBye cookie-banner engine for Playwright and Puppeteer, plus an MCP server for agents.",
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BannerBye/BannerBye.git",
+    "directory": "packages/refuse"
+  },
+  "homepage": "https://bannerbye.com",
+  "keywords": ["cookie-banner", "consent", "gdpr", "playwright", "puppeteer", "mcp", "scraping", "gpc", "tcf"],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "bin": {
+    "bannerbye-refuse-mcp": "./dist/mcp.js"
+  },
+  "files": ["dist", "README.md"],
+  "scripts": {
+    "build": "node build.mjs && tsc -p tsconfig.json --emitDeclarationOnly",
+    "test": "node --test test/*.test.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "peerDependencies": {
+    "@modelcontextprotocol/sdk": ">=1.0.0",
+    "playwright": ">=1.40.0"
+  },
+  "peerDependenciesMeta": {
+    "@modelcontextprotocol/sdk": { "optional": true },
+    "playwright": { "optional": true }
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "@types/node": "^22.0.0",
+    "esbuild": "^0.24.0",
+    "playwright": "^1.49.0",
+    "typescript": "^5.6.3",
+    "zod": "^3.23.0"
+  },
+  "engines": { "node": ">=20" }
+}

@@ -48,3 +48,26 @@ jobs:
 
       - name: Build all targets
         run: pnpm build:all
+
+  refuse:
+    # packages/refuse — de motor als bibliotheek + MCP-server. Eigen lockfile.
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: packages/refuse
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: pnpm install --frozen-lockfile
+      - name: Build (esbuild) + declarations
+        run: pnpm build
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Chromium for the fixture tests
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Fixture tests
+        run: pnpm test
