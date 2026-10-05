@@ -325,6 +325,14 @@ export function startAutoconsentLayer(onHandled: () => void): void {
             }
             window.removeEventListener('pagehide', onGone);
             sourcepointGoBack();
+            // v0.4.8 (issue #6): laat de popup weten dat dit een consent-or-
+            // pay-muur is, zodat de gebruiker ziet dat BannerBye hier bewust
+            // niets doet in plaats van te denken dat het kapot is.
+            try {
+              void chrome.runtime.sendMessage({ type: 'bb:consent-wall' });
+            } catch {
+              // Geen runtime (bv. frame al weg) — niet kritiek.
+            }
             release();
           }, SOURCEPOINT_VERIFY_MS);
           break;

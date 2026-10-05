@@ -32,6 +32,14 @@
     "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
   },
   "popup_storm_report": { "message": "Report this site" },
+  "popup_proof_refused": {
+    "message": "Refused here: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "No banner found on this site." },
+  "popup_proof_none": { "message": "Nothing to refuse here yet." },
+  "popup_proof_wall": { "message": "This site asks you to pay or consent. That choice stays yours — BannerBye leaves the wall alone." },
+  "popup_activity_wall": { "message": "pay-or-consent wall, left to you" },
   "popup_resume_site": { "message": "Resume on this site" },
 
   "popup_stat_label": { "message": "banners refused" },

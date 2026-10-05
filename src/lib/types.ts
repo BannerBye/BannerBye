@@ -71,7 +71,11 @@ export interface LocalStats {
 }
 
 /** Uitkomst van BannerBye op één host. */
-export type ActivityOutcome = 'refused' | 'clean';
+/**
+ * 'wall' (v0.4.8, issue #6): consent-or-pay-muur herkend — BannerBye laat die
+ * keuze bewust aan de gebruiker en weigert er dus niets.
+ */
+export type ActivityOutcome = 'refused' | 'clean' | 'wall';
 
 /**
  * Eén regel in de activiteitenlijst. Bewust per host samengevat in plaats van
@@ -83,7 +87,7 @@ export interface ActivityEntry {
   host: string;
   /** Herkend consent-platform, indien bekend. Bijvoorbeeld "IAB TCF". */
   platform?: string;
-  /** 'refused' = banner geweigerd · 'clean' = geen banner aangetroffen. */
+  /** 'refused' = banner geweigerd · 'clean' = geen banner aangetroffen · 'wall' = consent-or-pay-muur, bewust met rust gelaten. */
   outcome: ActivityOutcome;
   /** Laatste keer dat dit gebeurde (ms sinds epoch). */
   lastAt: number;

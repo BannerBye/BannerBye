@@ -32,6 +32,14 @@
     "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
   },
   "popup_storm_report": { "message": "Signaler ce site" },
+  "popup_proof_refused": {
+    "message": "Refusé ici : $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "Aucune bannière trouvée sur ce site." },
+  "popup_proof_none": { "message": "Rien à refuser ici pour l’instant." },
+  "popup_proof_wall": { "message": "Ce site demande de payer ou de consentir. Ce choix reste le vôtre — BannerBye laisse le mur en place." },
+  "popup_activity_wall": { "message": "mur payer-ou-consentir, laissé à vous" },
   "popup_resume_site": { "message": "Reprendre sur ce site" },
 
   "popup_stat_label": { "message": "bannières refusées" },

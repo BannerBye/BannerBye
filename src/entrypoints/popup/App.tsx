@@ -172,6 +172,11 @@ export function App() {
   const isActiveOnSite =
     state.settings.enabled && state.hostname !== null && !isSitePaused;
 
+  /** v0.4.8 (bouwpunt 5): wat BannerBye op déze site deed — het bewijs per site. */
+  const hereEntry = state.hostname
+    ? state.activity.find((e) => e.host === state.hostname) ?? null
+    : null;
+
   async function toggleGlobal() {
     const next = await updateSettings({ enabled: !state.settings.enabled });
     setState((s) => ({ ...s, settings: next }));
@@ -565,9 +570,23 @@ export function App() {
             {t('popup_status_paused', state.hostname)}
           </p>
         ) : (
-          <p className="bb-status-text">
-            {t('popup_status_active', state.hostname)}
-          </p>
+          <>
+            <p className="bb-status-text">
+              {t('popup_status_active', state.hostname)}
+            </p>
+            <p className={`bb-proof ${hereEntry?.outcome ?? 'none'}`}>
+              {hereEntry?.outcome === 'refused'
+                ? t('popup_proof_refused', [
+                    hereEntry.platform ?? t('popup_activity_banner_refused_fallback'),
+                    timeAgo(hereEntry.lastAt),
+                  ])
+                : hereEntry?.outcome === 'wall'
+                  ? t('popup_proof_wall')
+                  : hereEntry?.outcome === 'clean'
+                    ? t('popup_proof_clean')
+                    : t('popup_proof_none')}
+            </p>
+          </>
         )}
       </section>
 
@@ -626,7 +645,7 @@ export function App() {
                         className={`bb-activity-mark ${entry.outcome}`}
                         aria-hidden="true"
                       >
-                        {entry.outcome === 'refused' ? '✕' : '·'}
+                        {entry.outcome === 'refused' ? '✕' : entry.outcome === 'wall' ? '⊘' : '·'}
                       </span>
                       <span className="bb-activity-host" title={entry.host}>
                         {entry.host}
@@ -634,7 +653,9 @@ export function App() {
                       <span className="bb-activity-meta">
                         {entry.outcome === 'refused'
                           ? (entry.platform ?? t('popup_activity_banner_refused_fallback'))
-                          : t('popup_activity_no_banner')}
+                          : entry.outcome === 'wall'
+                            ? t('popup_activity_wall')
+                            : t('popup_activity_no_banner')}
                         {entry.count > 1
                           ? t('popup_activity_count_suffix', String(entry.count))
                           : ''}
@@ -659,6 +680,10 @@ export function App() {
         )}
       </section>
 
+      {/* v0.4.8 (bouwpunt 5): mijlpalen pas tonen na de eerste geweigerde
+          banner — op dag één is een lijst met zeven lege rondjes geen bewijs
+          maar ruis. */}
+      {state.stats.blocked > 0 && (
       <section className="bb-milestones">
         <header className="bb-milestones-header">
           <p className="bb-milestones-label">{t('popup_milestones_label')}</p>
@@ -690,6 +715,7 @@ export function App() {
           })}
         </ul>
       </section>
+      )}
 
       <footer className="bb-footer">
         <button

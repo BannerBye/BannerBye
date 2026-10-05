@@ -58,6 +58,8 @@ import {
   pruneStormPauses,
   STORM_PAUSE_RESTART_MIN_AGE_MS,
 } from '@/lib/reload-brake';
+// v0.4.8: bewijs naar de Apple host-app (alleen Safari) — zie lib/native-proof.ts.
+import { sendProofToHostApp } from '@/lib/native-proof';
 
 const GPC_RULESET_ID = 'gpc-headers';
 // v0.3.2 (#158 hotfix): rules/gpc-headers.json beperkt Sec-GPC-header-injectie
@@ -441,6 +443,8 @@ async function handleBannerBlocked(
   try {
     const stats = await incrementBlocked();
     await flashTabBadge(tabId);
+    // v0.4.8: de host-app (iOS/macOS) mag weten dat het werkt. No-op buiten Safari.
+    sendProofToHostApp(stats.blocked, hostname);
 
     // v0.4.0: leg vast wát er geweigerd werd — het bewijs achter de teller.
     // Faalt dit, dan mag de teller er niet onder lijden: eigen try/catch.
@@ -516,6 +520,9 @@ export default defineBackground({
       await syncGpcRuleset(settings.enabled);
       await syncFlagSetterScripts(settings);
       await syncRankBadge();
+      // v0.4.8: stand doorgeven aan de host-app, zodat die na een herstart
+      // niet op de eerstvolgende banner hoeft te wachten. No-op buiten Safari.
+      sendProofToHostApp((await getStats()).blocked, null);
     } catch (err) {
       console.warn('[BannerBye] boot sync failed:', err);
     }
@@ -602,6 +609,14 @@ export default defineBackground({
     if (msg?.type === 'bb:no-banner' && sender.tab?.url) {
       const host = normalizeHost(sender.tab.url);
       if (host) void recordActivity(host, 'clean');
+    }
+
+    // v0.4.8 (issue #6): consent-or-pay-muur herkend (Sourcepoint-manager
+    // zonder gratis weigerroute, zie autoconsent-layer.ts). Alleen een regel
+    // in de activiteitenlijst — geen teller, geen badge, niets gemeld.
+    if (msg?.type === 'bb:consent-wall' && sender.tab?.url) {
+      const host = normalizeHost(sender.tab.url);
+      if (host) void recordActivity(host, 'wall');
     }
 
     // v0.4.2 (#212): de Autoconsent-poortwachter (autoconsent.content.ts) heeft

@@ -49,6 +49,9 @@ export default defineConfig({
       // scripting al gebruikt werd voor onboarding-tab + executeScript.
       'scripting',
       'alarms',
+      // v0.4.8: alleen Safari — bewijs naar de host-app via sendNativeMessage
+      // (lib/native-proof.ts). Chrome/Firefox/Edge krijgen deze permissie niet.
+      ...(browser === 'safari' ? ['nativeMessaging'] : []),
     ],
     host_permissions: ['<all_urls>'],
     // v0.4.5 (fix #16, security-audit 2026-09-16) — expliciete CSP voor

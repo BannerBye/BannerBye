@@ -365,6 +365,17 @@ body {
   filter: brightness(1.08);
 }
 
+/* v0.4.8 (bouwpunt 5): bewijs per site onder de statuszin */
+.bb-proof {
+  margin-top: 6px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--smoke);
+}
+.bb-proof.refused { color: var(--ember); font-weight: 600; }
+.bb-proof.wall { color: var(--ink); }
+.bb-activity-mark.wall { color: var(--smoke); }
+
 /* v0.4.8: herlaadrem-notitie — zelfde donkere kaart als #reward-1, met twee
    acties: hervatten (ember) en melden (stille tekstknop). */
 .bb-storm .bb-celebration-emoji {

@@ -32,6 +32,14 @@
     "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
   },
   "popup_storm_report": { "message": "Diese Seite melden" },
+  "popup_proof_refused": {
+    "message": "Hier abgelehnt: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "Kein Banner auf dieser Seite gefunden." },
+  "popup_proof_none": { "message": "Hier noch nichts abzulehnen." },
+  "popup_proof_wall": { "message": "Diese Seite verlangt Bezahlen oder Zustimmen. Die Wahl bleibt bei dir — BannerBye lässt die Wand stehen." },
+  "popup_activity_wall": { "message": "Bezahl-oder-Zustimm-Wand, dir überlassen" },
   "popup_resume_site": { "message": "Auf dieser Website fortsetzen" },
 
   "popup_stat_label": { "message": "Banner abgelehnt" },

@@ -32,6 +32,14 @@
     "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
   },
   "popup_storm_report": { "message": "Deze site melden" },
+  "popup_proof_refused": {
+    "message": "Hier geweigerd: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "Geen banner gevonden op deze site." },
+  "popup_proof_none": { "message": "Hier nog niets te weigeren." },
+  "popup_proof_wall": { "message": "Deze site vraagt betalen of toestemmen. Die keuze blijft van jou — BannerBye laat de muur staan." },
+  "popup_activity_wall": { "message": "betaal-of-toestemmen-muur, aan jou gelaten" },
   "popup_resume_site": { "message": "Hervatten op deze site" },
 
   "popup_stat_label": { "message": "banners geweigerd" },

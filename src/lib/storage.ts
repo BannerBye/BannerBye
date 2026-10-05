@@ -111,7 +111,14 @@ export async function recordActivity(
       ...existing,
       lastAt: now,
       count: existing.count + 1,
-      outcome: outcome === 'refused' ? 'refused' : existing.outcome,
+      // Prioriteit: refused > wall > clean — een lagere uitkomst mag een
+      // hogere nooit overschrijven.
+      outcome:
+        outcome === 'refused' || existing.outcome === 'refused'
+          ? 'refused'
+          : outcome === 'wall' || existing.outcome === 'wall'
+            ? 'wall'
+            : 'clean',
       platform: platform ?? existing.platform,
     };
     next = [merged, ...fresh.filter((e) => e.host !== host)];
