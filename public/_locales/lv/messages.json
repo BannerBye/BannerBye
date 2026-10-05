@@ -176,5 +176,21 @@
   "share_since": {
     "message": "kopš $DATE$",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye šeit pats sevi apturēja" },
+  "popup_storm_text": {
+    "message": "$HOST$ nemitīgi pārlādējās ($COUNT$ reizes dažās sekundēs), tāpēc BannerBye no šīs vietnes atkāpās. Atsāc, lai mēģinātu vēlreiz, vai ziņo, lai mēs to varētu salabot.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "Ziņot par šo vietni" },
+  "popup_proof_refused": {
+    "message": "Noraidīts šeit: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "Šajā vietnē netika atrasts neviens baneris." },
+  "popup_proof_none": { "message": "Šeit vēl nav ko noraidīt." },
+  "popup_proof_wall": { "message": "Šī vietne lūdz tev maksāt vai piekrist. Izvēle paliek tava — BannerBye šo sienu neaiztiek." },
+  "popup_activity_wall": { "message": "“maksā vai piekrīti” siena, atstāta tavā ziņā" },
+  "onboarding_see_it": { "message": "Skaties, kā tas notiek" }
 }

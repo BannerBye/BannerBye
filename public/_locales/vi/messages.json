@@ -176,5 +176,21 @@
   "share_since": {
     "message": "kể từ $DATE$",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye đã tự tạm dừng ở đây" },
+  "popup_storm_text": {
+    "message": "$HOST$ liên tục tải lại ($COUNT$ lần trong vài giây), nên BannerBye đã lùi lại trên trang này. Tiếp tục để thử lại, hoặc báo cáo để chúng tôi sửa.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "Báo cáo trang này" },
+  "popup_proof_refused": {
+    "message": "Đã từ chối ở đây: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "Không tìm thấy banner nào trên trang này." },
+  "popup_proof_none": { "message": "Chưa có gì để từ chối ở đây." },
+  "popup_proof_wall": { "message": "Trang này yêu cầu bạn trả tiền hoặc đồng ý. Lựa chọn đó là của bạn — BannerBye không đụng đến bức tường này." },
+  "popup_activity_wall": { "message": "bức tường trả tiền hoặc đồng ý, để bạn quyết định" },
+  "onboarding_see_it": { "message": "Xem cách hoạt động" }
 }

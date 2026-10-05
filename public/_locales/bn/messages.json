@@ -176,5 +176,21 @@
   "share_since": {
     "message": "$DATE$ থেকে",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye এখানে নিজেকে বিরতি দিয়েছে" },
+  "popup_storm_text": {
+    "message": "$HOST$ বারবার রিলোড হচ্ছিল (কয়েক সেকেন্ডে $COUNT$ বার), তাই BannerBye এই সাইটে পিছিয়ে এসেছে। আবার চেষ্টা করতে চালু করুন, অথবা রিপোর্ট করুন যাতে আমরা ঠিক করতে পারি।",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "এই সাইটটি রিপোর্ট করুন" },
+  "popup_proof_refused": {
+    "message": "এখানে প্রত্যাখ্যাত: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "এই সাইটে কোনো ব্যানার পাওয়া যায়নি।" },
+  "popup_proof_none": { "message": "এখানে এখনও প্রত্যাখ্যান করার কিছু নেই।" },
+  "popup_proof_wall": { "message": "এই সাইট আপনাকে অর্থ দিতে বা সম্মতি দিতে বলে। সিদ্ধান্তটি আপনার — BannerBye দেয়ালটি যেমন আছে তেমনই রাখে।" },
+  "popup_activity_wall": { "message": "অর্থ-বা-সম্মতির দেয়াল, আপনার উপর ছেড়ে দেওয়া" },
+  "onboarding_see_it": { "message": "ঘটতে দেখুন" }
 }

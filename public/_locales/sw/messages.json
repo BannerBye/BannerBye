@@ -176,5 +176,21 @@
   "share_since": {
     "message": "tangu $DATE$",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye imejisitisha hapa" },
+  "popup_storm_text": {
+    "message": "$HOST$ iliendelea kupakia upya (mara $COUNT$ ndani ya sekunde chache), kwa hivyo BannerBye imerudi nyuma kwenye tovuti hii. Endelea ili ujaribu tena, au iripoti ili tuirekebishe.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "Ripoti tovuti hii" },
+  "popup_proof_refused": {
+    "message": "Imekataliwa hapa: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "Hakuna bango lililopatikana kwenye tovuti hii." },
+  "popup_proof_none": { "message": "Bado hakuna cha kukataa hapa." },
+  "popup_proof_wall": { "message": "Tovuti hii inakuomba ulipe au ukubali. Uamuzi huo unabaki kuwa wako — BannerBye inaliacha ukuta huo." },
+  "popup_activity_wall": { "message": "ukuta wa lipa-au-kubali, umeachiwa wewe" },
+  "onboarding_see_it": { "message": "Ione ikitokea" }
 }

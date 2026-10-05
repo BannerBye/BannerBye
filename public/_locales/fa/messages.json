@@ -176,5 +176,21 @@
   "share_since": {
     "message": "از $DATE$",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye اینجا خودش را متوقف کرد" },
+  "popup_storm_text": {
+    "message": "$HOST$ پشت سر هم دوباره بارگذاری می‌شد ($COUNT$ بار در چند ثانیه)، برای همین BannerBye در این سایت کنار کشید. برای تلاش دوباره ادامه دهید، یا گزارش دهید تا آن را درست کنیم.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "گزارش این سایت" },
+  "popup_proof_refused": {
+    "message": "اینجا رد شد: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "هیچ بنری در این سایت پیدا نشد." },
+  "popup_proof_none": { "message": "هنوز چیزی برای رد کردن اینجا نیست." },
+  "popup_proof_wall": { "message": "این سایت از شما می‌خواهد پرداخت کنید یا رضایت دهید. این انتخاب با شماست — BannerBye دیوار را دست نمی‌زند." },
+  "popup_activity_wall": { "message": "دیوار پرداخت یا رضایت، به انتخاب شما" },
+  "onboarding_see_it": { "message": "ببینید چطور کار می‌کند" }
 }

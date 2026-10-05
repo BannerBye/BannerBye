@@ -176,5 +176,21 @@
   "share_since": {
     "message": "منذ $DATE$",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "أوقف BannerBye نفسه مؤقتًا هنا" },
+  "popup_storm_text": {
+    "message": "ظل $HOST$ يعيد التحميل ($COUNT$ مرات في ثوانٍ قليلة)، لذا تراجع BannerBye على هذا الموقع. استأنف للمحاولة مجددًا، أو أبلغ عنه لنصلحه.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "الإبلاغ عن هذا الموقع" },
+  "popup_proof_refused": {
+    "message": "تم الرفض هنا: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "لم يتم العثور على لافتة في هذا الموقع." },
+  "popup_proof_none": { "message": "لا شيء لرفضه هنا بعد." },
+  "popup_proof_wall": { "message": "يطلب منك هذا الموقع الدفع أو الموافقة. يبقى هذا الخيار لك — يترك BannerBye الجدار كما هو." },
+  "popup_activity_wall": { "message": "جدار الدفع أو الموافقة، متروك لك" },
+  "onboarding_see_it": { "message": "شاهده يحدث" }
 }

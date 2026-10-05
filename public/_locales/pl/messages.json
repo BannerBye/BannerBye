@@ -176,5 +176,21 @@
   "share_since": {
     "message": "od $DATE$",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye sam się tu wstrzymał" },
+  "popup_storm_text": {
+    "message": "$HOST$ ciągle się przeładowywał ($COUNT$ razy w kilka sekund), więc BannerBye wycofał się z tej strony. Wznów, aby spróbować ponownie, albo zgłoś ją, żebyśmy mogli to naprawić.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "Zgłoś tę stronę" },
+  "popup_proof_refused": {
+    "message": "Odrzucono tutaj: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "Nie znaleziono banera na tej stronie." },
+  "popup_proof_none": { "message": "Na razie nie ma tu nic do odrzucenia." },
+  "popup_proof_wall": { "message": "Ta strona prosi cię o zapłatę lub zgodę. Ten wybór należy do ciebie — BannerBye nie rusza tej ściany." },
+  "popup_activity_wall": { "message": "ściana „zapłać albo się zgódź”, decyzja należy do ciebie" },
+  "onboarding_see_it": { "message": "Zobacz, jak to działa" }
 }

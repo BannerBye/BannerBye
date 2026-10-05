@@ -176,5 +176,21 @@
   "share_since": {
     "message": "de la $DATE$",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye s-a pus singur pe pauză aici" },
+  "popup_storm_text": {
+    "message": "$HOST$ se reîncărca întruna ($COUNT$ ori în câteva secunde), așa că BannerBye s-a retras de pe acest site. Reia pentru a încerca din nou sau raportează-l ca să-l putem repara.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "Raportează acest site" },
+  "popup_proof_refused": {
+    "message": "Refuzat aici: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "Niciun banner găsit pe acest site." },
+  "popup_proof_none": { "message": "Încă nimic de refuzat aici." },
+  "popup_proof_wall": { "message": "Acest site îți cere să plătești sau să consimți. Alegerea rămâne a ta — BannerBye lasă zidul neatins." },
+  "popup_activity_wall": { "message": "zid „plătește sau consimte”, lăsat la alegerea ta" },
+  "onboarding_see_it": { "message": "Vezi cum se întâmplă" }
 }

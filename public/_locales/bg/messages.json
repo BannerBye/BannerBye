@@ -176,5 +176,21 @@
   "share_since": {
     "message": "от $DATE$",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye се постави на пауза тук" },
+  "popup_storm_text": {
+    "message": "$HOST$ се презареждаше постоянно ($COUNT$ пъти за няколко секунди), затова BannerBye се оттегли от този сайт. Продължи, за да опиташ отново, или го докладвай, за да го поправим.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "Докладвай този сайт" },
+  "popup_proof_refused": {
+    "message": "Отказано тук: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "Не е открит банер на този сайт." },
+  "popup_proof_none": { "message": "Все още няма какво да се откаже тук." },
+  "popup_proof_wall": { "message": "Този сайт иска да платиш или да се съгласиш. Изборът остава твой — BannerBye не пипа стената." },
+  "popup_activity_wall": { "message": "стена „плати или се съгласи“, оставена на теб" },
+  "onboarding_see_it": { "message": "Виж го в действие" }
 }

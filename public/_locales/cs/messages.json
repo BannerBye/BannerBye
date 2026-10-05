@@ -176,5 +176,21 @@
   "share_since": {
     "message": "od $DATE$",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye se zde sám pozastavil" },
+  "popup_storm_text": {
+    "message": "$HOST$ se pořád znovu načítal ($COUNT$krát během několika sekund), proto BannerBye na tomto webu ustoupil. Pokračuj a zkus to znovu, nebo web nahlas, abychom to opravili.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "Nahlásit tento web" },
+  "popup_proof_refused": {
+    "message": "Odmítnuto zde: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "Na tomto webu nebyl nalezen žádný banner." },
+  "popup_proof_none": { "message": "Zatím tu není co odmítnout." },
+  "popup_proof_wall": { "message": "Tento web po tobě chce platbu nebo souhlas. Volba zůstává na tobě — BannerBye zeď nechává být." },
+  "popup_activity_wall": { "message": "zeď „zaplať, nebo souhlas“, ponecháno na tobě" },
+  "onboarding_see_it": { "message": "Podívej se, jak to funguje" }
 }

@@ -176,5 +176,21 @@
   "share_since": {
     "message": "ตั้งแต่ $DATE$",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye หยุดตัวเองชั่วคราวที่นี่" },
+  "popup_storm_text": {
+    "message": "$HOST$ โหลดซ้ำไม่หยุด ($COUNT$ ครั้งในไม่กี่วินาที) BannerBye จึงถอยออกจากเว็บไซต์นี้ กดทำต่อเพื่อลองอีกครั้ง หรือรายงานเพื่อให้เราแก้ไข",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "รายงานเว็บไซต์นี้" },
+  "popup_proof_refused": {
+    "message": "ปฏิเสธที่นี่: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "ไม่พบแบนเนอร์บนเว็บไซต์นี้" },
+  "popup_proof_none": { "message": "ยังไม่มีอะไรให้ปฏิเสธที่นี่" },
+  "popup_proof_wall": { "message": "เว็บไซต์นี้ขอให้คุณจ่ายเงินหรือยินยอม การเลือกนั้นเป็นของคุณ — BannerBye ไม่แตะกำแพงนี้" },
+  "popup_activity_wall": { "message": "กำแพงจ่ายเงินหรือยินยอม ให้คุณตัดสินใจเอง" },
+  "onboarding_see_it": { "message": "ดูการทำงานจริง" }
 }

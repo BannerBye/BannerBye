@@ -176,5 +176,21 @@
   "share_since": {
     "message": "sejak $DATE$",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye menjeda dirinya di sini" },
+  "popup_storm_text": {
+    "message": "$HOST$ terus memuat ulang ($COUNT$ kali dalam beberapa detik), jadi BannerBye mundur di situs ini. Lanjutkan untuk mencoba lagi, atau laporkan agar kami bisa memperbaikinya.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "Laporkan situs ini" },
+  "popup_proof_refused": {
+    "message": "Ditolak di sini: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "Tidak ada banner yang ditemukan di situs ini." },
+  "popup_proof_none": { "message": "Belum ada yang perlu ditolak di sini." },
+  "popup_proof_wall": { "message": "Situs ini memintamu membayar atau menyetujui. Pilihan itu tetap milikmu — BannerBye membiarkan dinding itu." },
+  "popup_activity_wall": { "message": "dinding bayar-atau-setuju, diserahkan kepadamu" },
+  "onboarding_see_it": { "message": "Lihat cara kerjanya" }
 }

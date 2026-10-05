@@ -176,5 +176,21 @@
   "share_since": {
     "message": "$DATE$ पासून",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye ने इथे स्वतःला थांबवले" },
+  "popup_storm_text": {
+    "message": "$HOST$ सतत रीलोड होत होते (काही सेकंदांत $COUNT$ वेळा), म्हणून BannerBye या साइटवरून मागे हटले. पुन्हा प्रयत्न करण्यासाठी सुरू ठेवा, किंवा आम्ही दुरुस्त करू शकू म्हणून तक्रार करा.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "या साइटची तक्रार करा" },
+  "popup_proof_refused": {
+    "message": "इथे नाकारले: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "या साइटवर कोणताही बॅनर आढळला नाही." },
+  "popup_proof_none": { "message": "इथे अजून नाकारण्यासारखे काही नाही." },
+  "popup_proof_wall": { "message": "ही साइट तुम्हाला पैसे द्यायला किंवा संमती द्यायला सांगते. ती निवड तुमची आहे — BannerBye ही भिंत तशीच ठेवते." },
+  "popup_activity_wall": { "message": "पैसे-द्या-किंवा-संमती-द्या भिंत, तुमच्यावर सोडलेली" },
+  "onboarding_see_it": { "message": "ते घडताना पाहा" }
 }

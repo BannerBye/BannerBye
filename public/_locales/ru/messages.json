@@ -176,5 +176,21 @@
   "share_since": {
     "message": "с $DATE$",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye приостановил себя на этом сайте" },
+  "popup_storm_text": {
+    "message": "$HOST$ постоянно перезагружался ($COUNT$ раз за несколько секунд), поэтому BannerBye отступил на этом сайте. Возобновите, чтобы попробовать снова, или сообщите о сайте, чтобы мы это исправили.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "Сообщить об этом сайте" },
+  "popup_proof_refused": {
+    "message": "Отклонено здесь: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "На этом сайте баннер не найден." },
+  "popup_proof_none": { "message": "Здесь пока нечего отклонять." },
+  "popup_proof_wall": { "message": "Этот сайт просит заплатить или дать согласие. Этот выбор остаётся за вами — BannerBye не трогает эту стену." },
+  "popup_activity_wall": { "message": "стена «плати или соглашайся», выбор за вами" },
+  "onboarding_see_it": { "message": "Посмотреть в действии" }
 }

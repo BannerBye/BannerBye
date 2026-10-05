@@ -176,5 +176,21 @@
   "share_since": {
     "message": "sejak $DATE$",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye menjeda dirinya di sini" },
+  "popup_storm_text": {
+    "message": "$HOST$ terus memuat semula ($COUNT$ kali dalam beberapa saat), jadi BannerBye berundur di laman ini. Sambung semula untuk mencuba lagi, atau laporkan supaya kami boleh membaikinya.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "Laporkan laman ini" },
+  "popup_proof_refused": {
+    "message": "Ditolak di sini: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "Tiada sepanduk ditemui di laman ini." },
+  "popup_proof_none": { "message": "Belum ada apa-apa untuk ditolak di sini." },
+  "popup_proof_wall": { "message": "Laman ini meminta anda membayar atau bersetuju. Pilihan itu kekal milik anda — BannerBye membiarkan dinding itu." },
+  "popup_activity_wall": { "message": "dinding bayar-atau-setuju, diserahkan kepada anda" },
+  "onboarding_see_it": { "message": "Lihat ia berlaku" }
 }

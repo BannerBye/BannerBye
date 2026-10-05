@@ -176,5 +176,21 @@
   "share_since": {
     "message": "alkaen $DATE$",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye keskeytti itsensä täällä" },
+  "popup_storm_text": {
+    "message": "$HOST$ latautui jatkuvasti uudelleen ($COUNT$ kertaa muutamassa sekunnissa), joten BannerBye vetäytyi tältä sivustolta. Jatka yrittääksesi uudelleen tai ilmoita siitä, jotta voimme korjata sen.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "Ilmoita tästä sivustosta" },
+  "popup_proof_refused": {
+    "message": "Hylätty täällä: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "Tältä sivustolta ei löytynyt banneria." },
+  "popup_proof_none": { "message": "Täällä ei ole vielä mitään hylättävää." },
+  "popup_proof_wall": { "message": "Tämä sivusto pyytää sinua maksamaan tai suostumaan. Valinta on sinun — BannerBye jättää muurin rauhaan." },
+  "popup_activity_wall": { "message": "maksa-tai-suostu-muuri, jätetty sinulle" },
+  "onboarding_see_it": { "message": "Katso, miten se toimii" }
 }

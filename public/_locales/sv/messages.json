@@ -176,5 +176,21 @@
   "share_since": {
     "message": "sedan $DATE$",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye pausade sig själv här" },
+  "popup_storm_text": {
+    "message": "$HOST$ laddades om hela tiden ($COUNT$ gånger på några sekunder), så BannerBye drog sig tillbaka på den här webbplatsen. Återuppta för att försöka igen, eller rapportera den så att vi kan åtgärda det.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "Rapportera den här webbplatsen" },
+  "popup_proof_refused": {
+    "message": "Nekad här: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "Ingen banner hittades på den här webbplatsen." },
+  "popup_proof_none": { "message": "Inget att neka här ännu." },
+  "popup_proof_wall": { "message": "Den här webbplatsen ber dig betala eller samtycka. Det valet är ditt — BannerBye låter muren stå." },
+  "popup_activity_wall": { "message": "betala-eller-samtyck-mur, lämnad åt dig" },
+  "onboarding_see_it": { "message": "Se det hända" }
 }

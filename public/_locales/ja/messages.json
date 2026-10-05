@@ -176,5 +176,21 @@
   "share_since": {
     "message": "$DATE$以来",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye はこのサイトで自動的に一時停止しました" },
+  "popup_storm_text": {
+    "message": "$HOST$ が再読み込みを繰り返したため(数秒間に $COUNT$ 回)、BannerBye はこのサイトから手を引きました。再開してもう一度試すか、修正のために報告してください。",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "このサイトを報告" },
+  "popup_proof_refused": {
+    "message": "このサイトで拒否: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "このサイトではバナーが見つかりませんでした。" },
+  "popup_proof_none": { "message": "まだ拒否するものはありません。" },
+  "popup_proof_wall": { "message": "このサイトは支払いか同意を求めています。その選択はあなたのものです — BannerBye はこの壁には手を出しません。" },
+  "popup_activity_wall": { "message": "支払いか同意の壁(あなたの判断に任せています)" },
+  "onboarding_see_it": { "message": "実際に見てみる" }
 }

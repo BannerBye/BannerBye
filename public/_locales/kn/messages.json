@@ -176,5 +176,21 @@
   "share_since": {
     "message": "$DATE$ ರಿಂದ",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye ಇಲ್ಲಿ ತನ್ನನ್ನು ತಾನೇ ವಿರಾಮಗೊಳಿಸಿದೆ" },
+  "popup_storm_text": {
+    "message": "$HOST$ ಮತ್ತೆ ಮತ್ತೆ ರಿಲೋಡ್ ಆಗುತ್ತಿತ್ತು (ಕೆಲವು ಸೆಕೆಂಡುಗಳಲ್ಲಿ $COUNT$ ಬಾರಿ), ಆದ್ದರಿಂದ BannerBye ಈ ಸೈಟ್‌ನಿಂದ ಹಿಂದೆ ಸರಿಯಿತು. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಲು ಮುಂದುವರಿಸಿ, ಅಥವಾ ನಾವು ಸರಿಪಡಿಸಲು ವರದಿ ಮಾಡಿ.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "ಈ ಸೈಟ್ ಅನ್ನು ವರದಿ ಮಾಡಿ" },
+  "popup_proof_refused": {
+    "message": "ಇಲ್ಲಿ ತಿರಸ್ಕರಿಸಲಾಗಿದೆ: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "ಈ ಸೈಟ್‌ನಲ್ಲಿ ಯಾವುದೇ ಬ್ಯಾನರ್ ಕಂಡುಬಂದಿಲ್ಲ." },
+  "popup_proof_none": { "message": "ಇಲ್ಲಿ ಇನ್ನೂ ತಿರಸ್ಕರಿಸಲು ಏನೂ ಇಲ್ಲ." },
+  "popup_proof_wall": { "message": "ಈ ಸೈಟ್ ನಿಮ್ಮನ್ನು ಪಾವತಿಸಲು ಅಥವಾ ಒಪ್ಪಿಗೆ ನೀಡಲು ಕೇಳುತ್ತದೆ. ಆ ಆಯ್ಕೆ ನಿಮ್ಮದೇ — BannerBye ಆ ಗೋಡೆಯನ್ನು ಮುಟ್ಟುವುದಿಲ್ಲ." },
+  "popup_activity_wall": { "message": "ಪಾವತಿ-ಅಥವಾ-ಒಪ್ಪಿಗೆ ಗೋಡೆ, ನಿಮ್ಮ ಆಯ್ಕೆಗೆ ಬಿಡಲಾಗಿದೆ" },
+  "onboarding_see_it": { "message": "ಅದು ನಡೆಯುವುದನ್ನು ನೋಡಿ" }
 }

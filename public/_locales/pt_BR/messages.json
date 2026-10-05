@@ -176,5 +176,21 @@
   "share_since": {
     "message": "desde $DATE$",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "O BannerBye se pausou aqui" },
+  "popup_storm_text": {
+    "message": "$HOST$ ficava recarregando ($COUNT$ vezes em poucos segundos), então o BannerBye recuou neste site. Retome para tentar de novo, ou denuncie para que possamos corrigir.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "Denunciar este site" },
+  "popup_proof_refused": {
+    "message": "Recusado aqui: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "Nenhum banner encontrado neste site." },
+  "popup_proof_none": { "message": "Nada para recusar aqui ainda." },
+  "popup_proof_wall": { "message": "Este site pede que você pague ou consinta. Essa escolha é sua — o BannerBye deixa o muro como está." },
+  "popup_activity_wall": { "message": "muro de pagar ou consentir, deixado para você" },
+  "onboarding_see_it": { "message": "Veja acontecer" }
 }

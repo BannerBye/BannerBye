@@ -176,5 +176,21 @@
   "share_since": {
     "message": "siden $DATE$",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye satte sig selv på pause her" },
+  "popup_storm_text": {
+    "message": "$HOST$ blev ved med at genindlæse ($COUNT$ gange på få sekunder), så BannerBye trak sig tilbage på dette websted. Genoptag for at prøve igen, eller rapportér det, så vi kan rette det.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "Rapportér dette websted" },
+  "popup_proof_refused": {
+    "message": "Afvist her: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "Intet banner fundet på dette websted." },
+  "popup_proof_none": { "message": "Intet at afvise her endnu." },
+  "popup_proof_wall": { "message": "Dette websted beder dig betale eller give samtykke. Det valg er dit — BannerBye lader muren stå." },
+  "popup_activity_wall": { "message": "betal-eller-samtykke-mur, overladt til dig" },
+  "onboarding_see_it": { "message": "Se det ske" }
 }

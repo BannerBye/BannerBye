@@ -176,5 +176,21 @@
   "share_since": {
     "message": "$DATE$ నుండి",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye ఇక్కడ తనంతట తానుగా పాజ్ అయ్యింది" },
+  "popup_storm_text": {
+    "message": "$HOST$ మళ్లీ మళ్లీ రీలోడ్ అవుతూనే ఉంది (కొన్ని సెకన్లలో $COUNT$ సార్లు), అందుకే BannerBye ఈ సైట్ నుండి వెనక్కి తగ్గింది. మళ్లీ ప్రయత్నించడానికి కొనసాగించండి, లేదా మేము సరిచేయడానికి నివేదించండి.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "ఈ సైట్‌ను నివేదించండి" },
+  "popup_proof_refused": {
+    "message": "ఇక్కడ తిరస్కరించబడింది: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "ఈ సైట్‌లో బ్యానర్ ఏదీ కనుగొనబడలేదు." },
+  "popup_proof_none": { "message": "ఇక్కడ ఇంకా తిరస్కరించడానికి ఏమీ లేదు." },
+  "popup_proof_wall": { "message": "ఈ సైట్ మిమ్మల్ని చెల్లించమని లేదా సమ్మతి ఇవ్వమని అడుగుతోంది. ఆ ఎంపిక మీదే — BannerBye ఆ గోడను తాకదు." },
+  "popup_activity_wall": { "message": "చెల్లించు-లేదా-సమ్మతించు గోడ, మీకే వదిలేయబడింది" },
+  "onboarding_see_it": { "message": "అది జరగడం చూడండి" }
 }

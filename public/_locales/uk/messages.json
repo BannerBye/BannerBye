@@ -176,5 +176,21 @@
   "share_since": {
     "message": "з $DATE$",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye призупинив себе на цьому сайті" },
+  "popup_storm_text": {
+    "message": "$HOST$ постійно перезавантажувався ($COUNT$ разів за кілька секунд), тому BannerBye відступив на цьому сайті. Відновіть, щоб спробувати знову, або повідомте про сайт, щоб ми це виправили.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "Повідомити про цей сайт" },
+  "popup_proof_refused": {
+    "message": "Відхилено тут: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "На цьому сайті банер не знайдено." },
+  "popup_proof_none": { "message": "Тут поки нічого відхиляти." },
+  "popup_proof_wall": { "message": "Цей сайт просить заплатити або дати згоду. Цей вибір залишається за вами — BannerBye не чіпає цю стіну." },
+  "popup_activity_wall": { "message": "стіна «плати або погоджуйся», вибір за вами" },
+  "onboarding_see_it": { "message": "Подивитися в дії" }
 }

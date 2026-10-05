@@ -176,5 +176,21 @@
   "share_since": {
     "message": "od $DATE$",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye se je tukaj sam ustavil" },
+  "popup_storm_text": {
+    "message": "$HOST$ se je nenehno znova nalagal ($COUNT$-krat v nekaj sekundah), zato se je BannerBye s tega spletnega mesta umaknil. Nadaljuj za ponoven poskus ali ga prijavi, da ga lahko popravimo.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "Prijavi to spletno mesto" },
+  "popup_proof_refused": {
+    "message": "Zavrnjeno tukaj: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "Na tem spletnem mestu ni bilo najdene pasice." },
+  "popup_proof_none": { "message": "Tukaj še ni ničesar za zavrniti." },
+  "popup_proof_wall": { "message": "To spletno mesto te prosi, da plačaš ali privoliš. Izbira ostaja tvoja — BannerBye zidu ne spreminja." },
+  "popup_activity_wall": { "message": "zid »plačaj ali privoli«, prepuščeno tebi" },
+  "onboarding_see_it": { "message": "Poglej, kako deluje" }
 }

@@ -176,5 +176,21 @@
   "share_since": {
     "message": "$DATE$ முதல்",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye இங்கே தன்னைத்தானே இடைநிறுத்தியது" },
+  "popup_storm_text": {
+    "message": "$HOST$ மீண்டும் மீண்டும் ஏற்றப்பட்டுக்கொண்டிருந்தது (சில விநாடிகளில் $COUNT$ முறை), எனவே BannerBye இந்தத் தளத்திலிருந்து பின்வாங்கியது. மீண்டும் முயல தொடரவும், அல்லது நாங்கள் சரிசெய்ய புகாரளிக்கவும்.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "இந்தத் தளத்தைப் புகாரளி" },
+  "popup_proof_refused": {
+    "message": "இங்கே மறுக்கப்பட்டது: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "இந்தத் தளத்தில் பேனர் எதுவும் கிடைக்கவில்லை." },
+  "popup_proof_none": { "message": "இங்கே இன்னும் மறுக்க எதுவும் இல்லை." },
+  "popup_proof_wall": { "message": "இந்தத் தளம் பணம் செலுத்த அல்லது ஒப்புதல் அளிக்கக் கேட்கிறது. அந்தத் தேர்வு உங்களுடையது — BannerBye அந்தச் சுவரைத் தொடுவதில்லை." },
+  "popup_activity_wall": { "message": "பணம்-அல்லது-ஒப்புதல் சுவர், உங்களிடம் விடப்பட்டது" },
+  "onboarding_see_it": { "message": "நடப்பதைப் பாருங்கள்" }
 }

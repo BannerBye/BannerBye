@@ -176,5 +176,21 @@
   "share_since": {
     "message": "mula noong $DATE$",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "Ipinahinto ng BannerBye ang sarili nito rito" },
+  "popup_storm_text": {
+    "message": "Paulit-ulit na nagre-reload ang $HOST$ ($COUNT$ beses sa ilang segundo), kaya umatras muna ang BannerBye sa site na ito. Ituloy para subukang muli, o i-report ito para maayos namin.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "I-report ang site na ito" },
+  "popup_proof_refused": {
+    "message": "Tinanggihan dito: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "Walang nakitang banner sa site na ito." },
+  "popup_proof_none": { "message": "Wala pang tatanggihan dito." },
+  "popup_proof_wall": { "message": "Hinihiling ng site na ito na magbayad ka o pumayag. Ikaw ang bahala sa pagpiling iyon — hinahayaan ng BannerBye ang pader." },
+  "popup_activity_wall": { "message": "pader na magbayad-o-pumayag, ikaw ang bahala" },
+  "onboarding_see_it": { "message": "Panoorin itong mangyari" }
 }

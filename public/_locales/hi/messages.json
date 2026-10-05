@@ -176,5 +176,21 @@
   "share_since": {
     "message": "$DATE$ से",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye ने यहाँ खुद को रोक दिया" },
+  "popup_storm_text": {
+    "message": "$HOST$ बार-बार रीलोड हो रहा था (कुछ सेकंड में $COUNT$ बार), इसलिए BannerBye इस साइट पर पीछे हट गया। फिर से आज़माने के लिए जारी रखें, या रिपोर्ट करें ताकि हम इसे ठीक कर सकें।",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "इस साइट की रिपोर्ट करें" },
+  "popup_proof_refused": {
+    "message": "यहाँ अस्वीकार किया: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "इस साइट पर कोई बैनर नहीं मिला।" },
+  "popup_proof_none": { "message": "यहाँ अभी अस्वीकार करने को कुछ नहीं है।" },
+  "popup_proof_wall": { "message": "यह साइट आपसे भुगतान या सहमति माँगती है। यह चुनाव आपका है — BannerBye इस दीवार को नहीं छूता।" },
+  "popup_activity_wall": { "message": "भुगतान-या-सहमति वाली दीवार, आप पर छोड़ी गई" },
+  "onboarding_see_it": { "message": "इसे होते हुए देखें" }
 }

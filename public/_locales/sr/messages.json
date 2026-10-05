@@ -176,5 +176,21 @@
   "share_since": {
     "message": "од $DATE$",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye се овде сам паузирао" },
+  "popup_storm_text": {
+    "message": "$HOST$ се стално поново учитавао ($COUNT$ пута за неколико секунди), па се BannerBye повукао са овог сајта. Настави да покушаш поново или пријави сајт да бисмо то поправили.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "Пријави овај сајт" },
+  "popup_proof_refused": {
+    "message": "Одбијено овде: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "На овом сајту није пронађен банер." },
+  "popup_proof_none": { "message": "Овде још нема шта да се одбије." },
+  "popup_proof_wall": { "message": "Овај сајт тражи да платиш или пристанеш. Тај избор остаје твој — BannerBye не дира зид." },
+  "popup_activity_wall": { "message": "зид „плати или пристани“, препуштено теби" },
+  "onboarding_see_it": { "message": "Погледај како ради" }
 }

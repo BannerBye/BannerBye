@@ -176,5 +176,21 @@
   "share_since": {
     "message": "自 $DATE$ 以来",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye 已在此网站自动暂停" },
+  "popup_storm_text": {
+    "message": "$HOST$ 不断重新加载(几秒内 $COUNT$ 次),因此 BannerBye 在此网站上暂时退出。点击恢复可重试,或报告此网站以便我们修复。",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "报告此网站" },
+  "popup_proof_refused": {
+    "message": "已在此拒绝:$PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "此网站上未发现横幅。" },
+  "popup_proof_none": { "message": "这里暂时没有需要拒绝的内容。" },
+  "popup_proof_wall": { "message": "此网站要求你付费或同意。选择权在你 — BannerBye 不会动这道墙。" },
+  "popup_activity_wall": { "message": "付费或同意墙,由你决定" },
+  "onboarding_see_it": { "message": "看看实际效果" }
 }

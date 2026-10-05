@@ -176,5 +176,21 @@
   "share_since": {
     "message": "alates $DATE$",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye peatas end siin ise" },
+  "popup_storm_text": {
+    "message": "$HOST$ laadis end pidevalt uuesti ($COUNT$ korda mõne sekundiga), seega tõmbus BannerBye sellelt saidilt tagasi. Jätka, et uuesti proovida, või teata sellest, et saaksime selle parandada.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "Teata sellest saidist" },
+  "popup_proof_refused": {
+    "message": "Siin keeldutud: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "Sellelt saidilt bännerit ei leitud." },
+  "popup_proof_none": { "message": "Siin pole veel millestki keelduda." },
+  "popup_proof_wall": { "message": "See sait palub sul maksta või nõustuda. See valik jääb sinule — BannerBye jätab müüri puutumata." },
+  "popup_activity_wall": { "message": "maksa-või-nõustu-müür, jäetud sinu otsustada" },
+  "onboarding_see_it": { "message": "Vaata, kuidas see töötab" }
 }

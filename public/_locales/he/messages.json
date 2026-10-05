@@ -176,5 +176,21 @@
   "share_since": {
     "message": "מאז $DATE$",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye השהה את עצמו כאן" },
+  "popup_storm_text": {
+    "message": "$HOST$ המשיך להיטען מחדש ($COUNT$ פעמים בכמה שניות), ולכן BannerBye נסוג מהאתר הזה. אפשר לחדש כדי לנסות שוב, או לדווח כדי שנתקן את זה.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "דיווח על האתר הזה" },
+  "popup_proof_refused": {
+    "message": "נדחה כאן: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "לא נמצא באנר באתר הזה." },
+  "popup_proof_none": { "message": "עדיין אין כאן מה לדחות." },
+  "popup_proof_wall": { "message": "האתר הזה מבקש ממך לשלם או להסכים. הבחירה נשארת שלך — BannerBye משאיר את החומה במקומה." },
+  "popup_activity_wall": { "message": "חומת תשלום-או-הסכמה, הבחירה שלך" },
+  "onboarding_see_it": { "message": "לראות את זה קורה" }
 }

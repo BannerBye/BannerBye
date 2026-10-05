@@ -176,5 +176,21 @@
   "share_since": {
     "message": "dal $DATE$",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye si è messo in pausa qui" },
+  "popup_storm_text": {
+    "message": "$HOST$ continuava a ricaricarsi ($COUNT$ volte in pochi secondi), quindi BannerBye si è ritirato da questo sito. Riprendi per riprovare, oppure segnalalo così possiamo sistemarlo.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "Segnala questo sito" },
+  "popup_proof_refused": {
+    "message": "Rifiutato qui: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "Nessun banner trovato su questo sito." },
+  "popup_proof_none": { "message": "Niente da rifiutare qui, per ora." },
+  "popup_proof_wall": { "message": "Questo sito ti chiede di pagare o acconsentire. La scelta resta tua — BannerBye lascia il muro com'è." },
+  "popup_activity_wall": { "message": "muro paga-o-acconsenti, lasciato a te" },
+  "onboarding_see_it": { "message": "Guardalo in azione" }
 }

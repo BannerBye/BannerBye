@@ -176,5 +176,21 @@
   "share_since": {
     "message": "$DATE$ óta",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "A BannerBye itt szüneteltette magát" },
+  "popup_storm_text": {
+    "message": "A(z) $HOST$ folyamatosan újratöltődött ($COUNT$ alkalommal néhány másodperc alatt), ezért a BannerBye visszavonult erről az oldalról. Folytasd az újrapróbáláshoz, vagy jelentsd, hogy kijavíthassuk.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "Oldal jelentése" },
+  "popup_proof_refused": {
+    "message": "Elutasítva itt: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "Ezen az oldalon nem található banner." },
+  "popup_proof_none": { "message": "Itt még nincs mit elutasítani." },
+  "popup_proof_wall": { "message": "Ez az oldal fizetést vagy hozzájárulást kér tőled. A döntés a tiéd — a BannerBye nem nyúl a falhoz." },
+  "popup_activity_wall": { "message": "fizess-vagy-fogadd-el fal, rád bízva" },
+  "onboarding_see_it": { "message": "Nézd meg működés közben" }
 }

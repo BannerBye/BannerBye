@@ -176,5 +176,21 @@
   "share_since": {
     "message": "από $DATE$",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "Το BannerBye έθεσε τον εαυτό του σε παύση εδώ" },
+  "popup_storm_text": {
+    "message": "Το $HOST$ φόρτωνε ξανά συνεχώς ($COUNT$ φορές σε λίγα δευτερόλεπτα), γι' αυτό το BannerBye αποσύρθηκε από αυτόν τον ιστότοπο. Συνέχισε για να δοκιμάσεις ξανά ή ανάφερέ το για να το διορθώσουμε.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "Αναφορά αυτού του ιστότοπου" },
+  "popup_proof_refused": {
+    "message": "Απορρίφθηκε εδώ: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "Δεν βρέθηκε banner σε αυτόν τον ιστότοπο." },
+  "popup_proof_none": { "message": "Τίποτα για απόρριψη εδώ ακόμα." },
+  "popup_proof_wall": { "message": "Αυτός ο ιστότοπος σου ζητά να πληρώσεις ή να συναινέσεις. Η επιλογή μένει δική σου — το BannerBye αφήνει τον τοίχο ως έχει." },
+  "popup_activity_wall": { "message": "τοίχος «πλήρωσε ή συναίνεσε», στην επιλογή σου" },
+  "onboarding_see_it": { "message": "Δες το να συμβαίνει" }
 }

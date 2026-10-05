@@ -176,5 +176,21 @@
   "share_since": {
     "message": "nuo $DATE$",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye čia pats save pristabdė" },
+  "popup_storm_text": {
+    "message": "$HOST$ vis persikraudavo ($COUNT$ kartus per kelias sekundes), todėl BannerBye pasitraukė iš šios svetainės. Tęsk, kad bandytum dar kartą, arba praneši, kad galėtume tai sutvarkyti.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "Pranešti apie šią svetainę" },
+  "popup_proof_refused": {
+    "message": "Atmesta čia: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "Šioje svetainėje reklamjuostė nerasta." },
+  "popup_proof_none": { "message": "Kol kas čia nėra ko atmesti." },
+  "popup_proof_wall": { "message": "Ši svetainė prašo sumokėti arba sutikti. Šis pasirinkimas lieka tavo — BannerBye šios sienos neliečia." },
+  "popup_activity_wall": { "message": "„mokėk arba sutik“ siena, palikta tau" },
+  "onboarding_see_it": { "message": "Pažiūrėk, kaip tai veikia" }
 }

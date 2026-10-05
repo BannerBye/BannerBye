@@ -176,5 +176,21 @@
   "share_since": {
     "message": "ከ$DATE$ ጀምሮ",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye እዚህ ራሱን ለአፍታ አቁሟል" },
+  "popup_storm_text": {
+    "message": "$HOST$ በተደጋጋሚ እንደገና ተጭኗል (በጥቂት ሰከንዶች ውስጥ $COUNT$ ጊዜ)፣ ስለዚህ BannerBye በዚህ ጣቢያ ላይ ወደ ኋላ ተመልሷል። እንደገና ለመሞከር ቀጥል፣ ወይም እንድናስተካክለው ሪፖርት አድርግ።",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "ይህን ጣቢያ ሪፖርት አድርግ" },
+  "popup_proof_refused": {
+    "message": "እዚህ ተከልክሏል፦ $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "በዚህ ጣቢያ ላይ ባነር አልተገኘም።" },
+  "popup_proof_none": { "message": "እዚህ እስካሁን የሚከለከል ነገር የለም።" },
+  "popup_proof_wall": { "message": "ይህ ጣቢያ እንድትከፍል ወይም እንድትስማማ ይጠይቃል። ምርጫው ያንተ ነው — BannerBye ግድግዳውን አይነካም።" },
+  "popup_activity_wall": { "message": "የክፍያ-ወይም-ስምምነት ግድግዳ፣ ለአንተ የተተወ" },
+  "onboarding_see_it": { "message": "ሲሆን ተመልከት" }
 }

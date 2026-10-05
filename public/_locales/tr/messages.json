@@ -176,5 +176,21 @@
   "share_since": {
     "message": "$DATE$ tarihinden beri",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye burada kendini duraklattı" },
+  "popup_storm_text": {
+    "message": "$HOST$ sürekli yeniden yükleniyordu (birkaç saniyede $COUNT$ kez), bu yüzden BannerBye bu sitede geri çekildi. Tekrar denemek için devam et ya da düzeltebilmemiz için bildir.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "Bu siteyi bildir" },
+  "popup_proof_refused": {
+    "message": "Burada reddedildi: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "Bu sitede banner bulunamadı." },
+  "popup_proof_none": { "message": "Burada henüz reddedilecek bir şey yok." },
+  "popup_proof_wall": { "message": "Bu site senden ödeme yapmanı ya da onay vermeni istiyor. Bu seçim sana ait — BannerBye bu duvara dokunmaz." },
+  "popup_activity_wall": { "message": "öde-ya-da-onayla duvarı, sana bırakıldı" },
+  "onboarding_see_it": { "message": "Nasıl çalıştığını gör" }
 }

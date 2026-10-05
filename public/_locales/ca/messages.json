@@ -176,5 +176,21 @@
   "share_since": {
     "message": "des de $DATE$",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye s'ha posat en pausa aquí" },
+  "popup_storm_text": {
+    "message": "$HOST$ es recarregava sense parar ($COUNT$ vegades en pocs segons), així que BannerBye s'ha retirat d'aquest lloc. Reprèn per tornar-ho a provar, o informa'n perquè ho puguem arreglar.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "Informa d'aquest lloc" },
+  "popup_proof_refused": {
+    "message": "Rebutjat aquí: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "No s'ha trobat cap bàner en aquest lloc." },
+  "popup_proof_none": { "message": "Encara no hi ha res a rebutjar aquí." },
+  "popup_proof_wall": { "message": "Aquest lloc et demana pagar o consentir. L'elecció és teva — BannerBye deixa el mur tal com està." },
+  "popup_activity_wall": { "message": "mur de pagar o consentir, a la teva elecció" },
+  "onboarding_see_it": { "message": "Mira-ho en acció" }
 }

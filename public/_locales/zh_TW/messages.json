@@ -176,5 +176,21 @@
   "share_since": {
     "message": "自 $DATE$ 起",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye 已在此網站自動暫停" },
+  "popup_storm_text": {
+    "message": "$HOST$ 不斷重新載入(幾秒內 $COUNT$ 次),因此 BannerBye 在此網站上暫時退出。點選繼續可重試,或回報此網站以便我們修正。",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "回報此網站" },
+  "popup_proof_refused": {
+    "message": "已在此拒絕:$PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "此網站上未發現橫幅。" },
+  "popup_proof_none": { "message": "這裡暫時沒有需要拒絕的內容。" },
+  "popup_proof_wall": { "message": "此網站要求你付費或同意。選擇權在你 — BannerBye 不會動這道牆。" },
+  "popup_activity_wall": { "message": "付費或同意牆,由你決定" },
+  "onboarding_see_it": { "message": "看看實際效果" }
 }

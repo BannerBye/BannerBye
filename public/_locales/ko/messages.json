@@ -176,5 +176,21 @@
   "share_since": {
     "message": "$DATE$부터",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye가 이 사이트에서 스스로 일시 중지했습니다" },
+  "popup_storm_text": {
+    "message": "$HOST$이(가) 계속 새로고침되어(몇 초 동안 $COUNT$회) BannerBye가 이 사이트에서 물러났습니다. 다시 시도하려면 재개하거나, 고칠 수 있도록 신고해 주세요.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "이 사이트 신고" },
+  "popup_proof_refused": {
+    "message": "여기서 거부됨: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "이 사이트에서 배너를 찾지 못했습니다." },
+  "popup_proof_none": { "message": "아직 여기서 거부할 것이 없습니다." },
+  "popup_proof_wall": { "message": "이 사이트는 결제 또는 동의를 요구합니다. 그 선택은 당신의 몫입니다 — BannerBye는 이 벽을 그대로 둡니다." },
+  "popup_activity_wall": { "message": "결제 또는 동의 벽, 당신의 선택에 맡김" },
+  "onboarding_see_it": { "message": "직접 확인하기" }
 }

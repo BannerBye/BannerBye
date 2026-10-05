@@ -176,5 +176,21 @@
   "share_since": {
     "message": "od $DATE$",
     "placeholders": { "date": { "content": "$1" } }
-  }
+  },
+
+  "popup_storm_label": { "message": "BannerBye se ovdje sam pauzirao" },
+  "popup_storm_text": {
+    "message": "$HOST$ se stalno ponovno učitavao ($COUNT$ puta u nekoliko sekundi), pa se BannerBye povukao s ove stranice. Nastavi da pokušaš ponovno ili prijavi stranicu kako bismo to popravili.",
+    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+  },
+  "popup_storm_report": { "message": "Prijavi ovu stranicu" },
+  "popup_proof_refused": {
+    "message": "Odbijeno ovdje: $PLATFORM$ · $WHEN$",
+    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+  },
+  "popup_proof_clean": { "message": "Na ovoj stranici nije pronađen banner." },
+  "popup_proof_none": { "message": "Ovdje još nema ničega za odbiti." },
+  "popup_proof_wall": { "message": "Ova stranica traži da platiš ili pristaneš. Taj izbor ostaje tvoj — BannerBye ne dira zid." },
+  "popup_activity_wall": { "message": "zid „plati ili pristani“, prepušteno tebi" },
+  "onboarding_see_it": { "message": "Pogledaj kako radi" }
 }
