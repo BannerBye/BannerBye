@@ -42,6 +42,14 @@ export interface DetectionResult {
 }
 
 /**
+ * v0.4.8 (bouwpunt 7): de structurele bannercheck is gedeeld met laag 5 van
+ * de extensie (`src/lib/autoclick/banner-structure.ts`). analyze.ts plakt
+ * die functie vóór `detectInPage` in één evaluate-string, zodat dit de
+ * enige vrije variabele is. Zie `buildDetectScript()`.
+ */
+declare const bannerStructureSignals: (el: Element) => string[];
+
+/**
  * Wordt geserialiseerd naar de browser. Houd 'm volledig self-contained.
  */
 export function detectInPage(): DetectionResult {
@@ -115,8 +123,17 @@ export function detectInPage(): DetectionResult {
     const style = window.getComputedStyle(el as HTMLElement);
     const z = parseInt(style.zIndex || '0', 10) || 0;
     const fixed = style.position === 'fixed' || style.position === 'sticky';
+    // v0.4.8 (bouwpunt 7): zelfde structurele eis als laag 5 — een container
+    // die alleen óver cookies praat (zijmenu, privacyblog) is geen banner.
+    let structural = 0;
+    try {
+      structural = bannerStructureSignals(el).length;
+    } catch {
+      structural = 0;
+    }
+    if (structural < 2) continue;
     // Score: fixed/sticky + hoge z-index + korte tekst = waarschijnlijker banner.
-    const score = (fixed ? 1000 : 0) + Math.min(z, 100000) / 100 + (1500 - txt.length) / 100;
+    const score = (fixed ? 1000 : 0) + structural * 50 + Math.min(z, 100000) / 100 + (1500 - txt.length) / 100;
     if (score > best) {
       best = score;
       banner = el;
@@ -151,6 +168,11 @@ export function detectInPage(): DetectionResult {
       // Bijna elke consent-banner heeft minstens 2 losse acties
       // (accept + reject, of accept + manage). Minder is te zwak een signaal.
       if (clickCount < 2) continue;
+      // v0.4.8: ook het vangnet eist structuur (anders is elke fixed
+      // navigatiebalk met twee links een "banner").
+      let structuralWeak = 0;
+      try { structuralWeak = bannerStructureSignals(el).length; } catch { structuralWeak = 0; }
+      if (structuralWeak < 2) continue;
       const z = parseInt(style.zIndex || '0', 10) || 0;
       const score = Math.min(z, 100000) / 100 + (1500 - txt.length) / 100;
       if (score > bestWeak) {
@@ -250,4 +272,13 @@ export function detectInPage(): DetectionResult {
     weakSignal: realBanner ? weakSignal : false,
     pageLang: document.documentElement.lang || '',
   };
+}
+
+/**
+ * Bouwt de evaluate-string: gedeelde structuurfunctie + detector in één
+ * expressie, zonder `new Function` (dat zou onder een strenge pagina-CSP
+ * vallen). `page.evaluate(buildDetectScript())`.
+ */
+export function buildDetectScript(structureFnSource: string): string {
+  return `(() => { const bannerStructureSignals = (${structureFnSource}); return (${detectInPage.toString()})(); })()`;
 }

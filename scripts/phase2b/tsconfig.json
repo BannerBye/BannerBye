@@ -11,5 +11,5 @@
     "lib": ["ES2022", "DOM"],
     "types": ["node"]
   },
-  "include": ["*.ts", "../../src/lib/autoclick/keywords.ts"]
+  "include": ["*.ts", "../../src/lib/autoclick/keywords.ts", "../../src/lib/autoclick/banner-structure.ts"]
 }

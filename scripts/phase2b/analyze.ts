@@ -45,7 +45,10 @@ import {
   type HostWork,
 } from './redis.ts';
 import { sendOwnerSummaryEmail } from './notify.ts';
-import { detectInPage, type DetectionResult } from './detect.ts';
+import { buildDetectScript, type DetectionResult } from './detect.ts';
+import { bannerStructureSignals } from '../../src/lib/autoclick/banner-structure.ts';
+
+const DETECT_SCRIPT = buildDetectScript(bannerStructureSignals.toString());
 import {
   classify,
   classifyStepPanel,
@@ -167,7 +170,7 @@ async function analyzeHost(
       timeout: NAV_TIMEOUT_MS,
     });
     await page.waitForTimeout(WAIT_MS);
-    const detection = (await page.evaluate(detectInPage)) as DetectionResult;
+    const detection = (await page.evaluate(DETECT_SCRIPT)) as DetectionResult;
     const classification = classify(detection);
 
     // Fase 2: geen directe reject, wél een step-into knop → klik + heranalyseer.
@@ -182,7 +185,7 @@ async function analyzeHost(
           .first()
           .click({ timeout: 3000 });
         await page.waitForTimeout(PANEL_WAIT_MS);
-        const panel = (await page.evaluate(detectInPage)) as DetectionResult;
+        const panel = (await page.evaluate(DETECT_SCRIPT)) as DetectionResult;
         const panelClass = classifyStepPanel(panel, btn, detection.cmps);
         return {
           host,

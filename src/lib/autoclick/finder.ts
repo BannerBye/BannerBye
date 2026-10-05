@@ -34,6 +34,7 @@
  * timeout nog een on-device vertaling van de knoptekst naar het Engels.
  */
 
+import { looksStructurallyLikeBanner } from './banner-structure.ts';
 import {
   isRejectText,
   isAmbiguousRejectText,
@@ -363,7 +364,10 @@ function isInCookieBanner(el: HTMLElement): boolean {
         rect.height >= 80 &&
         rect.width <= window.innerWidth * 1.1;
 
-      if (reasonablySized && hasCookieContext(text)) {
+      // v0.4.8 (bouwpunt 7): tekst over cookies is niet genoeg — het
+      // zijmenu van duckduckgo.com (de) praat ook over cookies. Eis daarnaast
+      // minstens twee structurele bannerkenmerken (zie banner-structure.ts).
+      if (reasonablySized && hasCookieContext(text) && looksStructurallyLikeBanner(current)) {
         return true;
       }
     }
