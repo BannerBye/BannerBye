@@ -67,6 +67,12 @@ const ALWAYS_PREHIDE_SELECTORS: string[] = [
   '#cmpwrapper',
   // Termly
   '#termly-code-snippet-support',
+  // Vodafone DIP-consent (vodafone.de). De Autoconsent-regel kent deze
+  // prehide ook, maar die motor wordt pas on-demand geïnjecteerd; in Safari
+  // met meerdere extensies was de banner daardoor even zichtbaar (melding
+  // gebruiker, 13 okt 2026). Hier verbergt prehide hem al op document_start.
+  '.dip-consent',
+  '.dip-consent-container',
   // Veelvoorkomende, redelijk specifieke banner-ID's
   '#cookie-notice',
   '#cookieConsent',
