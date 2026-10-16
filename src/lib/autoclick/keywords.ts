@@ -43,6 +43,10 @@ export const REJECT_KEYWORDS: readonly string[] = [
   'decline all',
   'decline all cookies',
   'decline',
+  // v0.4.10: TermsFeed Privacy Consent (freeprivacypolicy.com) — exacte match.
+  'i decline',
+  'i do not agree',
+  'i don\'t agree',
   'deny all',
   'deny',
   'refuse all',

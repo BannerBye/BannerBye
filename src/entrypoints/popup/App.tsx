@@ -582,10 +582,19 @@ export function App() {
                   ])
                 : hereEntry?.outcome === 'wall'
                   ? t('popup_proof_wall')
-                  : hereEntry?.outcome === 'clean'
-                    ? t('popup_proof_clean')
-                    : t('popup_proof_none')}
+                  : t('popup_proof_none')}
             </p>
+            {/* v0.4.10: 'clean' toonde "No banner found on this site." — ook
+                als er wél een banner stond die laag 5 niet herkende of die
+                niets te weigeren had (alleen "Accept"). Dat las als een
+                leugen (melding gebruiker 16 okt 2026). Nu de eerlijke tekst
+                plus direct een meldknop, zodat die niet onder een
+                mijlpaalkaart uit beeld kan vallen. */}
+            {hereEntry?.outcome !== 'refused' && hereEntry?.outcome !== 'wall' && (
+              <button type="button" className="bb-storm-report bb-proof-report" onClick={reportBrokenSite}>
+                {t('popup_storm_report')}
+              </button>
+            )}
           </>
         )}
       </section>

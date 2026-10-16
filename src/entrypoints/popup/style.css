@@ -784,3 +784,13 @@ body {
   .bb-pause:active { background: rgba(232, 90, 44, 0.08); border-color: var(--ember); }
   .bb-link:active { color: var(--ember); }
 }
+
+/* v0.4.10: meldknop direct onder de bewijsregel (zie App.tsx). */
+.bb-proof-report {
+  margin-top: 6px;
+  padding: 4px 0;
+  color: var(--smoke);
+}
+.bb-proof-report:hover {
+  color: var(--ink);
+}

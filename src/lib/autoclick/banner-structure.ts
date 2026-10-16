@@ -45,7 +45,26 @@ export function bannerStructureSignals(el: Element): BannerStructureSignal[] {
     role === 'dialog' || role === 'alertdialog' || ariaModal || el.tagName === 'DIALOG'
       ? true
       : !!el.querySelector('[role="dialog"],[role="alertdialog"],[aria-modal="true"],dialog');
-  if (innerDialog) signals.push('dialog');
+  // v0.4.10: ook een dialog-wrapper vlak BOVEN de container telt. TermsFeed
+  // (freeprivacypolicy.com, melding gebruiker 16 okt 2026) zet role="dialog"
+  // op een fixed wrapper van 0 px hoog met z-index 9999; de zichtbare box is
+  // een kind daarvan met z-index 2 en zonder dialog-rol. Daardoor haalde de
+  // box maar één signaal (actionPair) en klikte laag 5 "I Decline" nooit.
+  // Alleen 'dialog' erven, niet topZ: een zijmenu in een hoge-z-wrapper mag
+  // hier geen extra signaal van krijgen (#310).
+  let ancestorDialog = false;
+  if (!innerDialog) {
+    let up: Element | null = el.parentElement;
+    for (let i = 0; up && i < 4 && !ancestorDialog; i++, up = up.parentElement) {
+      const r = (up.getAttribute('role') || '').toLowerCase();
+      ancestorDialog =
+        r === 'dialog' ||
+        r === 'alertdialog' ||
+        (up.getAttribute('aria-modal') || '').toLowerCase() === 'true' ||
+        up.tagName === 'DIALOG';
+    }
+  }
+  if (innerDialog || ancestorDialog) signals.push('dialog');
 
   // overlay — balk (volle breedte, beperkte hoogte) of modal (groot blok),
   // maar géén smalle hoge zijbalk zoals een navigatiemenu.
@@ -75,7 +94,7 @@ export function bannerStructureSignals(el: Element): BannerStructureSignal[] {
   // cmpHint — op het element zelf of één niveau dieper (veel CMP's wikkelen
   // hun banner in een anonieme fixed wrapper).
   const CMP_HINT =
-    /cookie|consent|cmp|gdpr|privacy[-_]?(banner|notice|bar|wall)|onetrust|cookiebot|usercentrics|didomi|sp_message|qc-cmp|klaro|osano|truste|trustarc|cc-banner|cc-window|iubenda|complianz|borlabs|tarteaucitron|axeptio|cookieyes|termly/i;
+    /cookie|consent|cmp|gdpr|privacy[-_]?(banner|notice|bar|wall)|onetrust|cookiebot|usercentrics|didomi|sp_message|qc-cmp|klaro|osano|truste|trustarc|cc-banner|cc-window|iubenda|complianz|borlabs|tarteaucitron|axeptio|cookieyes|termly|termsfeed/i;
   const idClass = (node: Element): string =>
     `${node.id || ''} ${typeof node.className === 'string' ? node.className : ''} ${node.getAttribute('data-testid') || ''}`;
   let hint = CMP_HINT.test(idClass(el));

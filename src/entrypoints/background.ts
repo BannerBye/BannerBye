@@ -166,6 +166,16 @@ async function syncFlagSetterScripts(settings: SyncedSettings): Promise<void> {
     // MV2 fallback — niets te doen. v0.1.x gedrag blijft.
     return;
   }
+  // v0.4.10: Safari slaat de dynamische registratie over. Safari kent
+  // chrome.scripting wél, maar (1) de Xcode-wrapper bundelt `state/` niet
+  // mee, dus 'bb-flag-active' faalde bij élke start met "Unable to find
+  // state/flag-active.js" in de console (melding gebruiker 16 okt 2026), en
+  // (2) gpc/tcf/cmp staan in het Safari-manifest al statisch, dus de
+  // dynamische kopieën draaiden er dubbel. Pauze per site loopt in Safari
+  // via de localStorage-marker van bridge.content.ts (0.4.6).
+  if ((import.meta as unknown as { env: { BROWSER: string } }).env.BROWSER === 'safari') {
+    return;
+  }
 
   // STEP 1: unregister bestaande BB-scripts (alle 6 IDs, idempotent).
   try {
