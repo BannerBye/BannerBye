@@ -36,6 +36,20 @@
       "label": "autoClickGuard",
       "version": "0.4.7",
       "fixedAt": "2026-10-04"
+    },
+    {
+      "hostname": "freeprivacypolicy.com",
+      "reason": "TermsFeed consent banner now refused automatically: its dialog wrapper was not recognised as a banner (0.4.10)",
+      "label": "bannerDetection",
+      "version": "0.4.10",
+      "fixedAt": "2026-10-18"
+    },
+    {
+      "hostname": "vodafone.de",
+      "reason": "Vodafone consent banner hidden from the very first paint in Safari, instead of flashing while the refusal engine loads (0.4.10)",
+      "label": "prehide",
+      "version": "0.4.10",
+      "fixedAt": "2026-10-18"
     }
   ]
 }
