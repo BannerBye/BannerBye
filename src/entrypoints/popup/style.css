@@ -818,7 +818,18 @@ body {
   text-transform: uppercase;
   color: var(--smoke);
 }
+.bb-ticket-row {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+.bb-ticket-row .bb-activity-host {
+  max-width: 100%;
+}
 .bb-ticket-row .bb-activity-meta {
-  flex: 1 1 auto;
+  flex: 0 0 auto;
+  width: 100%;
   white-space: normal;
+  text-align: left;
+  color: var(--ink);
 }
