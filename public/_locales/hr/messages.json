@@ -361,7 +361,7 @@
     "message": "Ovdje još nema ničega za odbiti."
   },
   "popup_proof_wall": {
-    "message": "Ova stranica traži da platiš ili pristaneš. Taj izbor ostaje tvoj — BannerBye ne dira zid."
+    "message": "Platiti ili pristati, oboje je da. BannerBye kaže samo ne, a ova stranica to ne nudi. Izbor je vaš."
   },
   "popup_activity_wall": {
     "message": "zid „plati ili pristani“, prepušteno tebi"
@@ -404,5 +404,11 @@
         "content": "$1"
       }
     }
+  },
+  "popup_ticket_wall": {
+    "message": "Vaša prijava: platiti ili pristati, oboje je da. BannerBye kaže samo ne, a ova stranica to ne nudi. Izbor je vaš."
+  },
+  "popup_ticket_accept_only": {
+    "message": "Vaša prijava: „prihvati“ je jedini gumb, a to je da. BannerBye kaže samo ne, a ova stranica to ne nudi. Izbor je vaš."
   }
 }

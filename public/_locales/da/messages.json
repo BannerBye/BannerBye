@@ -361,7 +361,7 @@
     "message": "Intet at afvise her endnu."
   },
   "popup_proof_wall": {
-    "message": "Dette websted beder dig betale eller give samtykke. Det valg er dit — BannerBye lader muren stå."
+    "message": "Betal eller samtyk er begge et ja. BannerBye siger kun nej, og det tilbyder dette site ikke. Valget er dit."
   },
   "popup_activity_wall": {
     "message": "betal-eller-samtykke-mur, overladt til dig"
@@ -404,5 +404,11 @@
         "content": "$1"
       }
     }
+  },
+  "popup_ticket_wall": {
+    "message": "Din rapport: betal eller samtyk er begge et ja. BannerBye siger kun nej, og det tilbyder dette site ikke. Valget er dit."
+  },
+  "popup_ticket_accept_only": {
+    "message": "Din rapport: ”accepter” er den eneste knap, og det er et ja. BannerBye siger kun nej, og det tilbyder dette site ikke. Valget er dit."
   }
 }

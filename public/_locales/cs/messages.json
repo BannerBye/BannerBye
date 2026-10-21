@@ -361,7 +361,7 @@
     "message": "Zatím tu není co odmítnout."
   },
   "popup_proof_wall": {
-    "message": "Tento web po tobě chce platbu nebo souhlas. Volba zůstává na tobě — BannerBye zeď nechává být."
+    "message": "Zaplatit nebo souhlasit je v obou případech ano. BannerBye říká jen ne, a to tento web nenabízí. Volba je na vás."
   },
   "popup_activity_wall": {
     "message": "zeď „zaplať, nebo souhlas“, ponecháno na tobě"
@@ -404,5 +404,11 @@
         "content": "$1"
       }
     }
+  },
+  "popup_ticket_wall": {
+    "message": "Vaše hlášení: zaplatit nebo souhlasit je v obou případech ano. BannerBye říká jen ne, a to tento web nenabízí. Volba je na vás."
+  },
+  "popup_ticket_accept_only": {
+    "message": "Vaše hlášení: „přijmout“ je jediné tlačítko, a to je ano. BannerBye říká jen ne, a to tento web nenabízí. Volba je na vás."
   }
 }

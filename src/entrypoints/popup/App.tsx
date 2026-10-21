@@ -125,8 +125,14 @@ function ticketLine(ticket: TicketEntry | undefined): string | null {
         ? t('popup_ticket_fixed_installed', ticket.version)
         : t('popup_ticket_fixed_update', ticket.version);
     }
-    case 'not-a-bug':
+    case 'not-a-bug': {
+      // Vaste notitiecodes uit de pijplijn/admin krijgen een vertaalde uitleg;
+      // alles anders is een vrije (Engelse) notitie van Robin.
+      const code = (ticket.note ?? '').trim().toLowerCase();
+      if (code === 'wall' || code === '') return t('popup_ticket_wall');
+      if (code === 'accept-only') return t('popup_ticket_accept_only');
       return t('popup_ticket_not_a_bug', ticket.note ?? '');
+    }
     default:
       return t('popup_ticket_received');
   }

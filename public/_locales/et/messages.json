@@ -361,7 +361,7 @@
     "message": "Siin pole veel millestki keelduda."
   },
   "popup_proof_wall": {
-    "message": "See sait palub sul maksta või nõustuda. See valik jääb sinule — BannerBye jätab müüri puutumata."
+    "message": "Maksta või nõustuda on mõlemad jah. BannerBye ütleb ainult ei, ja seda see sait ei paku. Valik on sinu."
   },
   "popup_activity_wall": {
     "message": "maksa-või-nõustu-müür, jäetud sinu otsustada"
@@ -404,5 +404,11 @@
         "content": "$1"
       }
     }
+  },
+  "popup_ticket_wall": {
+    "message": "Sinu teade: maksta või nõustuda on mõlemad jah. BannerBye ütleb ainult ei, ja seda see sait ei paku. Valik on sinu."
+  },
+  "popup_ticket_accept_only": {
+    "message": "Sinu teade: „nõustu“ on ainus nupp ja see on jah. BannerBye ütleb ainult ei, ja seda see sait ei paku. Valik on sinu."
   }
 }

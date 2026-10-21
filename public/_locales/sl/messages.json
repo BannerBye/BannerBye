@@ -361,7 +361,7 @@
     "message": "Tukaj še ni ničesar za zavrniti."
   },
   "popup_proof_wall": {
-    "message": "To spletno mesto te prosi, da plačaš ali privoliš. Izbira ostaja tvoja — BannerBye zidu ne spreminja."
+    "message": "Plačati ali privoliti je oboje da. BannerBye reče samo ne, tega pa ta stran ne ponuja. Izbira je vaša."
   },
   "popup_activity_wall": {
     "message": "zid »plačaj ali privoli«, prepuščeno tebi"
@@ -404,5 +404,11 @@
         "content": "$1"
       }
     }
+  },
+  "popup_ticket_wall": {
+    "message": "Vaša prijava: plačati ali privoliti je oboje da. BannerBye reče samo ne, tega pa ta stran ne ponuja. Izbira je vaša."
+  },
+  "popup_ticket_accept_only": {
+    "message": "Vaša prijava: »sprejmi« je edini gumb, in to je da. BannerBye reče samo ne, tega pa ta stran ne ponuja. Izbira je vaša."
   }
 }

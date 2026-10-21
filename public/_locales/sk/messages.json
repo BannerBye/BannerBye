@@ -361,7 +361,7 @@
     "message": "Zatiaľ tu nie je čo odmietnuť."
   },
   "popup_proof_wall": {
-    "message": "Tento web od teba chce platbu alebo súhlas. Voľba zostáva na tebe — BannerBye stenu necháva tak."
+    "message": "Zaplatiť alebo súhlasiť je v oboch prípadoch áno. BannerBye hovorí len nie, a to táto stránka neponúka. Voľba je na vás."
   },
   "popup_activity_wall": {
     "message": "stena „zaplať alebo súhlas“, ponechané na tebe"
@@ -404,5 +404,11 @@
         "content": "$1"
       }
     }
+  },
+  "popup_ticket_wall": {
+    "message": "Vaše hlásenie: zaplatiť alebo súhlasiť je v oboch prípadoch áno. BannerBye hovorí len nie, a to táto stránka neponúka. Voľba je na vás."
+  },
+  "popup_ticket_accept_only": {
+    "message": "Vaše hlásenie: „prijať“ je jediné tlačidlo, a to je áno. BannerBye hovorí len nie, a to táto stránka neponúka. Voľba je na vás."
   }
 }

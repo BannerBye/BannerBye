@@ -361,7 +361,7 @@
     "message": "這裡暫時沒有需要拒絕的內容。"
   },
   "popup_proof_wall": {
-    "message": "此網站要求你付費或同意。選擇權在你 — BannerBye 不會動這道牆。"
+    "message": "付費或同意，兩者都是「是」。BannerBye 只會說「否」，而這個網站不提供這個選項。選擇權在你。"
   },
   "popup_activity_wall": {
     "message": "付費或同意牆,由你決定"
@@ -404,5 +404,11 @@
         "content": "$1"
       }
     }
+  },
+  "popup_ticket_wall": {
+    "message": "你的回報：付費或同意，兩者都是「是」。BannerBye 只會說「否」，而這個網站不提供這個選項。選擇權在你。"
+  },
+  "popup_ticket_accept_only": {
+    "message": "你的回報：「接受」是唯一的按鈕，而那就是「是」。BannerBye 只會說「否」，而這個網站不提供這個選項。選擇權在你。"
   }
 }

@@ -361,7 +361,7 @@
     "message": "Itt még nincs mit elutasítani."
   },
   "popup_proof_wall": {
-    "message": "Ez az oldal fizetést vagy hozzájárulást kér tőled. A döntés a tiéd — a BannerBye nem nyúl a falhoz."
+    "message": "A fizetés és a hozzájárulás egyaránt igen. A BannerBye csak nemet mond, ezt pedig ez az oldal nem kínálja. A döntés a tiéd."
   },
   "popup_activity_wall": {
     "message": "fizess-vagy-fogadd-el fal, rád bízva"
@@ -404,5 +404,11 @@
         "content": "$1"
       }
     }
+  },
+  "popup_ticket_wall": {
+    "message": "A bejelentésed: a fizetés és a hozzájárulás egyaránt igen. A BannerBye csak nemet mond, ezt pedig ez az oldal nem kínálja. A döntés a tiéd."
+  },
+  "popup_ticket_accept_only": {
+    "message": "A bejelentésed: az „elfogadom” az egyetlen gomb, és az egy igen. A BannerBye csak nemet mond, ezt pedig ez az oldal nem kínálja. A döntés a tiéd."
   }
 }

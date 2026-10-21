@@ -612,7 +612,7 @@ async function main(): Promise<void> {
           redis,
           r.host,
           'not-a-bug',
-          'This site offers no way to refuse, only to accept. Nothing for BannerBye to click.',
+          'accept-only', // notitiecode: de popup vertaalt 'm (popup_ticket_accept_only)
         );
       }
     }

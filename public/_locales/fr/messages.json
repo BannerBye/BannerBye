@@ -83,7 +83,7 @@
     "message": "Rien à refuser ici pour l’instant."
   },
   "popup_proof_wall": {
-    "message": "Ce site demande de payer ou de consentir. Ce choix reste le vôtre — BannerBye laisse le mur en place."
+    "message": "Payer ou consentir, c'est deux fois oui. BannerBye ne dit que non, et ce site ne le propose pas. Le choix vous appartient."
   },
   "popup_activity_wall": {
     "message": "mur payer-ou-consentir, laissé à vous"
@@ -404,5 +404,11 @@
         "content": "$1"
       }
     }
+  },
+  "popup_ticket_wall": {
+    "message": "Votre signalement : payer ou consentir, c'est deux fois oui. BannerBye ne dit que non, et ce site ne le propose pas. Le choix vous appartient."
+  },
+  "popup_ticket_accept_only": {
+    "message": "Votre signalement : « accepter » est le seul bouton, et c'est un oui. BannerBye ne dit que non, et ce site ne le propose pas. Le choix vous appartient."
   }
 }

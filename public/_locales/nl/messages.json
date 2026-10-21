@@ -83,7 +83,7 @@
     "message": "Hier nog niets te weigeren."
   },
   "popup_proof_wall": {
-    "message": "Deze site vraagt betalen of toestemmen. Die keuze blijft van jou — BannerBye laat de muur staan."
+    "message": "Betalen of toestemmen is allebei een ja. BannerBye zegt alleen nee, en dat biedt deze site niet aan. De keuze blijft aan jou."
   },
   "popup_activity_wall": {
     "message": "betaal-of-toestemmen-muur, aan jou gelaten"
@@ -404,5 +404,11 @@
         "content": "$1"
       }
     }
+  },
+  "popup_ticket_wall": {
+    "message": "Jouw melding: betalen of toestemmen is allebei een ja. BannerBye zegt alleen nee, en dat biedt deze site niet aan. De keuze blijft aan jou."
+  },
+  "popup_ticket_accept_only": {
+    "message": "Jouw melding: 'accepteren' is de enige knop, en dat is een ja. BannerBye zegt alleen nee, en dat biedt deze site niet aan. De keuze blijft aan jou."
   }
 }

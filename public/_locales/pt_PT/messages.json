@@ -361,7 +361,7 @@
     "message": "Ainda nada para recusar aqui."
   },
   "popup_proof_wall": {
-    "message": "Este site pede-te que pagues ou consintas. Essa escolha é tua — o BannerBye deixa o muro como está."
+    "message": "Pagar ou consentir são ambos um sim. O BannerBye só diz não, e este site não o oferece. A escolha é tua."
   },
   "popup_activity_wall": {
     "message": "muro de pagar ou consentir, deixado ao teu critério"
@@ -404,5 +404,11 @@
         "content": "$1"
       }
     }
+  },
+  "popup_ticket_wall": {
+    "message": "O teu relatório: pagar ou consentir são ambos um sim. O BannerBye só diz não, e este site não o oferece. A escolha é tua."
+  },
+  "popup_ticket_accept_only": {
+    "message": "O teu relatório: «aceitar» é o único botão, e isso é um sim. O BannerBye só diz não, e este site não o oferece. A escolha é tua."
   }
 }

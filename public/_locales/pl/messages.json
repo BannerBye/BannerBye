@@ -361,7 +361,7 @@
     "message": "Na razie nie ma tu nic do odrzucenia."
   },
   "popup_proof_wall": {
-    "message": "Ta strona prosi cię o zapłatę lub zgodę. Ten wybór należy do ciebie — BannerBye nie rusza tej ściany."
+    "message": "Zapłać lub zgódź się to w obu przypadkach „tak”. BannerBye mówi tylko „nie”, a ta strona tego nie oferuje. Wybór należy do Ciebie."
   },
   "popup_activity_wall": {
     "message": "ściana „zapłać albo się zgódź”, decyzja należy do ciebie"
@@ -404,5 +404,11 @@
         "content": "$1"
       }
     }
+  },
+  "popup_ticket_wall": {
+    "message": "Twoje zgłoszenie: zapłać lub zgódź się to w obu przypadkach „tak”. BannerBye mówi tylko „nie”, a ta strona tego nie oferuje. Wybór należy do Ciebie."
+  },
+  "popup_ticket_accept_only": {
+    "message": "Twoje zgłoszenie: „akceptuj” to jedyny przycisk, a to jest „tak”. BannerBye mówi tylko „nie”, a ta strona tego nie oferuje. Wybór należy do Ciebie."
   }
 }

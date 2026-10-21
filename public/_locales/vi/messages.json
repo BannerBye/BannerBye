@@ -361,7 +361,7 @@
     "message": "Chưa có gì để từ chối ở đây."
   },
   "popup_proof_wall": {
-    "message": "Trang này yêu cầu bạn trả tiền hoặc đồng ý. Lựa chọn đó là của bạn — BannerBye không đụng đến bức tường này."
+    "message": "Trả tiền hay đồng ý đều là một lời “có”. BannerBye chỉ nói “không”, và trang này không có lựa chọn đó. Quyền quyết định là của bạn."
   },
   "popup_activity_wall": {
     "message": "bức tường trả tiền hoặc đồng ý, để bạn quyết định"
@@ -404,5 +404,11 @@
         "content": "$1"
       }
     }
+  },
+  "popup_ticket_wall": {
+    "message": "Báo cáo của bạn: trả tiền hay đồng ý đều là một lời “có”. BannerBye chỉ nói “không”, và trang này không có lựa chọn đó. Quyền quyết định là của bạn."
+  },
+  "popup_ticket_accept_only": {
+    "message": "Báo cáo của bạn: “chấp nhận” là nút duy nhất, và đó là một lời “có”. BannerBye chỉ nói “không”, và trang này không có lựa chọn đó. Quyền quyết định là của bạn."
   }
 }

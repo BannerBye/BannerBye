@@ -361,7 +361,7 @@
     "message": "Kol kas čia nėra ko atmesti."
   },
   "popup_proof_wall": {
-    "message": "Ši svetainė prašo sumokėti arba sutikti. Šis pasirinkimas lieka tavo — BannerBye šios sienos neliečia."
+    "message": "Mokėti arba sutikti – abu reiškia taip. „BannerBye“ sako tik ne, o ši svetainė to nesiūlo. Pasirinkimas jūsų."
   },
   "popup_activity_wall": {
     "message": "„mokėk arba sutik“ siena, palikta tau"
@@ -404,5 +404,11 @@
         "content": "$1"
       }
     }
+  },
+  "popup_ticket_wall": {
+    "message": "Jūsų pranešimas: mokėti arba sutikti – abu reiškia taip. „BannerBye“ sako tik ne, o ši svetainė to nesiūlo. Pasirinkimas jūsų."
+  },
+  "popup_ticket_accept_only": {
+    "message": "Jūsų pranešimas: „priimti“ – vienintelis mygtukas, o tai reiškia taip. „BannerBye“ sako tik ne, o ši svetainė to nesiūlo. Pasirinkimas jūsų."
   }
 }

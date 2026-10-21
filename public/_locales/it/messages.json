@@ -361,7 +361,7 @@
     "message": "Niente da rifiutare qui, per ora."
   },
   "popup_proof_wall": {
-    "message": "Questo sito ti chiede di pagare o acconsentire. La scelta resta tua — BannerBye lascia il muro com'è."
+    "message": "Pagare o acconsentire sono entrambi un sì. BannerBye dice solo no, e questo sito non lo offre. La scelta resta tua."
   },
   "popup_activity_wall": {
     "message": "muro paga-o-acconsenti, lasciato a te"
@@ -404,5 +404,11 @@
         "content": "$1"
       }
     }
+  },
+  "popup_ticket_wall": {
+    "message": "La tua segnalazione: pagare o acconsentire sono entrambi un sì. BannerBye dice solo no, e questo sito non lo offre. La scelta resta tua."
+  },
+  "popup_ticket_accept_only": {
+    "message": "La tua segnalazione: «accetta» è l'unico pulsante, ed è un sì. BannerBye dice solo no, e questo sito non lo offre. La scelta resta tua."
   }
 }

@@ -361,7 +361,7 @@
     "message": "Burada henüz reddedilecek bir şey yok."
   },
   "popup_proof_wall": {
-    "message": "Bu site senden ödeme yapmanı ya da onay vermeni istiyor. Bu seçim sana ait — BannerBye bu duvara dokunmaz."
+    "message": "Ödemek ya da onaylamak, ikisi de evet demek. BannerBye yalnızca hayır der; bu site bunu sunmuyor. Seçim senin."
   },
   "popup_activity_wall": {
     "message": "öde-ya-da-onayla duvarı, sana bırakıldı"
@@ -404,5 +404,11 @@
         "content": "$1"
       }
     }
+  },
+  "popup_ticket_wall": {
+    "message": "Bildirimin: ödemek ya da onaylamak, ikisi de evet demek. BannerBye yalnızca hayır der; bu site bunu sunmuyor. Seçim senin."
+  },
+  "popup_ticket_accept_only": {
+    "message": "Bildirimin: tek düğme “kabul et”, o da evet demek. BannerBye yalnızca hayır der; bu site bunu sunmuyor. Seçim senin."
   }
 }

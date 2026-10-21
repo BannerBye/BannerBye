@@ -361,7 +361,7 @@
     "message": "Wala pang tatanggihan dito."
   },
   "popup_proof_wall": {
-    "message": "Hinihiling ng site na ito na magbayad ka o pumayag. Ikaw ang bahala sa pagpiling iyon — hinahayaan ng BannerBye ang pader."
+    "message": "Magbayad o pumayag, pareho itong oo. Hindi lang ang sinasabi ng BannerBye, at hindi iyon inaalok ng site na ito. Nasa iyo ang pagpapasya."
   },
   "popup_activity_wall": {
     "message": "pader na magbayad-o-pumayag, ikaw ang bahala"
@@ -404,5 +404,11 @@
         "content": "$1"
       }
     }
+  },
+  "popup_ticket_wall": {
+    "message": "Ang ulat mo: magbayad o pumayag, pareho itong oo. Hindi lang ang sinasabi ng BannerBye, at hindi iyon inaalok ng site na ito. Nasa iyo ang pagpapasya."
+  },
+  "popup_ticket_accept_only": {
+    "message": "Ang ulat mo: “tanggapin” lang ang button, at oo iyon. Hindi lang ang sinasabi ng BannerBye, at hindi iyon inaalok ng site na ito. Nasa iyo ang pagpapasya."
   }
 }

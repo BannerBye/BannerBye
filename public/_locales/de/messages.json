@@ -83,7 +83,7 @@
     "message": "Hier noch nichts abzulehnen."
   },
   "popup_proof_wall": {
-    "message": "Diese Seite verlangt Bezahlen oder Zustimmen. Die Wahl bleibt bei dir — BannerBye lässt die Wand stehen."
+    "message": "Bezahlen oder Einwilligen ist beides ein Ja. BannerBye sagt nur Nein, und das bietet diese Seite nicht an. Die Wahl bleibt bei dir."
   },
   "popup_activity_wall": {
     "message": "Bezahl-oder-Zustimm-Wand, dir überlassen"
@@ -404,5 +404,11 @@
         "content": "$1"
       }
     }
+  },
+  "popup_ticket_wall": {
+    "message": "Deine Meldung: Bezahlen oder Einwilligen ist beides ein Ja. BannerBye sagt nur Nein, und das bietet diese Seite nicht an. Die Wahl bleibt bei dir."
+  },
+  "popup_ticket_accept_only": {
+    "message": "Deine Meldung: „Akzeptieren“ ist der einzige Button, und das ist ein Ja. BannerBye sagt nur Nein, und das bietet diese Seite nicht an. Die Wahl bleibt bei dir."
   }
 }

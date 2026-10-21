@@ -361,7 +361,7 @@
     "message": "Täällä ei ole vielä mitään hylättävää."
   },
   "popup_proof_wall": {
-    "message": "Tämä sivusto pyytää sinua maksamaan tai suostumaan. Valinta on sinun — BannerBye jättää muurin rauhaan."
+    "message": "Maksa tai hyväksy ovat molemmat kyllä. BannerBye sanoo vain ei, eikä tämä sivusto tarjoa sitä. Valinta on sinun."
   },
   "popup_activity_wall": {
     "message": "maksa-tai-suostu-muuri, jätetty sinulle"
@@ -404,5 +404,11 @@
         "content": "$1"
       }
     }
+  },
+  "popup_ticket_wall": {
+    "message": "Ilmoituksesi: maksa tai hyväksy ovat molemmat kyllä. BannerBye sanoo vain ei, eikä tämä sivusto tarjoa sitä. Valinta on sinun."
+  },
+  "popup_ticket_accept_only": {
+    "message": "Ilmoituksesi: ”hyväksy” on ainoa painike, ja se on kyllä. BannerBye sanoo vain ei, eikä tämä sivusto tarjoa sitä. Valinta on sinun."
   }
 }

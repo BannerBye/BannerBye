@@ -361,7 +361,7 @@
     "message": "Belum ada yang perlu ditolak di sini."
   },
   "popup_proof_wall": {
-    "message": "Situs ini memintamu membayar atau menyetujui. Pilihan itu tetap milikmu — BannerBye membiarkan dinding itu."
+    "message": "Bayar atau setuju, keduanya berarti ya. BannerBye hanya berkata tidak, dan situs ini tidak menawarkannya. Pilihan ada di tangan Anda."
   },
   "popup_activity_wall": {
     "message": "dinding bayar-atau-setuju, diserahkan kepadamu"
@@ -404,5 +404,11 @@
         "content": "$1"
       }
     }
+  },
+  "popup_ticket_wall": {
+    "message": "Laporan Anda: bayar atau setuju, keduanya berarti ya. BannerBye hanya berkata tidak, dan situs ini tidak menawarkannya. Pilihan ada di tangan Anda."
+  },
+  "popup_ticket_accept_only": {
+    "message": "Laporan Anda: “terima” adalah satu-satunya tombol, dan itu berarti ya. BannerBye hanya berkata tidak, dan situs ini tidak menawarkannya. Pilihan ada di tangan Anda."
   }
 }

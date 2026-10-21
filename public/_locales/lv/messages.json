@@ -361,7 +361,7 @@
     "message": "Šeit vēl nav ko noraidīt."
   },
   "popup_proof_wall": {
-    "message": "Šī vietne lūdz tev maksāt vai piekrist. Izvēle paliek tava — BannerBye šo sienu neaiztiek."
+    "message": "Maksāt vai piekrist – abi nozīmē jā. BannerBye saka tikai nē, un šī vietne to nepiedāvā. Izvēle ir jūsu."
   },
   "popup_activity_wall": {
     "message": "“maksā vai piekrīti” siena, atstāta tavā ziņā"
@@ -404,5 +404,11 @@
         "content": "$1"
       }
     }
+  },
+  "popup_ticket_wall": {
+    "message": "Jūsu ziņojums: maksāt vai piekrist – abi nozīmē jā. BannerBye saka tikai nē, un šī vietne to nepiedāvā. Izvēle ir jūsu."
+  },
+  "popup_ticket_accept_only": {
+    "message": "Jūsu ziņojums: „pieņemt” ir vienīgā poga, un tas ir jā. BannerBye saka tikai nē, un šī vietne to nepiedāvā. Izvēle ir jūsu."
   }
 }

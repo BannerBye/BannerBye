@@ -361,7 +361,7 @@
     "message": "Todavía no hay nada que rechazar aquí."
   },
   "popup_proof_wall": {
-    "message": "Este sitio te pide pagar o aceptar. Esa decisión es tuya — BannerBye deja el muro como está."
+    "message": "Pagar o consentir son dos formas de decir sí. BannerBye solo dice no, y este sitio no lo ofrece. La decisión es tuya."
   },
   "popup_activity_wall": {
     "message": "muro de pagar o aceptar, a tu elección"
@@ -404,5 +404,11 @@
         "content": "$1"
       }
     }
+  },
+  "popup_ticket_wall": {
+    "message": "Tu reporte: pagar o consentir son dos formas de decir sí. BannerBye solo dice no, y este sitio no lo ofrece. La decisión es tuya."
+  },
+  "popup_ticket_accept_only": {
+    "message": "Tu reporte: «aceptar» es el único botón, y eso es un sí. BannerBye solo dice no, y este sitio no lo ofrece. La decisión es tuya."
   }
 }

@@ -361,7 +361,7 @@
     "message": "Inget att neka här ännu."
   },
   "popup_proof_wall": {
-    "message": "Den här webbplatsen ber dig betala eller samtycka. Det valet är ditt — BannerBye låter muren stå."
+    "message": "Betala eller samtyck är båda ett ja. BannerBye säger bara nej, och den här sidan erbjuder inte det. Valet är ditt."
   },
   "popup_activity_wall": {
     "message": "betala-eller-samtyck-mur, lämnad åt dig"
@@ -404,5 +404,11 @@
         "content": "$1"
       }
     }
+  },
+  "popup_ticket_wall": {
+    "message": "Din rapport: betala eller samtyck är båda ett ja. BannerBye säger bara nej, och den här sidan erbjuder inte det. Valet är ditt."
+  },
+  "popup_ticket_accept_only": {
+    "message": "Din rapport: ”acceptera” är den enda knappen, och det är ett ja. BannerBye säger bara nej, och den här sidan erbjuder inte det. Valet är ditt."
   }
 }

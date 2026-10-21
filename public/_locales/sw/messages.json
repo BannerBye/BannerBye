@@ -361,7 +361,7 @@
     "message": "Bado hakuna cha kukataa hapa."
   },
   "popup_proof_wall": {
-    "message": "Tovuti hii inakuomba ulipe au ukubali. Uamuzi huo unabaki kuwa wako — BannerBye inaliacha ukuta huo."
+    "message": "Kulipa au kukubali, zote ni ndiyo. BannerBye husema hapana tu, na tovuti hii haitoi chaguo hilo. Uamuzi ni wako."
   },
   "popup_activity_wall": {
     "message": "ukuta wa lipa-au-kubali, umeachiwa wewe"
@@ -404,5 +404,11 @@
         "content": "$1"
       }
     }
+  },
+  "popup_ticket_wall": {
+    "message": "Ripoti yako: kulipa au kukubali, zote ni ndiyo. BannerBye husema hapana tu, na tovuti hii haitoi chaguo hilo. Uamuzi ni wako."
+  },
+  "popup_ticket_accept_only": {
+    "message": "Ripoti yako: 'kubali' ndicho kitufe pekee, na hiyo ni ndiyo. BannerBye husema hapana tu, na tovuti hii haitoi chaguo hilo. Uamuzi ni wako."
   }
 }

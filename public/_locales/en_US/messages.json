@@ -361,7 +361,7 @@
     "message": "Nothing to refuse here yet."
   },
   "popup_proof_wall": {
-    "message": "This site asks you to pay or consent. That choice stays yours — BannerBye leaves the wall alone."
+    "message": "Pay or consent are both a yes. BannerBye only says no, and this site doesn't offer it. The choice stays yours."
   },
   "popup_activity_wall": {
     "message": "pay-or-consent wall, left to you"
@@ -404,5 +404,11 @@
         "content": "$1"
       }
     }
+  },
+  "popup_ticket_wall": {
+    "message": "Your report: pay or consent are both a yes. BannerBye only says no, and this site doesn't offer it. The choice stays yours."
+  },
+  "popup_ticket_accept_only": {
+    "message": "Your report: 'accept' is the only button, and that's a yes. BannerBye only says no, and this site doesn't offer it. The choice stays yours."
   }
 }
