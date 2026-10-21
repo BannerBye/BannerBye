@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "گزارش شما: «پذیرفتن» تنها دکمه است و آن یعنی «بله». BannerBye فقط «نه» می‌گوید و این سایت آن را ارائه نمی‌دهد. انتخاب با شماست."
+  },
+  "popup_details": {
+    "message": "جزئیات"
+  },
+  "popup_details_hide": {
+    "message": "پنهان کردن جزئیات"
+  },
+  "popup_details_copy": {
+    "message": "کپی"
+  },
+  "popup_details_copied": {
+    "message": "کپی شد"
+  },
+  "popup_details_report": {
+    "message": "گزارش با جزئیات"
   }
 }

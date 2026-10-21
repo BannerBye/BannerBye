@@ -39,6 +39,7 @@
  * vertelt hetzelfde. Zie EVAL_DOM_SHIMS.
  */
 
+import { traceIso } from '../trace.ts';
 import AutoConsent from '@duckduckgo/autoconsent';
 import type { Config, RuleBundle } from '@duckduckgo/autoconsent';
 import rules from '@duckduckgo/autoconsent/rules/rules.json';
@@ -263,7 +264,12 @@ export function startAutoconsentLayer(onHandled: () => void): void {
   const release = (): void => {
     window.clearTimeout(watchdogId);
     if (verifyPending) return;
-    if (!handledFired) window.__bbConsentActive = false;
+    if (!handledFired) {
+      if (window.__bbConsentActive) {
+        traceIso('auto', 'autoconsent gave up (no popup or opt-out failed) → generic click layer released');
+      }
+      window.__bbConsentActive = false;
+    }
   };
 
   // v0.4.2 (#170, 7 sep): construeer ZONDER config/rules. De vendored library
@@ -298,6 +304,7 @@ export function startAutoconsentLayer(onHandled: () => void): void {
         // Bekende CMP herkend → de generieke auto-click moet even wachten.
         // Waakhond: vindt de motor binnen de tijd geen popup, dan meldt de
         // library dat niet — dan laten wij laag 5 zelf weer los.
+        traceIso('auto', `autoconsent rule ${String(msg.cmp)} matched · generic click layer waits`);
         window.__bbConsentActive = true;
         if (msg.cmp === 'Sourcepoint-frame') window.__bbStepIntoBlocked = true;
         window.clearTimeout(watchdogId);
@@ -305,9 +312,11 @@ export function startAutoconsentLayer(onHandled: () => void): void {
         break;
       case 'popupFound':
         // Popup gevonden → de motor gaat nu écht weigeren; waakhond uit.
+        traceIso('auto', `autoconsent ${String(msg.cmp)}: popup found → opting out`);
         window.clearTimeout(watchdogId);
         break;
       case 'optOutResult': {
+        traceIso('auto', `autoconsent ${String(msg.cmp)}: opt-out ${msg.result ? 'succeeded' : 'failed'}`);
         if (!msg.result) {
           release();
           break;
@@ -324,6 +333,7 @@ export function startAutoconsentLayer(onHandled: () => void): void {
               return;
             }
             window.removeEventListener('pagehide', onGone);
+            traceIso('auto', 'Sourcepoint manager still open after opt-out → consent-or-pay, clicked back');
             sourcepointGoBack();
             // v0.4.8 (issue #6): laat de popup weten dat dit een consent-or-
             // pay-muur is, zodat de gebruiker ziet dat BannerBye hier bewust

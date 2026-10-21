@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "உங்கள் புகார்: 'ஏற்கவும்' மட்டுமே பொத்தான், அது ஆம் தான். BannerBye இல்லை என்று மட்டுமே சொல்லும், இந்தத் தளம் அதைத் தரவில்லை. முடிவு உங்களுடையது."
+  },
+  "popup_details": {
+    "message": "விவரங்கள்"
+  },
+  "popup_details_hide": {
+    "message": "விவரங்களை மறை"
+  },
+  "popup_details_copy": {
+    "message": "நகலெடு"
+  },
+  "popup_details_copied": {
+    "message": "நகலெடுக்கப்பட்டது"
+  },
+  "popup_details_report": {
+    "message": "விவரங்களுடன் புகாரளி"
   }
 }

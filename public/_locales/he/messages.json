@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "הדיווח שלך: ‚אישור‘ הוא הכפתור היחיד, וזה כן. BannerBye אומר רק לא, והאתר הזה לא מציע את זה. הבחירה בידיים שלך."
+  },
+  "popup_details": {
+    "message": "פרטים"
+  },
+  "popup_details_hide": {
+    "message": "הסתר פרטים"
+  },
+  "popup_details_copy": {
+    "message": "העתק"
+  },
+  "popup_details_copied": {
+    "message": "הועתק"
+  },
+  "popup_details_report": {
+    "message": "דווח עם פרטים"
   }
 }

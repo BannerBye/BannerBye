@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "El teu avís: «accepta» és l'únic botó, i això és un sí. BannerBye només diu no, i aquest lloc no ho ofereix. La decisió és teva."
+  },
+  "popup_details": {
+    "message": "Detalls"
+  },
+  "popup_details_hide": {
+    "message": "Amaga els detalls"
+  },
+  "popup_details_copy": {
+    "message": "Copia"
+  },
+  "popup_details_copied": {
+    "message": "Copiat"
+  },
+  "popup_details_report": {
+    "message": "Informa amb detalls"
   }
 }

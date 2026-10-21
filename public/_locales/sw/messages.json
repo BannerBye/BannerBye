@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "Ripoti yako: 'kubali' ndicho kitufe pekee, na hiyo ni ndiyo. BannerBye husema hapana tu, na tovuti hii haitoi chaguo hilo. Uamuzi ni wako."
+  },
+  "popup_details": {
+    "message": "Maelezo"
+  },
+  "popup_details_hide": {
+    "message": "Ficha maelezo"
+  },
+  "popup_details_copy": {
+    "message": "Nakili"
+  },
+  "popup_details_copied": {
+    "message": "Imenakiliwa"
+  },
+  "popup_details_report": {
+    "message": "Ripoti pamoja na maelezo"
   }
 }

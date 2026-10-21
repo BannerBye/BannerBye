@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "Laporan Anda: “terima” adalah satu-satunya tombol, dan itu berarti ya. BannerBye hanya berkata tidak, dan situs ini tidak menawarkannya. Pilihan ada di tangan Anda."
+  },
+  "popup_details": {
+    "message": "Detail"
+  },
+  "popup_details_hide": {
+    "message": "Sembunyikan detail"
+  },
+  "popup_details_copy": {
+    "message": "Salin"
+  },
+  "popup_details_copied": {
+    "message": "Disalin"
+  },
+  "popup_details_report": {
+    "message": "Laporkan dengan detail"
   }
 }

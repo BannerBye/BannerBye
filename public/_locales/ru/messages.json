@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "Ваше сообщение: «принять» — единственная кнопка, и это «да». BannerBye говорит только «нет», а этот сайт такого не предлагает. Выбор за вами."
+  },
+  "popup_details": {
+    "message": "Подробности"
+  },
+  "popup_details_hide": {
+    "message": "Скрыть подробности"
+  },
+  "popup_details_copy": {
+    "message": "Копировать"
+  },
+  "popup_details_copied": {
+    "message": "Скопировано"
+  },
+  "popup_details_report": {
+    "message": "Сообщить с подробностями"
   }
 }

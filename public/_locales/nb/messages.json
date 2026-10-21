@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "Din rapport: «godta» er den eneste knappen, og det er et ja. BannerBye sier bare nei, og det tilbyr ikke dette nettstedet. Valget er ditt."
+  },
+  "popup_details": {
+    "message": "Detaljer"
+  },
+  "popup_details_hide": {
+    "message": "Skjul detaljer"
+  },
+  "popup_details_copy": {
+    "message": "Kopier"
+  },
+  "popup_details_copied": {
+    "message": "Kopiert"
+  },
+  "popup_details_report": {
+    "message": "Rapporter med detaljer"
   }
 }

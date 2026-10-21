@@ -58,6 +58,9 @@ import {
   pruneStormPauses,
   STORM_PAUSE_RESTART_MIN_AGE_MS,
 } from '@/lib/reload-brake';
+// v0.4.12: technische trace per tab voor de "Details"-link in de popup.
+import { TRACE_EVENT, MAX_STEPS, cleanTraceMsg, isTraceLayer } from '@/lib/trace';
+import type { TabTrace, TraceLayer } from '@/lib/trace';
 // v0.4.8: bewijs naar de Apple host-app (alleen Safari) — zie lib/native-proof.ts.
 import { sendProofToHostApp } from '@/lib/native-proof';
 
@@ -445,6 +448,95 @@ async function syncRankBadge(): Promise<void> {
  * scripts sturen alleen de message. Voorkomt race tussen popup-display en
  * achtergrond-detectie.
  */
+// === TRACE PER TAB (v0.4.12) ===
+// chrome.storage.session overleeft een slapende service worker; de Map vangt
+// MV2-platforms zonder session-opslag. Niets hiervan raakt de schijf.
+const traceMem = new Map<number, TabTrace>();
+const sessionStore: chrome.storage.StorageArea | undefined = (() => {
+  try {
+    return chrome.storage.session;
+  } catch {
+    return undefined;
+  }
+})();
+const traceKey = (tabId: number): string => `bbtrace:${tabId}`;
+
+async function readTrace(tabId: number): Promise<TabTrace | null> {
+  if (sessionStore) {
+    try {
+      const r = await sessionStore.get(traceKey(tabId));
+      const v = r[traceKey(tabId)] as TabTrace | undefined;
+      if (v) return v;
+    } catch {
+      // val terug op geheugen
+    }
+  }
+  return traceMem.get(tabId) ?? null;
+}
+
+async function writeTrace(tabId: number, trace: TabTrace | null): Promise<void> {
+  if (trace) traceMem.set(tabId, trace);
+  else traceMem.delete(tabId);
+  if (!sessionStore) return;
+  try {
+    if (trace) await sessionStore.set({ [traceKey(tabId)]: trace });
+    else await sessionStore.remove(traceKey(tabId));
+  } catch {
+    // session-opslag vol of niet beschikbaar — de Map blijft werken
+  }
+}
+
+// Stappen serieel verwerken, anders raken twee snelle berichten elkaars
+// read-modify-write kwijt.
+let traceQueue: Promise<void> = Promise.resolve();
+/**
+ * Nieuwe hoofdframe-navigatie: begin een lege trace voor deze tab.
+ * Race: document_start-scripts (gpc/tcf) melden soms al vóórdat
+ * tabs.onUpdated 'loading' binnenkomt. Een verse trace op dezelfde host die
+ * jonger is dan anderhalve seconde laten we daarom staan — die hoort bij
+ * déze navigatie. Een oudere trace (reload na een tijdje) wordt wél gewist.
+ */
+const TRACE_FRESH_MS = 1500;
+function resetTrace(tabId: number, url: string | undefined): void {
+  const host = url ? normalizeHost(url) : null;
+  traceQueue = traceQueue
+    .then(async () => {
+      if (!host) {
+        await writeTrace(tabId, null);
+        return;
+      }
+      const existing = await readTrace(tabId);
+      if (existing && existing.host === host && Date.now() - existing.startedAt < TRACE_FRESH_MS) return;
+      await writeTrace(tabId, { host, startedAt: Date.now(), steps: [] });
+    })
+    .catch(() => {
+      // trace is bijzaak
+    });
+}
+
+function pushTrace(tabId: number, frameUrl: string | undefined, layer: TraceLayer, msg: string, t: number): void {
+  traceQueue = traceQueue
+    .then(async () => {
+      let trace = await readTrace(tabId);
+      const frameHost = frameUrl ? normalizeHost(frameUrl) : null;
+      // Hoofdframe-stap vóór de 'loading'-melding van de tab, of met een
+      // klok die terugspringt (nieuwe navigatie op dezelfde host): verse trace.
+      const lastMain = trace ? [...trace.steps].reverse().find((s) => s.frame === 'main') : undefined;
+      const isMainFrame = !!frameHost && (!trace || frameHost === trace.host);
+      if (isMainFrame && frameHost && (!trace || (lastMain && t + 500 < lastMain.t))) {
+        trace = { host: frameHost, startedAt: Date.now(), steps: [] };
+      }
+      if (!trace || trace.steps.length >= MAX_STEPS) return;
+      let frame = 'main';
+      if (frameHost && frameHost !== trace.host) frame = frameHost;
+      trace.steps.push({ t: Math.max(0, Math.round(t)), layer, msg, frame });
+      await writeTrace(tabId, trace);
+    })
+    .catch(() => {
+      // trace is bijzaak
+    });
+}
+
 async function handleBannerBlocked(
   tabId: number,
   hostname: string | null,
@@ -549,17 +641,23 @@ export default defineBackground({
   const brake = new ReloadBrake();
   chrome.tabs.onUpdated.addListener((tabId, info, tab) => {
     if (info.status !== 'loading') return;
+    // v0.4.12: nieuwe paginalaad → verse trace voor deze tab.
+    resetTrace(tabId, info.url ?? tab.url);
     const hit = brake.note(tabId, info.url ?? tab.url);
     if (!hit) return;
     void applyStormPause(hit.host, hit.loads).then((applied) => {
       if (applied) {
+        pushTrace(tabId, undefined, 'brake', `reload brake: ${hit.loads} loads in a few seconds → paused here for this session`, 0);
         console.warn(
           `[BannerBye] ${hit.host} reloaded ${hit.loads}× in a few seconds — paused BannerBye there for this session.`,
         );
       }
     });
   });
-  chrome.tabs.onRemoved.addListener((tabId) => brake.forget(tabId));
+  chrome.tabs.onRemoved.addListener((tabId) => {
+    brake.forget(tabId);
+    void writeTrace(tabId, null);
+  });
   // Bij een browserstart: rem-pauzes ouder dan een uur loslaten (er kan
   // intussen een fix zijn uitgerold). Jongere blijven staan — wie herstartte
   // ómdat een pagina bleef herladen, moet niet meteen weer vastlopen.
@@ -606,12 +704,34 @@ export default defineBackground({
       return true;
     }
 
+    // v0.4.12: trace-stap van een content script (ISOLATED rechtstreeks, MAIN
+    // via de bridge). Alleen met een echte tab-afzender; de popup telt niet.
+    if (msg?.type === TRACE_EVENT && sender.tab?.id !== undefined && isTraceLayer(msg.layer)) {
+      const text = cleanTraceMsg(msg.msg);
+      if (text) {
+        pushTrace(sender.tab.id, sender.url, msg.layer, text, typeof msg.t === 'number' ? msg.t : 0);
+      }
+    }
+
+    // v0.4.12: de popup vraagt de trace van de actieve tab.
+    if (msg?.type === 'bb:get-trace' && typeof msg.tabId === 'number') {
+      void readTrace(msg.tabId).then((trace) => {
+        try {
+          sendResponse(trace);
+        } catch {
+          // popup al dicht
+        }
+      });
+      return true;
+    }
+
     if (msg?.type === 'bb:banner-blocked' && sender.tab?.id !== undefined) {
       // Hostname uit de tab-URL (voor #reward-1 melding-gekild-detectie).
       const host = sender.tab.url ? normalizeHost(sender.tab.url) : null;
       const platform =
         typeof msg.platform === 'string' ? msg.platform : undefined;
       void handleBannerBlocked(sender.tab.id, host, platform);
+      pushTrace(sender.tab.id, sender.url, 'result', `refused · ${platform ?? 'banner'}`, typeof msg.t === 'number' ? msg.t : 0);
     }
 
     // v0.4.0: autoclick meldt vanuit het hoofdframe dat er niets te weigeren
@@ -619,6 +739,9 @@ export default defineBackground({
     if (msg?.type === 'bb:no-banner' && sender.tab?.url) {
       const host = normalizeHost(sender.tab.url);
       if (host) void recordActivity(host, 'clean');
+      if (sender.tab.id !== undefined) {
+        pushTrace(sender.tab.id, sender.url, 'result', 'clean · nothing found to refuse', typeof msg.t === 'number' ? msg.t : 0);
+      }
     }
 
     // v0.4.8 (issue #6): consent-or-pay-muur herkend (Sourcepoint-manager
@@ -627,6 +750,9 @@ export default defineBackground({
     if (msg?.type === 'bb:consent-wall' && sender.tab?.url) {
       const host = normalizeHost(sender.tab.url);
       if (host) void recordActivity(host, 'wall');
+      if (sender.tab.id !== undefined) {
+        pushTrace(sender.tab.id, sender.url, 'result', 'wall · consent-or-pay · nothing clicked', typeof msg.t === 'number' ? msg.t : 0);
+      }
     }
 
     // v0.4.2 (#212): de Autoconsent-poortwachter (autoconsent.content.ts) heeft

@@ -24,6 +24,7 @@
  */
 
 import { defineContentScript } from 'wxt/sandbox';
+import { traceMain } from '@/lib/trace.ts';
 import { readActiveState } from '@/lib/active-flag.ts';
 import { isPdfDocument } from '@/lib/pdf-guard.ts';
 
@@ -75,9 +76,11 @@ export default defineContentScript({
         get: () => true,
         configurable: false,
       });
+      traceMain('gpc', 'Sec-GPC header rule active · navigator.globalPrivacyControl=true');
     } catch {
       // Sommige sites/extensies kunnen al een definitie hebben gezet.
       // Niet stoppen — header-laag (DNR) doet z'n werk nog steeds.
+      traceMain('gpc', 'Sec-GPC header rule active · globalPrivacyControl already defined by page/other extension');
     }
   },
 });

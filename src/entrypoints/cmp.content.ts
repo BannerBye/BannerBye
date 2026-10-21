@@ -27,6 +27,7 @@
 import { defineContentScript } from 'wxt/sandbox';
 import { handlers } from '@/lib/cmp/index.ts';
 import { readActiveState } from '@/lib/active-flag.ts';
+import { traceMain } from '@/lib/trace.ts';
 import { isPdfDocument } from '@/lib/pdf-guard.ts';
 
 export default defineContentScript({
@@ -140,6 +141,7 @@ async function runDetectedHandler(): Promise<boolean> {
       continue;
     }
     if (!detected) continue;
+    traceMain('cmp', `${handler.name} detected`);
 
     // v0.4.6: herlaadlus-rem. Als wij op dit tabblad + deze origin zojuist
     // (< RELOAD_GUARD_MS) een CMP-handler lieten weigeren en de pagina is
@@ -147,11 +149,15 @@ async function runDetectedHandler(): Promise<boolean> {
     // op onze weigering met location.reload(). Nog een keer weigeren zou de
     // lus in stand houden — dus niets doen. GPC-header en -property blijven
     // gewoon aan. Geldt voor alle vijf handlers, niet alleen OneTrust.
-    if (recentlyAppliedAndReloaded()) return true;
+    if (recentlyAppliedAndReloaded()) {
+      traceMain('cmp', `${handler.name}: refused <30 s ago and page reloaded → skipped (reload guard)`);
+      return true;
+    }
 
     try {
       markApplied();
       await handler.apply();
+      traceMain('cmp', `${handler.name} handler applied → refused`);
       // v0.2.0 (#114): rapporteer block voor teller. bridge.content.ts
       // pickt 'bb:cmp-blocked' op en stuurt 'bb:banner-blocked' naar background.
       // Op `document` (niet `window`) want events flowen daar wél cross-world
@@ -170,6 +176,7 @@ async function runDetectedHandler(): Promise<boolean> {
       }
     } catch (err) {
       console.warn(`[BannerBye] CMP apply "${handler.name}" failed:`, err);
+      traceMain('cmp', `${handler.name} handler failed: ${err instanceof Error ? err.message : String(err)}`);
     }
     // Eerste match wint. Sites gebruiken zelden meerdere CMPs
     // tegelijk; als ze dat wel doen, raden we de meest-zichtbare

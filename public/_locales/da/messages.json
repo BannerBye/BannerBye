@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "Din rapport: ”accepter” er den eneste knap, og det er et ja. BannerBye siger kun nej, og det tilbyder dette site ikke. Valget er dit."
+  },
+  "popup_details": {
+    "message": "Detaljer"
+  },
+  "popup_details_hide": {
+    "message": "Skjul detaljer"
+  },
+  "popup_details_copy": {
+    "message": "Kopiér"
+  },
+  "popup_details_copied": {
+    "message": "Kopieret"
+  },
+  "popup_details_report": {
+    "message": "Rapportér med detaljer"
   }
 }

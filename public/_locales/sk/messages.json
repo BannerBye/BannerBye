@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "Vaše hlásenie: „prijať“ je jediné tlačidlo, a to je áno. BannerBye hovorí len nie, a to táto stránka neponúka. Voľba je na vás."
+  },
+  "popup_details": {
+    "message": "Podrobnosti"
+  },
+  "popup_details_hide": {
+    "message": "Skryť podrobnosti"
+  },
+  "popup_details_copy": {
+    "message": "Kopírovať"
+  },
+  "popup_details_copied": {
+    "message": "Skopírované"
+  },
+  "popup_details_report": {
+    "message": "Nahlásiť s podrobnosťami"
   }
 }

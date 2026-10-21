@@ -24,6 +24,7 @@
 import { defineContentScript } from 'wxt/sandbox';
 import { isPdfDocument } from '@/lib/pdf-guard.ts';
 import { STATE_MARKER_KEY, writeStateMarker, computeStateForHost } from '@/lib/active-flag.ts';
+import { TRACE_EVENT, MAX_STEPS, cleanTraceMsg, isTraceLayer } from '@/lib/trace.ts';
 
 export default defineContentScript({
   matches: ['<all_urls>'],
@@ -102,7 +103,7 @@ export default defineContentScript({
       if (w.__bbConsentHandled) return;
       w.__bbConsentHandled = true;
       try {
-        void chrome.runtime.sendMessage({ type: 'bb:banner-blocked', platform });
+        void chrome.runtime.sendMessage({ type: 'bb:banner-blocked', platform, t: Math.round(performance.now()) });
       } catch {
         // Background-worker idle of ander runtime-probleem — niet kritiek.
       }
@@ -113,6 +114,33 @@ export default defineContentScript({
     // dispatchen op document zodat onze ISOLATED bridge ze ook hoort).
     document.addEventListener('bb:tcf-blocked', relay);
     document.addEventListener('bb:cmp-blocked', relay);
+
+    // v0.4.12: trace-regels uit de MAIN-world lagen (gpc/tcf/cmp) doorgeven
+    // aan de background — zie lib/trace.ts. Zelfde spoofing-overweging als
+    // hierboven: een pagina kan dit event ook dispatchen, maar de trace stuurt
+    // niets aan (alleen tonen), en de cap per pagina begrenst de rommel.
+    let traceCount = 0;
+    document.addEventListener(TRACE_EVENT, (event: Event) => {
+      if (traceCount >= MAX_STEPS) return;
+      let layer: unknown;
+      let msg = '';
+      let t = 0;
+      try {
+        const detail = (event as CustomEvent<{ layer?: unknown; msg?: unknown; t?: unknown }>).detail;
+        layer = detail?.layer;
+        msg = cleanTraceMsg(detail?.msg);
+        t = typeof detail?.t === 'number' ? detail.t : Math.round(performance.now());
+      } catch {
+        return;
+      }
+      if (!isTraceLayer(layer) || !msg) return;
+      traceCount++;
+      try {
+        void chrome.runtime.sendMessage({ type: TRACE_EVENT, layer, msg, t });
+      } catch {
+        // niet kritiek
+      }
+    });
 
     // v0.4.6: houd de synchrone state-marker voor deze origin gelijk aan de
     // instellingen (per-site pauze + globale schakelaar), zodat de MAIN-world

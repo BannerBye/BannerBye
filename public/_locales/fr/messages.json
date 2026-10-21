@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "Votre signalement : « accepter » est le seul bouton, et c'est un oui. BannerBye ne dit que non, et ce site ne le propose pas. Le choix vous appartient."
+  },
+  "popup_details": {
+    "message": "Détails"
+  },
+  "popup_details_hide": {
+    "message": "Masquer les détails"
+  },
+  "popup_details_copy": {
+    "message": "Copier"
+  },
+  "popup_details_copied": {
+    "message": "Copié"
+  },
+  "popup_details_report": {
+    "message": "Signaler avec les détails"
   }
 }

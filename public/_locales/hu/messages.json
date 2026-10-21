@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "A bejelentésed: az „elfogadom” az egyetlen gomb, és az egy igen. A BannerBye csak nemet mond, ezt pedig ez az oldal nem kínálja. A döntés a tiéd."
+  },
+  "popup_details": {
+    "message": "Részletek"
+  },
+  "popup_details_hide": {
+    "message": "Részletek elrejtése"
+  },
+  "popup_details_copy": {
+    "message": "Másolás"
+  },
+  "popup_details_copied": {
+    "message": "Másolva"
+  },
+  "popup_details_report": {
+    "message": "Jelentés részletekkel"
   }
 }

@@ -135,6 +135,7 @@ export default defineContentScript({
           // was — nuttig signaal in de bewijslijst (§11 skill) voor talen
           // die nog niet in de keyword-lijsten zitten.
           platform: result.viaTranslation ? 'Custom banner (vertaald)' : 'Custom banner',
+          t: Math.round(performance.now()),
         });
       } catch {
         // Background-worker kan net idle zijn — niet kritiek.
@@ -157,7 +158,7 @@ export default defineContentScript({
       // alleen een lege pagina. Background schrijft 'wall' (wint van 'clean',
       // zie storage.ts), de popup legt uit dat BannerBye hier bewust niets doet.
       try {
-        void chrome.runtime.sendMessage({ type: 'bb:consent-wall' });
+        void chrome.runtime.sendMessage({ type: 'bb:consent-wall', t: Math.round(performance.now()) });
       } catch {
         // Background-worker kan net idle zijn — niet kritiek.
       }
@@ -167,7 +168,7 @@ export default defineContentScript({
       // als we niet geklikt hebben — een mislukte klik is geen schone pagina.
       // Background schrijft dit als 'clean'-regel in de activiteitenlijst.
       try {
-        void chrome.runtime.sendMessage({ type: 'bb:no-banner' });
+        void chrome.runtime.sendMessage({ type: 'bb:no-banner', t: Math.round(performance.now()) });
       } catch {
         // Background-worker kan net idle zijn — niet kritiek.
       }

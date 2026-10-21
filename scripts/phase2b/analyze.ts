@@ -604,9 +604,18 @@ async function main(): Promise<void> {
   // de popup van de melder kan tonen. Best-effort; mag de run nooit breken.
   try {
     const staged = new Set(stageEntries.map((e) => e.hostname));
+    // v0.4.12: de melder kan via "Report with details" de trace van de popup
+    // meesturen. Een regel `result  wall · …` daarin is betrouwbaarder dan
+    // onze headless kijk (muren zijn vaak geo-afhankelijk: netzwelt.de toont
+    // 'm alleen vanaf een Duits IP) — dan meteen de wall-uitleg terug.
+    const traceByHost = new Map(hosts.map((h) => [h.hostname, h.sampleMessage ?? '']));
+    const traceSaysWall = (host: string): boolean =>
+      /^t=\+\d+ms\s+(wall|result)\s+.*\bwall\b/m.test(traceByHost.get(host) ?? '');
     for (const r of results) {
       if (staged.has(r.host)) {
         await setHostStatus(redis, r.host, 'investigating', 'A fix is in review.');
+      } else if (traceSaysWall(r.host)) {
+        await setHostStatus(redis, r.host, 'not-a-bug', 'wall');
       } else if (r.classification.category === 'accept_only') {
         await setHostStatus(
           redis,

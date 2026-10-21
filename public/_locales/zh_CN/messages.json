@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "你的反馈：“接受”是唯一的按钮，而那就是“是”。BannerBye 只会说“否”，而这个网站不提供这个选项。选择权在你。"
+  },
+  "popup_details": {
+    "message": "详情"
+  },
+  "popup_details_hide": {
+    "message": "隐藏详情"
+  },
+  "popup_details_copy": {
+    "message": "复制"
+  },
+  "popup_details_copied": {
+    "message": "已复制"
+  },
+  "popup_details_report": {
+    "message": "附详情反馈"
   }
 }

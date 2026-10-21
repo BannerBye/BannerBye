@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "तुमचा अहवाल: 'स्वीकारा' हे एकमेव बटण आहे, आणि ते हो आहे. BannerBye फक्त नाही म्हणतो, आणि ही साइट तो पर्याय देत नाही. निर्णय तुमचा आहे."
+  },
+  "popup_details": {
+    "message": "तपशील"
+  },
+  "popup_details_hide": {
+    "message": "तपशील लपवा"
+  },
+  "popup_details_copy": {
+    "message": "कॉपी करा"
+  },
+  "popup_details_copied": {
+    "message": "कॉपी झाले"
+  },
+  "popup_details_report": {
+    "message": "तपशीलांसह अहवाल द्या"
   }
 }

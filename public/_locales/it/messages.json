@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "La tua segnalazione: «accetta» è l'unico pulsante, ed è un sì. BannerBye dice solo no, e questo sito non lo offre. La scelta resta tua."
+  },
+  "popup_details": {
+    "message": "Dettagli"
+  },
+  "popup_details_hide": {
+    "message": "Nascondi dettagli"
+  },
+  "popup_details_copy": {
+    "message": "Copia"
+  },
+  "popup_details_copied": {
+    "message": "Copiato"
+  },
+  "popup_details_report": {
+    "message": "Segnala con i dettagli"
   }
 }

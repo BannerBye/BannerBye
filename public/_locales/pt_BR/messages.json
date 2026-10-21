@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "Seu relato: “aceitar” é o único botão, e isso é um sim. O BannerBye só diz não, e este site não oferece isso. A escolha é sua."
+  },
+  "popup_details": {
+    "message": "Detalhes"
+  },
+  "popup_details_hide": {
+    "message": "Ocultar detalhes"
+  },
+  "popup_details_copy": {
+    "message": "Copiar"
+  },
+  "popup_details_copied": {
+    "message": "Copiado"
+  },
+  "popup_details_report": {
+    "message": "Relatar com detalhes"
   }
 }

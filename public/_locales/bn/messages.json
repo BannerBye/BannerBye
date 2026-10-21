@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "আপনার রিপোর্ট: 'গ্রহণ করুন' একমাত্র বোতাম, আর সেটা হ্যাঁ। BannerBye শুধু না বলে, আর এই সাইট সেই সুযোগ দেয় না। সিদ্ধান্ত আপনার।"
+  },
+  "popup_details": {
+    "message": "বিস্তারিত"
+  },
+  "popup_details_hide": {
+    "message": "বিস্তারিত লুকান"
+  },
+  "popup_details_copy": {
+    "message": "কপি করুন"
+  },
+  "popup_details_copied": {
+    "message": "কপি হয়েছে"
+  },
+  "popup_details_report": {
+    "message": "বিস্তারিতসহ রিপোর্ট করুন"
   }
 }

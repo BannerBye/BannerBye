@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "내 신고: 버튼은 ‘동의’ 하나뿐이고, 그건 ‘예’입니다. BannerBye는 ‘아니요’만 말하는데, 이 사이트에는 그 선택지가 없습니다. 결정은 당신의 몫입니다."
+  },
+  "popup_details": {
+    "message": "자세히"
+  },
+  "popup_details_hide": {
+    "message": "자세히 숨기기"
+  },
+  "popup_details_copy": {
+    "message": "복사"
+  },
+  "popup_details_copied": {
+    "message": "복사됨"
+  },
+  "popup_details_report": {
+    "message": "세부 정보와 함께 신고"
   }
 }

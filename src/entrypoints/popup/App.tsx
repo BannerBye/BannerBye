@@ -32,6 +32,7 @@ import { t } from '@/lib/i18n/t';
 import { clearStormPause, getStormPauses, type StormPause } from '@/lib/reload-brake';
 import { addTicket, clearTickets, newTicketId, refreshTicketStatuses, versionAtLeast } from '@/lib/tickets';
 import type { TicketEntry } from '@/lib/types';
+import { browserLabel, formatTrace, type TabTrace } from '@/lib/trace';
 import type {
   ActivityEntry,
   LocalStats,
@@ -90,6 +91,10 @@ interface PopupState {
   activity: ActivityEntry[];
   /** v0.4.0: staat het bewijs-paneel open? Dicht bij openen van de popup. */
   activityOpen: boolean;
+  /** v0.4.12: technische trace van de actieve tab (alleen in sessiegeheugen). */
+  trace: TabTrace | null;
+  traceOpen: boolean;
+  traceCopied: boolean;
   /** v0.4.0: toon de eenmalige review-vraag (na dismiss van een viering). */
   reviewAsk: boolean;
   /** v0.4.8: de herlaadrem pauzeerde deze host zelf — toon uitleg + hervatten. */
@@ -144,6 +149,21 @@ async function getActiveTabHost(): Promise<string | null> {
   return normalizeHost(tab.url);
 }
 
+/** v0.4.12: trace van de actieve tab opvragen bij de background. */
+async function getActiveTabTrace(): Promise<TabTrace | null> {
+  try {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (tab?.id === undefined) return null;
+    const res = (await chrome.runtime.sendMessage({ type: 'bb:get-trace', tabId: tab.id })) as
+      | TabTrace
+      | null
+      | undefined;
+    return res ?? null;
+  } catch {
+    return null;
+  }
+}
+
 export function App() {
   const [state, setState] = useState<PopupState>({
     settings: { enabled: true, pausedSites: [], onboardingCompleted: false },
@@ -164,18 +184,22 @@ export function App() {
     reportModal: null,
     activity: [],
     activityOpen: false,
+    trace: null,
+    traceOpen: false,
+    traceCopied: false,
     reviewAsk: false,
     stormPause: null,
   });
 
   useEffect(() => {
     void (async () => {
-      const [settings, stats, hostname, activity, stormPauses] = await Promise.all([
+      const [settings, stats, hostname, activity, stormPauses, trace] = await Promise.all([
         getSettings(),
         getStats(),
         getActiveTabHost(),
         getRecentActivity(),
         getStormPauses(),
+        getActiveTabTrace(),
       ]);
       setState({
         settings,
@@ -185,6 +209,9 @@ export function App() {
         reportModal: null,
         activity,
         activityOpen: false,
+        trace,
+        traceOpen: false,
+        traceCopied: false,
         reviewAsk: false,
         stormPause: hostname ? (stormPauses[hostname] ?? null) : null,
       });
@@ -316,17 +343,43 @@ export function App() {
     }
   }
 
-  function reportBrokenSite() {
+  function reportBrokenSite(prefill = '') {
     if (!state.hostname) return;
     setState((s) => ({
       ...s,
       reportModal: {
         hostname: state.hostname!,
-        message: '',
+        message: prefill,
         status: 'idle',
         errorText: '',
       },
     }));
+  }
+
+  /** v0.4.12: platte tekst van de trace, voor Copy en voor het meldbericht. */
+  function traceText(): string {
+    return formatTrace(state.trace, {
+      version: chrome.runtime.getManifest().version,
+      browser: browserLabel(),
+    });
+  }
+
+  function toggleTrace() {
+    setState((s) => ({ ...s, traceOpen: !s.traceOpen, traceCopied: false }));
+  }
+
+  async function copyTrace() {
+    try {
+      await navigator.clipboard.writeText(traceText());
+      setState((s) => ({ ...s, traceCopied: true }));
+      setTimeout(() => setState((s) => ({ ...s, traceCopied: false })), 1500);
+    } catch {
+      // Clipboard geweigerd — de tekst staat al in beeld om te selecteren.
+    }
+  }
+
+  function reportWithTrace() {
+    reportBrokenSite(`\n\n--- technical details ---\n${traceText()}`);
   }
 
   function updateReportMessage(message: string) {
@@ -571,7 +624,7 @@ export function App() {
               <button type="button" className="bb-review-cta" onClick={() => void togglePauseSite()}>
                 {t('popup_resume_site')}
               </button>
-              <button type="button" className="bb-storm-report" onClick={reportBrokenSite}>
+              <button type="button" className="bb-storm-report" onClick={() => reportBrokenSite()}>
                 {t('popup_storm_report')}
               </button>
             </div>
@@ -606,6 +659,25 @@ export function App() {
             {hereTicketLine && (
               <p className="bb-ticket">{hereTicketLine}</p>
             )}
+            {/* v0.4.12: technische trace op verzoek — één grijze link, geen
+                badge, geen kaart. Wie meldt is meestal technisch; dit zegt
+                wat elke laag deed en waarom er (niet) geklikt is. */}
+            <button type="button" className="bb-trace-toggle" onClick={toggleTrace}>
+              {state.traceOpen ? t('popup_details_hide') : t('popup_details')}
+            </button>
+            {state.traceOpen && (
+              <div className="bb-trace">
+                <pre className="bb-trace-pre">{traceText()}</pre>
+                <div className="bb-trace-actions">
+                  <button type="button" className="bb-trace-btn" onClick={copyTrace}>
+                    {state.traceCopied ? t('popup_details_copied') : t('popup_details_copy')}
+                  </button>
+                  <button type="button" className="bb-trace-btn" onClick={reportWithTrace}>
+                    {t('popup_details_report')}
+                  </button>
+                </div>
+              </div>
+            )}
             {/* v0.4.10: 'clean' toonde "No banner found on this site." — ook
                 als er wél een banner stond die laag 5 niet herkende of die
                 niets te weigeren had (alleen "Accept"). Dat las als een
@@ -613,7 +685,7 @@ export function App() {
                 plus direct een meldknop, zodat die niet onder een
                 mijlpaalkaart uit beeld kan vallen. */}
             {hereEntry?.outcome !== 'refused' && hereEntry?.outcome !== 'wall' && (
-              <button type="button" className="bb-storm-report bb-proof-report" onClick={reportBrokenSite}>
+              <button type="button" className="bb-storm-report bb-proof-report" onClick={() => reportBrokenSite()}>
                 {t('popup_storm_report')}
               </button>
             )}
@@ -778,7 +850,7 @@ export function App() {
         <button
           type="button"
           className="bb-link"
-          onClick={reportBrokenSite}
+          onClick={() => reportBrokenSite()}
         >
           {t('popup_footer_report')}
         </button>

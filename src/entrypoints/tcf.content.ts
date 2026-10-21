@@ -28,6 +28,7 @@
 import { defineContentScript } from 'wxt/sandbox';
 import { buildNoConsentTCData, type TCData } from '@/lib/tcf/tcdata.ts';
 import { readActiveState } from '@/lib/active-flag.ts';
+import { traceMain } from '@/lib/trace.ts';
 import { isPdfDocument } from '@/lib/pdf-guard.ts';
 
 /** Response shape voor `__tcfapi('ping', ...)`. */
@@ -187,6 +188,7 @@ export default defineContentScript({
             detail: { platform: 'IAB TCF' },
           }),
         );
+        traceMain('tcf', 'site called __tcfapi → answered with reject-all TC string');
       } catch {
         // CustomEvent kan in oude/exotische contexts falen — niet kritiek.
       }
@@ -330,6 +332,7 @@ export default defineContentScript({
         set: (value: unknown) => {
           if (typeof value === 'function' && value !== tcfapi) {
             cmpImpl = value as TcfApi;
+            traceMain('tcf', 'site CMP registered its own __tcfapi → delegated (our reject-all stays for the window before)');
           }
         },
         enumerable: true,
@@ -421,9 +424,13 @@ export default defineContentScript({
       if (!/(?:^|;\s*)euconsent-v2=/.test(document.cookie)) {
         const oneYear = 365 * 24 * 60 * 60;
         document.cookie = `euconsent-v2=${tcData.tcString}; path=/; max-age=${oneYear}; SameSite=Lax`;
+        traceMain('tcf', '__tcfapi stub installed · euconsent-v2 absent → reject-all string set');
+      } else {
+        traceMain('tcf', '__tcfapi stub installed · euconsent-v2 already present (left as is)');
       }
     } catch {
       // Sommige contexten (sandboxed iframe) staan cookies niet toe.
+      traceMain('tcf', '__tcfapi stub installed · cookies not writable in this frame');
     }
   },
 });

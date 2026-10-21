@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "Ilmoituksesi: ”hyväksy” on ainoa painike, ja se on kyllä. BannerBye sanoo vain ei, eikä tämä sivusto tarjoa sitä. Valinta on sinun."
+  },
+  "popup_details": {
+    "message": "Tiedot"
+  },
+  "popup_details_hide": {
+    "message": "Piilota tiedot"
+  },
+  "popup_details_copy": {
+    "message": "Kopioi"
+  },
+  "popup_details_copied": {
+    "message": "Kopioitu"
+  },
+  "popup_details_report": {
+    "message": "Ilmoita tietojen kanssa"
   }
 }

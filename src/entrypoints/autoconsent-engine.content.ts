@@ -50,6 +50,7 @@ export default defineContentScript({
         void chrome.runtime.sendMessage({
           type: 'bb:banner-blocked',
           platform: 'Known platform',
+          t: Math.round(performance.now()),
         });
       } catch {
         // background kan net idle zijn — niet kritiek.

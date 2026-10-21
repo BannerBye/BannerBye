@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "તમારો રિપોર્ટ: 'સ્વીકારો' એકમાત્ર બટન છે, અને એ હા છે. BannerBye ફક્ત ના કહે છે, અને આ સાઇટ એ વિકલ્પ આપતી નથી. નિર્ણય તમારો છે."
+  },
+  "popup_details": {
+    "message": "વિગતો"
+  },
+  "popup_details_hide": {
+    "message": "વિગતો છુપાવો"
+  },
+  "popup_details_copy": {
+    "message": "કૉપિ કરો"
+  },
+  "popup_details_copied": {
+    "message": "કૉપિ થયું"
+  },
+  "popup_details_report": {
+    "message": "વિગતો સાથે રિપોર્ટ કરો"
   }
 }

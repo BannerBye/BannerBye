@@ -21,7 +21,9 @@
  * en blokkeert oneindige loops als step-into geen bruikbaar paneel opent.
  */
 
-import { findRejectButton, findStepIntoButton } from './finder.ts';
+import { findRejectButton, findStepIntoButton, collectVisibleTextCandidates, isInCookieBanner } from './finder.ts';
+import { traceIso, quoteText } from '../trace.ts';
+import { isSubFrame } from '../frame-guard.ts';
 import { tryTranslationFallback } from './translate.ts';
 import { detectConsentOrPayWall } from './consent-wall.ts';
 
@@ -131,6 +133,30 @@ function bannerStillPresent(el: Element): boolean {
 }
 
 /**
+ * v0.4.12: één regel voor de trace als laag 5 het opgeeft — zegt een
+ * technische melder meteen óf er überhaupt een banner herkend is.
+ */
+function giveUpSummary(elapsedMs: number): string {
+  let total = 0;
+  let inBanner = 0;
+  try {
+    const cands = collectVisibleTextCandidates();
+    total = cands.length;
+    for (const c of cands) {
+      if (isInCookieBanner(c.el)) inBanner++;
+    }
+  } catch {
+    // telling is bijzaak
+  }
+  const where = isSubFrame() ? 'this frame' : 'main frame';
+  if (total === 0) return `gave up after ${elapsedMs} ms: no visible clickable elements with text in ${where}`;
+  if (inBanner === 0) {
+    return `gave up after ${elapsedMs} ms: ${total} visible buttons, none inside something that looks like a cookie banner`;
+  }
+  return `gave up after ${elapsedMs} ms: ${inBanner} buttons in cookie context, none matched a reject keyword (possible language gap)`;
+}
+
+/**
  * Start de auto-click fallback. Geeft een Promise terug die resolved
  * zodra de knop is geklikt of de timeout is verstreken.
  */
@@ -183,6 +209,7 @@ export function startAutoClick(
       // wel melden. Vóór de passes, zodat geen enkele pass per ongeluk de
       // "weigeren = abonneren"-knop kan raken. Zie consent-wall.ts.
       if (detectConsentOrPayWall()) {
+        traceIso('wall', `consent-or-pay wall: pay button + consent button, no free reject → left alone (${Date.now() - startTime} ms)`);
         finish({ clicked: false, wall: true, elapsedMs: Date.now() - startTime });
         return;
       }
@@ -206,9 +233,14 @@ export function startAutoClick(
         verifying = true;
         const viaStepInto = stepIntoClicked;
         window.setTimeout(() => {
+          const verified = !bannerStillPresent(reject);
+          traceIso(
+            'click',
+            `clicked ${quoteText(buttonText)}${viaStepInto ? ' (after step-into)' : ''} → ${verified ? 'banner gone' : 'banner still visible'} (${Date.now() - startTime} ms)`,
+          );
           finish({
             clicked: true,
-            verified: !bannerStillPresent(reject),
+            verified,
             buttonText,
             viaStepInto,
             elapsedMs: Date.now() - startTime,
@@ -230,6 +262,7 @@ export function startAutoClick(
 
       stepIntoClicked = true;
       markStepInto();
+      traceIso('click', `no reject button yet → step-into ${quoteText((stepInto.innerText || stepInto.textContent || '').trim())}`);
       try {
         stepInto.click();
         // De click triggert DOM-mutaties die de observer pickt — maar we
@@ -290,9 +323,11 @@ export function startAutoClick(
         const translated = await tryTranslationFallback();
         if (resolved || verifying) return;
         if (!translated) {
+          traceIso('click', giveUpSummary(Date.now() - startTime));
           finish({ clicked: false, elapsedMs: Date.now() - startTime });
           return;
         }
+        traceIso('click', `on-device translation matched ${quoteText((translated.innerText || translated.textContent || '').trim())}`);
 
         const buttonText = (translated.innerText || translated.textContent || '').trim();
         try {

@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "Ваша пријава: „прихвати“ је једино дугме, а то је да. BannerBye каже само не, а овај сајт то не нуди. Избор је ваш."
+  },
+  "popup_details": {
+    "message": "Детаљи"
+  },
+  "popup_details_hide": {
+    "message": "Сакриј детаље"
+  },
+  "popup_details_copy": {
+    "message": "Копирај"
+  },
+  "popup_details_copied": {
+    "message": "Копирано"
+  },
+  "popup_details_report": {
+    "message": "Пријави са детаљима"
   }
 }

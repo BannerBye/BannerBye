@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "ನಿಮ್ಮ ವರದಿ: 'ಸ್ವೀಕರಿಸಿ' ಒಂದೇ ಬಟನ್, ಮತ್ತು ಅದು ಹೌದು. BannerBye ಇಲ್ಲ ಎಂದು ಮಾತ್ರ ಹೇಳುತ್ತದೆ, ಮತ್ತು ಈ ಸೈಟ್ ಆ ಆಯ್ಕೆ ನೀಡುವುದಿಲ್ಲ. ನಿರ್ಧಾರ ನಿಮ್ಮದು."
+  },
+  "popup_details": {
+    "message": "ವಿವರಗಳು"
+  },
+  "popup_details_hide": {
+    "message": "ವಿವರಗಳನ್ನು ಮರೆಮಾಡಿ"
+  },
+  "popup_details_copy": {
+    "message": "ನಕಲಿಸಿ"
+  },
+  "popup_details_copied": {
+    "message": "ನಕಲಿಸಲಾಗಿದೆ"
+  },
+  "popup_details_report": {
+    "message": "ವಿವರಗಳೊಂದಿಗೆ ವರದಿ ಮಾಡಿ"
   }
 }

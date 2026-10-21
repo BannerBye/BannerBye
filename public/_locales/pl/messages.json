@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "Twoje zgłoszenie: „akceptuj” to jedyny przycisk, a to jest „tak”. BannerBye mówi tylko „nie”, a ta strona tego nie oferuje. Wybór należy do Ciebie."
+  },
+  "popup_details": {
+    "message": "Szczegóły"
+  },
+  "popup_details_hide": {
+    "message": "Ukryj szczegóły"
+  },
+  "popup_details_copy": {
+    "message": "Kopiuj"
+  },
+  "popup_details_copied": {
+    "message": "Skopiowano"
+  },
+  "popup_details_report": {
+    "message": "Zgłoś ze szczegółami"
   }
 }

@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "Вашият сигнал: „приемам“ е единственият бутон, а това е „да“. BannerBye казва само „не“, а този сайт не го предлага. Изборът е ваш."
+  },
+  "popup_details": {
+    "message": "Подробности"
+  },
+  "popup_details_hide": {
+    "message": "Скрий подробностите"
+  },
+  "popup_details_copy": {
+    "message": "Копирай"
+  },
+  "popup_details_copied": {
+    "message": "Копирано"
+  },
+  "popup_details_report": {
+    "message": "Докладвай с подробности"
   }
 }

@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "รายงานของคุณ: “ยอมรับ” เป็นปุ่มเดียว และนั่นคือ “ใช่” BannerBye พูดแค่ “ไม่” และเว็บไซต์นี้ไม่มีตัวเลือกนั้น การตัดสินใจเป็นของคุณ"
+  },
+  "popup_details": {
+    "message": "รายละเอียด"
+  },
+  "popup_details_hide": {
+    "message": "ซ่อนรายละเอียด"
+  },
+  "popup_details_copy": {
+    "message": "คัดลอก"
+  },
+  "popup_details_copied": {
+    "message": "คัดลอกแล้ว"
+  },
+  "popup_details_report": {
+    "message": "รายงานพร้อมรายละเอียด"
   }
 }

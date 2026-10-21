@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "നിങ്ങളുടെ റിപ്പോർട്ട്: 'അംഗീകരിക്കുക' മാത്രമാണ് ബട്ടൺ, അത് അതെ എന്നാണ്. BannerBye ഇല്ല എന്ന് മാത്രമേ പറയൂ, ഈ സൈറ്റ് അത് നൽകുന്നില്ല. തീരുമാനം നിങ്ങളുടേതാണ്."
+  },
+  "popup_details": {
+    "message": "വിശദാംശങ്ങൾ"
+  },
+  "popup_details_hide": {
+    "message": "വിശദാംശങ്ങൾ മറയ്ക്കുക"
+  },
+  "popup_details_copy": {
+    "message": "പകർത്തുക"
+  },
+  "popup_details_copied": {
+    "message": "പകർത്തി"
+  },
+  "popup_details_report": {
+    "message": "വിശദാംശങ്ങളോടെ റിപ്പോർട്ട് ചെയ്യുക"
   }
 }

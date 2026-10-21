@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "Your report: 'accept' is the only button, and that's a yes. BannerBye only says no, and this site doesn't offer it. The choice stays yours."
+  },
+  "popup_details": {
+    "message": "Details"
+  },
+  "popup_details_hide": {
+    "message": "Hide details"
+  },
+  "popup_details_copy": {
+    "message": "Copy"
+  },
+  "popup_details_copied": {
+    "message": "Copied"
+  },
+  "popup_details_report": {
+    "message": "Report with details"
   }
 }

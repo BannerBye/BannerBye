@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "Jūsų pranešimas: „priimti“ – vienintelis mygtukas, o tai reiškia taip. „BannerBye“ sako tik ne, o ši svetainė to nesiūlo. Pasirinkimas jūsų."
+  },
+  "popup_details": {
+    "message": "Išsami informacija"
+  },
+  "popup_details_hide": {
+    "message": "Slėpti informaciją"
+  },
+  "popup_details_copy": {
+    "message": "Kopijuoti"
+  },
+  "popup_details_copied": {
+    "message": "Nukopijuota"
+  },
+  "popup_details_report": {
+    "message": "Pranešti su informacija"
   }
 }

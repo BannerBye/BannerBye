@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "Ang ulat mo: “tanggapin” lang ang button, at oo iyon. Hindi lang ang sinasabi ng BannerBye, at hindi iyon inaalok ng site na ito. Nasa iyo ang pagpapasya."
+  },
+  "popup_details": {
+    "message": "Mga detalye"
+  },
+  "popup_details_hide": {
+    "message": "Itago ang mga detalye"
+  },
+  "popup_details_copy": {
+    "message": "Kopyahin"
+  },
+  "popup_details_copied": {
+    "message": "Nakopya"
+  },
+  "popup_details_report": {
+    "message": "I-ulat kasama ang mga detalye"
   }
 }

@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "Raportul tău: „acceptă” este singurul buton, iar acesta e un da. BannerBye spune doar nu, iar acest site nu oferă asta. Alegerea rămâne a ta."
+  },
+  "popup_details": {
+    "message": "Detalii"
+  },
+  "popup_details_hide": {
+    "message": "Ascunde detaliile"
+  },
+  "popup_details_copy": {
+    "message": "Copiază"
+  },
+  "popup_details_copied": {
+    "message": "Copiat"
+  },
+  "popup_details_report": {
+    "message": "Raportează cu detalii"
   }
 }

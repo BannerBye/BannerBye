@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "Vaša prijava: „prihvati“ je jedini gumb, a to je da. BannerBye kaže samo ne, a ova stranica to ne nudi. Izbor je vaš."
+  },
+  "popup_details": {
+    "message": "Pojedinosti"
+  },
+  "popup_details_hide": {
+    "message": "Sakrij pojedinosti"
+  },
+  "popup_details_copy": {
+    "message": "Kopiraj"
+  },
+  "popup_details_copied": {
+    "message": "Kopirano"
+  },
+  "popup_details_report": {
+    "message": "Prijavi s pojedinostima"
   }
 }

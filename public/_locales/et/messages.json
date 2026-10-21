@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "Sinu teade: „nõustu“ on ainus nupp ja see on jah. BannerBye ütleb ainult ei, ja seda see sait ei paku. Valik on sinu."
+  },
+  "popup_details": {
+    "message": "Üksikasjad"
+  },
+  "popup_details_hide": {
+    "message": "Peida üksikasjad"
+  },
+  "popup_details_copy": {
+    "message": "Kopeeri"
+  },
+  "popup_details_copied": {
+    "message": "Kopeeritud"
+  },
+  "popup_details_report": {
+    "message": "Teata koos üksikasjadega"
   }
 }

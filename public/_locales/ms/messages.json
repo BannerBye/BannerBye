@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "Laporan anda: “terima” ialah satu-satunya butang, dan itu bermaksud ya. BannerBye hanya berkata tidak, dan laman ini tidak menawarkannya. Pilihan di tangan anda."
+  },
+  "popup_details": {
+    "message": "Butiran"
+  },
+  "popup_details_hide": {
+    "message": "Sembunyikan butiran"
+  },
+  "popup_details_copy": {
+    "message": "Salin"
+  },
+  "popup_details_copied": {
+    "message": "Disalin"
+  },
+  "popup_details_report": {
+    "message": "Laporkan dengan butiran"
   }
 }

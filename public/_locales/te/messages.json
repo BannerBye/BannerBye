@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "మీ నివేదిక: 'అంగీకరించు' ఒక్కటే బటన్, అది అవును. BannerBye కాదు అని మాత్రమే చెబుతుంది, ఈ సైట్ ఆ ఎంపిక ఇవ్వదు. నిర్ణయం మీదే."
+  },
+  "popup_details": {
+    "message": "వివరాలు"
+  },
+  "popup_details_hide": {
+    "message": "వివరాలు దాచు"
+  },
+  "popup_details_copy": {
+    "message": "కాపీ చేయి"
+  },
+  "popup_details_copied": {
+    "message": "కాపీ అయింది"
+  },
+  "popup_details_report": {
+    "message": "వివరాలతో నివేదించు"
   }
 }

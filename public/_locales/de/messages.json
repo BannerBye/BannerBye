@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "Deine Meldung: „Akzeptieren“ ist der einzige Button, und das ist ein Ja. BannerBye sagt nur Nein, und das bietet diese Seite nicht an. Die Wahl bleibt bei dir."
+  },
+  "popup_details": {
+    "message": "Details"
+  },
+  "popup_details_hide": {
+    "message": "Details ausblenden"
+  },
+  "popup_details_copy": {
+    "message": "Kopieren"
+  },
+  "popup_details_copied": {
+    "message": "Kopiert"
+  },
+  "popup_details_report": {
+    "message": "Mit Details melden"
   }
 }

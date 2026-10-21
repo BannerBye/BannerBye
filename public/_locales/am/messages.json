@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "ሪፖርትዎ፦ ‘ተቀበል’ ብቸኛው አዝራር ነው፣ ያም አዎ ነው። BannerBye አይ ብቻ ነው የሚለው፣ ይህ ድረ-ገጽ ደግሞ ያንን አያቀርብም። ምርጫው የእርስዎ ነው።"
+  },
+  "popup_details": {
+    "message": "ዝርዝሮች"
+  },
+  "popup_details_hide": {
+    "message": "ዝርዝሮችን ደብቅ"
+  },
+  "popup_details_copy": {
+    "message": "ቅዳ"
+  },
+  "popup_details_copied": {
+    "message": "ተቀድቷል"
+  },
+  "popup_details_report": {
+    "message": "ከዝርዝሮች ጋር ሪፖርት አድርግ"
   }
 }

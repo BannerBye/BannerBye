@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "Jūsu ziņojums: „pieņemt” ir vienīgā poga, un tas ir jā. BannerBye saka tikai nē, un šī vietne to nepiedāvā. Izvēle ir jūsu."
+  },
+  "popup_details": {
+    "message": "Detaļas"
+  },
+  "popup_details_hide": {
+    "message": "Slēpt detaļas"
+  },
+  "popup_details_copy": {
+    "message": "Kopēt"
+  },
+  "popup_details_copied": {
+    "message": "Nokopēts"
+  },
+  "popup_details_report": {
+    "message": "Ziņot ar detaļām"
   }
 }

@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "आपकी रिपोर्ट: 'स्वीकार करें' ही एकमात्र बटन है, और वह हाँ है। BannerBye सिर्फ़ ना कहता है, और यह साइट वह विकल्प नहीं देती। फ़ैसला आपका है।"
+  },
+  "popup_details": {
+    "message": "विवरण"
+  },
+  "popup_details_hide": {
+    "message": "विवरण छिपाएँ"
+  },
+  "popup_details_copy": {
+    "message": "कॉपी करें"
+  },
+  "popup_details_copied": {
+    "message": "कॉपी हो गया"
+  },
+  "popup_details_report": {
+    "message": "विवरण के साथ रिपोर्ट करें"
   }
 }

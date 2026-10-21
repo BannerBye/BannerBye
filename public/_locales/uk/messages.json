@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "Ваше повідомлення: «прийняти» — єдина кнопка, і це «так». BannerBye каже лише «ні», а цей сайт такого не пропонує. Вибір за вами."
+  },
+  "popup_details": {
+    "message": "Деталі"
+  },
+  "popup_details_hide": {
+    "message": "Сховати деталі"
+  },
+  "popup_details_copy": {
+    "message": "Копіювати"
+  },
+  "popup_details_copied": {
+    "message": "Скопійовано"
+  },
+  "popup_details_report": {
+    "message": "Повідомити з деталями"
   }
 }

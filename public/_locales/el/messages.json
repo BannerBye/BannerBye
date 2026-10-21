@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "Η αναφορά σου: το «αποδοχή» είναι το μόνο κουμπί, και αυτό είναι ένα ναι. Το BannerBye λέει μόνο όχι, και αυτός ο ιστότοπος δεν το προσφέρει. Η επιλογή είναι δική σου."
+  },
+  "popup_details": {
+    "message": "Λεπτομέρειες"
+  },
+  "popup_details_hide": {
+    "message": "Απόκρυψη λεπτομερειών"
+  },
+  "popup_details_copy": {
+    "message": "Αντιγραφή"
+  },
+  "popup_details_copied": {
+    "message": "Αντιγράφηκε"
+  },
+  "popup_details_report": {
+    "message": "Αναφορά με λεπτομέρειες"
   }
 }

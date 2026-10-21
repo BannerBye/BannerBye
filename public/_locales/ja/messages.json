@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "あなたの報告：ボタンは「同意する」だけで、それは「はい」です。BannerBye は「いいえ」しか言いませんが、このサイトにはその選択肢がありません。判断はあなたに委ねます。"
+  },
+  "popup_details": {
+    "message": "詳細"
+  },
+  "popup_details_hide": {
+    "message": "詳細を隠す"
+  },
+  "popup_details_copy": {
+    "message": "コピー"
+  },
+  "popup_details_copied": {
+    "message": "コピーしました"
+  },
+  "popup_details_report": {
+    "message": "詳細付きで報告"
   }
 }

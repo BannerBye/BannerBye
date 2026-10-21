@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "بلاغك: «قبول» هو الزر الوحيد، وهذا «نعم». BannerBye يقول «لا» فقط، وهذا الموقع لا يتيح ذلك. القرار يبقى لك."
+  },
+  "popup_details": {
+    "message": "التفاصيل"
+  },
+  "popup_details_hide": {
+    "message": "إخفاء التفاصيل"
+  },
+  "popup_details_copy": {
+    "message": "نسخ"
+  },
+  "popup_details_copied": {
+    "message": "تم النسخ"
+  },
+  "popup_details_report": {
+    "message": "الإبلاغ مع التفاصيل"
   }
 }

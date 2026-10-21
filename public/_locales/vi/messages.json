@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "Báo cáo của bạn: “chấp nhận” là nút duy nhất, và đó là một lời “có”. BannerBye chỉ nói “không”, và trang này không có lựa chọn đó. Quyền quyết định là của bạn."
+  },
+  "popup_details": {
+    "message": "Chi tiết"
+  },
+  "popup_details_hide": {
+    "message": "Ẩn chi tiết"
+  },
+  "popup_details_copy": {
+    "message": "Sao chép"
+  },
+  "popup_details_copied": {
+    "message": "Đã sao chép"
+  },
+  "popup_details_report": {
+    "message": "Báo cáo kèm chi tiết"
   }
 }

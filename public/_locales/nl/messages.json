@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "Jouw melding: 'accepteren' is de enige knop, en dat is een ja. BannerBye zegt alleen nee, en dat biedt deze site niet aan. De keuze blijft aan jou."
+  },
+  "popup_details": {
+    "message": "Details"
+  },
+  "popup_details_hide": {
+    "message": "Details verbergen"
+  },
+  "popup_details_copy": {
+    "message": "Kopieer"
+  },
+  "popup_details_copied": {
+    "message": "Gekopieerd"
+  },
+  "popup_details_report": {
+    "message": "Meld met details"
   }
 }

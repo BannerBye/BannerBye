@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "Bildirimin: tek düğme “kabul et”, o da evet demek. BannerBye yalnızca hayır der; bu site bunu sunmuyor. Seçim senin."
+  },
+  "popup_details": {
+    "message": "Ayrıntılar"
+  },
+  "popup_details_hide": {
+    "message": "Ayrıntıları gizle"
+  },
+  "popup_details_copy": {
+    "message": "Kopyala"
+  },
+  "popup_details_copied": {
+    "message": "Kopyalandı"
+  },
+  "popup_details_report": {
+    "message": "Ayrıntılarla bildir"
   }
 }

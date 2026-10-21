@@ -410,5 +410,20 @@
   },
   "popup_ticket_accept_only": {
     "message": "Vaša prijava: »sprejmi« je edini gumb, in to je da. BannerBye reče samo ne, tega pa ta stran ne ponuja. Izbira je vaša."
+  },
+  "popup_details": {
+    "message": "Podrobnosti"
+  },
+  "popup_details_hide": {
+    "message": "Skrij podrobnosti"
+  },
+  "popup_details_copy": {
+    "message": "Kopiraj"
+  },
+  "popup_details_copied": {
+    "message": "Kopirano"
+  },
+  "popup_details_report": {
+    "message": "Prijavi s podrobnostmi"
   }
 }
