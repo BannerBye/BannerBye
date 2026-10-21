@@ -23,6 +23,7 @@
 
 import { findRejectButton, findStepIntoButton } from './finder.ts';
 import { tryTranslationFallback } from './translate.ts';
+import { detectConsentOrPayWall } from './consent-wall.ts';
 
 /** Hoe lang we proberen voordat we opgeven. */
 const OBSERVE_TIMEOUT_MS = 10_000;
@@ -95,6 +96,12 @@ export interface AutoClickResult {
   buttonText?: string;
   /** True als we via step-into de reject-knop bereikten. */
   viaStepInto?: boolean;
+  /**
+   * v0.4.11: er is niet geklikt omdat dit een consent-or-pay-muur is
+   * (toestemmen of betalen, geen gratis weigerroute). Die keuze blijft bij
+   * de gebruiker; de popup toont dat als 'wall' in plaats van 'clean'.
+   */
+  wall?: boolean;
   /**
    * True als we de knop alleen via de on-device vertaal-fallback vonden
    * (v0.4.4, translate.ts) — knoptekst matchte geen enkele bundled/remote
@@ -171,6 +178,14 @@ export function startAutoClick(
       // (voorkomt dubbel klikken/tellen). Flags staan op de gedeelde window.
       const w = window as Window;
       if (w.__bbConsentHandled || w.__bbConsentActive) return;
+
+      // v0.4.11 (netzwelt.de): consent-or-pay-muur → bewust niets klikken,
+      // wel melden. Vóór de passes, zodat geen enkele pass per ongeluk de
+      // "weigeren = abonneren"-knop kan raken. Zie consent-wall.ts.
+      if (detectConsentOrPayWall()) {
+        finish({ clicked: false, wall: true, elapsedMs: Date.now() - startTime });
+        return;
+      }
 
       // PASS 1+2: directe reject-knop. Na een step-into klik passen we
       // de relax-flag toe — we zitten dan al in een cookie-flow, en het

@@ -151,6 +151,16 @@ export default defineContentScript({
         }
       }, 350);
       // Voor debug: console.log(`[BannerBye] auto-click: "${result.buttonText}" in ${result.elapsedMs}ms`);
+    } else if (result.wall) {
+      // v0.4.11 (netzwelt.de): toestemmen-of-betalen-muur. Vanuit elk frame
+      // melden — contentpass zet de muur in een iframe en het hoofdframe ziet
+      // alleen een lege pagina. Background schrijft 'wall' (wint van 'clean',
+      // zie storage.ts), de popup legt uit dat BannerBye hier bewust niets doet.
+      try {
+        void chrome.runtime.sendMessage({ type: 'bb:consent-wall' });
+      } catch {
+        // Background-worker kan net idle zijn — niet kritiek.
+      }
     } else if (!result.clicked && !isSubFrame()) {
       // v0.4.0: er viel hier niets te weigeren. Alleen vanuit het hoofdframe
       // melden (anders zou elk consent-verdacht iframe apart tellen) en alleen

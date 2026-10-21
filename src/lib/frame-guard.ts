@@ -38,6 +38,9 @@ const CONSENT_FRAME_HOSTS = [
   'quantcast.com',
   'privacymanager.io',
   'sourcepoint.mgr.consensu.org',
+  // v0.4.11 (netzwelt.de): contentpass serveert zijn consent-or-pay-muur
+  // als iframe; meestal op een eigen CNAME (cp.netzwelt.de), soms direct.
+  'contentpass.net',
 ];
 
 /**
@@ -86,7 +89,7 @@ function isConsentFrameByUrl(): boolean {
     const host = location.hostname.toLowerCase();
     if (CONSENT_HOST_FRAGMENTS.some((frag) => host.includes(frag))) return true;
 
-    return isSourcepointFrameUrl();
+    return isSourcepointFrameUrl() || isContentpassFrameUrl();
   } catch {
     return false;
   }
@@ -110,6 +113,23 @@ export function isSourcepointFrameUrl(): boolean {
       spPath &&
       (params.has('message_id') || params.has('consentUUID') || params.has('requestUUID'))
     );
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * v0.4.11 (netzwelt.de, 21 okt 2026): contentpass' "first layer" — de
+ * consent-or-pay-muur die veel Duitse uitgevers gebruiken — draait in een
+ * iframe op een eigen CNAME zonder consent-woord in de hostnaam
+ * (cp.netzwelt.de). Handtekening: pad `/first-layer/` met een `start`-
+ * parameter. Zonder deze herkenning werd dat frame nooit verwerkt en meldde
+ * het hoofdframe "niets te weigeren" terwijl de muur het hele scherm vulde.
+ */
+export function isContentpassFrameUrl(): boolean {
+  try {
+    const params = new URLSearchParams(location.search);
+    return /^\/first-layer\/?$/.test(location.pathname) && params.has('start');
   } catch {
     return false;
   }

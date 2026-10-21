@@ -343,7 +343,7 @@ function* walkClickables(root: Document | ShadowRoot): Generator<HTMLElement> {
  * Dit is conservatief — voorkomt dat we een random "Save"-knop op een
  * formulier klikken alleen omdat de pagina-footer "cookies" zegt.
  */
-function isInCookieBanner(el: HTMLElement): boolean {
+export function isInCookieBanner(el: HTMLElement): boolean {
   let current: HTMLElement | null = el;
   let depth = 0;
 
