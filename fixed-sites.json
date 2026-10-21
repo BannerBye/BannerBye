@@ -50,6 +50,13 @@
       "label": "prehide",
       "version": "0.4.10",
       "fixedAt": "2026-10-18"
+    },
+    {
+      "hostname": "netzwelt.de",
+      "reason": "Pay-or-consent wall (contentpass) is now recognised: BannerBye leaves the choice to you and says so in the popup, instead of reporting a clean page (0.4.11)",
+      "label": "consentWall",
+      "version": "0.4.11",
+      "fixedAt": "2026-10-21"
     }
   ]
 }
