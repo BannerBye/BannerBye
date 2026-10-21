@@ -42,6 +42,7 @@ import {
   writeAnalysis,
   recordPendingFix,
   promotePendingFixes,
+  setHostStatus,
   type HostWork,
 } from './redis.ts';
 import { sendOwnerSummaryEmail } from './notify.ts';
@@ -598,6 +599,26 @@ async function main(): Promise<void> {
   // Robin de PR merget. Een latere iteratie kan dit opnieuw aansluiten op een
   // "PR gemerged"-webhook/workflow; buiten scope van deze security-fix
   // (zie BannerBye_Security-Audit_2026-09-16_INTERN.md, bevinding 1).
+
+  // v0.4.12 — ticket-terugkoppeling: zet per onderzochte host een status die
+  // de popup van de melder kan tonen. Best-effort; mag de run nooit breken.
+  try {
+    const staged = new Set(stageEntries.map((e) => e.hostname));
+    for (const r of results) {
+      if (staged.has(r.host)) {
+        await setHostStatus(redis, r.host, 'investigating', 'A fix is in review.');
+      } else if (r.classification.category === 'accept_only') {
+        await setHostStatus(
+          redis,
+          r.host,
+          'not-a-bug',
+          'This site offers no way to refuse, only to accept. Nothing for BannerBye to click.',
+        );
+      }
+    }
+  } catch (err) {
+    console.warn('[analyze] ticket-status zetten faalde:', err);
+  }
 
   // #134 — samenvattingsmail naar de eigenaar, altijd, ongeacht uitkomst.
   // Best-effort: een mislukte mail mag de rest van de run nooit blokkeren.

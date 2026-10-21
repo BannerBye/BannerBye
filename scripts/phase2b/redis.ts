@@ -125,7 +125,7 @@ export interface FixedEntry {
  */
 export async function recordFixed(
   redis: Redis,
-  entries: { hostname: string; keyword: string; list: string; fixedAt?: number }[],
+  entries: { hostname: string; keyword: string; list: string; fixedAt?: number; version?: string }[],
 ): Promise<void> {
   if (!entries.length) return;
   const now = Date.now();
@@ -142,9 +142,41 @@ export async function recordFixed(
       keyword: e.keyword,
       list: e.list,
       fixedAt,
+      // v0.4.12: extensieversie van een codefix, zodat de popup "fixed in
+      // 0.4.x — update to get it" kan tonen (ticket-terugkoppeling). Leeg bij
+      // een keyword-fix: die komt via de regellijst zonder update.
+      ...(e.version ? { version: e.version } : {}),
     });
+    // Een expliciete host-status (bv. 'investigating') is hiermee achterhaald.
+    p.del(`bb:host:status:${e.hostname}`);
   }
   await p.exec();
+}
+
+/**
+ * v0.4.12: expliciete fix-status per host voor de anonieme ticket-
+ * terugkoppeling (zie deploy/lib/store.ts). De pijplijn zet 'investigating'
+ * zodra een voorstel in de review-PR staat en 'not-a-bug' bij accept-only;
+ * 'fixed' volgt vanzelf uit bb:fixed. Geen persoonsgegevens: alleen hostname
+ * + status + korte publieke uitleg. TTL 180 d, zoals de meldingen zelf.
+ */
+export async function setHostStatus(
+  redis: Redis,
+  hostname: string,
+  status: 'received' | 'investigating' | 'fixed' | 'not-a-bug',
+  note?: string,
+  version?: string,
+): Promise<void> {
+  await redis.set(
+    `bb:host:status:${hostname}`,
+    {
+      status,
+      ...(note ? { note: note.slice(0, 200) } : {}),
+      ...(version ? { version } : {}),
+      ts: Date.now(),
+    },
+    { ex: ANALYSIS_TTL_SECONDS },
+  );
 }
 
 /**

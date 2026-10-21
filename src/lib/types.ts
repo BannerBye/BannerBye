@@ -63,6 +63,13 @@ export interface LocalStats {
    */
   recentActivity: ActivityEntry[];
   /**
+   * v0.4.12: anonieme tickets van eigen meldingen. Alleen op dit apparaat;
+   * de server kent per ticket alleen de hostname. Zie lib/tickets.ts.
+   */
+  tickets: TicketEntry[];
+  /** v0.4.12: wanneer de ticketstatus voor het laatst is opgehaald (ms). */
+  ticketsCheckedAt: number;
+  /**
    * v0.4.0: is de eenmalige review-vraag afgehandeld (weggeklikt of gebruikt)?
    * Anti-feature manifest: we vragen precies één keer, ná een milestone-viering,
    * en nooit opnieuw na een dismissal. Geen nag, geen herhaling, geen timer.
@@ -82,6 +89,21 @@ export type ActivityOutcome = 'refused' | 'clean' | 'wall';
  * per paginabezoek — dat maakt het een overzicht van waar BannerBye werkte,
  * niet een tijdlijn van wat je gelezen hebt.
  */
+/** v0.4.12: status die de server per ticket teruggeeft. */
+export type TicketStatus = 'received' | 'investigating' | 'fixed' | 'not-a-bug';
+
+export interface TicketEntry {
+  /** Willekeurig, lokaal gemaakt: `xxxx-xxxx` (base36). */
+  id: string;
+  host: string;
+  createdAt: number;
+  status: TicketStatus;
+  /** Korte publieke uitleg van de server (bij not-a-bug / keyword-fix). */
+  note?: string;
+  /** Extensieversie waarin de codefix zit; leeg bij een keyword-fix. */
+  version?: string;
+}
+
 export interface ActivityEntry {
   /** Genormaliseerde hostname, bijvoorbeeld "zalando.nl". */
   host: string;
@@ -126,5 +148,7 @@ export const DEFAULT_STATS: LocalStats = {
   reportedSites: [],
   pendingReportFixed: [],
   recentActivity: [],
+  tickets: [],
+  ticketsCheckedAt: 0,
   reviewAskDone: false,
 };

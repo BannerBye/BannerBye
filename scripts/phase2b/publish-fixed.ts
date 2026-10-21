@@ -157,6 +157,7 @@ async function main(): Promise<void> {
       keyword: e.reason,
       list: e.label,
       fixedAt: parseDay(e.fixedAt),
+      version: e.version,
     })),
   );
 

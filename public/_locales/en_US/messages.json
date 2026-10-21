@@ -5,192 +5,404 @@
   "extDesc": {
     "message": "Cookie banners, killed before they load. Set your privacy once. BannerBye handles the rest — automatically, on every site."
   },
-
-  "popup_loading": { "message": "Loading…" },
-
-  "popup_status_off": { "message": "BannerBye is off everywhere." },
-  "popup_status_no_site": { "message": "No site to act on." },
+  "popup_loading": {
+    "message": "Loading…"
+  },
+  "popup_status_off": {
+    "message": "BannerBye is off everywhere."
+  },
+  "popup_status_no_site": {
+    "message": "No site to act on."
+  },
   "popup_status_paused": {
     "message": "Paused on $HOST$.",
-    "placeholders": { "host": { "content": "$1" } }
+    "placeholders": {
+      "host": {
+        "content": "$1"
+      }
+    }
   },
   "popup_status_active": {
     "message": "Active on $HOST$.",
-    "placeholders": { "host": { "content": "$1" } }
+    "placeholders": {
+      "host": {
+        "content": "$1"
+      }
+    }
   },
-  "popup_status_dot_active_aria": { "message": "Active" },
-  "popup_status_dot_inactive_aria": { "message": "Inactive" },
-
-  "popup_toggle_label": { "message": "BannerBye" },
-  "popup_toggle_on": { "message": "On" },
-  "popup_toggle_off": { "message": "Off" },
-  "popup_pause_site": { "message": "Pause on this site" },
-  "popup_resume_site": { "message": "Resume on this site" },
-
-  "popup_stat_label": { "message": "banners refused" },
-
-  "popup_activity_show": { "message": "Show the evidence" },
-  "popup_activity_hide": { "message": "Hide the evidence" },
-  "popup_activity_no_banner": { "message": "No banner" },
-  "popup_activity_banner_refused_fallback": { "message": "Banner refused" },
+  "popup_status_dot_active_aria": {
+    "message": "Active"
+  },
+  "popup_status_dot_inactive_aria": {
+    "message": "Inactive"
+  },
+  "popup_toggle_label": {
+    "message": "BannerBye"
+  },
+  "popup_toggle_on": {
+    "message": "On"
+  },
+  "popup_toggle_off": {
+    "message": "Off"
+  },
+  "popup_pause_site": {
+    "message": "Pause on this site"
+  },
+  "popup_resume_site": {
+    "message": "Resume on this site"
+  },
+  "popup_stat_label": {
+    "message": "banners refused"
+  },
+  "popup_activity_show": {
+    "message": "Show the evidence"
+  },
+  "popup_activity_hide": {
+    "message": "Hide the evidence"
+  },
+  "popup_activity_no_banner": {
+    "message": "No banner"
+  },
+  "popup_activity_banner_refused_fallback": {
+    "message": "Banner refused"
+  },
   "popup_activity_count_suffix": {
     "message": " · $COUNT$×",
-    "placeholders": { "count": { "content": "$1" } }
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
   },
-  "popup_time_just_now": { "message": "just now" },
+  "popup_time_just_now": {
+    "message": "just now"
+  },
   "popup_time_minutes_ago": {
     "message": "$MINUTES$m ago",
-    "placeholders": { "minutes": { "content": "$1" } }
+    "placeholders": {
+      "minutes": {
+        "content": "$1"
+      }
+    }
   },
   "popup_time_hours_ago": {
     "message": "$HOURS$h ago",
-    "placeholders": { "hours": { "content": "$1" } }
+    "placeholders": {
+      "hours": {
+        "content": "$1"
+      }
+    }
   },
-  "popup_time_one_day_ago": { "message": "1 day ago" },
+  "popup_time_one_day_ago": {
+    "message": "1 day ago"
+  },
   "popup_time_days_ago": {
     "message": "$DAYS$ days ago",
-    "placeholders": { "days": { "content": "$1" } }
+    "placeholders": {
+      "days": {
+        "content": "$1"
+      }
+    }
   },
   "popup_activity_note": {
     "message": "Kept on this device only, for seven days. Never sent anywhere."
   },
-  "popup_activity_clear": { "message": "Clear this list" },
-
-  "popup_milestones_label": { "message": "Milestones" },
+  "popup_activity_clear": {
+    "message": "Clear this list"
+  },
+  "popup_milestones_label": {
+    "message": "Milestones"
+  },
   "popup_milestones_count": {
     "message": "$CURRENT$/$TOTAL$",
     "placeholders": {
-      "current": { "content": "$1" },
-      "total": { "content": "$2" }
+      "current": {
+        "content": "$1"
+      },
+      "total": {
+        "content": "$2"
+      }
     }
   },
-
-  "popup_footer_download_stats": { "message": "Download stats image →" },
+  "popup_footer_download_stats": {
+    "message": "Download stats image →"
+  },
   "popup_footer_download_stats_disabled_title": {
     "message": "Refuse a banner first"
   },
   "popup_footer_download_stats_title": {
     "message": "Saves a shareable PNG image of your stats to your downloads"
   },
-  "popup_footer_report": { "message": "Report broken site →" },
-  "popup_footer_rate": { "message": "Rate BannerBye →" },
+  "popup_footer_report": {
+    "message": "Report broken site →"
+  },
+  "popup_footer_rate": {
+    "message": "Rate BannerBye →"
+  },
   "popup_footer_rate_title": {
     "message": "Leave a review — it keeps BannerBye visible"
   },
-
-  "popup_modal_title": { "message": "Report broken site" },
-  "popup_modal_close_aria": { "message": "Close" },
+  "popup_modal_title": {
+    "message": "Report broken site"
+  },
+  "popup_modal_close_aria": {
+    "message": "Close"
+  },
   "popup_modal_sent": {
     "message": "Thanks. We'll take a look at $HOST$.",
-    "placeholders": { "host": { "content": "$1" } }
+    "placeholders": {
+      "host": {
+        "content": "$1"
+      }
+    }
   },
   "popup_modal_help": {
     "message": "We'll send the hostname $HOST$ to BannerBye. Optional: add what's going wrong.",
-    "placeholders": { "host": { "content": "$1" } }
+    "placeholders": {
+      "host": {
+        "content": "$1"
+      }
+    }
   },
   "popup_modal_placeholder_message": {
     "message": "What's happening? (optional)"
   },
-  "popup_modal_placeholder_email": {
-    "message": "Email me when it's fixed (optional)"
-  },
   "popup_modal_fineprint": {
-    "message": "Leave it blank to stay fully anonymous. If you add it, we only use it to send one heads-up when this banner is handled."
+    "message": "Sends only the site name, your BannerBye version and what you typed. No account, no email: the outcome shows up right here in the popup."
   },
   "popup_modal_error": {
     "message": "Couldn't send: $ERROR$",
-    "placeholders": { "error": { "content": "$1" } }
+    "placeholders": {
+      "error": {
+        "content": "$1"
+      }
+    }
   },
-  "popup_modal_send": { "message": "Send report" },
-  "popup_modal_sending": { "message": "Sending…" },
-  "popup_modal_try_again": { "message": "Try again" },
-
-  "popup_celebration_label": { "message": "Milestone unlocked" },
-  "popup_celebration_share_aria": { "message": "Download share card" },
-  "popup_celebration_dismiss_aria": { "message": "Dismiss" },
-
-  "popup_reportfixed_label": { "message": "A banner you reported" },
+  "popup_modal_send": {
+    "message": "Send report"
+  },
+  "popup_modal_sending": {
+    "message": "Sending…"
+  },
+  "popup_modal_try_again": {
+    "message": "Try again"
+  },
+  "popup_celebration_label": {
+    "message": "Milestone unlocked"
+  },
+  "popup_celebration_share_aria": {
+    "message": "Download share card"
+  },
+  "popup_celebration_dismiss_aria": {
+    "message": "Dismiss"
+  },
+  "popup_reportfixed_label": {
+    "message": "A banner you reported"
+  },
   "popup_reportfixed_text": {
     "message": "Now killed on $HOST$",
-    "placeholders": { "host": { "content": "$1" } }
+    "placeholders": {
+      "host": {
+        "content": "$1"
+      }
+    }
   },
-
-  "popup_reviewask_label": { "message": "A one-time ask" },
-  "popup_reviewask_title": { "message": "Enjoying the quiet?" },
+  "popup_reviewask_label": {
+    "message": "A one-time ask"
+  },
+  "popup_reviewask_title": {
+    "message": "Enjoying the quiet?"
+  },
   "popup_reviewask_text": {
     "message": "A short review keeps BannerBye easy to find. Ask once — never again."
   },
-  "popup_reviewask_cta": { "message": "Rate BannerBye →" },
-  "popup_reviewask_dismiss_aria": { "message": "No thanks" },
-  "popup_reviewask_dismiss_title": { "message": "No thanks — we won't ask again" },
-
-  "onboarding_eyebrow": { "message": "Quick setup — you're already protected" },
-  "onboarding_headline_1": { "message": "Cookie banners, killed." },
-  "onboarding_headline_2": { "message": "Before they load." },
+  "popup_reviewask_cta": {
+    "message": "Rate BannerBye →"
+  },
+  "popup_reviewask_dismiss_aria": {
+    "message": "No thanks"
+  },
+  "popup_reviewask_dismiss_title": {
+    "message": "No thanks — we won't ask again"
+  },
+  "onboarding_eyebrow": {
+    "message": "Quick setup — you're already protected"
+  },
+  "onboarding_headline_1": {
+    "message": "Cookie banners, killed."
+  },
+  "onboarding_headline_2": {
+    "message": "Before they load."
+  },
   "onboarding_body": {
     "message": "Nothing to configure. BannerBye already does this, right now:"
   },
-  "onboarding_check1_title": { "message": "Refusing on every site" },
+  "onboarding_check1_title": {
+    "message": "Refusing on every site"
+  },
   "onboarding_check1_desc": {
     "message": "Sends \"no consent\" automatically, legally, before a banner gets the chance to ask."
   },
-  "onboarding_check2_title": { "message": "Working silently" },
+  "onboarding_check2_title": {
+    "message": "Working silently"
+  },
   "onboarding_check2_desc": {
     "message": "You won't hear from us again. Click the shield icon ↗ in your toolbar any time to see how many banners we've refused."
   },
-  "onboarding_check3_title": { "message": "Reversible on any site" },
+  "onboarding_check3_title": {
+    "message": "Reversible on any site"
+  },
   "onboarding_check3_desc": {
     "message": "Banking, work tools, logins — if one looks broken, open the shield icon and hit Pause on this site."
   },
   "onboarding_tip": {
     "message": "Tip: pin the icon for one-click access — toolbar puzzle piece → find BannerBye → click the pin."
   },
-  "onboarding_cta": { "message": "Start browsing →" },
-
-  "milestone_first_banner": { "message": "Pop your first" },
-  "milestone_first_steps": { "message": "First steps" },
-  "milestone_cookie_crusher": { "message": "Cookie crusher" },
-  "milestone_banner_bye_master": { "message": "Banner bye-bye master" },
-  "milestone_privacy_champion": { "message": "Privacy champion" },
-  "milestone_cookie_diet_month": { "message": "Cookie diet · month one" },
-  "milestone_cookie_diet_year": { "message": "Cookie diet · year one" },
-
-  "share_milestone_unlocked_label": { "message": "MILESTONE UNLOCKED" },
-  "share_tagline": { "message": "Cookie banners, killed. Before they load." },
+  "onboarding_cta": {
+    "message": "Start browsing →"
+  },
+  "milestone_first_banner": {
+    "message": "Pop your first"
+  },
+  "milestone_first_steps": {
+    "message": "First steps"
+  },
+  "milestone_cookie_crusher": {
+    "message": "Cookie crusher"
+  },
+  "milestone_banner_bye_master": {
+    "message": "Banner bye-bye master"
+  },
+  "milestone_privacy_champion": {
+    "message": "Privacy champion"
+  },
+  "milestone_cookie_diet_month": {
+    "message": "Cookie diet · month one"
+  },
+  "milestone_cookie_diet_year": {
+    "message": "Cookie diet · year one"
+  },
+  "share_milestone_unlocked_label": {
+    "message": "MILESTONE UNLOCKED"
+  },
+  "share_tagline": {
+    "message": "Cookie banners, killed. Before they load."
+  },
   "share_counter_singular": {
     "message": "$COUNT$ cookie banner refused",
-    "placeholders": { "count": { "content": "$1" } }
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
   },
   "share_counter_plural": {
     "message": "$COUNT$ cookie banners refused",
-    "placeholders": { "count": { "content": "$1" } }
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
   },
-  "share_stats_label": { "message": "YOUR BANNERBYE STORY" },
+  "share_stats_label": {
+    "message": "YOUR BANNERBYE STORY"
+  },
   "share_milestones_unlocked": {
     "message": "$COUNT$ of $TOTAL$ milestones unlocked",
     "placeholders": {
-      "count": { "content": "$1" },
-      "total": { "content": "$2" }
+      "count": {
+        "content": "$1"
+      },
+      "total": {
+        "content": "$2"
+      }
     }
   },
   "share_since": {
     "message": "since $DATE$",
-    "placeholders": { "date": { "content": "$1" } }
+    "placeholders": {
+      "date": {
+        "content": "$1"
+      }
+    }
   },
-
-  "popup_storm_label": { "message": "BannerBye paused itself here" },
+  "popup_storm_label": {
+    "message": "BannerBye paused itself here"
+  },
   "popup_storm_text": {
     "message": "$HOST$ kept reloading ($COUNT$ times in a few seconds), so BannerBye stepped back on this site. Resume to try again, or report it so we can fix it.",
-    "placeholders": { "host": { "content": "$1" }, "count": { "content": "$2" } }
+    "placeholders": {
+      "host": {
+        "content": "$1"
+      },
+      "count": {
+        "content": "$2"
+      }
+    }
   },
-  "popup_storm_report": { "message": "Report this site" },
+  "popup_storm_report": {
+    "message": "Report this site"
+  },
   "popup_proof_refused": {
     "message": "Refused here: $PLATFORM$ · $WHEN$",
-    "placeholders": { "platform": { "content": "$1" }, "when": { "content": "$2" } }
+    "placeholders": {
+      "platform": {
+        "content": "$1"
+      },
+      "when": {
+        "content": "$2"
+      }
+    }
   },
-  "popup_proof_clean": { "message": "No banner found on this site." },
-  "popup_proof_none": { "message": "Nothing to refuse here yet." },
-  "popup_proof_wall": { "message": "This site asks you to pay or consent. That choice stays yours — BannerBye leaves the wall alone." },
-  "popup_activity_wall": { "message": "pay-or-consent wall, left to you" },
-  "onboarding_see_it": { "message": "See it happen" }
+  "popup_proof_clean": {
+    "message": "No banner found on this site."
+  },
+  "popup_proof_none": {
+    "message": "Nothing to refuse here yet."
+  },
+  "popup_proof_wall": {
+    "message": "This site asks you to pay or consent. That choice stays yours — BannerBye leaves the wall alone."
+  },
+  "popup_activity_wall": {
+    "message": "pay-or-consent wall, left to you"
+  },
+  "onboarding_see_it": {
+    "message": "See it happen"
+  },
+  "popup_tickets_title": {
+    "message": "Your reports"
+  },
+  "popup_ticket_received": {
+    "message": "Your report: received."
+  },
+  "popup_ticket_investigating": {
+    "message": "Your report: we're looking into it."
+  },
+  "popup_ticket_fixed_rules": {
+    "message": "Your report: fixed through the rule list. Nothing to update."
+  },
+  "popup_ticket_fixed_update": {
+    "message": "Your report: fixed in $VERSION$. Update to get it.",
+    "placeholders": {
+      "version": {
+        "content": "$1"
+      }
+    }
+  },
+  "popup_ticket_fixed_installed": {
+    "message": "Your report: fixed in $VERSION$. You have it.",
+    "placeholders": {
+      "version": {
+        "content": "$1"
+      }
+    }
+  },
+  "popup_ticket_not_a_bug": {
+    "message": "Your report: $NOTE$",
+    "placeholders": {
+      "note": {
+        "content": "$1"
+      }
+    }
+  }
 }

@@ -30,6 +30,8 @@ import { downloadShareCard, downloadStatsCard } from '@/lib/share-card';
 import { t } from '@/lib/i18n/t';
 // v0.4.8: herlaadrem — uitleg + hervatten in de popup, zie lib/reload-brake.ts.
 import { clearStormPause, getStormPauses, type StormPause } from '@/lib/reload-brake';
+import { addTicket, clearTickets, newTicketId, refreshTicketStatuses, versionAtLeast } from '@/lib/tickets';
+import type { TicketEntry } from '@/lib/types';
 import type {
   ActivityEntry,
   LocalStats,
@@ -81,8 +83,6 @@ interface PopupState {
   reportModal: {
     hostname: string;
     message: string;
-    /** v0.3.0: optioneel e-mailadres om een seintje te krijgen bij een fix. */
-    email: string;
     status: ReportStatus;
     errorText: string;
   } | null;
@@ -109,9 +109,27 @@ function timeAgo(ts: number): string {
     : t('popup_time_days_ago', String(days));
 }
 
-/** Losse, tolerante e-mailcheck — alleen om onzin te weren, niet streng. */
-function looksLikeEmail(value: string): boolean {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
+/**
+ * v0.4.12: één regel over de eigen melding voor een site. Null = geen ticket.
+ * Zie lib/tickets.ts voor de gedachte erachter.
+ */
+function ticketLine(ticket: TicketEntry | undefined): string | null {
+  if (!ticket) return null;
+  switch (ticket.status) {
+    case 'investigating':
+      return t('popup_ticket_investigating');
+    case 'fixed': {
+      if (!ticket.version) return t('popup_ticket_fixed_rules');
+      const installed = chrome.runtime.getManifest().version;
+      return versionAtLeast(installed, ticket.version)
+        ? t('popup_ticket_fixed_installed', ticket.version)
+        : t('popup_ticket_fixed_update', ticket.version);
+    }
+    case 'not-a-bug':
+      return t('popup_ticket_not_a_bug', ticket.note ?? '');
+    default:
+      return t('popup_ticket_received');
+  }
 }
 
 async function getActiveTabHost(): Promise<string | null> {
@@ -131,6 +149,8 @@ export function App() {
       reportedSites: [],
       pendingReportFixed: [],
       recentActivity: [],
+      tickets: [],
+      ticketsCheckedAt: 0,
       reviewAskDone: false,
     },
     hostname: null,
@@ -162,6 +182,11 @@ export function App() {
         reviewAsk: false,
         stormPause: hostname ? (stormPauses[hostname] ?? null) : null,
       });
+      // v0.4.12: status van eigen meldingen ophalen (max 1×/uur, faalt stil).
+      if (stats.tickets.length) {
+        const refreshed = await refreshTicketStatuses();
+        setState((s) => ({ ...s, stats: refreshed }));
+      }
     })();
   }, []);
 
@@ -176,6 +201,10 @@ export function App() {
   const hereEntry = state.hostname
     ? state.activity.find((e) => e.host === state.hostname) ?? null
     : null;
+  /** v0.4.12: de eigen melding voor déze site, als die er is. */
+  const hereTicketLine = ticketLine(
+    state.hostname ? state.stats.tickets.find((tk) => tk.host === state.hostname) : undefined,
+  );
 
   async function toggleGlobal() {
     const next = await updateSettings({ enabled: !state.settings.enabled });
@@ -199,7 +228,8 @@ export function App() {
   /** v0.4.0: wis de activiteitenlijst. De teller blijft staan — dat is een
    * ander gegeven (wat BannerBye deed vs. waar het dat deed). */
   async function wipeActivity() {
-    const nextStats = await clearActivity();
+    await clearActivity();
+    const nextStats = await clearTickets();
     setState((s) => ({ ...s, stats: nextStats, activity: [] }));
   }
 
@@ -287,7 +317,6 @@ export function App() {
       reportModal: {
         hostname: state.hostname!,
         message: '',
-        email: '',
         status: 'idle',
         errorText: '',
       },
@@ -301,19 +330,11 @@ export function App() {
     }));
   }
 
-  function updateReportEmail(email: string) {
-    setState((s) => ({
-      ...s,
-      reportModal: s.reportModal ? { ...s.reportModal, email } : null,
-    }));
-  }
-
   async function sendReport() {
     if (!state.reportModal) return;
-    const { hostname, message, email } = state.reportModal;
-    // Alleen een plausibel e-mailadres meesturen; leeg = volledig anoniem.
-    const trimmedEmail = email.trim();
-    const emailToSend = looksLikeEmail(trimmedEmail) ? trimmedEmail : '';
+    const { hostname, message } = state.reportModal;
+    // v0.4.12: anoniem ticket i.p.v. e-mailadres — zie lib/tickets.ts.
+    const ticket = newTicketId();
     setState((s) => ({
       ...s,
       reportModal: s.reportModal
@@ -328,7 +349,7 @@ export function App() {
           hostname,
           version: chrome.runtime.getManifest().version,
           message,
-          ...(emailToSend ? { email: emailToSend } : {}),
+          ticket,
         }),
       });
       if (!res.ok) {
@@ -338,8 +359,10 @@ export function App() {
       // #reward-1: onthoud lokaal dat we deze host meldden, zodat we later
       // kunnen vieren wanneer BannerBye er alsnog een banner blokkeert.
       void addReportedSite(hostname);
+      const withTicket = await addTicket(hostname, ticket);
       setState((s) => ({
         ...s,
+        stats: withTicket,
         reportModal: s.reportModal
           ? { ...s.reportModal, status: 'sent', errorText: '' }
           : null,
@@ -413,16 +436,6 @@ export function App() {
                   onChange={(e) => updateReportMessage(e.target.value)}
                   rows={4}
                   maxLength={2000}
-                  disabled={state.reportModal.status === 'sending'}
-                />
-                <input
-                  className="bb-modal-input"
-                  type="email"
-                  placeholder={t('popup_modal_placeholder_email')}
-                  value={state.reportModal.email}
-                  onChange={(e) => updateReportEmail(e.target.value)}
-                  maxLength={254}
-                  autoComplete="email"
                   disabled={state.reportModal.status === 'sending'}
                 />
                 <p className="bb-modal-fineprint">
@@ -584,6 +597,9 @@ export function App() {
                   ? t('popup_proof_wall')
                   : t('popup_proof_none')}
             </p>
+            {hereTicketLine && (
+              <p className="bb-ticket">{hereTicketLine}</p>
+            )}
             {/* v0.4.10: 'clean' toonde "No banner found on this site." — ook
                 als er wél een banner stond die laag 5 niet herkende of die
                 niets te weigeren had (alleen "Accept"). Dat las als een
@@ -675,6 +691,19 @@ export function App() {
                     </li>
                   ))}
                 </ul>
+                {state.stats.tickets.length > 0 && (
+                  <div className="bb-tickets">
+                    <p className="bb-tickets-title">{t('popup_tickets_title')}</p>
+                    <ul className="bb-activity-list">
+                      {state.stats.tickets.map((tk) => (
+                        <li key={tk.id} className="bb-activity-row bb-ticket-row">
+                          <span className="bb-activity-host" title={tk.host}>{tk.host}</span>
+                          <span className="bb-activity-meta">{ticketLine(tk)}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
                 <p className="bb-activity-note">{t('popup_activity_note')}</p>
                 <button
                   type="button"
