@@ -96,7 +96,15 @@ const NAV_TIMEOUT_MS = Number(process.env.NAV_TIMEOUT_MS ?? '20000');
 const WAIT_MS = Number(process.env.WAIT_MS ?? '3500');
 const PANEL_WAIT_MS = Number(process.env.PANEL_WAIT_MS ?? '1800');
 
-const CLICKABLE = 'button, [role="button"], a, input[type="button"], input[type="submit"]';
+// v0.4.14: ook pseudo-knoppen (div/span met knop-class, zie detect.ts). De
+// exacte-tekst-filter in stepIntoLocator() houdt wrappers als
+// `.cookie__buttons` (die álle knopteksten bevatten) buiten de deur.
+const CLICKABLE =
+  'button, [role="button"], a, input[type="button"], input[type="submit"], [class*="button"], [class*="btn"], [onclick]';
+
+function escapeRegExp(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
 
 /**
  * v0.4.5 (fix #4, security-audit 2026-09-16) — SSRF-denylist, defense-in-
@@ -182,7 +190,7 @@ async function analyzeHost(
       const btn = classification.stepIntoButtonText;
       try {
         await page
-          .locator(CLICKABLE, { hasText: btn })
+          .locator(CLICKABLE, { hasText: new RegExp(`^\\s*${escapeRegExp(btn)}\\s*$`, 'i') })
           .first()
           .click({ timeout: 3000 });
         await page.waitForTimeout(PANEL_WAIT_MS);

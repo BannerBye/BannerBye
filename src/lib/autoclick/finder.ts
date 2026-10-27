@@ -53,6 +53,46 @@ const CLICKABLE_SELECTOR = [
   'input[type="submit"]',
 ].join(',');
 
+/**
+ * Pseudo-knoppen (v0.4.14, 27 okt 2026 — openground.club).
+ *
+ * Sommige zelfgebouwde banners zetten hun acties op een kale <div> of <span>
+ * met een knop-achtige class en een JS-click-handler — geen <button>, geen
+ * role, geen href. openground.club ("CookieOojah"): `<div class="cookie-button
+ * cookie-button--no js-cookie-select-nothing">No Thanks</div>`. Het keyword
+ * "no thanks" stond al jaren in de lijst; de knop was alleen nooit een
+ * kandidaat, dus de pijplijn zag als enige knoptekst "Privacy policy".
+ *
+ * Vangrails: alleen elementen met een knop-achtige class (`button`/`btn` als
+ * los woorddeel), `onclick` of een focusbare `tabindex`; nooit een element dat
+ * zelf een échte klikbare bevat (dan is het een wrapper en zit de handler op
+ * het kind); en een kort label — een container met een alinea erin is geen
+ * knop. De tekst-passes eisen daarna nog steeds een exacte keyword-match, dus
+ * een willekeurige `.btn-group` matcht niets.
+ */
+const PSEUDO_BUTTON_SELECTOR = '[class*="button"],[class*="btn"],[onclick],[tabindex]';
+const PSEUDO_BUTTON_CLASS_RE = /(^|[^a-z])(button|btn)([^a-z]|$)/i;
+const PSEUDO_BUTTON_SKIP_TAGS = new Set([
+  'BUTTON', 'A', 'INPUT', 'SELECT', 'TEXTAREA', 'LABEL', 'HTML', 'BODY', 'SCRIPT', 'STYLE', 'IFRAME', 'SVG', 'PATH',
+]);
+const MAX_PSEUDO_BUTTON_LABEL_LENGTH = 60;
+
+function isPseudoButton(el: HTMLElement): boolean {
+  if (PSEUDO_BUTTON_SKIP_TAGS.has(el.tagName)) return false;
+  if (el.matches(CLICKABLE_SELECTOR)) return false;
+  const className = typeof el.className === 'string' ? el.className : '';
+  const tabindex = el.getAttribute('tabindex');
+  const looksLikeButton =
+    PSEUDO_BUTTON_CLASS_RE.test(className) ||
+    el.hasAttribute('onclick') ||
+    (tabindex !== null && tabindex !== '-1');
+  if (!looksLikeButton) return false;
+  // Wrapper om een echte knop: de handler zit op het kind, niet hier.
+  if (el.querySelector(CLICKABLE_SELECTOR)) return false;
+  const text = (el.innerText || el.textContent || '').trim();
+  return text.length > 0 && text.length <= MAX_PSEUDO_BUTTON_LABEL_LENGTH;
+}
+
 /** Hoeveel parents we omhoog walken om een banner-container te vinden. */
 const MAX_PARENT_DEPTH = 15;
 
@@ -267,6 +307,8 @@ function isSafeToClick(el: HTMLElement): boolean {
   if (tag === 'BUTTON') return true;
   if (tag === 'INPUT') return true;
   if (el.getAttribute('role') === 'button') return true;
+  // Pseudo-knop zonder href kan nergens heen navigeren (v0.4.14).
+  if (isPseudoButton(el)) return true;
 
   return false;
 }
@@ -311,6 +353,11 @@ export function findStepIntoButton(): HTMLElement | null {
 function* walkClickables(root: Document | ShadowRoot): Generator<HTMLElement> {
   for (const el of root.querySelectorAll<HTMLElement>(CLICKABLE_SELECTOR)) {
     yield el;
+  }
+
+  // Pseudo-knoppen (div/span met knop-class + click-handler), zie boven.
+  for (const el of root.querySelectorAll<HTMLElement>(PSEUDO_BUTTON_SELECTOR)) {
+    if (isPseudoButton(el)) yield el;
   }
 
   for (const host of root.querySelectorAll<HTMLElement>('*')) {

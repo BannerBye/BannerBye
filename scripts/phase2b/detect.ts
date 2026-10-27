@@ -187,11 +187,23 @@ export function detectInPage(): DetectionResult {
   const candidates: ClickCandidate[] = [];
   const seen = new Set<string>();
   const scope: ParentNode = banner ?? weakBanner ?? document;
-  const clickables = Array.from(
-    scope.querySelectorAll(
-      'button, a[href], [role="button"], input[type="button"], input[type="submit"]',
-    ),
-  );
+  const REAL_CLICKABLE = 'button, a[href], [role="button"], input[type="button"], input[type="submit"]';
+  const clickables = Array.from(scope.querySelectorAll(REAL_CLICKABLE));
+  // v0.4.14 (openground.club): pseudo-knoppen — <div>/<span> met een
+  // knop-class, onclick of tabindex, zonder échte klikbare erin. Spiegelt
+  // isPseudoButton() in src/lib/autoclick/finder.ts; self-contained omdat
+  // dit in page.evaluate draait.
+  const SKIP = new Set(['BUTTON', 'A', 'INPUT', 'SELECT', 'TEXTAREA', 'LABEL', 'HTML', 'BODY', 'SCRIPT', 'STYLE', 'IFRAME', 'SVG', 'PATH']);
+  for (const el of Array.from(scope.querySelectorAll('[class*="button"],[class*="btn"],[onclick],[tabindex]'))) {
+    if (SKIP.has(el.tagName) || el.matches(REAL_CLICKABLE)) continue;
+    const cls = typeof el.className === 'string' ? el.className : '';
+    const ti = el.getAttribute('tabindex');
+    if (!(/(^|[^a-z])(button|btn)([^a-z]|$)/i.test(cls) || el.hasAttribute('onclick') || (ti !== null && ti !== '-1'))) continue;
+    if (el.querySelector(REAL_CLICKABLE)) continue;
+    const t = textOf(el);
+    if (!t || t.length > 60) continue;
+    clickables.push(el);
+  }
   for (const el of clickables) {
     if (!isVisible(el)) continue;
     let text = textOf(el);
