@@ -75,6 +75,8 @@ export const REJECT_KEYWORDS: readonly string[] = [
 
   // === Nederlands ===
   'weigeren',
+  // v0.4.13: claude.ai (NL) toont de gebiedende wijs "Weiger" — stond er niet.
+  'weiger',
   'alles weigeren',
   'alle weigeren',
   'cookies weigeren',
@@ -207,6 +209,33 @@ export const REJECT_KEYWORDS: readonly string[] = [
   'απορριψη μη απαραιτητων cookies',
   'συνεχεια χωρις αποδοχη',
   'οχι ευχαριστω',
+  // === Русский (Russian) ===
+  // v0.4.13 (27 okt 2026): twee meldingen op één ochtend vanaf hetzelfde
+  // Russische IP — rt.pornhub.com (pijplijn: "настроить файлы cookie",
+  // [nieuwe taal]) en claude.ai ("Cookie banner doesn't close"). Russisch
+  // ontbrak volledig, dus geen enkele Russischtalige banner werd geweigerd.
+  // Claude.ai toont "Отклонить" (NL: "Weiger", EN: "Reject"); Pornhub's
+  // tweede stap toont "принять только необходимые"-achtige knoppen.
+  'отклонить',
+  'отклонить все',
+  'отклонить всё',
+  'отклонить все файлы cookie',
+  'отказаться',
+  'отказаться от всех',
+  'отказаться от всех файлов cookie',
+  'отказать',
+  'не принимать',
+  'не согласен',
+  'не согласна',
+  'я не согласен',
+  'только необходимые',
+  'только необходимые файлы cookie',
+  'принять только необходимые',
+  'только обязательные',
+  'принять только обязательные',
+  'использовать только необходимые файлы cookie',
+  'продолжить без принятия',
+  'нет, спасибо',
 ];
 
 /**
@@ -382,6 +411,15 @@ export const STEP_INTO_KEYWORDS: readonly string[] = [
   'διαχειριση cookies',
   'περισσοτερες επιλογες',
   'προσαρμογη',
+  // Русский (v0.4.13, 27 okt 2026 — rt.pornhub.com: "Настроить файлы cookie")
+  'настроить',
+  'настроить файлы cookie',
+  'настройки',
+  'настройки cookie',
+  'настройки файлов cookie',
+  'управление файлами cookie',
+  'больше опций',
+  'дополнительные настройки',
 ];
 
 /**
@@ -411,6 +449,11 @@ export const COOKIE_CONTEXT_WORDS: readonly string[] = [
   'απορρητο',
   'συγκαταθεση',
   'προτιμησεις',
+  // Русский (v0.4.13) — "cookie" staat meestal al in Latijns schrift in de
+  // Russische tekst ("файлы cookie"), dit vangt de gevallen zonder.
+  'куки',
+  'конфиденциальность',
+  'согласие',
 ];
 
 /**
@@ -669,18 +712,6 @@ export function hasCookieContext(text: string): boolean {
 export function isRejectAttributeHint(tokens: string[], raw: string): boolean {
   if (tokens.length === 0 && !raw) return false;
 
-  const hasAcceptGuard = tokens.some((t) =>
-    ATTRIBUTE_ACCEPT_GUARD_WORDS.includes(t),
-  );
-  if (hasAcceptGuard) return false;
-
-  const wordMatch = tokens.some(
-    (t) =>
-      ATTRIBUTE_REJECT_WORD_HINTS.includes(t) ||
-      remoteAttributeWordHints.includes(t),
-  );
-  if (wordMatch) return true;
-
   // Compact-check op zowel de ruwe string (vangt géén-scheidingsteken-vorm,
   // "rejectall") als de losse tokens aan elkaar geplakt (vangt kebab-case/
   // snake_case/camelCase-vormen met scheidingstekens ertussen, zoals
@@ -688,17 +719,36 @@ export function isRejectAttributeHint(tokens: string[], raw: string): boolean {
   // Allebei zijn substring-checks tegen bewust samengestelde, specifieke
   // fragmenten — geen los woord — dus het risico op een toevallige match
   // blijft laag.
+  //
+  // v0.4.13 (27 okt 2026): deze check staat nu VÓÓR de accept-guard. Tot
+  // 0.4.12 stond hij erna, en dat maakte 'consentreject' onbereikbaar:
+  // claude.ai zet `data-testid="consent-reject"` op z'n weiger-knop, dat
+  // wordt tokens ['consent','reject'], en 'consent' staat in de guard — dus
+  // de knop werd afgewezen vóór de compact-hint aan de beurt kwam. Een
+  // Russische gebruiker (knoptekst "Отклонить", toen nog geen keyword)
+  // meldde "Cookie banner doesn't close". De compact-hints zijn bewust
+  // specifiek genoeg om zonder guard te mogen matchen; de guard blijft
+  // gelden voor de losse woord-hints, waar hij voor bedoeld is.
   const normalizedRaw = raw.toLowerCase();
   const joinedTokens = tokens.join('');
   const compactCandidates = [normalizedRaw, joinedTokens].filter((s) => s.length > 0);
-  if (compactCandidates.length === 0) return false;
-
-  return (
+  const compactMatch =
     ATTRIBUTE_REJECT_COMPACT_HINTS.some((hint) =>
       compactCandidates.some((c) => c.includes(hint)),
     ) ||
     remoteAttributeCompactHints.some((hint) =>
       compactCandidates.some((c) => c.includes(hint)),
-    )
+    );
+  if (compactMatch) return true;
+
+  const hasAcceptGuard = tokens.some((t) =>
+    ATTRIBUTE_ACCEPT_GUARD_WORDS.includes(t),
+  );
+  if (hasAcceptGuard) return false;
+
+  return tokens.some(
+    (t) =>
+      ATTRIBUTE_REJECT_WORD_HINTS.includes(t) ||
+      remoteAttributeWordHints.includes(t),
   );
 }
