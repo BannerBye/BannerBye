@@ -128,6 +128,12 @@ export default defineContentScript({
       // single source of truth voor storage-writes. Voorkomt race tussen
       // popup en background-detectie van nieuwe milestones (#86).
       try {
+        // v0.4.14 (raiplay.it): heeft de TCF-laag deze pagina al geteld,
+        // dan niet nog eens de teller verhogen — wel het bewijs ("Custom
+        // banner") en de trace doorgeven. Zie bridge.content.ts.
+        const w = window as Window & { __bbCounted?: boolean };
+        const alreadyCounted = w.__bbCounted === true;
+        w.__bbCounted = true;
         void chrome.runtime.sendMessage({
           type: 'bb:banner-blocked',
           // v0.4.0: bron mee zodat de popup kan tonen wát er herkend werd.
@@ -136,6 +142,7 @@ export default defineContentScript({
           // die nog niet in de keyword-lijsten zitten.
           platform: result.viaTranslation ? 'Custom banner (vertaald)' : 'Custom banner',
           t: Math.round(performance.now()),
+          alreadyCounted,
         });
       } catch {
         // Background-worker kan net idle zijn — niet kritiek.

@@ -730,7 +730,18 @@ export default defineBackground({
       const host = sender.tab.url ? normalizeHost(sender.tab.url) : null;
       const platform =
         typeof msg.platform === 'string' ? msg.platform : undefined;
-      void handleBannerBlocked(sender.tab.id, host, platform);
+      // v0.4.14 (raiplay.it): laag 5 meldt `alreadyCounted` als de TCF-laag
+      // deze pagina al telde. Dan alleen het bewijs bijwerken (de klik is
+      // het échte resultaat), niet nogmaals de teller/badge/mijlpalen.
+      if (msg.alreadyCounted === true) {
+        if (host) {
+          recordActivity(host, 'refused', platform).catch(() => {
+            // Activiteitenlijst is bijzaak.
+          });
+        }
+      } else {
+        void handleBannerBlocked(sender.tab.id, host, platform);
+      }
       pushTrace(sender.tab.id, sender.url, 'result', `refused · ${platform ?? 'banner'}`, typeof msg.t === 'number' ? msg.t : 0);
     }
 

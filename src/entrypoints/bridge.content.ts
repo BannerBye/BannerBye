@@ -99,9 +99,19 @@ export default defineContentScript({
       // tellen, voor ZOWEL tcf- als cmp-events — niet alleen cmp zoals
       // voorheen. De vlag leeft op de gedeelde ISOLATED-world window (zie
       // autoconsent-layer.ts).
-      const w = window as Window & { __bbConsentHandled?: boolean };
-      if (w.__bbConsentHandled) return;
-      w.__bbConsentHandled = true;
+      const w = window as Window & { __bbConsentHandled?: boolean; __bbCounted?: boolean };
+      if (w.__bbCounted) return;
+      w.__bbCounted = true;
+      // v0.4.14 (raiplay.it, melding 30 okt 2026): een `bb:tcf-blocked` is
+      // GEEN bewijs dat de banner weg is. Dat event vuurt zodra een vendor
+      // (Google IMA op raiplay.it, 30 ms na start) ons __tcfapi-antwoord
+      // ophaalt — nog vóór de CMP van de site (Avacy/OIL) zich installeert
+      // en alsnog een banner rendert. Tot 0.4.13 zette dit pad
+      // __bbConsentHandled, waarop laag 5 de pagina met rust liet en de
+      // zichtbare "Continua senza accettare" nooit klikte. Alleen een
+      // CMP-handler-weigering (bb:cmp-blocked, de API van de CMP zelf) mag
+      // laag 5 uitschakelen; de TCF-laag telt wél (één keer per pagina).
+      if (event.type === 'bb:cmp-blocked') w.__bbConsentHandled = true;
       try {
         void chrome.runtime.sendMessage({ type: 'bb:banner-blocked', platform, t: Math.round(performance.now()) });
       } catch {

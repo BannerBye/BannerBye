@@ -49,6 +49,14 @@ declare global {
     __bbConsentActive?: boolean;
     __bbConsentHandled?: boolean;
     /**
+     * v0.4.14: deze pagina is al één keer geteld (TCF-laag via
+     * bridge.content.ts, CMP-handler, Autoconsent of laag 5). Los van
+     * __bbConsentHandled, want een TCF-antwoord is geen bewijs dat de
+     * banner weg is (raiplay.it) — laag 5 mag dan nog klikken, maar telt
+     * niet dubbel.
+     */
+    __bbCounted?: boolean;
+    /**
      * v0.4.2 (#170): laag 5 mag in dit frame niet "doorklikken" naar een
      * instellingenpaneel. Gezet in Sourcepoint-frames: de motor opent en
      * beoordeelt de privacy-manager zelf; een tweede "Einstellingen"-klik
@@ -247,6 +255,11 @@ export function startAutoconsentLayer(onHandled: () => void): void {
     // niet dubbel tellen.
     if (window.__bbConsentHandled) return;
     window.__bbConsentHandled = true;
+    // v0.4.14: heeft de TCF-laag deze pagina al geteld (bridge.content.ts
+    // zet __bbCounted), dan wél afgehandeld markeren maar niet nog eens
+    // tellen — zie de raiplay.it-toelichting in bridge.content.ts.
+    if (window.__bbCounted) return;
+    window.__bbCounted = true;
     try {
       onHandled();
     } catch {

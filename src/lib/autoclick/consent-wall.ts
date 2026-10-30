@@ -59,9 +59,14 @@ export const PAY_WALL_WORDS: readonly string[] = [
   'sin publicidad',
   // it
   'abbonati',
+  'abbonato',
   'abbonarsi',
   'abbonamento',
   'senza pubblicità',
+  // v0.4.14 (ilfattoquotidiano.it, melding 30 okt 2026): "Rifiuta e
+  // Sostienici" = weigeren én betalen; "diventa nostro Sostenitore".
+  'sostienici',
+  'sostenitore',
 ];
 
 /** Knoptekst-fragmenten die op toestemmen wijzen. Substring-match. */
