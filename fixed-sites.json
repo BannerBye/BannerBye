@@ -64,6 +64,20 @@
       "label": "attributeMatcher",
       "version": "0.4.13",
       "fixedAt": "2026-10-27"
+    },
+    {
+      "hostname": "openground.club",
+      "reason": "Reject button was a plain <div> styled as a button, so it was never considered clickable; BannerBye now recognises button-like elements without a real <button> tag (0.4.14)",
+      "label": "pseudoButton",
+      "version": "0.4.14",
+      "fixedAt": "2026-10-30"
+    },
+    {
+      "hostname": "raiplay.it",
+      "reason": "An ad script asked BannerBye for its consent answer before the site's own banner appeared, and that early answer silenced the refusal engine; the engine now keeps clicking whatever banner still shows (0.4.14)",
+      "label": "tcfGate",
+      "version": "0.4.14",
+      "fixedAt": "2026-10-30"
     }
   ]
 }
