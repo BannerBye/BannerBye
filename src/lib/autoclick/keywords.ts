@@ -236,6 +236,17 @@ export const REJECT_KEYWORDS: readonly string[] = [
   'использовать только необходимые файлы cookie',
   'продолжить без принятия',
   'нет, спасибо',
+  // v0.4.15 (rt.pornhub.com, ticket 843p-c3p7, 1 nov 2026): de echte
+  // weigerknop daar heet "Принимать только необходимые файлы cookie"
+  // (imperfectief "принимать", niet "принять"). Door die mis stapte laag 5
+  // in "Настроить файлы cookie", zag toggles die al uit stonden en kende de
+  // opslaan-knop "Сохранить и Применить" niet — paneel bleef open.
+  // Sinds 1 nov ook remote in rules.json; hier voor de bundel.
+  'принимать только необходимые файлы cookie',
+  'принимать только необходимые',
+  'принять только необходимые файлы cookie',
+  'только необходимые cookie',
+  'принимать только обязательные',
 ];
 
 /**
@@ -343,6 +354,16 @@ export const AMBIGUOUS_REJECT_KEYWORDS: readonly string[] = [
   // Italiano
   'salva',
   'salva preferenze',
+  // Русский (v0.4.15, rt.pornhub.com: tweede stap sluit af met
+  // "Сохранить и Применить" — toggles staan daar standaard uit)
+  'сохранить',
+  'сохранить и применить',
+  'сохранить настройки',
+  'сохранить выбор',
+  'сохранить и закрыть',
+  'подтвердить',
+  'подтвердить выбор',
+  'подтвердить мой выбор',
 ];
 
 /**
