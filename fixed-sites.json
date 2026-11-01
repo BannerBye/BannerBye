@@ -74,7 +74,7 @@
     },
     {
       "hostname": "raiplay.it",
-      "reason": "An ad script asked BannerBye for its consent answer before the site's own banner appeared, and that early answer silenced the refusal engine; the engine now keeps clicking whatever banner still shows (0.4.14)",
+      "reason": "An ad script asked BannerBye for its consent answer before the banner appeared, and that early answer silenced the refusal engine; it now keeps refusing whatever banner still shows (0.4.14)",
       "label": "tcfGate",
       "version": "0.4.14",
       "fixedAt": "2026-10-30"
