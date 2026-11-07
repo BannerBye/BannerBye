@@ -160,6 +160,48 @@ function giveUpSummary(elapsedMs: number): string {
  * Start de auto-click fallback. Geeft een Promise terug die resolved
  * zodra de knop is geklikt of de timeout is verstreken.
  */
+/**
+ * v0.4.15 (twinseasons.de, ticket mrjz-a3d7): klik die ook werkt op
+ * `<a href="javascript:…">`. Dit script draait in ISOLATED world; een gewone
+ * `.click()` op zo'n anchor voert de javascript:-URL daar uit (waar de
+ * paginafunctie niet bestaat) of wordt stil geblokkeerd. "Alles ablehnen" op
+ * twinseasons.de is precies zo'n link: herkend, geklikt, niets gebeurd.
+ * Voor die anchors vragen we de background om de klik in MAIN world te doen
+ * (`bb:main-click`, zelfde brug als de Autoconsent-eval). Lukt dat niet
+ * (MV2 zonder scripting-API), dan blijft de gewone klik de fallback.
+ */
+function clickElement(el: HTMLElement): void {
+  const href = el.tagName === 'A' ? (el.getAttribute('href') ?? '').trim().toLowerCase() : '';
+  if (!href.startsWith('javascript:')) {
+    el.click();
+    return;
+  }
+  const id = Math.random().toString(36).slice(2, 10);
+  el.setAttribute('data-bb-click', id);
+  let handled = false;
+  try {
+    Promise.resolve(
+      chrome.runtime.sendMessage({ type: 'bb:main-click', clickId: id }) as Promise<
+        { ok?: boolean; clicked?: boolean } | undefined
+      >,
+    )
+      .then((res) => {
+        handled = !!res?.ok && !!res.clicked;
+        if (!handled) {
+          el.removeAttribute('data-bb-click');
+          el.click();
+        }
+      })
+      .catch(() => {
+        el.removeAttribute('data-bb-click');
+        el.click();
+      });
+  } catch {
+    el.removeAttribute('data-bb-click');
+    el.click();
+  }
+}
+
 export function startAutoClick(
   options: { timeoutMs?: number } = {},
 ): Promise<AutoClickResult> {
@@ -222,7 +264,7 @@ export function startAutoClick(
       if (reject) {
         const buttonText = (reject.innerText || reject.textContent || '').trim();
         try {
-          reject.click();
+          clickElement(reject);
         } catch (err) {
           console.warn('[BannerBye] reject click failed:', err);
           return; // klik faalde → blijf proberen
@@ -264,7 +306,7 @@ export function startAutoClick(
       markStepInto();
       traceIso('click', `no reject button yet → step-into ${quoteText((stepInto.innerText || stepInto.textContent || '').trim())}`);
       try {
-        stepInto.click();
+        clickElement(stepInto);
         // De click triggert DOM-mutaties die de observer pickt — maar we
         // schedulen ook een expliciete delayed scan als backup, voor het
         // geval het detail-paneel via CSS-transition komt zonder DOM-change.
@@ -331,7 +373,7 @@ export function startAutoClick(
 
         const buttonText = (translated.innerText || translated.textContent || '').trim();
         try {
-          translated.click();
+          clickElement(translated);
         } catch (err) {
           console.warn('[BannerBye] translated reject click failed:', err);
           finish({ clicked: false, elapsedMs: Date.now() - startTime });

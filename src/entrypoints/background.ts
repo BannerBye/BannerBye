@@ -368,6 +368,45 @@ async function evalAutoconsentSnippet(
 }
 
 /**
+ * v0.4.15 (twinseasons.de, ticket mrjz-a3d7): klik in MAIN world.
+ *
+ * Laag 5 draait in ISOLATED world. Een `.click()` daar op een
+ * `<a href="javascript:CookiesRefuse()">` doet in Chrome níets: de
+ * javascript:-URL wordt in de wereld van de klikker geëvalueerd en daar
+ * bestaat de paginafunctie niet (of de navigatie wordt stil geblokkeerd).
+ * De knop werd dus wel herkend, de banner bleef staan. Het content script
+ * markeert het element met `data-bb-click="<id>"`; hier klikken we het in
+ * MAIN world opnieuw en halen de marker weg. Zelfde route als de
+ * Autoconsent-eval-brug. `{ ok: false }` = geen scripting-API (MV2).
+ */
+async function clickInMainWorld(
+  tabId: number,
+  frameId: number,
+  clickId: unknown,
+): Promise<{ ok: boolean; clicked?: boolean }> {
+  if (typeof clickId !== 'string' || !/^[a-z0-9]{4,16}$/.test(clickId)) return { ok: false };
+  if (typeof chrome.scripting?.executeScript !== 'function') return { ok: false };
+  try {
+    const MAIN_WORLD: chrome.scripting.ExecutionWorld = 'MAIN';
+    const results = await chrome.scripting.executeScript({
+      target: { tabId, frameIds: [frameId] },
+      world: MAIN_WORLD,
+      args: [clickId],
+      func: (id: string) => {
+        const el = document.querySelector<HTMLElement>(`[data-bb-click="${id}"]`);
+        if (!el) return false;
+        el.removeAttribute('data-bb-click');
+        el.click();
+        return true;
+      },
+    });
+    return { ok: true, clicked: !!results?.[0]?.result };
+  } catch {
+    return { ok: false };
+  }
+}
+
+/**
  * Korte oranje "✓" badge op het toolbar-icoon, ~900ms zichtbaar. UI-
  * feedback bij elke succesvol gekilde banner via autoclick. Per-tab
  * zodat een actie in tab A geen badge op tab B veroorzaakt.
@@ -701,6 +740,22 @@ export default defineBackground({
           }
         },
       );
+      return true;
+    }
+
+    // v0.4.15: klik-verzoek voor een javascript:-anchor (zie clickInMainWorld).
+    if (
+      msg?.type === 'bb:main-click' &&
+      sender.tab?.id !== undefined &&
+      typeof sender.frameId === 'number'
+    ) {
+      void clickInMainWorld(sender.tab.id, sender.frameId, msg.clickId).then((response) => {
+        try {
+          sendResponse(response);
+        } catch {
+          // Poort dicht — niet kritiek.
+        }
+      });
       return true;
     }
 
