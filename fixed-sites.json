@@ -78,6 +78,13 @@
       "label": "tcfGate",
       "version": "0.4.14",
       "fixedAt": "2026-10-30"
+    },
+    {
+      "hostname": "twinseasons.de",
+      "reason": "The reject link ran a javascript: URL the extension could not trigger from its sandbox; such links are now clicked inside the page itself (0.4.15)",
+      "label": "mainWorldClick",
+      "version": "0.4.15",
+      "fixedAt": "2026-11-07"
     }
   ]
 }

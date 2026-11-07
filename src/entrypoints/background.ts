@@ -47,6 +47,7 @@ import {
   scheduleRulesFetch,
   isRulesFetchAlarm,
 } from '@/lib/rules/fetcher';
+import { TICKET_ALARM_NAME, runTicketCheckFromBackground, scheduleTicketCheck } from '@/lib/tickets';
 // v0.4.2 (#170): de eval-snippets van de Autoconsent-regels (~86 kleine,
 // zelfstandige functies). Alleen dít object wordt meegebundeld — de rest van
 // de library blijft in content-scripts/autoconsent-engine.js.
@@ -712,9 +713,15 @@ export default defineBackground({
   // === REMOTE RULES (alarm-based) ===
   // Periodieke fetch van keyword-updates van bannerbye.com.
   scheduleRulesFetch();
+  // v0.4.15: uurlijkse ticketcheck — "je melding is opgelost" zonder dat de
+  // popup open hoeft (zie lib/tickets.ts).
+  scheduleTicketCheck();
   chrome.alarms.onAlarm.addListener((alarm) => {
     if (isRulesFetchAlarm(alarm)) {
       void fetchRemoteRules();
+    }
+    if (alarm.name === TICKET_ALARM_NAME) {
+      void runTicketCheckFromBackground();
     }
   });
 

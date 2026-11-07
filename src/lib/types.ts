@@ -70,6 +70,12 @@ export interface LocalStats {
   /** v0.4.12: wanneer de ticketstatus voor het laatst is opgehaald (ms). */
   ticketsCheckedAt: number;
   /**
+   * v0.4.15: ticket-ID's die 'fixed' werden terwijl de popup dicht was. De
+   * background zet dan een ✓-badge op het icoon; de popup toont de kaart en
+   * leegt deze lijst. Zie lib/tickets.ts.
+   */
+  unseenFixed: string[];
+  /**
    * v0.4.0: is de eenmalige review-vraag afgehandeld (weggeklikt of gebruikt)?
    * Anti-feature manifest: we vragen precies één keer, ná een milestone-viering,
    * en nooit opnieuw na een dismissal. Geen nag, geen herhaling, geen timer.
@@ -150,5 +156,6 @@ export const DEFAULT_STATS: LocalStats = {
   recentActivity: [],
   tickets: [],
   ticketsCheckedAt: 0,
+  unseenFixed: [],
   reviewAskDone: false,
 };

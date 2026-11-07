@@ -167,7 +167,65 @@ export async function refreshTicketStatuses(opts: { force?: boolean } = {}): Pro
     // Offline of server niet bereikbaar — volgende keer opnieuw.
   }
 
-  const next: LocalStats = { ...current, tickets: updated, ticketsCheckedAt: now };
+  // v0.4.15: welke tickets zijn zojuist 'fixed' geworden? Die onthouden we
+  // tot de popup ze heeft laten zien — de background zet er een badge voor.
+  const before = new Map(kept.map((t) => [t.id, t.status]));
+  const newlyFixed = updated
+    .filter((t) => t.status === 'fixed' && before.get(t.id) !== 'fixed')
+    .map((t) => t.id);
+  const unseenFixed = Array.from(new Set([...(current.unseenFixed ?? []), ...newlyFixed])).filter(
+    (id) => updated.some((t) => t.id === id),
+  );
+
+  const next: LocalStats = { ...current, tickets: updated, ticketsCheckedAt: now, unseenFixed };
   await writeStats(next);
   return next;
+}
+
+/** v0.4.15: de popup heeft de fixed-kaart getoond — lijst leegmaken, badge weg. */
+export async function markFixedSeen(): Promise<LocalStats> {
+  const current = await getStats();
+  if (!(current.unseenFixed ?? []).length) return current;
+  const next: LocalStats = { ...current, unseenFixed: [] };
+  await writeStats(next);
+  try {
+    await chrome.action.setBadgeText({ text: '' });
+  } catch {
+    // MV2 zonder action-API — niet kritiek.
+  }
+  return next;
+}
+
+export const TICKET_ALARM_NAME = 'bb-ticket-check';
+
+/**
+ * v0.4.15: uurlijkse check vanuit de background, ook als de popup dicht
+ * blijft. Wordt een eigen melding 'fixed', dan verschijnt een ✓ op het
+ * icoon tot de popup is geopend. Eén badge, geen notificatie: een
+ * `notifications`-permissie zou de extensie bij bestaande gebruikers
+ * uitschakelen tot ze de nieuwe permissie goedkeuren.
+ */
+export function scheduleTicketCheck(): void {
+  try {
+    chrome.alarms.create(TICKET_ALARM_NAME, {
+      when: Date.now() + 5 * 60_000,
+      periodInMinutes: TICKET_CHECK_INTERVAL_MS / 60_000,
+    });
+  } catch {
+    // Geen alarms-API — de popup-check blijft werken.
+  }
+}
+
+export async function runTicketCheckFromBackground(): Promise<void> {
+  try {
+    const stats = await getStats();
+    if (!stats.tickets.length) return;
+    const next = await refreshTicketStatuses({ force: true });
+    if ((next.unseenFixed ?? []).length) {
+      await chrome.action.setBadgeBackgroundColor({ color: '#E85A2C' });
+      await chrome.action.setBadgeText({ text: '✓' });
+    }
+  } catch {
+    // Offline of geen action-API — volgende uur opnieuw.
+  }
 }

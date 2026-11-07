@@ -30,7 +30,7 @@ import { downloadShareCard, downloadStatsCard } from '@/lib/share-card';
 import { t } from '@/lib/i18n/t';
 // v0.4.8: herlaadrem — uitleg + hervatten in de popup, zie lib/reload-brake.ts.
 import { clearStormPause, getStormPauses, type StormPause } from '@/lib/reload-brake';
-import { addTicket, clearTickets, newTicketId, refreshTicketStatuses, versionAtLeast } from '@/lib/tickets';
+import { addTicket, clearTickets, markFixedSeen, newTicketId, refreshTicketStatuses, versionAtLeast } from '@/lib/tickets';
 import type { TicketEntry } from '@/lib/types';
 import { browserLabel, formatTrace, type TabTrace } from '@/lib/trace';
 import type {
@@ -177,6 +177,7 @@ export function App() {
       recentActivity: [],
       tickets: [],
       ticketsCheckedAt: 0,
+      unseenFixed: [],
       reviewAskDone: false,
     },
     hostname: null,
@@ -219,9 +220,18 @@ export function App() {
       if (stats.tickets.length) {
         const refreshed = await refreshTicketStatuses();
         setState((s) => ({ ...s, stats: refreshed }));
+        // v0.4.15: de fixed-kaart is nu getoond → badge weg, lijst leeg. De
+        // kaart zelf blijft deze popup-sessie staan via `fixedCards`.
+        if ((refreshed.unseenFixed ?? []).length) {
+          setFixedCards(refreshed.tickets.filter((tk) => refreshed.unseenFixed.includes(tk.id)));
+          void markFixedSeen();
+        }
       }
     })();
   }, []);
+
+  /** v0.4.15: meldingen die sinds de vorige popup 'fixed' werden. */
+  const [fixedCards, setFixedCards] = useState<TicketEntry[]>([]);
 
   const isSitePaused = state.hostname
     ? isHostPaused(state.hostname, state.settings.pausedSites)
@@ -631,6 +641,16 @@ export function App() {
           </div>
         </section>
       )}
+
+      {fixedCards.map((tk) => (
+        <section key={tk.id} className="bb-celebration bb-celebration-fixed bb-fixedcard" aria-live="polite">
+          <span className="bb-celebration-emoji" aria-hidden="true">✓</span>
+          <div className="bb-celebration-body">
+            <p className="bb-celebration-label">{t('popup_fixedcard_label', tk.host)}</p>
+            <p className="bb-review-text">{ticketLine(tk)}</p>
+          </div>
+        </section>
+      ))}
 
       <section className="bb-status">
         {!state.settings.enabled ? (
