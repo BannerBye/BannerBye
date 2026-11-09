@@ -112,3 +112,30 @@ deploy-folder en draai je `vercel --prod`.
 - Taalgat-voorstellen (v0.4.4) doorlopen dezelfde `judgeKeyword()`-poort als
   elk ander voorstel — een generator-call beoordeelt nooit zijn eigen werk.
 - Geen PII in PR's of analyse-records (alleen hostname + knop-teksten + categorie).
+
+## Pijplijn v2 (0.4.17, 9 nov 2026)
+
+Aanleiding: portal.newdaycards.com — root 404, banner alleen op `/aqua/login`,
+melder op Android; v1 bezocht de root met een desktop en mailde "vals positief".
+
+Wat er veranderde:
+
+- **Melding v2** (extensie): pad (opgeschoond), taal, viewport, DOM-snapshot
+  van de banner-knoppen (`src/lib/report-snapshot.ts`) en de trace gaan mee.
+  `api/report.ts` (landing) valideert en begrenst alles opnieuw.
+- **Profielen** (`analyze.ts`): eerst zoals de melder (mobiel/desktop, pad,
+  taal), dan desktop op `/`. Herhaalpogingen met andere profielen en langer
+  wachten.
+- **Snapshot als bewijs** (`evidence.ts`): ziet headless niets, dan draait
+  dezelfde classificatie op de knoplabels die de melder zag.
+- **Host-scoped auto-apply**: Claude approve/high → `autoclick.hostRules[host]`
+  direct op main (`apply-host-rules.ts`, daarna `publish-autofixed.ts` voor
+  /fixed + tickets). Bewuste uitzondering op security-fix #1; blast radius één
+  host. Globale keywords blijven via de review-PR; een host-keyword op ≥ 2
+  hosts wordt daar automatisch voorgedragen (`hostRuleKeywordsSeenOn`).
+- **Wachtrij** (`bb:retry`): niets gezien → opnieuw na 6 u, max 3 pogingen
+  (schedule-run met `RETRY_MODE=1`), daarna "jouw blik nodig".
+- **Mail**: per host wat de melder zag, wat wij probeerden, uitkomst, to-do,
+  plus twee zinnen duiding van Claude. Onderwerp zegt of Robin iets moet doen.
+
+Offline test zonder browser/Redis: `node --experimental-strip-types test-evidence.ts`.

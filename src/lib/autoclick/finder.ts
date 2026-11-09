@@ -391,6 +391,15 @@ function* walkClickables(root: Document | ShadowRoot): Generator<HTMLElement> {
  * formulier klikken alleen omdat de pagina-footer "cookies" zegt.
  */
 export function isInCookieBanner(el: HTMLElement): boolean {
+  return findCookieBannerContainer(el) !== null;
+}
+
+/**
+ * v0.4.17: dezelfde walk als isInCookieBanner(), maar geeft de gevonden
+ * banner-container terug. De melding-snapshot (snapshot.ts) gebruikt 'm om
+ * de bannertekst mee te sturen zodat de pijplijn weet wat de melder zag.
+ */
+export function findCookieBannerContainer(el: HTMLElement): HTMLElement | null {
   let current: HTMLElement | null = el;
   let depth = 0;
 
@@ -415,7 +424,7 @@ export function isInCookieBanner(el: HTMLElement): boolean {
       // zijmenu van duckduckgo.com (de) praat ook over cookies. Eis daarnaast
       // minstens twee structurele bannerkenmerken (zie banner-structure.ts).
       if (reasonablySized && hasCookieContext(text) && looksStructurallyLikeBanner(current)) {
-        return true;
+        return current;
       }
     }
 
@@ -435,7 +444,7 @@ export function isInCookieBanner(el: HTMLElement): boolean {
     depth++;
   }
 
-  return false;
+  return null;
 }
 
 /**

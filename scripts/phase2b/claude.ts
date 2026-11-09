@@ -363,3 +363,57 @@ function extractLanguageGapJson(text: string): {
     return null;
   }
 }
+
+// ---------------------------------------------------------------------------
+// v0.4.17 (pijplijn v2) — duiding voor de eigenaar-mail
+// ---------------------------------------------------------------------------
+
+export interface ExplainInput {
+  hostname: string;
+  reporterSaw: string;
+  weTried: string;
+  outcome: string;
+  userMessage: string;
+}
+
+const EXPLAIN_SYSTEM = `Je schrijft voor de eigenaar van BannerBye (een browser-extensie die cookie-banners weigert) een duiding van één gebruikersmelding, in het Nederlands, maximaal twee korte zinnen, zonder opsomming en zonder aanhef. Zeg wat er waarschijnlijk aan de hand is en of hij iets moet doen. Wees concreet en eerlijk; speculeer niet verder dan de gegevens toelaten. Geen emoji.
+
+${UNTRUSTED_DATA_INSTRUCTION}
+
+Antwoord UITSLUITEND met JSON: {"text":"<duiding>"}`;
+
+/** Twee zinnen duiding; leeg bij elke fout. */
+export async function explainForOwner(input: ExplainInput): Promise<string> {
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) return '';
+  const untrusted = buildUntrustedBlock({
+    site: input.hostname,
+    'wat de melder zag': input.reporterSaw.slice(0, 600),
+    'bericht van de melder': input.userMessage.slice(0, 400) || '(geen)',
+  });
+  const userMsg = [
+    `Wat wij probeerden (vertrouwd, eigen pijplijn): ${input.weTried.slice(0, 600)}`,
+    `Uitkomst van de pijplijn (vertrouwd): ${input.outcome.slice(0, 600)}`,
+    ``,
+    untrusted,
+    ``,
+    `Geef de duiding als JSON.`,
+  ].join('\n');
+  try {
+    const res = await fetch(ANTHROPIC_ENDPOINT, {
+      method: 'POST',
+      headers: { 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
+      body: JSON.stringify({ model: MODEL, max_tokens: 220, system: EXPLAIN_SYSTEM, messages: [{ role: 'user', content: userMsg }] }),
+    });
+    if (!res.ok) return '';
+    const data = (await res.json()) as { content?: Array<{ type: string; text?: string }> };
+    const text = data.content?.find((c) => c.type === 'text')?.text?.trim() ?? '';
+    const start = text.indexOf('{');
+    const end = text.lastIndexOf('}');
+    if (start === -1 || end <= start) return '';
+    const json = JSON.parse(text.slice(start, end + 1)) as { text?: unknown };
+    return typeof json.text === 'string' ? json.text.replace(/\s+/g, ' ').trim().slice(0, 400) : '';
+  } catch {
+    return '';
+  }
+}

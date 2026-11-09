@@ -34,6 +34,7 @@ import { getSettings } from '@/lib/storage.ts';
 import { isHostPaused } from '@/lib/host.ts';
 import { isPdfDocument } from '@/lib/pdf-guard.ts';
 import { shouldProcessFrame, isSubFrame } from '@/lib/frame-guard.ts';
+import { takeReportSnapshot } from '@/lib/report-snapshot.ts';
 
 export default defineContentScript({
   matches: ['<all_urls>'],
@@ -69,6 +70,28 @@ export default defineContentScript({
   allFrames: true,
 
   async main() {
+    // v0.4.17 (pijplijn v2): de popup vraagt bij "Report this problem" een
+    // snapshot van wat er nú op het scherm staat (knoplabels in de banner,
+    // bannertekst, CMP-signatures, consent-iframes). Alleen het hoofdframe
+    // antwoordt; de popup adresseert dat frame expliciet (frameId 0). Dit
+    // staat vóór alle vroege returns: ook op een gepauzeerde site of met
+    // BannerBye uit moet melden met context kunnen.
+    if (!isSubFrame()) {
+      try {
+        chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
+          if (msg?.type !== 'bb:snapshot') return false;
+          try {
+            sendResponse(takeReportSnapshot());
+          } catch {
+            sendResponse(null);
+          }
+          return false;
+        });
+      } catch {
+        // runtime niet beschikbaar — melden werkt dan zonder snapshot.
+      }
+    }
+
     // v0.3.7: in sub-frames alleen doorgaan als dit een consent-frame kan zijn.
     if (!shouldProcessFrame()) return;
 

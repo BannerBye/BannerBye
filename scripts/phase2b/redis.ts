@@ -18,12 +18,34 @@
 
 import { Redis } from '@upstash/redis';
 
+/** Spiegel van `ReportSnapshot` in de extensie (src/lib/report-snapshot.ts). */
+export interface ReportSnapshot {
+  v: number;
+  at: number;
+  candidates: Array<{ text: string; tag: string; inBanner: boolean; attrs?: string[] }>;
+  bannerFound: boolean;
+  bannerText: string;
+  cmps: string[];
+  iframes: string[];
+  pageLang: string;
+  uiLang: string;
+  viewport: { w: number; h: number };
+  totalClickables: number;
+}
+
 export interface StoredReport {
   id: string;
   hostname: string;
   version: string;
   message: string;
   ts: number;
+  /** User-agent van de melder (door api/report.ts uit de header gehaald). */
+  ua?: string;
+  /** v0.4.17 (pijplijn v2) — context van de melder, zie api/report.ts. */
+  path?: string;
+  lang?: string;
+  snapshot?: ReportSnapshot;
+  trace?: string;
 }
 
 /** Een host met de (nog niet geanalyseerde) report-id's die erbij horen. */
@@ -32,6 +54,15 @@ export interface HostWork {
   reportIds: string[];
   sampleMessage: string;
   lastTs: number;
+  /** v0.4.17: context van de meest recente melding die 'm meestuurde. */
+  path?: string;
+  lang?: string;
+  ua?: string;
+  snapshot?: ReportSnapshot;
+  trace?: string;
+  version?: string;
+  /** Alleen in retry-modus: het hoeveelste bezoek dit is (1 = eerste run). */
+  attempt?: number;
 }
 
 const ANALYSIS_TTL_SECONDS = 180 * 24 * 60 * 60;
@@ -67,6 +98,16 @@ export async function getHostsToAnalyze(
   const records = (await redis.mget<StoredReport[]>(...keys)) ?? [];
 
   const byHost = new Map<string, HostWork>();
+  const applyContext = (w: HostWork, r: StoredReport): void => {
+    // Nieuwste melding wint, maar een oudere mét snapshot/pad is meer waard
+    // dan een nieuwere zonder — vul alleen aan wat nog leeg is.
+    if (r.path && (!w.path || w.path === '/')) w.path = r.path;
+    if (r.lang && !w.lang) w.lang = r.lang;
+    if (r.ua && !w.ua) w.ua = r.ua;
+    if (r.snapshot && !w.snapshot) w.snapshot = r.snapshot;
+    if (r.trace && !w.trace) w.trace = r.trace;
+    if (r.version && !w.version) w.version = r.version;
+  };
   records.forEach((r) => {
     if (!r || typeof r !== 'object' || !r.hostname) return;
     const existing = byHost.get(r.hostname);
@@ -75,14 +116,25 @@ export async function getHostsToAnalyze(
       if (r.ts > existing.lastTs) {
         existing.lastTs = r.ts;
         if (r.message) existing.sampleMessage = r.message;
+        // Nieuwere context overschrijft wél als ze er is.
+        if (r.path) existing.path = r.path;
+        if (r.lang) existing.lang = r.lang;
+        if (r.ua) existing.ua = r.ua;
+        if (r.snapshot) existing.snapshot = r.snapshot;
+        if (r.trace) existing.trace = r.trace;
+        if (r.version) existing.version = r.version;
+      } else {
+        applyContext(existing, r);
       }
     } else {
-      byHost.set(r.hostname, {
+      const w: HostWork = {
         hostname: r.hostname,
         reportIds: [r.id],
         sampleMessage: r.message || '',
         lastTs: r.ts,
-      });
+      };
+      applyContext(w, r);
+      byHost.set(r.hostname, w);
     }
   });
 
@@ -304,4 +356,78 @@ export async function clearWatchers(
   } catch {
     // Niet kritiek — verloopt anders vanzelf via TTL.
   }
+}
+
+// ---------------------------------------------------------------------------
+// v0.4.17 (pijplijn v2) — herhaalpogingen.
+//
+//   bb:retry            ZSET   score = wanneer opnieuw proberen (ms), member = host
+//   bb:retry:meta:{h}   STRING (JSON) HostWork + pogingen + wat er geprobeerd is
+//
+// Een host die in geen enkel profiel een banner liet zien is NIET "vals
+// positief". Hij gaat in de wachtrij en wordt tot MAX_ATTEMPTS keer opnieuw
+// bezocht met andere profielen (zie analyze.ts). Pas daarna is het een zaak
+// voor een mens, en dat zegt de mail dan ook letterlijk.
+// ---------------------------------------------------------------------------
+
+export const RETRY_MAX_ATTEMPTS = 3;
+export const RETRY_DELAY_MS = 6 * 60 * 60 * 1000;
+
+export interface RetryMeta {
+  work: HostWork;
+  attempts: number;
+  tried: string[];
+  firstSeen: number;
+  nextAt: number;
+}
+
+export async function scheduleRetry(
+  redis: Redis,
+  work: HostWork,
+  tried: string[],
+  opts: { delayMs?: number } = {},
+): Promise<RetryMeta> {
+  const key = `bb:retry:meta:${work.hostname}`;
+  const prev = (await redis.get(key)) as RetryMeta | null;
+  const attempts = (prev?.attempts ?? 0) + 1;
+  const nextAt = Date.now() + (opts.delayMs ?? RETRY_DELAY_MS);
+  const meta: RetryMeta = {
+    work: { ...work, attempt: attempts + 1 },
+    attempts,
+    tried: Array.from(new Set([...(prev?.tried ?? []), ...tried])),
+    firstSeen: prev?.firstSeen ?? Date.now(),
+    nextAt,
+  };
+  const p = redis.pipeline();
+  p.set(key, meta, { ex: 14 * 24 * 60 * 60 });
+  p.zadd('bb:retry', { score: nextAt, member: work.hostname });
+  await p.exec();
+  return meta;
+}
+
+export async function getRetryMeta(redis: Redis, hostname: string): Promise<RetryMeta | null> {
+  try {
+    return ((await redis.get(`bb:retry:meta:${hostname}`)) as RetryMeta | null) ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/** Hosts waarvan de wachttijd om is, oudste eerst. */
+export async function getDueRetries(redis: Redis, max: number): Promise<RetryMeta[]> {
+  const hosts = (await redis.zrange('bb:retry', 0, Date.now(), {
+    byScore: true,
+    offset: 0,
+    count: max,
+  })) as string[];
+  if (!hosts.length) return [];
+  const metas = await Promise.all(hosts.map((h) => getRetryMeta(redis, h)));
+  return metas.filter((m): m is RetryMeta => !!m && !!m.work?.hostname);
+}
+
+export async function clearRetry(redis: Redis, hostname: string): Promise<void> {
+  const p = redis.pipeline();
+  p.zrem('bb:retry', hostname);
+  p.del(`bb:retry:meta:${hostname}`);
+  await p.exec();
 }

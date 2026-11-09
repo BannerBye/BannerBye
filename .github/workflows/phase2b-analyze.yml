@@ -1,24 +1,33 @@
 name: Phase 2B/2C — analyze reported sites
 
-# Headless analyse van gemelde "broken sites" → Claude beoordeelt voorgestelde
-# keywords. Sinds de security-fix van bevinding 1 (2026-09-16, zie
-# BannerBye_Security-Audit_2026-09-16_INTERN.md) gaat NIETS meer automatisch
-# live: elk geoordeeld voorstel — ook approve/high — komt op een branch en
-# opent één PR die Robin zelf moet beoordelen en mergen. Nooit auto-merge.
-
-# Draait NIET meer op een dagschema. In plaats daarvan meteen wanneer een
-# gebruiker een link inzendt: deploy/api/report.ts vuurt na een geldige melding
-# een repository_dispatch (type "report-submitted") af. Weinig inzendingen →
-# behapbaar. workflow_dispatch blijft voor handmatige (her)runs.
+# Pijplijn v2 (0.4.17, 9 nov 2026). Headless analyse van gemelde sites in
+# meerdere profielen (zoals de melder + desktop), met de snapshot van de
+# melder als tweede bewijsbron; Claude beoordeelt elk voorstel.
+#
+# Wat er automatisch live gaat en wat niet:
+#   - approve/high → HOST-SCOPED (autoclick.hostRules[host]) direct op main.
+#     Bewuste, afgebakende uitzondering op security-fix #1 (2026-09-16): de
+#     blast radius is één host. Zie scripts/phase2b/apply-host-rules.ts.
+#   - approve/medium|low en globale kandidaten → één review-PR, nooit auto-merge.
+#   - niets gezien → wachtrij (bb:retry), elke 6 uur opnieuw, max 3 pogingen.
+#
+# Triggers: repository_dispatch bij elke geldige melding (api/report.ts),
+# een 6-uurs schema voor de wachtrij (RETRY_MODE=1), en workflow_dispatch.
 on:
   repository_dispatch:
     types: [report-submitted]
+  schedule:
+    - cron: "41 */6 * * *"
   workflow_dispatch:
     inputs:
       max_hosts:
         description: "Max aantal hosts deze run"
         required: false
         default: "25"
+      retry_mode:
+        description: "Alleen de wachtrij (herhaalpogingen) draaien"
+        required: false
+        default: "false"
 
 permissions:
   contents: write
@@ -80,12 +89,47 @@ jobs:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           MAX_HOSTS: ${{ github.event.inputs.max_hosts || '25' }}
           RULES_FILE: ${{ github.workspace }}/landing/rules.json
+          # Schema-run = alleen de wachtrij; dispatch = nieuwe meldingen.
+          RETRY_MODE: ${{ (github.event_name == 'schedule' || github.event.inputs.retry_mode == 'true') && '1' || '0' }}
         run: node --experimental-strip-types analyze.ts
 
-      # Bevinding 1 (security-audit 2026-09-16): geen directe git-push naar
-      # main meer, voor GEEN enkel voorstel — ook approve/high niet. Alles
-      # wat Claude goedkeurde (beide zekerheids-tiers) wordt hier op een
-      # branch gezet en gaat via één PR die Robin zelf moet mergen.
+      # Pijplijn v2: host-scoped fixes met hoge zekerheid direct naar main.
+      # Alleen autoclick.hostRules[host] verandert; globale lijsten nooit hier.
+      - name: Host-regels toepassen (approve/high, blast radius één host)
+        if: steps.analyze.outputs.has_hostrules == 'true'
+        working-directory: scripts/phase2b
+        env:
+          RULES_FILE: ${{ github.workspace }}/landing/rules.json
+        run: node --experimental-strip-types apply-host-rules.ts
+
+      - name: Host-regels committen en pushen naar landing main
+        if: steps.analyze.outputs.has_hostrules == 'true'
+        working-directory: landing
+        env:
+          MSG: ${{ steps.analyze.outputs.hostrules_commit_message }}
+        run: |
+          git config user.name "bannerbye-pipeline"
+          git config user.email "hello@bannerbye.com"
+          if git diff --quiet -- rules.json; then
+            echo "rules.json ongewijzigd (regels stonden er al)."
+          else
+            git add rules.json
+            git commit -m "$MSG"
+            git push origin HEAD:main
+          fi
+
+      # Pas ná een geslaagde push: /fixed, ticketstatus en opt-in-mails.
+      - name: Publiceer automatisch opgeloste hosts (/fixed + tickets)
+        if: steps.analyze.outputs.has_hostrules == 'true'
+        working-directory: scripts/phase2b
+        env:
+          KV_REST_API_URL: ${{ secrets.KV_REST_API_URL }}
+          KV_REST_API_TOKEN: ${{ secrets.KV_REST_API_TOKEN }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+        run: node --experimental-strip-types publish-autofixed.ts
+
+      # Globale keywords (lagere zekerheid + host-keywords die op ≥2 hosts
+      # voorkomen) blijven via één PR gaan die Robin zelf merget.
       - name: Stage beoordeelde keywords (ready-to-merge + needs-extra-review)
         if: steps.analyze.outputs.has_proposals == 'true'
         working-directory: scripts/phase2b
@@ -104,6 +148,6 @@ jobs:
           draft: ${{ steps.analyze.outputs.pr_draft }}
           add-paths: rules.json
           commit-message: ${{ steps.analyze.outputs.commit_message }}
-          title: "Phase 2C — keywords naar review"
+          title: "Pijplijn v2 — keywords naar review"
           body: ${{ steps.analyze.outputs.pr_body }}
           labels: phase-2c, automated, needs-review

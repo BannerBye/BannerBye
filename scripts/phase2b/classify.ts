@@ -69,6 +69,9 @@ const ACCEPT_INDICATORS = [
 const STEP_INTO_INDICATORS = [
   'customize', 'customise', 'manage', 'more options', 'more choices',
   'options', 'preferences', 'settings', 'purposes', 'show details',
+  // v0.4.17: breder — 'choices' (Adjust cookie choices), 'adjust', 'configure',
+  // 'details' (openground.club: DETAILS), 'configurar', 'ajustes', 'anpassen'.
+  'choices', 'adjust', 'configure', 'details', 'configurar', 'ajustes', 'anpassen',
   'meer opties', 'instellingen', 'opties', 'aanpassen', 'beheren',
   'voorkeuren', 'personali', 'einstellungen', 'optionen', 'mehr optionen',
   'paramètres', 'personnaliser', 'gérer', 'impostazioni', 'più opzioni',
@@ -122,6 +125,11 @@ export function classify(d: DetectionResult): Classification {
   let hasMatchedReject = false;
   let hasAcceptOnly = false;
   let stepIntoButtonText: string | undefined;
+  // v0.4.17: knoppen die geen accept, geen reject en geen bekend step-into-
+  // woord hebben. Staat er precies één naast een accept-knop, dan is dat
+  // vrijwel altijd de instellingen-knop met een onbekend label — analyze.ts
+  // klikt 'm (headless) of laat Claude 'm beoordelen (snapshot).
+  const otherButtons: string[] = [];
 
   for (const c of d.candidates) {
     const norm = normalize(c.text);
@@ -149,8 +157,13 @@ export function classify(d: DetectionResult): Classification {
     if (!stepIntoButtonText && !looksAccept) {
       if (isStepIntoText(c.text) || hasAny(norm, STEP_INTO_INDICATORS)) {
         stepIntoButtonText = c.text;
+      } else if (norm.length <= 40 && !/^(ok|okay|close|sluiten|schließen|fermer|cerrar|chiudi|×|x)$/.test(norm)) {
+        otherButtons.push(c.text);
       }
     }
+  }
+  if (!stepIntoButtonText && hasAcceptOnly && otherButtons.length === 1 && rejectProposals.length === 0) {
+    stepIntoButtonText = otherButtons[0];
   }
 
   // Directe weiger-knop met onbekende tekst → meteen voorstellen.

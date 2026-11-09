@@ -81,44 +81,59 @@ export async function sendFixedEmail(
 }
 
 /**
- * #134 — samenvattingsmail naar de eigenaar na elke analyse-run.
- *
- * `lines` is een kant-en-klare lijst met één regel per onderzochte host
- * (gebouwd in analyze.ts door describeHostOutcome), zodat de mail-logica hier
- * niet zelf hoeft te weten wat een "vals positief" is — dat blijft in de
- * classificatielogica van analyze.ts/classify.ts.
- *
- * Best-effort, zoals sendFixedEmail: een falende mail laat de run nooit
- * klappen, en er wordt niets herhaald (geen queue, geen retry — de volgende
- * run stuurt gewoon zijn eigen samenvatting).
+ * v0.4.17 (pijplijn v2) — samenvattingsmail aan de eigenaar, per host een
+ * blok: wat de melder zag, wat wij probeerden, wat de uitkomst is en wat
+ * Robin nog moet doen. Het onderwerp zegt meteen of er iets van hem wordt
+ * verwacht. Best-effort: een mislukte mail laat de run nooit klappen.
  */
+export interface OwnerHostBlock {
+  hostname: string;
+  ticketStatus: 'fixed' | 'investigating' | 'not-a-bug';
+  reporterSaw: string;
+  weTried: string;
+  outcome: string;
+  todo: string;
+  /** Twee zinnen duiding van Claude; leeg als die faalde. */
+  explanation: string;
+  urgent: boolean;
+}
+
 export async function sendOwnerSummaryEmail(
-  lines: string[],
-  appliedCount: number,
-  needsReviewCount: number,
+  blocks: OwnerHostBlock[],
+  counts: { live: number; review: number; human: number; retry: number; retryMode: boolean },
 ): Promise<boolean> {
+  const needsRobin = counts.review + counts.human;
   const subject =
-    appliedCount > 0
-      ? `BannerBye: ${appliedCount} melding(en) automatisch opgelost`
-      : needsReviewCount > 0
-        ? `BannerBye: ${needsReviewCount} melding(en) verwerkt, review nodig`
-        : `BannerBye: melding(en) verwerkt — geen actie nodig`;
+    needsRobin > 0
+      ? `BannerBye: ${needsRobin} melding(en) wachten op jou${counts.live ? `, ${counts.live} al live` : ''}`
+      : counts.live > 0
+        ? `BannerBye: ${counts.live} melding(en) automatisch opgelost — niets te doen`
+        : counts.retry > 0
+          ? `BannerBye: ${counts.retry} melding(en) nog niet gereproduceerd — herhaalpoging gepland`
+          : `BannerBye: melding(en) verwerkt — niets te doen`;
 
-  const text = [
-    `Analyse-run klaar. ${lines.length} host(s) onderzocht (getriggerd door een nieuwe melding via /api/report).`,
-    ``,
-    ...lines,
-    ``,
-    `Fixed-overzicht: https://bannerbye.com/fixed`,
-    `Rules: https://github.com/BannerBye/bannerbye-landing/blob/main/rules.json`,
-    needsReviewCount > 0
-      ? `Review-PR: https://github.com/BannerBye/bannerbye-landing/pulls`
-      : '',
-    ``,
-    `— automatisch verstuurd door de zelfherstellende pijplijn (.github/workflows/phase2b-analyze.yml)`,
-  ]
-    .filter((l) => l !== '')
-    .join('\n');
+  const urgentFirst = [...blocks].sort((a, b) => Number(b.urgent) - Number(a.urgent));
+  const body: string[] = [];
+  body.push(
+    `${counts.retryMode ? 'Herhaalpoging' : 'Analyse-run'} klaar: ${blocks.length} host(s). ` +
+      `Live (host-scoped): ${counts.live} · naar review: ${counts.review} · herhaalpoging gepland: ${counts.retry} · jouw blik nodig: ${counts.human}.`,
+  );
+  body.push('');
+  for (const b of urgentFirst) {
+    body.push(`${b.urgent ? '🙋' : '✅'} ${b.hostname}  [ticket: ${b.ticketStatus}]`);
+    if (b.explanation) body.push(`   ${b.explanation}`);
+    body.push(`   Melder zag:      ${b.reporterSaw}`);
+    body.push(`   Wij probeerden:  ${b.weTried}`);
+    body.push(`   Uitkomst:        ${b.outcome}`);
+    body.push(`   Jij hoeft:       ${b.todo}`);
+    body.push('');
+  }
+  body.push(`Fixed-overzicht: https://bannerbye.com/fixed`);
+  body.push(`Rules (host-regels staan onder autoclick.hostRules): https://github.com/BannerBye/bannerbye-landing/blob/main/rules.json`);
+  if (counts.review > 0) body.push(`Review-PR: https://github.com/BannerBye/bannerbye-landing/pulls`);
+  body.push(`Run-logs: https://github.com/BannerBye/BannerBye/actions/workflows/phase2b-analyze.yml`);
+  body.push('');
+  body.push(`— pijplijn v2 (.github/workflows/phase2b-analyze.yml). Host-scoped fixes gaan live zonder PR (bewuste uitzondering op security-fix #1, blast radius één host); globale keywords alleen via de PR.`);
 
-  return sendEmail(OWNER_EMAIL, subject, text);
+  return sendEmail(OWNER_EMAIL, subject, body.join('\n'));
 }

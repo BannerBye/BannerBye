@@ -33,6 +33,7 @@ import { clearStormPause, getStormPauses, type StormPause } from '@/lib/reload-b
 import { addTicket, clearTickets, markFixedSeen, newTicketId, refreshTicketStatuses, versionAtLeast } from '@/lib/tickets';
 import type { TicketEntry } from '@/lib/types';
 import { browserLabel, formatTrace, type TabTrace } from '@/lib/trace';
+import { scrubPath, type ReportSnapshot } from '@/lib/report-snapshot';
 import type {
   ActivityEntry,
   LocalStats,
@@ -40,6 +41,48 @@ import type {
 } from '@/lib/types';
 
 const REPORT_ENDPOINT = 'https://bannerbye.com/api/report';
+
+/**
+ * v0.4.17 (pijplijn v2): context van de actieve tab voor de melding —
+ * opgeschoond pad, snapshot van het hoofdframe (zie lib/report-snapshot.ts)
+ * en de trace. Alles best-effort met een korte wachttijd: een site zonder
+ * ons content-script (of een trage tab) mag de melding nooit tegenhouden.
+ */
+async function collectReportContext(): Promise<{
+  path: string;
+  snapshot: ReportSnapshot | null;
+  trace: string;
+}> {
+  const out = { path: '/', snapshot: null as ReportSnapshot | null, trace: '' };
+  try {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (tab?.url) {
+      try {
+        out.path = scrubPath(new URL(tab.url).pathname);
+      } catch {
+        out.path = '/';
+      }
+    }
+    if (tab?.id !== undefined) {
+      const ask = chrome.tabs.sendMessage(tab.id, { type: 'bb:snapshot' }, { frameId: 0 }) as Promise<
+        ReportSnapshot | null | undefined
+      >;
+      const timeout = new Promise<null>((resolve) => setTimeout(() => resolve(null), 1500));
+      const snap = await Promise.race([ask.catch(() => null), timeout]);
+      if (snap && typeof snap === 'object' && Array.isArray(snap.candidates)) out.snapshot = snap;
+      const trace = await getActiveTabTrace();
+      if (trace) {
+        out.trace = formatTrace(trace, {
+          version: chrome.runtime.getManifest().version,
+          browser: browserLabel(),
+        }).slice(0, 2000);
+      }
+    }
+  } catch {
+    // Zonder context melden kan altijd nog.
+  }
+  return out;
+}
 
 /**
  * v0.2.1: review-link in de footer (ASO — reviews aanjagen).
@@ -411,6 +454,11 @@ export function App() {
         : null,
     }));
     try {
+      // v0.4.17 (pijplijn v2): stuur mee wat de melder zag — pad, snapshot
+      // van de banner-knoppen en de trace — zodat de analyse niet meer blind
+      // de root van de host hoeft te bezoeken. Zie lib/report-snapshot.ts
+      // voor wat er wél en níet in zit.
+      const ctx = await collectReportContext();
       const res = await fetch(REPORT_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -419,6 +467,11 @@ export function App() {
           version: chrome.runtime.getManifest().version,
           message,
           ticket,
+          v: 2,
+          path: ctx.path,
+          lang: navigator.language ?? '',
+          ...(ctx.snapshot ? { snapshot: ctx.snapshot } : {}),
+          ...(ctx.trace ? { trace: ctx.trace } : {}),
         }),
       });
       if (!res.ok) {
