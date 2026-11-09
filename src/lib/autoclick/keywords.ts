@@ -396,6 +396,13 @@ export const AMBIGUOUS_REJECT_KEYWORDS: readonly string[] = [
   'confirm and close',
   'confirm my choices',
   'confirm my selection',
+  // v0.4.16 (portal.newdaycards.com): laag-2-knop die de default-OFF
+  // selectie opslaat.
+  'confirm current selection',
+  'confirm selection',
+  'confirm settings',
+  'confirm preferences',
+  'save current selection',
   // Deutsch
   'speichern',
   'einstellungen speichern',
@@ -450,6 +457,13 @@ export const STEP_INTO_KEYWORDS: readonly string[] = [
   'manage preferences',
   'manage options',
   'manage cookies',
+  // v0.4.16 (portal.newdaycards.com, melding 8 nov 2026): eigen CMP met
+  // "Accept all cookies" + "Manage cookie settings" op laag 1; laag 2 heeft
+  // default-OFF toggles en "Confirm current selection" (= weigeren).
+  'manage cookie settings',
+  'manage cookie preferences',
+  'manage my cookie settings',
+  'manage my cookies',
   'cookie settings',
   'cookie preferences',
   'customize',

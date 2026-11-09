@@ -85,6 +85,13 @@
       "label": "mainWorldClick",
       "version": "0.4.15",
       "fixedAt": "2026-11-07"
+    },
+    {
+      "hostname": "portal.newdaycards.com",
+      "reason": "Custom banner with only Accept and Manage; BannerBye now opens Manage cookie settings and confirms the default-off selection (0.4.16)",
+      "label": "stepIntoConfirm",
+      "version": "0.4.16",
+      "fixedAt": "2026-11-09"
     }
   ]
 }
