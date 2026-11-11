@@ -537,7 +537,7 @@ function describeOutcome(o: Outcome, r: HostResult): { outcome: string; todo: st
         todo: 'alleen als je het oneens bent: keyword handmatig in rules.json zetten',
       };
     case 'wall':
-      return { outcome: 'TOESTEMMEN-OF-BETALEN-MUUR — de trace van de melder zegt wall; BannerBye klikt daar bewust niets (issue #6). Ticket op not-a-bug.', todo: 'niets' };
+      return { outcome: 'TOESTEMMEN-OF-BETALEN-MUUR — toestemmen of betalen, geen gratis weigerroute; BannerBye klikt daar bewust niets (issue #6). Ticket op not-a-bug.', todo: 'niets' };
     case 'accept_only':
       return { outcome: 'ACCEPT-ONLY — alleen accepteer-knoppen, geen weiger-optie en geen instellingen-knop. Niet oplosbaar via klikken. Ticket op not-a-bug.', todo: 'niets' };
     case 'cmp_iframe':
@@ -786,7 +786,7 @@ async function main(): Promise<void> {
     else if (liveHere.length) outcome = { kind: 'live', keywords: liveHere };
     else if (reviewHere.length) outcome = { kind: 'review', keywords: reviewHere };
     else if (rejectedHere.length) outcome = { kind: 'rejected', keywords: rejectedHere };
-    else if (r.wallFromTrace) outcome = { kind: 'wall' };
+    else if (r.wallFromTrace || r.classification.category === 'consent_or_pay_wall') outcome = { kind: 'wall' };
     else if (r.classification.category === 'accept_only') outcome = { kind: 'accept_only' };
     else if (r.classification.category === 'cmp_iframe_unreachable') outcome = { kind: 'cmp_iframe' };
     else if (r.classification.category === 'possible_language_gap') outcome = { kind: 'language_gap' };

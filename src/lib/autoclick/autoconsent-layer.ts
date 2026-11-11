@@ -40,6 +40,7 @@
  */
 
 import { traceIso } from '../trace.ts';
+import { detectConsentOrPayWall } from './consent-wall.ts';
 import AutoConsent from '@duckduckgo/autoconsent';
 import type { Config, RuleBundle } from '@duckduckgo/autoconsent';
 import rules from '@duckduckgo/autoconsent/rules/rules.json';
@@ -200,6 +201,37 @@ function sourcepointGoBack(): void {
     cancel?.click();
   } catch {
     // Niet kritiek — dan blijft de manager staan zoals de library 'm liet.
+  }
+}
+
+/**
+ * v0.4.18 (chefkoch.de, melding 10 nov 2026): consent-or-pay-muur vóór de
+ * opt-out van de motor.
+ *
+ * Tot 0.4.17 keek alleen laag 5 naar consent-or-pay-muren (consent-wall.ts).
+ * Maar zodra een gebundelde DDG-regel een CMP herkent, staat laag 5 stil
+ * (`__bbConsentActive`) en weigert de motor op eigen houtje. Op chefkoch.de
+ * (consentmanager.net in PUR-modus: "Allen Zwecken zustimmen" of "Zum
+ * Abonnement", 1,99 €/maand, géén gratis weigerknop) betekende dat:
+ *   - Safari (geen MAIN-world-eval, dus `apiAvailable` false): de DOM-tak
+ *     van DDG's consentmanager-regel klikt "Einstellungen" en probeert in
+ *     het instellingenpaneel alle doelen uit te zetten. De melder bleef op
+ *     een paneel met ~40 doel-knoppen achter — slechter dan zonder ons.
+ *   - Chrome/Firefox: `__cmp('setConsent', 0)` — een API-weigering op een
+ *     site die weigeren alleen tegen betaling toestaat.
+ * Ethos (issue #6): muren blijven staan, de keuze is aan de gebruiker. Dus
+ * kijken we vlak vóór de opt-out met exact dezelfde strenge herkenning als
+ * laag 5. Muur → niets doen, prehide weg, popup laten weten dat het een muur
+ * is. Opacity-prehide (van de motor of van prehide.ts) zit op de container,
+ * niet op de knoppen, dus de herkenning ziet de knoppen gewoon.
+ */
+const WALL_CHECK_DELAY_MS = 500;
+
+function consentOrPayWallVisible(): boolean {
+  try {
+    return detectConsentOrPayWall();
+  } catch {
+    return false;
   }
 }
 
@@ -381,6 +413,32 @@ export function startAutoconsentLayer(onHandled: () => void): void {
         break;
     }
   });
+
+  // v0.4.18: consent-or-pay-muur vóór elke opt-out (zie consentOrPayWallVisible).
+  // handlePopup() roept `this.doOptOut()` aan, dus een instance-override
+  // grijpt precies op het moment tussen "popup gevonden" en "weigeren".
+  const libraryOptOut = consent.doOptOut.bind(consent);
+  consent.doOptOut = async (): Promise<boolean> => {
+    // Zelfde adempauze als DDG's eigen regels (wait 500) — de CMP rendert
+    // z'n tweede kolom (de betaaloptie) soms net na de eerste.
+    await new Promise((r) => window.setTimeout(r, WALL_CHECK_DELAY_MS));
+    if (!consentOrPayWallVisible()) return libraryOptOut();
+    traceIso('wall', 'autoconsent: consent-or-pay wall (pay button + consent button, no free reject) → no opt-out, left alone');
+    try {
+      consent.undoPrehide();
+    } catch {
+      // prehide-style al weg — prima.
+    }
+    // Laag 5 mag hier niet alsnog "Einstellungen" openen.
+    window.__bbStepIntoBlocked = true;
+    try {
+      void chrome.runtime.sendMessage({ type: 'bb:consent-wall' });
+    } catch {
+      // Geen runtime — niet kritiek.
+    }
+    release();
+    return false;
+  };
 
   try {
     // domActions bestaat nu (constructor is al klaar) — pas hier initialiseren

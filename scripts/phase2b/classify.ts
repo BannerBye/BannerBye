@@ -21,6 +21,7 @@ import {
   containsRejectPhrase,
 } from '../../src/lib/autoclick/keywords.ts';
 import type { DetectionResult } from './detect.ts';
+import { PAY_WALL_WORDS, WALL_CONSENT_WORDS } from '../../src/lib/autoclick/consent-wall.ts';
 
 export type Category =
   | 'custom_unmatched'
@@ -31,6 +32,7 @@ export type Category =
   | 'no_banner'
   | 'cmp_iframe_unreachable'
   | 'possible_language_gap'
+  | 'consent_or_pay_wall'
   | 'unknown';
 
 /** Doellijst in rules.json waar een voorgesteld keyword heen gaat. */
@@ -119,6 +121,28 @@ export function classify(d: DetectionResult): Classification {
         'Geen zichtbare consent-banner gevonden — waarschijnlijk al opgelost of niet reproduceerbaar.',
       cmps,
     };
+  }
+
+  // v0.4.18 (chefkoch.de, 10 nov 2026): consent-or-pay-muur herkennen met
+  // dezelfde woordenlijsten als de extensie (consent-wall.ts). Tot nu toe
+  // zag de pijplijn een muur alleen als de trace van de melder 'wall' zei;
+  // zonder trace klikte hij "Einstellungen" open en meldde "weiger-knop
+  // herkend — mogelijk timing". Een muur is geen bug en krijgt geen keyword.
+  {
+    const texts = d.candidates.map((c) => normalize(c.text)).filter((t) => t && t.length <= 80);
+    const hasPay = texts.some((t) => PAY_WALL_WORDS.some((w) => t.includes(w)));
+    const hasConsent = texts.some((t) => WALL_CONSENT_WORDS.some((w) => t.includes(w)));
+    const hasReject = texts.some((t) => isRejectText(t));
+    if (hasPay && hasConsent && !hasReject) {
+      return {
+        category: 'consent_or_pay_wall',
+        proposals: [],
+        reason:
+          'Toestemmen-of-betalen-muur: een toestem-knop en een abonnement-knop, geen gratis weigerknop. ' +
+          'BannerBye laat zo\'n muur bewust staan (issue #6) — geen keyword voorstellen.',
+        cmps,
+      };
+    }
   }
 
   const rejectProposals: KeywordProposal[] = [];
