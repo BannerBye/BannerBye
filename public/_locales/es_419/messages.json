@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "Tu reporte: resuelto en $VERSION$. Ya lo tienes.",
+    "message": "Tu reporte: resuelto en $VERSION$. Esa versión ya está instalada.",
     "placeholders": {
       "version": {
         "content": "$1"

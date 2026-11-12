@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "La tua segnalazione: risolta nella $VERSION$. Ce l'hai già.",
+    "message": "La tua segnalazione: risolta nella $VERSION$. Questa versione è già installata.",
     "placeholders": {
       "version": {
         "content": "$1"

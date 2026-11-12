@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "A tua denúncia: resolvida na $VERSION$. Já a tens.",
+    "message": "A tua denúncia: resolvida na $VERSION$. Essa versão já está instalada.",
     "placeholders": {
       "version": {
         "content": "$1"

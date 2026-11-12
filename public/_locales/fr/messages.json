@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "Ton signalement : corrigé dans $VERSION$. Tu l'as déjà.",
+    "message": "Ton signalement : corrigé dans $VERSION$. Cette version est déjà installée.",
     "placeholders": {
       "version": {
         "content": "$1"

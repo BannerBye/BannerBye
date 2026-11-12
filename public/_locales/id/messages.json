@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "Laporan Anda: diperbaiki di $VERSION$. Anda sudah memilikinya.",
+    "message": "Laporan Anda: diperbaiki di $VERSION$. Versi itu sudah terpasang.",
     "placeholders": {
       "version": {
         "content": "$1"

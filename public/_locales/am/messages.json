@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "ሪፖርትዎ፡ በ $VERSION$ ተስተካክሏል። አስቀድመው አለዎት።",
+    "message": "ሪፖርትዎ፡ በ $VERSION$ ተስተካክሏል። ይህ ስሪት አስቀድሞ ተጭኗል።",
     "placeholders": {
       "version": {
         "content": "$1"

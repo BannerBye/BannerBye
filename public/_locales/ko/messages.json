@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "내 신고: $VERSION$에서 해결됨. 이미 적용되어 있습니다.",
+    "message": "내 신고: $VERSION$에서 해결됨. 이 버전은 이미 설치되어 있습니다.",
     "placeholders": {
       "version": {
         "content": "$1"

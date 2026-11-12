@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "Ваше повідомлення: виправлено у $VERSION$. Ви вже це маєте.",
+    "message": "Ваше повідомлення: виправлено у $VERSION$. Ця версія у вас уже встановлена.",
     "placeholders": {
       "version": {
         "content": "$1"

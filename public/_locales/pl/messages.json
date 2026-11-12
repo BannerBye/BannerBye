@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "Twoje zgłoszenie: naprawione w $VERSION$. Już to masz.",
+    "message": "Twoje zgłoszenie: naprawione w $VERSION$. Ta wersja jest już zainstalowana.",
     "placeholders": {
       "version": {
         "content": "$1"

@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "Deine Meldung: behoben in $VERSION$. Du hast es bereits.",
+    "message": "Deine Meldung: behoben in $VERSION$. Diese Version ist bereits installiert.",
     "placeholders": {
       "version": {
         "content": "$1"

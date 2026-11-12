@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "你的报告：已在 $VERSION$ 中修复。你已经拥有了。",
+    "message": "你的报告：已在 $VERSION$ 中修复。此版本已安装。",
     "placeholders": {
       "version": {
         "content": "$1"

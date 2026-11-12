@@ -889,3 +889,9 @@ body {
 .bb-trace-btn:hover {
   color: var(--ember);
 }
+
+/* "Details" en de meldknop staan naast elkaar op één regel; zonder ruimte
+   las het als "DetailsDeze site melden". */
+.bb-trace-toggle + .bb-proof-report {
+  margin-left: 16px;
+}

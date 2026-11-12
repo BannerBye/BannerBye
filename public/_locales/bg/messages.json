@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "Твоят сигнал: решен в $VERSION$. Вече го имаш.",
+    "message": "Твоят сигнал: решен в $VERSION$. Тази версия вече е инсталирана.",
     "placeholders": {
       "version": {
         "content": "$1"

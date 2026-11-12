@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "आपकी रिपोर्ट: $VERSION$ में ठीक हो गई। आपके पास है।",
+    "message": "आपकी रिपोर्ट: $VERSION$ में ठीक हो गई। यह संस्करण पहले से इंस्टॉल है।",
     "placeholders": {
       "version": {
         "content": "$1"

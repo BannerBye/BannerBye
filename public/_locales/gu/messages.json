@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "તમારો રિપોર્ટ: $VERSION$ માં ઠીક થયો. તમારી પાસે છે.",
+    "message": "તમારો રિપોર્ટ: $VERSION$ માં ઠીક થયો. આ સંસ્કરણ પહેલેથી ઇન્સ્ટોલ છે.",
     "placeholders": {
       "version": {
         "content": "$1"

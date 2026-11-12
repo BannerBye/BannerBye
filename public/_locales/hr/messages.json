@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "Tvoja prijava: riješena u $VERSION$. Već je imaš.",
+    "message": "Tvoja prijava: riješena u $VERSION$. Ta je verzija već instalirana.",
     "placeholders": {
       "version": {
         "content": "$1"

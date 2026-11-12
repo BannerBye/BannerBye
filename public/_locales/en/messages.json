@@ -398,7 +398,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "Your report: fixed in $VERSION$. You have it.",
+    "message": "Your report: fixed in $VERSION$. That version is already installed.",
     "placeholders": {
       "version": {
         "content": "$1"

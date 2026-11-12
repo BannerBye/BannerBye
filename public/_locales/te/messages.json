@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "మీ నివేదిక: $VERSION$ లో సరిచేయబడింది. మీ దగ్గర ఉంది.",
+    "message": "మీ నివేదిక: $VERSION$ లో సరిచేయబడింది. ఈ వెర్షన్ ఇప్పటికే ఇన్‌స్టాల్ అయి ఉంది.",
     "placeholders": {
       "version": {
         "content": "$1"

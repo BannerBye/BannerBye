@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "Jouw melding: opgelost in $VERSION$. Je hebt het al.",
+    "message": "Jouw melding: opgelost in $VERSION$. Die versie heb je al geïnstalleerd.",
     "placeholders": {
       "version": {
         "content": "$1"

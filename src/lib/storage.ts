@@ -21,6 +21,14 @@ import {
 
 const SETTINGS_KEY = 'settings';
 const STATS_KEY = 'stats';
+/**
+ * Milestone-IDs waarvan de viering al één keer getoond is. Bewust een eigen
+ * sleutel, los van `stats`: veel schrijvers doen read-modify-write op `stats`
+ * en een verouderde kopie zette `pendingCelebrations` terug, waardoor
+ * "Mijlpaal ontgrendeld" bij elke popup-open opnieuw verscheen. Alleen
+ * markCelebrationSeen() schrijft hierheen, dus dit kan niet teruggedraaid worden.
+ */
+const CELEBRATED_KEY = 'celebrated';
 
 /**
  * Lees gesynchroniseerde settings. Vult ontbrekende keys aan
@@ -65,9 +73,28 @@ export async function setPausedForSite(
 
 /** Lokale stats (niet gesynced) ophalen. */
 export async function getStats(): Promise<LocalStats> {
-  const result = await chrome.storage.local.get(STATS_KEY);
+  const result = await chrome.storage.local.get([STATS_KEY, CELEBRATED_KEY]);
   const stored = (result[STATS_KEY] ?? {}) as Partial<LocalStats>;
-  return { ...DEFAULT_STATS, ...stored };
+  const stats: LocalStats = { ...DEFAULT_STATS, ...stored };
+  const celebrated = new Set((result[CELEBRATED_KEY] ?? []) as string[]);
+  if (celebrated.size > 0) {
+    stats.pendingCelebrations = stats.pendingCelebrations.filter(
+      (id) => !celebrated.has(id),
+    );
+  }
+  return stats;
+}
+
+/**
+ * Markeer een milestone-viering als getoond. Daarna verschijnt de kaart nooit
+ * meer, ook niet als de popup sluit zonder dat de gebruiker op ✕ klikt.
+ * Idempotent.
+ */
+export async function markCelebrationSeen(id: string): Promise<void> {
+  const result = await chrome.storage.local.get(CELEBRATED_KEY);
+  const current = (result[CELEBRATED_KEY] ?? []) as string[];
+  if (current.includes(id)) return;
+  await chrome.storage.local.set({ [CELEBRATED_KEY]: [...current, id] });
 }
 
 /** Increment de "blocked"-teller. Roep aan bij een succesvol geblokte banner. */
@@ -211,6 +238,7 @@ export async function markUnlockedAndPending(ids: string[]): Promise<LocalStats>
  * v0.2.0: nieuw voor celebration card (#86).
  */
 export async function clearPendingCelebration(id: string): Promise<LocalStats> {
+  await markCelebrationSeen(id);
   const current = await getStats();
   if (!current.pendingCelebrations.includes(id)) {
     return current;

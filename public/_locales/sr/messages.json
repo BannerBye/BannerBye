@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "Твоја пријава: решена у $VERSION$. Већ је имаш.",
+    "message": "Твоја пријава: решена у $VERSION$. Та верзија је већ инсталирана.",
     "placeholders": {
       "version": {
         "content": "$1"

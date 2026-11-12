@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "Vaše hlášení: vyřešeno ve verzi $VERSION$. Už to máte.",
+    "message": "Vaše hlášení: vyřešeno ve verzi $VERSION$. Tu už máte nainstalovanou.",
     "placeholders": {
       "version": {
         "content": "$1"

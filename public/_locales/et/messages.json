@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "Sinu teade: lahendatud versioonis $VERSION$. Sul on see juba olemas.",
+    "message": "Sinu teade: lahendatud versioonis $VERSION$. See versioon on juba paigaldatud.",
     "placeholders": {
       "version": {
         "content": "$1"

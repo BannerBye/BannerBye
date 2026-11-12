@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "Din rapport: löst i $VERSION$. Du har det redan.",
+    "message": "Din rapport: löst i $VERSION$. Den versionen är redan installerad.",
     "placeholders": {
       "version": {
         "content": "$1"

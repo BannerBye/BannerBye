@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "Ваше сообщение: исправлено в $VERSION$. У вас уже есть.",
+    "message": "Ваше сообщение: исправлено в $VERSION$. Эта версия у вас уже установлена.",
     "placeholders": {
       "version": {
         "content": "$1"

@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "Bildirimin: $VERSION$ sürümünde düzeltildi. Sende zaten var.",
+    "message": "Bildirimin: $VERSION$ sürümünde düzeltildi. Bu sürüm zaten yüklü.",
     "placeholders": {
       "version": {
         "content": "$1"

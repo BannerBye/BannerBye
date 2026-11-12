@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "നിങ്ങളുടെ റിപ്പോർട്ട്: $VERSION$-ൽ പരിഹരിച്ചു. നിങ്ങൾക്കത് ഉണ്ട്.",
+    "message": "നിങ്ങളുടെ റിപ്പോർട്ട്: $VERSION$-ൽ പരിഹരിച്ചു. ഈ പതിപ്പ് ഇതിനകം ഇൻസ്റ്റാൾ ചെയ്തിട്ടുണ്ട്.",
     "placeholders": {
       "version": {
         "content": "$1"

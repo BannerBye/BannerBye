@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "El teu avís: resolt a la $VERSION$. Ja ho tens.",
+    "message": "El teu avís: resolt a la $VERSION$. Aquesta versió ja la tens instal·lada.",
     "placeholders": {
       "version": {
         "content": "$1"

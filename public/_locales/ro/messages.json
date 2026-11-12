@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "Raportarea ta: rezolvată în $VERSION$. O ai deja.",
+    "message": "Raportarea ta: rezolvată în $VERSION$. Versiunea aceasta este deja instalată.",
     "placeholders": {
       "version": {
         "content": "$1"

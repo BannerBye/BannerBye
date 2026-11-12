@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "Ilmoituksesi: korjattu versiossa $VERSION$. Sinulla on se jo.",
+    "message": "Ilmoituksesi: korjattu versiossa $VERSION$. Se versio on jo asennettuna.",
     "placeholders": {
       "version": {
         "content": "$1"

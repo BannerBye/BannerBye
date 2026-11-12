@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "Jūsų pranešimas: išspręsta versijoje $VERSION$. Jau turite.",
+    "message": "Jūsų pranešimas: išspręsta versijoje $VERSION$. Ši versija jau įdiegta.",
     "placeholders": {
       "version": {
         "content": "$1"

@@ -18,6 +18,7 @@ import {
   setPausedForSite,
   getStats,
   clearPendingCelebration,
+  markCelebrationSeen,
   addReportedSite,
   clearPendingReportFixed,
   getRecentActivity,
@@ -325,6 +326,13 @@ export function App() {
     firstPendingId !== undefined
       ? (getMilestoneById(firstPendingId) ?? null)
       : null;
+
+  // Eén keer tonen is genoeg: zodra de kaart in beeld is, telt hij als gezien.
+  // Hij blijft deze popup-sessie staan (state verandert niet), maar komt bij
+  // de volgende opening niet terug — ook niet zonder klik op ✕.
+  useEffect(() => {
+    if (firstPendingId !== undefined) void markCelebrationSeen(firstPendingId);
+  }, [firstPendingId]);
 
   async function dismissCelebration() {
     if (!currentCelebration) return;

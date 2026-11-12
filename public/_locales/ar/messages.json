@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "بلاغك: تم الحل في الإصدار $VERSION$. لديك ذلك بالفعل.",
+    "message": "بلاغك: تم الحل في الإصدار $VERSION$. هذا الإصدار مثبّت لديك بالفعل.",
     "placeholders": {
       "version": {
         "content": "$1"

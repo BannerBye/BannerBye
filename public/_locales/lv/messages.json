@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "Jūsu ziņojums: atrisināts versijā $VERSION$. Jums tas jau ir.",
+    "message": "Jūsu ziņojums: atrisināts versijā $VERSION$. Šī versija jau ir instalēta.",
     "placeholders": {
       "version": {
         "content": "$1"

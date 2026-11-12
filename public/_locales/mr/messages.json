@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "तुमचा अहवाल: $VERSION$ मध्ये दुरुस्त झाला. तुमच्याकडे आहे.",
+    "message": "तुमचा अहवाल: $VERSION$ मध्ये दुरुस्त झाला. ही आवृत्ती आधीच इन्स्टॉल आहे.",
     "placeholders": {
       "version": {
         "content": "$1"

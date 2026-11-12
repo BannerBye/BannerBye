@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "あなたの報告：$VERSION$ で修正済み。すでに反映されています。",
+    "message": "あなたの報告：$VERSION$ で修正済み。このバージョンはインストール済みです。",
     "placeholders": {
       "version": {
         "content": "$1"

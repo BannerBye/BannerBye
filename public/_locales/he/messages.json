@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "הדיווח שלך: תוקן בגרסה $VERSION$. כבר יש לך את זה.",
+    "message": "הדיווח שלך: תוקן בגרסה $VERSION$. הגרסה הזו כבר מותקנת.",
     "placeholders": {
       "version": {
         "content": "$1"

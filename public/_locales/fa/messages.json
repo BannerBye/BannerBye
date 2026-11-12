@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "گزارش شما: در نسخه $VERSION$ رفع شد. شما آن را دارید.",
+    "message": "گزارش شما: در نسخه $VERSION$ رفع شد. این نسخه از قبل نصب شده است.",
     "placeholders": {
       "version": {
         "content": "$1"

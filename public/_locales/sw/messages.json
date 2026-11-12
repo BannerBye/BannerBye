@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "Ripoti yako: imerekebishwa katika $VERSION$. Tayari unayo.",
+    "message": "Ripoti yako: imerekebishwa katika $VERSION$. Toleo hilo tayari limesakinishwa.",
     "placeholders": {
       "version": {
         "content": "$1"

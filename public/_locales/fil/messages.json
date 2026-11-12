@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "Ang ulat mo: naayos sa $VERSION$. Nasa iyo na ito.",
+    "message": "Ang ulat mo: naayos sa $VERSION$. Naka-install na ang bersyong iyon.",
     "placeholders": {
       "version": {
         "content": "$1"

@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "Bejelentésed: megoldva a $VERSION$ verzióban. Már megvan.",
+    "message": "Bejelentésed: megoldva a $VERSION$ verzióban. Ez a verzió már telepítve van.",
     "placeholders": {
       "version": {
         "content": "$1"

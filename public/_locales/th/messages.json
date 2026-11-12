@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "รายงานของคุณ: แก้ไขแล้วใน $VERSION$ คุณมีแล้ว",
+    "message": "รายงานของคุณ: แก้ไขแล้วใน $VERSION$ เวอร์ชันนี้ติดตั้งอยู่แล้ว",
     "placeholders": {
       "version": {
         "content": "$1"

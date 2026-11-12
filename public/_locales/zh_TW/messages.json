@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "你的回報：已在 $VERSION$ 修正。你已經擁有了。",
+    "message": "你的回報：已在 $VERSION$ 修正。此版本已安裝。",
     "placeholders": {
       "version": {
         "content": "$1"

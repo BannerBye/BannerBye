@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "Η αναφορά σου: διορθώθηκε στην $VERSION$. Το έχεις ήδη.",
+    "message": "Η αναφορά σου: διορθώθηκε στην $VERSION$. Αυτή η έκδοση είναι ήδη εγκατεστημένη.",
     "placeholders": {
       "version": {
         "content": "$1"

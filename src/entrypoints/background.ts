@@ -896,7 +896,7 @@ export default defineBackground({
       await syncFlagSetterScripts(newSettings);
     } else if (area === 'local') {
       // Stats kunnen veranderd zijn → re-sync rang-badge (#85).
-      if (changes.stats) {
+      if (changes.stats || changes.celebrated) {
         await syncRankBadge();
       }
     }

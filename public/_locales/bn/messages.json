@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "আপনার রিপোর্ট: $VERSION$-এ ঠিক হয়েছে। আপনার কাছে আছে।",
+    "message": "আপনার রিপোর্ট: $VERSION$-এ ঠিক হয়েছে। এই সংস্করণটি আগেই ইনস্টল করা আছে।",
     "placeholders": {
       "version": {
         "content": "$1"

@@ -390,7 +390,7 @@
     }
   },
   "popup_ticket_fixed_installed": {
-    "message": "உங்கள் அறிக்கை: $VERSION$ இல் சரிசெய்யப்பட்டது. உங்களிடம் உள்ளது.",
+    "message": "உங்கள் அறிக்கை: $VERSION$ இல் சரிசெய்யப்பட்டது. இந்தப் பதிப்பு ஏற்கனவே நிறுவப்பட்டுள்ளது.",
     "placeholders": {
       "version": {
         "content": "$1"
