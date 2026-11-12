@@ -37,7 +37,7 @@ export default defineConfig({
     // (waren jarenlang geclaimd in de listings maar nooit gebouwd — alleen
     // Didomi + Usercentrics bestonden). Zie src/lib/cmp/onetrust.ts,
     // cookiebot.ts en trustarc.ts voor de onderbouwing per handler.
-    version: '0.4.17',
+    version: '0.4.18',
     permissions: [
       'storage',
       'tabs',
