@@ -91,6 +91,8 @@ export interface OwnerHostBlock {
   ticketStatus: 'fixed' | 'investigating' | 'not-a-bug';
   reporterSaw: string;
   weTried: string;
+  /** v3: wat het bezoek met de echte extensie geladen liet zien. */
+  withExtension?: string;
   outcome: string;
   todo: string;
   /** Twee zinnen duiding van Claude; leeg als die faalde. */
@@ -102,21 +104,24 @@ export async function sendOwnerSummaryEmail(
   blocks: OwnerHostBlock[],
   counts: { live: number; review: number; human: number; retry: number; retryMode: boolean },
 ): Promise<boolean> {
-  const needsRobin = counts.review + counts.human;
+  // v3: wie Robin nodig heeft volgt uit het eindoordeel per host (verdict.ts),
+  // niet uit losse tellers. "niets te doen" kan alleen als geen enkel blok
+  // urgent is — een onbewezen uitkomst telt altijd als werk voor Robin.
+  const needsRobin = blocks.filter((b) => b.urgent).length;
   const subject =
     needsRobin > 0
       ? `BannerBye: ${needsRobin} melding(en) wachten op jou${counts.live ? `, ${counts.live} al live` : ''}`
       : counts.live > 0
-        ? `BannerBye: ${counts.live} melding(en) automatisch opgelost — niets te doen`
+        ? `BannerBye: ${counts.live} melding(en) automatisch opgelost`
         : counts.retry > 0
           ? `BannerBye: ${counts.retry} melding(en) nog niet gereproduceerd — herhaalpoging gepland`
-          : `BannerBye: melding(en) verwerkt — niets te doen`;
+          : `BannerBye: melding(en) verwerkt — uitkomst bewezen, niets te doen`;
 
   const urgentFirst = [...blocks].sort((a, b) => Number(b.urgent) - Number(a.urgent));
   const body: string[] = [];
   body.push(
     `${counts.retryMode ? 'Herhaalpoging' : 'Analyse-run'} klaar: ${blocks.length} host(s). ` +
-      `Live (host-scoped): ${counts.live} · naar review: ${counts.review} · herhaalpoging gepland: ${counts.retry} · jouw blik nodig: ${counts.human}.`,
+      `Live (host-scoped): ${counts.live} · naar review: ${counts.review} · herhaalpoging gepland: ${counts.retry} · jouw blik nodig: ${needsRobin}.`,
   );
   body.push('');
   for (const b of urgentFirst) {
@@ -124,6 +129,7 @@ export async function sendOwnerSummaryEmail(
     if (b.explanation) body.push(`   ${b.explanation}`);
     body.push(`   Melder zag:      ${b.reporterSaw}`);
     body.push(`   Wij probeerden:  ${b.weTried}`);
+    if (b.withExtension) body.push(`   Met BannerBye:   ${b.withExtension}`);
     body.push(`   Uitkomst:        ${b.outcome}`);
     body.push(`   Jij hoeft:       ${b.todo}`);
     body.push('');

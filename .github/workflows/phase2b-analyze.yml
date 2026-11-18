@@ -60,6 +60,16 @@ jobs:
           node-version: "22"
           package-manager-cache: false
 
+      # v3 (nov 2026): de extensiecheck herhaalt elk bezoek waarin een banner
+      # gezien werd mét de echte extensie geladen (scripts/phase2b/extcheck.ts).
+      # Mislukt de build, dan draait de analyse gewoon door zonder die check —
+      # en telt de check nergens als bewijs (verdict.ts).
+      - uses: pnpm/action-setup@v4
+      - name: Build Chrome-extensie voor de extensiecheck
+        id: extbuild
+        continue-on-error: true
+        run: pnpm install --frozen-lockfile && pnpm exec wxt build
+
       - name: Install analyzer deps
         working-directory: scripts/phase2b
         run: npm install --no-audit --no-fund
@@ -91,6 +101,7 @@ jobs:
           RULES_FILE: ${{ github.workspace }}/landing/rules.json
           # Schema-run = alleen de wachtrij; dispatch = nieuwe meldingen.
           RETRY_MODE: ${{ (github.event_name == 'schedule' || github.event.inputs.retry_mode == 'true') && '1' || '0' }}
+          BB_EXTENSION_PATH: ${{ github.workspace }}/.output/chrome-mv3
         run: node --experimental-strip-types analyze.ts
 
       # Pijplijn v2: host-scoped fixes met hoge zekerheid direct naar main.

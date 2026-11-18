@@ -35,12 +35,27 @@
  *      met andere profielen. Daarna pas: "jouw blik nodig", met alles wat er
  *      geprobeerd is op een rij.
  *   7. Mail aan Robin: per host wat de melder zag, wat wij probeerden, wat de
- *      uitkomst is en wat hij nog moet doen (meestal: niets). Claude schrijft
+ *      uitkomst is en wat hij nog moet doen. Claude schrijft
  *      er een duiding van twee zinnen bij.
+ *
+ * V3 (19 nov 2026) — "niets aan de hand" moet bewezen worden
+ * Bij minstens tien meldingen in okt/nov zei de pijplijn dat er niets aan de
+ * hand was terwijl er een bug zat (zie verdict.ts voor de lijst). Daarom:
+ *   8. Zag headless een banner, dan herhaalt extcheck.ts dat bezoek met de
+ *      echte extensie geladen. Banner blijft staan of de pagina herlaadt in
+ *      een lus → bevestigd kapot.
+ *   9. accept-only of betaalmuur sluit het ticket pas na een onafhankelijke
+ *      tweede controle (claude.ts verifyRefuseRoute) die bevestigt dat er
+ *      geen enkele gratis weigerroute is. Twijfel of een fout sluit nooit.
+ *  10. Het eindoordeel komt uit verdict.ts (getest in test/verdict.test.ts).
+ *      Alleen live, herhaalpoging en bevestigd not-a-bug vragen niets van
+ *      Robin; al het andere staat in de mail als "wacht op jou", en de
+ *      Claude-duiding mag dat nooit tegenspreken.
  *
  * Env: KV_REST_API_URL/TOKEN (verplicht), ANTHROPIC_API_KEY, RESEND_API_KEY,
  *      MAX_HOSTS (25), NAV_TIMEOUT_MS (20000), WAIT_MS (3500),
- *      PANEL_WAIT_MS (1800), RULES_FILE, RETRY_MODE (1 = alleen de wachtrij).
+ *      PANEL_WAIT_MS (1800), RULES_FILE, RETRY_MODE (1 = alleen de wachtrij),
+ *      BB_EXTENSION_PATH (.output/chrome-mv3; zonder pad geen extensiecheck).
  */
 
 import { appendFile, writeFile } from 'node:fs/promises';
@@ -78,8 +93,18 @@ import {
   isAutoApprove,
   proposeLanguageGapKeywords,
   explainForOwner,
+  verifyRefuseRoute,
   type Judgement,
 } from './claude.ts';
+import { checkWithExtension, extensionPath } from './extcheck.ts';
+import {
+  decideVerdict,
+  safeExplanation,
+  type BaseKind,
+  type ExtensionCheck,
+  type RefuseRouteCheck,
+  type Verdict,
+} from './verdict.ts';
 
 const DETECT_SCRIPT = buildDetectScript(bannerStructureSignals.toString());
 
@@ -115,6 +140,8 @@ interface Profile {
 
 interface Visit {
   profile: string;
+  /** v3: het volledige profiel, zodat de extensiecheck exact hetzelfde bezoek herhaalt. */
+  profileObj?: Profile;
   url: string;
   status: number | null;
   finalUrl: string;
@@ -141,6 +168,10 @@ interface HostResult {
   wallFromTrace: boolean;
   snapshotHadBanner: boolean;
   denied?: boolean;
+  /** v3: bezoek met de echte extensie geladen (alleen als headless een banner zag). */
+  extension?: ExtensionCheck;
+  /** v3: tweede controle bij accept-only of muur. */
+  refuseRoute?: RefuseRouteCheck;
 }
 
 type Outcome =
@@ -154,7 +185,9 @@ type Outcome =
   | { kind: 'retry'; attempt: number; nextInHours: number }
   | { kind: 'needs_human'; attempts: number }
   | { kind: 'error'; message: string }
-  | { kind: 'unknown'; reason: string };
+  | { kind: 'unknown'; reason: string }
+  | { kind: 'misclassified'; claimed: 'wall' | 'accept_only'; button: string; reason: string }
+  | { kind: 'unverified_close'; claimed: 'wall' | 'accept_only'; reason: string };
 
 // ---------------------------------------------------------------------------
 // Config
@@ -295,6 +328,7 @@ async function visit(browser: Browser, host: string, path: string, profile: Prof
   const url = `https://${host}${path}`;
   const base: Visit = {
     profile: profile.name,
+    profileObj: profile,
     url,
     status: null,
     finalUrl: '',
@@ -555,7 +589,17 @@ function describeOutcome(o: Outcome, r: HostResult): { outcome: string; todo: st
         todo: `site zelf openen (${`https://${r.host}${safePath(r.work.path)}`}) en kijken wat de melder zag`,
       };
     case 'error':
-      return { outcome: `FOUT BIJ BEZOEKEN — ${o.message}`, todo: 'alleen bij herhaling: site handmatig checken' };
+      return { outcome: `FOUT BIJ BEZOEKEN — ${o.message}`, todo: 'site handmatig checken' };
+    case 'misclassified':
+      return {
+        outcome: `CLASSIFICATIE WEERSPROKEN — de heuristiek zei ${o.claimed === 'wall' ? 'betaalmuur' : 'accept-only'}, maar de tweede controle ziet een weigerroute: "${o.button}" (${o.reason}). Ticket blijft open.`,
+        todo: `knop "${o.button}" bekijken en zo nodig als keyword toevoegen`,
+      };
+    case 'unverified_close':
+      return {
+        outcome: `${o.claimed === 'wall' ? 'MOGELIJK BETAALMUUR' : 'MOGELIJK ACCEPT-ONLY'} — NIET BEVESTIGD. De tweede controle kon niet bevestigen dat er geen weigerroute is (${o.reason}). Ticket blijft open; niets gesloten.`,
+        todo: `site zelf openen (https://${r.host}${safePath(r.work.path)}) en kijken of er echt geen weigerknop is`,
+      };
     default:
       return { outcome: `ONBEKEND — ${o.reason}`, todo: 'korte blik' };
   }
@@ -631,6 +675,16 @@ async function main(): Promise<void> {
       setRemoteKeywords(keywordsForHost(rules, work.hostname), work.hostname);
 
       const result = await analyzeHost(browser, work, attempt);
+
+      // v3: zag headless een banner, herhaal dat bezoek met BannerBye erin.
+      const seenVisit = result.source === 'headless' ? result.visits.find((v) => v.bannerVisible && v.profileObj) : undefined;
+      if (seenVisit?.profileObj && extensionPath()) {
+        result.extension = await checkWithExtension(seenVisit.url, seenVisit.profileObj, DETECT_SCRIPT, {
+          waitMs: seenVisit.profileObj.waitMs,
+          navTimeoutMs: NAV_TIMEOUT_MS,
+        });
+        console.log(`   met extensie: ${result.extension.ran ? '' : 'NIET GELUKT — '}${result.extension.note}`);
+      }
 
       // Taalgat → Claude laten kijken (ook op snapshot-bewijs).
       if (
@@ -777,6 +831,7 @@ async function main(): Promise<void> {
   let reviewCount = 0;
   let humanCount = 0;
   let retryCount = 0;
+  const verdicts: Verdict[] = [];
   for (const r of results) {
     const liveHere = autoLive.filter((p) => p.hostname === r.host);
     const reviewHere = needsReview.filter((p) => p.hostname === r.host);
@@ -797,6 +852,29 @@ async function main(): Promise<void> {
       else if (attempt < RETRY_MAX_ATTEMPTS) outcome = { kind: 'retry', attempt, nextInHours: 6 };
       else outcome = { kind: 'needs_human', attempts: attempt };
     } else outcome = { kind: 'unknown', reason: r.classification.reason };
+
+    // v3: een ticket sluiten (not-a-bug) mag alleen na een onafhankelijke
+    // tweede controle. Zie verdict.ts voor de regel en de gevallen.
+    if (outcome.kind === 'wall' || outcome.kind === 'accept_only') {
+      const claimed = outcome.kind;
+      const buttons = r.detection?.candidates.map((c) => c.text) ?? r.work.snapshot?.candidates.map((c) => c.text) ?? [];
+      r.refuseRoute = await verifyRefuseRoute({
+        hostname: r.host,
+        claimed,
+        buttonTexts: buttons,
+        bannerSnippet: r.detection?.bannerTextSnippet ?? '',
+        pageLang: r.detection?.pageLang ?? r.work.lang ?? '',
+      });
+      console.log(`   tweede controle (${claimed}): ${r.refuseRoute.result} — ${r.refuseRoute.reason}`);
+    }
+    const verdict: Verdict = decideVerdict({ base: outcome.kind as BaseKind, refuseRoute: r.refuseRoute, extension: r.extension });
+    if ((outcome.kind === 'wall' || outcome.kind === 'accept_only') && verdict.ticket !== 'not-a-bug') {
+      const rr = r.refuseRoute;
+      outcome = rr && rr.result === 'found'
+        ? { kind: 'misclassified', claimed: outcome.kind, button: rr.button, reason: rr.reason }
+        : { kind: 'unverified_close', claimed: outcome.kind, reason: rr?.reason || (r.extension?.loop ? 'herlaadlus met de extensie' : 'niet uitgevoerd') };
+    }
+    verdicts.push(verdict);
 
     try {
       switch (outcome.kind) {
@@ -830,11 +908,7 @@ async function main(): Promise<void> {
           await clearRetry(redis, r.host);
           await setHostStatus(redis, r.host, 'investigating', 'Queued for a manual look.');
           break;
-        case 'cmp_iframe':
-        case 'language_gap':
-        case 'unknown':
-        case 'rejected':
-        case 'error':
+        default:
           humanCount++;
           await clearRetry(redis, r.host);
           await setHostStatus(redis, r.host, 'investigating', 'Under investigation.');
@@ -845,6 +919,13 @@ async function main(): Promise<void> {
     }
 
     const described = describeOutcome(outcome, r);
+    if (verdict.confirmedBroken && r.extension) {
+      described.outcome = `BEVESTIGD MET BANNERBYE: ${r.extension.note}. ${described.outcome}`;
+      if (described.todo === 'niets' || described.todo.startsWith('niets')) described.todo = 'kijken waarom BannerBye hier faalt';
+    }
+    if (verdict.needsRobin && (described.todo === 'niets' || described.todo.startsWith('niets'))) {
+      described.todo = 'korte blik: de pijplijn kon dit niet bewijzen';
+    }
     const reporter = describeReporter(r.work);
     const tried = describeVisits(r);
     let explanation = '';
@@ -855,20 +936,23 @@ async function main(): Promise<void> {
         weTried: tried,
         outcome: described.outcome,
         userMessage: (r.work.sampleMessage ?? '').slice(0, 400),
+        todo: described.todo,
+        needsRobin: verdict.needsRobin,
       });
+      explanation = safeExplanation(explanation, verdict);
     } catch {
       explanation = '';
     }
     blocks.push({
       hostname: r.host,
-      ticketStatus:
-        outcome.kind === 'live' ? 'fixed' : outcome.kind === 'wall' || outcome.kind === 'accept_only' ? 'not-a-bug' : 'investigating',
+      ticketStatus: verdict.ticket,
       reporterSaw: reporter,
       weTried: tried,
+      withExtension: r.extension ? (r.extension.ran ? r.extension.note : `niet gelukt (${r.extension.note})`) : extensionPath() ? 'niet gedraaid (headless zag geen banner)' : 'niet gedraaid (extensie niet gebouwd)',
       outcome: described.outcome,
       todo: described.todo,
       explanation,
-      urgent: outcome.kind === 'needs_human' || outcome.kind === 'review' || outcome.kind === 'cmp_iframe' || outcome.kind === 'language_gap',
+      urgent: verdict.needsRobin,
     });
   }
 

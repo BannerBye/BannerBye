@@ -71,3 +71,31 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium
       - name: Fixture tests
         run: pnpm test
+
+  pipeline:
+    # Phase 2B/2C — de regels die bepalen of een melding "niets aan de hand"
+    # mag heten (scripts/phase2b/verdict.ts), regressies van classify() en de
+    # extensiecheck tegen lokale pagina's met de echt gebouwde extensie.
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Build Chrome-extensie voor de extensiecheck
+        run: pnpm exec wxt build
+      - name: Pijplijn-deps
+        working-directory: scripts/phase2b
+        run: npm install --no-audit --no-fund
+      - name: Chromium
+        working-directory: scripts/phase2b
+        run: npx playwright install --with-deps chromium
+      - name: Pijplijn-tests (oordeel, classificatie, extensiecheck)
+        working-directory: scripts/phase2b
+        env:
+          BB_EXTENSION_PATH: ${{ github.workspace }}/.output/chrome-mv3
+        run: npm test

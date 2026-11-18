@@ -374,9 +374,13 @@ export interface ExplainInput {
   weTried: string;
   outcome: string;
   userMessage: string;
+  /** v3: wat Robin moet doen volgens het (vertrouwde) eindoordeel. */
+  todo?: string;
+  /** v3: true = Robin moet kijken; de duiding mag dan niet geruststellen. */
+  needsRobin?: boolean;
 }
 
-const EXPLAIN_SYSTEM = `Je schrijft voor de eigenaar van BannerBye (een browser-extensie die cookie-banners weigert) een duiding van één gebruikersmelding, in het Nederlands, maximaal twee korte zinnen, zonder opsomming en zonder aanhef. Zeg wat er waarschijnlijk aan de hand is en of hij iets moet doen. Wees concreet en eerlijk; speculeer niet verder dan de gegevens toelaten. Geen emoji.
+const EXPLAIN_SYSTEM = `Je schrijft voor de eigenaar van BannerBye (een browser-extensie die cookie-banners weigert) een duiding van één gebruikersmelding, in het Nederlands, maximaal twee korte zinnen, zonder opsomming en zonder aanhef. Zeg wat er waarschijnlijk aan de hand is. Of hij iets moet doen staat vast in het eindoordeel van de pijplijn: spreek dat nooit tegen. Zegt het eindoordeel dat hij moet kijken, schrijf dan nooit dat er niets aan de hand is, dat het een bekend patroon is of dat niemand iets hoeft te doen. Wees concreet en eerlijk; speculeer niet verder dan de gegevens toelaten. Geen emoji.
 
 ${UNTRUSTED_DATA_INSTRUCTION}
 
@@ -394,6 +398,7 @@ export async function explainForOwner(input: ExplainInput): Promise<string> {
   const userMsg = [
     `Wat wij probeerden (vertrouwd, eigen pijplijn): ${input.weTried.slice(0, 600)}`,
     `Uitkomst van de pijplijn (vertrouwd): ${input.outcome.slice(0, 600)}`,
+    `Eindoordeel (vertrouwd): ${input.needsRobin ? 'Robin moet kijken' : 'Robin hoeft niets te doen'}${input.todo ? ` — ${input.todo.slice(0, 200)}` : ''}`,
     ``,
     untrusted,
     ``,
@@ -415,5 +420,84 @@ export async function explainForOwner(input: ExplainInput): Promise<string> {
     return typeof json.text === 'string' ? json.text.replace(/\s+/g, ' ').trim().slice(0, 400) : '';
   } catch {
     return '';
+  }
+}
+
+// ---------------------------------------------------------------------------
+// v3 (nov 2026) — tweede controle vóór een ticket op not-a-bug mag
+// ---------------------------------------------------------------------------
+
+export interface RefuseRouteInput {
+  hostname: string;
+  /** Wat de heuristiek dacht: 'accept_only' of 'wall'. */
+  claimed: 'accept_only' | 'wall';
+  buttonTexts: string[];
+  bannerSnippet: string;
+  pageLang: string;
+}
+
+const REFUSE_ROUTE_SYSTEM = `Je controleert een conclusie van een automatische heuristiek over een cookie-banner. De heuristiek denkt dat deze banner GEEN gratis manier heeft om niet-noodzakelijke cookies te weigeren. Klopt dat, dan sluit de pijplijn de gebruikersmelding als "geen bug". Ten onrechte sluiten is duur: een echte bug blijft dan liggen en de gebruiker krijgt een verkeerde uitleg.
+
+Wees daarom kritisch en zoek actief naar een weigerroute. Een weigerroute is elke knop of link die zonder betalen leidt tot alleen noodzakelijke cookies, bijvoorbeeld:
+- weigeren, afwijzen, reject, ablehnen, refuser, rifiuta, rechazar (ook beleefd: "nee bedankt", "no thanks");
+- alleen noodzakelijke/essentiële/functionele cookies accepteren of toestaan ("Nur notwendige Cookies akzeptieren", "Accept only necessary", "Alleen noodzakelijke cookies"). Let op: het woord accepteren in zo'n knop maakt het GEEN accepteer-knop;
+- doorgaan zonder accepteren ("continua senza accettare", "continue without accepting");
+- instellingen, voorkeuren, aanpassen, beheren, details, opties: daarachter kun je bijna altijd weigeren, dus dat telt ook als route;
+- een sluitknop of kruisje dat de banner wegklikt zonder in te stemmen, als de banner-tekst dat zo beschrijft.
+
+Geen weigerroute zijn: knoppen die alles of een deel accepteren zonder beperking tot noodzakelijk, "OK"/"Got it"/"Begrepen" in een puur informatieve banner, abonneren/betalen, links naar het privacybeleid.
+
+Antwoord "none" alleen als je zeker weet dat er geen enkele weigerroute is. Antwoord "found" met de exacte knoptekst als er een is. Twijfel je, of is de lijst onvolledig of onduidelijk, antwoord dan "unsure".
+
+${UNTRUSTED_DATA_INSTRUCTION}
+
+Antwoord UITSLUITEND met JSON: {"result":"none|found|unsure","button":"<exacte knoptekst of leeg>","reason":"<één korte zin, Nederlands>"}`;
+
+/**
+ * Onafhankelijke tweede controle. FAIL-SAFE in de veilige richting: elke
+ * fout, geen key of geen knoppen geeft 'unsure', en 'unsure' sluit nooit.
+ */
+export async function verifyRefuseRoute(
+  input: RefuseRouteInput,
+): Promise<{ result: 'none'; reason: string } | { result: 'found'; button: string; reason: string } | { result: 'unsure'; reason: string }> {
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) return { result: 'unsure', reason: 'geen ANTHROPIC_API_KEY' };
+  const buttons = input.buttonTexts.map((t) => t.replace(/\s+/g, ' ').trim()).filter(Boolean).slice(0, 25);
+  if (!buttons.length) return { result: 'unsure', reason: 'geen knopteksten om te beoordelen' };
+  const untrusted = buildUntrustedBlock({
+    site: input.hostname,
+    paginataal: input.pageLang || '(onbekend)',
+    'knoppen in de banner': buttons.map((b) => `"${b}"`).join(' | '),
+    'banner-tekst': input.bannerSnippet.slice(0, 600) || '(geen)',
+  });
+  const userMsg = [
+    `Conclusie van de heuristiek (vertrouwd): ${input.claimed === 'wall' ? 'toestemmen-of-betalen-muur, geen gratis weigerroute' : 'alleen accepteer-knoppen, geen weigerroute'}.`,
+    '',
+    untrusted,
+    '',
+    'Controleer de conclusie en antwoord als JSON.',
+  ].join('\n');
+  try {
+    const res = await fetch(ANTHROPIC_ENDPOINT, {
+      method: 'POST',
+      headers: { 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
+      body: JSON.stringify({ model: MODEL, max_tokens: 200, system: REFUSE_ROUTE_SYSTEM, messages: [{ role: 'user', content: userMsg }] }),
+    });
+    if (!res.ok) return { result: 'unsure', reason: `Claude HTTP ${res.status}` };
+    const data = (await res.json()) as { content?: Array<{ type: string; text?: string }> };
+    const text = data.content?.find((c) => c.type === 'text')?.text ?? '';
+    const start = text.indexOf('{');
+    const end = text.lastIndexOf('}');
+    if (start === -1 || end <= start) return { result: 'unsure', reason: 'onleesbaar antwoord' };
+    const json = JSON.parse(text.slice(start, end + 1)) as { result?: unknown; button?: unknown; reason?: unknown };
+    const reason = typeof json.reason === 'string' ? json.reason.slice(0, 200) : '';
+    if (json.result === 'none') return { result: 'none', reason };
+    if (json.result === 'found') {
+      const button = typeof json.button === 'string' ? json.button.slice(0, 120) : '';
+      return { result: 'found', button, reason };
+    }
+    return { result: 'unsure', reason: reason || 'twijfel' };
+  } catch (err) {
+    return { result: 'unsure', reason: `Claude-call faalde: ${err instanceof Error ? err.message.slice(0, 80) : 'onbekend'}` };
   }
 }
