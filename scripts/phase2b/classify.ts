@@ -86,6 +86,25 @@ const SAVE_INDICATORS = [
   'keuzes', 'selectie', 'voorkeuren', 'auswahl', 'mes choix',
 ];
 
+/**
+ * v0.4.19 (freeletics.com, nov 2026): "Nur notwendige Cookies akzeptieren"
+ * bevat een accept-woord, maar beperkt de instemming tot noodzakelijke
+ * cookies — dat ís de weigerknop. Zonder deze lijst viel zo'n knop onder
+ * de accept-heuristiek en kreeg de melder ten onrechte "accept-only".
+ * Alleen beperkende formuleringen: "only/nur/alleen … necessary/essential".
+ */
+const RESTRICTED_ACCEPT_INDICATORS = [
+  'only necessary', 'necessary only', 'only essential', 'essential only',
+  'only required', 'required only', 'only strictly necessary',
+  'accept necessary', 'accept essential', 'accept required',
+  'nur notwendige', 'nur erforderliche', 'nur essenzielle', 'nur essentielle',
+  'nur technisch notwendige', 'notwendige cookies akzeptieren',
+  'alleen noodzakelijk', 'alleen essentie', 'alleen functionele',
+  'uniquement les cookies n', 'seulement les cookies n', 'cookies nécessaires uniquement',
+  'solo necesarias', 'solo las necesarias', 'solo cookies necesarias', 'solo esenciales',
+  'solo necessari', 'solo tecnici', 'solo i necessari',
+];
+
 function hasAny(haystack: string, needles: string[]): boolean {
   return needles.some((n) => haystack.includes(n));
 }
@@ -172,7 +191,8 @@ export function classify(d: DetectionResult): Classification {
     }
     const looksReject = hasAny(norm, REJECT_INDICATORS);
     const looksAccept = hasAny(norm, ACCEPT_INDICATORS);
-    if (looksReject && !looksAccept) {
+    const restrictedAccept = looksAccept && hasAny(norm, RESTRICTED_ACCEPT_INDICATORS);
+    if ((looksReject && !looksAccept) || restrictedAccept) {
       rejectProposals.push({ keyword: norm, list: 'reject' });
       continue;
     }
@@ -297,6 +317,10 @@ export function classifyStepPanel(
       continue;
     }
     const looksAccept = hasAny(norm, ACCEPT_INDICATORS);
+    if (looksAccept && hasAny(norm, RESTRICTED_ACCEPT_INDICATORS)) {
+      proposals.push({ keyword: norm, list: 'reject' });
+      continue;
+    }
     if (looksAccept) continue;
     if (hasAny(norm, REJECT_INDICATORS)) {
       proposals.push({ keyword: norm, list: 'reject' });

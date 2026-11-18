@@ -121,6 +121,18 @@ export const REJECT_KEYWORDS: readonly string[] = [
   'nur erforderliche cookies',
   'nur notwendige',
   'nur notwendige cookies',
+  // v0.4.19 (freeletics.com, nov 2026): "Nur notwendige Cookies akzeptieren"
+  // is de weigerknop — "akzeptieren" staat er wel in, maar alleen voor de
+  // noodzakelijke cookies. Matching is exact, dus de hele knoptekst moet erin.
+  'nur notwendige cookies akzeptieren',
+  'nur notwendige akzeptieren',
+  'nur erforderliche cookies akzeptieren',
+  'nur erforderliche akzeptieren',
+  'nur essenzielle cookies akzeptieren',
+  'nur technisch notwendige cookies akzeptieren',
+  'notwendige cookies akzeptieren',
+  'nur notwendige cookies zulassen',
+  'nur notwendige zulassen',
   // v0.4.0 (#170-test): event-buddy.de toont "Nur Essenzielle" — die variant
   // ontbrak, waardoor de banner bleef staan. Beide spellingen meenemen.
   'nur essenzielle',

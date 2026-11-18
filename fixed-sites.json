@@ -99,6 +99,12 @@
       "label": "consentWall",
       "version": "0.4.18",
       "fixedAt": "2026-11-12"
+    },
+    {
+      "hostname": "freeletics.com",
+      "reason": "\"Nur notwendige Cookies akzeptieren\" is the reject button; BannerBye now recognises it through the rule list, no update needed",
+      "label": "keyword",
+      "fixedAt": "2026-11-19"
     }
   ]
 }
