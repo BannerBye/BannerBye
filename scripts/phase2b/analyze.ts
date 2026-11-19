@@ -151,6 +151,8 @@ interface Visit {
   detection: DetectionResult | null;
   classification: Classification | null;
   stepIntoButtonText?: string;
+  /** v3: knoppen van de eerste laag, vóór de step-into-klik. */
+  firstLayerTexts?: string[];
   error?: string;
 }
 
@@ -172,6 +174,8 @@ interface HostResult {
   extension?: ExtensionCheck;
   /** v3: tweede controle bij accept-only of muur. */
   refuseRoute?: RefuseRouteCheck;
+  /** v3: knoppen van de eerste laag als het bewijs een step-into-paneel is. */
+  firstLayerTexts?: string[];
 }
 
 type Outcome =
@@ -375,6 +379,7 @@ async function visit(browser: Browser, host: string, path: string, profile: Prof
     if (classification.category === 'needs_step_into' && classification.stepIntoButtonText) {
       const btn = classification.stepIntoButtonText;
       base.stepIntoButtonText = btn;
+      base.firstLayerTexts = detection.candidates.map((c) => c.text);
       try {
         await page
           .locator(CLICKABLE, { hasText: new RegExp(`^\\s*${escapeRegExp(btn)}\\s*$`, 'i') })
@@ -448,7 +453,7 @@ async function analyzeHost(browser: Browser, work: HostWork, attempt: number): P
   if (seen) {
     return {
       host, work, visits, detection: seen.detection, classification: seen.classification!, source: 'headless',
-      stepIntoButtonText: seen.stepIntoButtonText, wallFromTrace, snapshotHadBanner,
+      stepIntoButtonText: seen.stepIntoButtonText, firstLayerTexts: seen.firstLayerTexts, wallFromTrace, snapshotHadBanner,
     };
   }
 
@@ -857,7 +862,12 @@ async function main(): Promise<void> {
     // tweede controle. Zie verdict.ts voor de regel en de gevallen.
     if (outcome.kind === 'wall' || outcome.kind === 'accept_only') {
       const claimed = outcome.kind;
-      const buttons = r.detection?.candidates.map((c) => c.text) ?? r.work.snapshot?.candidates.map((c) => c.text) ?? [];
+      // Beide lagen meegeven: rt.pornhub.com had 0 knoppen in het paneel en
+      // de tweede controle kreeg daardoor niets te zien.
+      const buttons = [
+        ...(r.firstLayerTexts ?? []),
+        ...(r.detection?.candidates.map((c) => c.text) ?? r.work.snapshot?.candidates.map((c) => c.text) ?? []),
+      ].filter((t, i, a) => a.indexOf(t) === i);
       r.refuseRoute = await verifyRefuseRoute({
         hostname: r.host,
         claimed,

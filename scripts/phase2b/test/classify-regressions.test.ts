@@ -4,7 +4,7 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { classify } from '../classify.ts';
+import { classify, classifyStepPanel } from '../classify.ts';
 import { setRemoteKeywords, isRejectText } from '../../../src/lib/autoclick/keywords.ts';
 import type { DetectionResult } from '../detect.ts';
 
@@ -49,4 +49,16 @@ test('echt accept-only blijft accept-only (mocospace.com: alleen "Got it!")', ()
 test('"Alle Cookies akzeptieren" telt nooit als weigerknop', () => {
   assert.equal(isRejectText('Alle Cookies akzeptieren'), false);
   assert.equal(isRejectText('Cookies akzeptieren'), false);
+});
+
+test('sentisight.ai (19 nov): privacybeleid-link is geen instellingen-knop → direct accept-only', () => {
+  const c = classify(det(['Privacy policy', 'Accept all']));
+  assert.equal(c.category, 'accept_only');
+});
+
+test('rt.pornhub.com (1 nov): leeg instellingen-paneel is nooit accept-only', () => {
+  const c = classifyStepPanel(det([]), 'Настроить', []);
+  assert.notEqual(c.category, 'accept_only');
+  const d = classifyStepPanel(det(['Accept all', 'Marketing', 'Analytics']), 'Manage', []);
+  assert.notEqual(d.category, 'accept_only');
 });

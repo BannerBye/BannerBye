@@ -105,6 +105,9 @@ const RESTRICTED_ACCEPT_INDICATORS = [
   'solo necessari', 'solo tecnici', 'solo i necessari',
 ];
 
+const PRIVACY_LINK_RE =
+  /privacy|datenschutz|privacidad|confidentialit|riservatezza|privacybeleid|policy|richtlinie|beleid|impressum|imprint|mentions l|terms|voorwaarden|nutzungsbedingungen/;
+
 function hasAny(haystack: string, needles: string[]): boolean {
   return needles.some((n) => haystack.includes(n));
 }
@@ -201,7 +204,14 @@ export function classify(d: DetectionResult): Classification {
     if (!stepIntoButtonText && !looksAccept) {
       if (isStepIntoText(c.text) || hasAny(norm, STEP_INTO_INDICATORS)) {
         stepIntoButtonText = c.text;
-      } else if (norm.length <= 40 && !/^(ok|okay|close|sluiten|schließen|fermer|cerrar|chiudi|×|x)$/.test(norm)) {
+      } else if (
+        norm.length <= 40 &&
+        !/^(ok|okay|close|sluiten|schließen|fermer|cerrar|chiudi|×|x)$/.test(norm) &&
+        // v3 (nov 2026): een link naar het privacybeleid is geen instellingen-
+        // knop. sentisight.ai ("Privacy policy" + "Accept all") werd zo als
+        // step-into geklikt en kwam via het lege "paneel" pas bij accept-only.
+        !PRIVACY_LINK_RE.test(norm)
+      ) {
         otherButtons.push(c.text);
       }
     }
@@ -348,12 +358,16 @@ export function classifyStepPanel(
     };
   }
 
+  // v3 (nov 2026): nooit accept_only na een step-into. Een instellingen-
+  // knop ís een route naar weigeren; vinden we in dat paneel niets, dan
+  // missen wíj iets (toggles, onbekend label) en niet de site. rt.pornhub.com
+  // werd zo op 1 nov ten onrechte als accept-only gesloten.
   return {
-    category: hasMatchedReject ? 'unknown' : 'accept_only',
+    category: 'unknown',
     proposals: [],
     reason: hasMatchedReject
       ? `Step-into paneel geopend; weiger-knop wél herkend — mogelijk timing. Handmatige review.`
-      : `Step-into paneel geopend maar geen weiger/save-knop gevonden — mogelijk toggle-based of echt accept-only. Handmatige review.`,
+      : `Step-into paneel (via "${stepIntoButtonText}") geopend maar geen weiger/save-knop herkend — mogelijk toggles of een onbekend label. Handmatige review.`,
     cmps,
   };
 }
