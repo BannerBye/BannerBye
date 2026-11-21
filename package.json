@@ -16,7 +16,8 @@
     "compile": "tsc --noEmit",
     "postinstall": "wxt prepare",
     "tcf:sample": "node --experimental-strip-types scripts/tcf-sample.ts",
-    "tcf:verify": "node --experimental-strip-types scripts/tcf-verify.ts"
+    "tcf:verify": "node --experimental-strip-types scripts/tcf-verify.ts",
+    "test:unit": "node --experimental-strip-types scripts/tests/test-0419.ts"
   },
   "dependencies": {
     "@duckduckgo/autoconsent": "^16.39.0",

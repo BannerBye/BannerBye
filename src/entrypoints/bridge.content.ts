@@ -125,6 +125,19 @@ export default defineContentScript({
     document.addEventListener('bb:tcf-blocked', relay);
     document.addEventListener('bb:cmp-blocked', relay);
 
+    // v0.4.19: gpc.content.ts meldt dat de browser zelf GPC stuurt. Eén keer
+    // per pagina doorgeven; zet in de background alleen een tijdstip.
+    let nativeGpcSent = false;
+    document.addEventListener('bb:native-gpc', () => {
+      if (nativeGpcSent) return;
+      nativeGpcSent = true;
+      try {
+        void chrome.runtime.sendMessage({ type: 'bb:native-gpc' });
+      } catch {
+        // runtime weg — niet kritiek
+      }
+    });
+
     // v0.4.12: trace-regels uit de MAIN-world lagen (gpc/tcf/cmp) doorgeven
     // aan de background — zie lib/trace.ts. Zelfde spoofing-overweging als
     // hierboven: een pagina kan dit event ook dispatchen, maar de trace stuurt

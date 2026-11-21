@@ -145,6 +145,7 @@ function isValidAutoclickFields(fields: Record<string, unknown>): boolean {
   if (fields.rejectKeywords !== undefined && !isStringArray(fields.rejectKeywords)) return false;
   if (fields.ambiguousKeywords !== undefined && !isStringArray(fields.ambiguousKeywords)) return false;
   if (fields.stepIntoKeywords !== undefined && !isStringArray(fields.stepIntoKeywords)) return false;
+  if (fields.objectKeywords !== undefined && !isStringArray(fields.objectKeywords)) return false;
   if (fields.rejectPhrases !== undefined && !isStringArray(fields.rejectPhrases)) return false;
   if (fields.contextWords !== undefined && !isStringArray(fields.contextWords)) return false;
   if (

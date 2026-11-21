@@ -39,6 +39,7 @@ import {
   isRejectText,
   isAmbiguousRejectText,
   isStepIntoText,
+  isObjectText,
   containsRejectPhrase,
   hasCookieContext,
   isRejectAttributeHint,
@@ -342,6 +343,22 @@ export function findStepIntoButton(): HTMLElement | null {
     const text = readLabel(el);
     if (!text) continue;
     if (isStepIntoText(text) && isInCookieBanner(el)) return el;
+  }
+  return null;
+}
+
+/**
+ * v0.4.19 — bezwaarlaag: vind een "Object all"/"Bezwaar maken"-knop binnen
+ * een cookie-banner. Zelfde vangrails als step-into (zichtbaar, veilig om te
+ * klikken, cookie-context).
+ */
+export function findObjectButton(): HTMLElement | null {
+  for (const el of walkClickables(document)) {
+    if (!isVisible(el)) continue;
+    if (!isSafeToClick(el)) continue;
+    const text = readLabel(el);
+    if (!text) continue;
+    if (isObjectText(text) && isInCookieBanner(el)) return el;
   }
   return null;
 }

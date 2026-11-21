@@ -21,7 +21,7 @@
  * en blokkeert oneindige loops als step-into geen bruikbaar paneel opent.
  */
 
-import { findRejectButton, findStepIntoButton, collectVisibleTextCandidates, isInCookieBanner } from './finder.ts';
+import { findRejectButton, findStepIntoButton, findObjectButton, collectVisibleTextCandidates, isInCookieBanner } from './finder.ts';
 import { traceIso, quoteText } from '../trace.ts';
 import { isSubFrame } from '../frame-guard.ts';
 import { tryTranslationFallback } from './translate.ts';
@@ -112,6 +112,8 @@ export interface AutoClickResult {
   viaTranslation?: boolean;
   /** Hoe lang het duurde voor we 'm vonden (ms na start). */
   elapsedMs: number;
+  /** v0.4.19: er is (ook) een bezwaarknop geklikt (bezwaarlaag). */
+  viaObject?: boolean;
 }
 
 /**
@@ -203,15 +205,18 @@ function clickElement(el: HTMLElement): void {
 }
 
 export function startAutoClick(
-  options: { timeoutMs?: number } = {},
+  options: { timeoutMs?: number; objectToExempt?: boolean } = {},
 ): Promise<AutoClickResult> {
   const timeoutMs = options.timeoutMs ?? OBSERVE_TIMEOUT_MS;
+  // v0.4.19: bezwaarlaag staat standaard aan; alleen expliciet false zet 'm uit.
+  const objectEnabled = options.objectToExempt !== false;
   const startTime = Date.now();
 
   return new Promise((resolve) => {
     let resolved = false;
     let verifying = false;
     let stepIntoClicked = false;
+    let objectClicked = false;
     let throttleTimeoutId = 0;
     let pendingScan = false;
     // v0.3.2 (#154 hotfix): observer/timeoutId hier al declareren (i.p.v. pas
@@ -260,7 +265,7 @@ export function startAutoClick(
       // de relax-flag toe — we zitten dan al in een cookie-flow, en het
       // detail-paneel is vaak een full-page replacement zonder fixed
       // overlay meer (zoals fok.nl's "Keuze aanpassen"-paneel).
-      const reject = findRejectButton(stepIntoClicked);
+      const reject = findRejectButton(stepIntoClicked || objectClicked);
       if (reject) {
         const buttonText = (reject.innerText || reject.textContent || '').trim();
         try {
@@ -274,6 +279,7 @@ export function startAutoClick(
         // ondertussen nieuwe klik-pogingen; finish() ruimt observer/timeouts op.
         verifying = true;
         const viaStepInto = stepIntoClicked;
+        const viaObject = objectClicked;
         window.setTimeout(() => {
           const verified = !bannerStillPresent(reject);
           traceIso(
@@ -285,10 +291,30 @@ export function startAutoClick(
             verified,
             buttonText,
             viaStepInto,
+            viaObject,
             elapsedMs: Date.now() - startTime,
           });
         }, VERIFY_DELAY_MS);
         return;
+      }
+
+      // PASS 2.5 (v0.4.19, bezwaarlaag): geen weigerknop, wél een
+      // "Object all"/"Bezwaar maken"-knop in de banner → die eerst, één keer.
+      // Sluit de banner zelden; daarna zoeken PASS 1+2 met ontspannen context
+      // naar "Opslaan"/"Bevestigen" om de keuze vast te leggen.
+      if (objectEnabled && !objectClicked) {
+        const obj = findObjectButton();
+        if (obj) {
+          objectClicked = true;
+          traceIso('click', `object button ${quoteText((obj.innerText || obj.textContent || '').trim())} (objection layer)`);
+          try {
+            clickElement(obj);
+            window.setTimeout(scheduleScan, STEP_INTO_DELAY_MS);
+          } catch (err) {
+            console.warn('[BannerBye] object click failed:', err);
+          }
+          return;
+        }
       }
 
       // PASS 3: step-into (eenmalig per page-load). v0.4.2 (#170): niet in

@@ -38,6 +38,8 @@ import {
   markUnlockedAndPending,
   markReportFixed,
   recordActivity,
+  recordReask,
+  markNativeGpcSeen,
 } from '@/lib/storage';
 import { normalizeHost } from '@/lib/host';
 import type { SyncedSettings } from '@/lib/types';
@@ -792,6 +794,14 @@ export default defineBackground({
       const host = sender.tab.url ? normalizeHost(sender.tab.url) : null;
       const platform =
         typeof msg.platform === 'string' ? msg.platform : undefined;
+      // v0.4.19 — vraag-opnieuw-teller. Alleen als er een zichtbare banner
+      // geweigerd werd: de TCF-laag weigert preventief bij elke lading, dat is
+      // geen vraag van de site.
+      if (host && platform !== 'IAB TCF') {
+        recordReask(host).catch(() => {
+          // bijzaak
+        });
+      }
       // v0.4.14 (raiplay.it): laag 5 meldt `alreadyCounted` als de TCF-laag
       // deze pagina al telde. Dan alleen het bewijs bijwerken (de klik is
       // het échte resultaat), niet nogmaals de teller/badge/mijlpalen.
@@ -809,6 +819,12 @@ export default defineBackground({
 
     // v0.4.0: autoclick meldt vanuit het hoofdframe dat er niets te weigeren
     // viel. Alleen een regel in de activiteitenlijst — geen teller, geen badge.
+    // v0.4.19: de browser stuurt zelf GPC (gpc.content.ts → bridge). Alleen een
+    // tijdstip voor de popup-uitleg; een vervalst event zet hooguit die vlag.
+    if (msg?.type === 'bb:native-gpc') {
+      void markNativeGpcSeen();
+    }
+
     if (msg?.type === 'bb:no-banner' && sender.tab?.url) {
       const host = normalizeHost(sender.tab.url);
       if (host) void recordActivity(host, 'clean');

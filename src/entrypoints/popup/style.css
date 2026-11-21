@@ -895,3 +895,13 @@ body {
 .bb-trace-toggle + .bb-proof-report {
   margin-left: 16px;
 }
+
+/* v0.4.19: bezwaarlaag-schakelaar — secundair, dus licht in plaats van inkt. */
+.bb-toggle.bb-toggle-object {
+  background: transparent;
+  color: var(--ink);
+  border-color: rgba(14, 17, 22, 0.12);
+  font-size: 13px;
+  padding: 10px 16px;
+}
+.bb-toggle.bb-toggle-object .bb-toggle-state { color: var(--smoke, #6B7077); }

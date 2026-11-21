@@ -19,6 +19,11 @@ export interface SyncedSettings {
   pausedSites: string[];
   /** Of de welkomst-flow al getoond is. Voorkomt dubbele onboarding op nieuw device. */
   onboardingCompleted: boolean;
+  /**
+   * v0.4.19 — bezwaarlaag: ook "Object all"/"Bezwaar maken"-knoppen klikken
+   * (gerechtvaardigd belang, vrijgestelde metingen). Default: true.
+   */
+  objectToExempt: boolean;
 }
 
 /**
@@ -81,7 +86,41 @@ export interface LocalStats {
    * en nooit opnieuw na een dismissal. Geen nag, geen herhaling, geen timer.
    */
   reviewAskDone: boolean;
+  /**
+   * v0.4.19: laatste keer (ms) dat de browser zélf Global Privacy Control
+   * bleek te sturen (native `navigator.globalPrivacyControl`, niet van ons of
+   * een andere extensie). 0 = nooit gezien. Alleen voor de popup-uitleg.
+   */
+  nativeGpcSeenAt: number;
+  /**
+   * v0.4.19 — vraag-opnieuw-teller. Per host: wanneer BannerBye daar voor het
+   * eerst weigerde en hoe vaak de site daarna opnieuw om toestemming vroeg.
+   * PRIVACY: zelfde regels als recentActivity — alleen lokaal, gecapt op
+   * REASK_CAP hosts, vervalt na REASK_TTL_MS, gewist met "Clear".
+   */
+  reasks: ReaskEntry[];
 }
+
+/** v0.4.19: één host in de vraag-opnieuw-teller. */
+export interface ReaskEntry {
+  host: string;
+  /** Eerste weigering door BannerBye op deze host (ms). */
+  firstAt: number;
+  /** Laatste weigering (ms). */
+  lastAt: number;
+  /** Hoe vaak de site opnieuw vroeg ná de eerste weigering. */
+  reasks: number;
+}
+
+/** Maximaal aantal hosts in de vraag-opnieuw-teller. */
+export const REASK_CAP = 100;
+/** Hoe lang een regel blijft staan zonder nieuwe weigering: 180 dagen. */
+export const REASK_TTL_MS = 180 * 24 * 60 * 60 * 1000;
+/**
+ * Twee weigeringen binnen dit venster tellen als één bezoek (de banner op
+ * pagina 2 van dezelfde sessie is geen nieuwe vraag). 30 minuten.
+ */
+export const REASK_MIN_GAP_MS = 30 * 60 * 1000;
 
 /** Uitkomst van BannerBye op één host. */
 /**
@@ -144,6 +183,7 @@ export const DEFAULT_SETTINGS: SyncedSettings = {
   enabled: true,
   pausedSites: [],
   onboardingCompleted: false,
+  objectToExempt: true,
 };
 
 export const DEFAULT_STATS: LocalStats = {
@@ -158,4 +198,6 @@ export const DEFAULT_STATS: LocalStats = {
   ticketsCheckedAt: 0,
   unseenFixed: [],
   reviewAskDone: false,
+  nativeGpcSeenAt: 0,
+  reasks: [],
 };

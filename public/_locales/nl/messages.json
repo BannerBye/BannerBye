@@ -425,5 +425,30 @@
   },
   "popup_details_report": {
     "message": "Meld met details"
+  },
+  "popup_reask": {
+    "message": "Deze site vroeg het $COUNT$ keer opnieuw sinds BannerBye hier voor het eerst weigerde, $SINCE$. Ook cookies wissen laat sites opnieuw vragen.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      },
+      "since": {
+        "content": "$2"
+      }
+    }
+  },
+  "popup_reask_once": {
+    "message": "Deze site vroeg het één keer opnieuw sinds BannerBye hier voor het eerst weigerde, $SINCE$.",
+    "placeholders": {
+      "since": {
+        "content": "$1"
+      }
+    }
+  },
+  "popup_native_gpc": {
+    "message": "Je browser stuurt zelf ook Global Privacy Control. Dat vraagt sites je gegevens niet te verkopen. Banners haalt het niet weg — BannerBye wel."
+  },
+  "popup_object_label": {
+    "message": "Ook bezwaar maken tegen vrijgestelde tracking"
   }
 }

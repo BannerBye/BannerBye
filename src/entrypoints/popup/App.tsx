@@ -24,6 +24,7 @@ import {
   getRecentActivity,
   clearActivity,
   markReviewAskDone,
+  getReask,
 } from '@/lib/storage';
 import { isHostPaused, normalizeHost } from '@/lib/host';
 import { getMilestoneById, MILESTONES, type Milestone } from '@/lib/milestones';
@@ -32,7 +33,7 @@ import { t } from '@/lib/i18n/t';
 // v0.4.8: herlaadrem — uitleg + hervatten in de popup, zie lib/reload-brake.ts.
 import { clearStormPause, getStormPauses, type StormPause } from '@/lib/reload-brake';
 import { addTicket, clearTickets, markFixedSeen, newTicketId, refreshTicketStatuses, versionAtLeast } from '@/lib/tickets';
-import type { TicketEntry } from '@/lib/types';
+import type { ReaskEntry, TicketEntry } from '@/lib/types';
 import { browserLabel, formatTrace, type TabTrace } from '@/lib/trace';
 import { scrubPath, type ReportSnapshot } from '@/lib/report-snapshot';
 import type {
@@ -210,7 +211,7 @@ async function getActiveTabTrace(): Promise<TabTrace | null> {
 
 export function App() {
   const [state, setState] = useState<PopupState>({
-    settings: { enabled: true, pausedSites: [], onboardingCompleted: false },
+    settings: { enabled: true, pausedSites: [], onboardingCompleted: false, objectToExempt: true },
     stats: {
       blocked: 0,
       installedAt: 0,
@@ -223,6 +224,8 @@ export function App() {
       ticketsCheckedAt: 0,
       unseenFixed: [],
       reviewAskDone: false,
+      nativeGpcSeenAt: 0,
+      reasks: [],
     },
     hostname: null,
     loading: true,
@@ -277,6 +280,16 @@ export function App() {
   /** v0.4.15: meldingen die sinds de vorige popup 'fixed' werden. */
   const [fixedCards, setFixedCards] = useState<TicketEntry[]>([]);
 
+  /** v0.4.19: vraag-opnieuw-teller voor de huidige host. */
+  const [hereReask, setHereReask] = useState<ReaskEntry | null>(null);
+  useEffect(() => {
+    if (!state.hostname) return;
+    void getReask(state.hostname).then(setHereReask).catch(() => setHereReask(null));
+  }, [state.hostname]);
+
+  /** v0.4.19: de browser stuurde de afgelopen 30 dagen zelf GPC. */
+  const nativeGpc = Date.now() - (state.stats.nativeGpcSeenAt ?? 0) < 30 * 24 * 60 * 60 * 1000;
+
   const isSitePaused = state.hostname
     ? isHostPaused(state.hostname, state.settings.pausedSites)
     : false;
@@ -295,6 +308,12 @@ export function App() {
 
   async function toggleGlobal() {
     const next = await updateSettings({ enabled: !state.settings.enabled });
+    setState((s) => ({ ...s, settings: next }));
+  }
+
+  /** v0.4.19: bezwaarlaag aan/uit (standaard aan). */
+  async function toggleObject() {
+    const next = await updateSettings({ objectToExempt: state.settings.objectToExempt === false });
     setState((s) => ({ ...s, settings: next }));
   }
 
@@ -318,6 +337,7 @@ export function App() {
     await clearActivity();
     const nextStats = await clearTickets();
     setState((s) => ({ ...s, stats: nextStats, activity: [] }));
+    setHereReask(null);
   }
 
   /** Eerste in pendingCelebrations → toon als card. Lookup via stable id. */
@@ -740,6 +760,16 @@ export function App() {
             {hereTicketLine && (
               <p className="bb-ticket">{hereTicketLine}</p>
             )}
+            {/* v0.4.19: vraag-opnieuw-teller. Alleen tonen als de site het
+                echt opnieuw vroeg; één regel, zelfde stijl als de ticketregel. */}
+            {hereReask && hereReask.reasks > 0 && (
+              <p className="bb-ticket bb-reask">
+                {hereReask.reasks === 1
+                  ? t('popup_reask_once', timeAgo(hereReask.firstAt))
+                  : t('popup_reask', [String(hereReask.reasks), timeAgo(hereReask.firstAt)])}
+              </p>
+            )}
+            {nativeGpc && <p className="bb-ticket bb-native-gpc">{t('popup_native_gpc')}</p>}
             {/* v0.4.12: technische trace op verzoek — één grijze link, geen
                 badge, geen kaart. Wie meldt is meestal technisch; dit zegt
                 wat elke laag deed en waarom er (niet) geklikt is. */}
@@ -785,6 +815,19 @@ export function App() {
             {state.settings.enabled ? t('popup_toggle_on') : t('popup_toggle_off')}
           </span>
         </button>
+
+        {state.settings.enabled && (
+          <button
+            type="button"
+            className="bb-toggle bb-toggle-object"
+            onClick={toggleObject}
+          >
+            <span className="bb-toggle-label">{t('popup_object_label')}</span>
+            <span className="bb-toggle-state">
+              {state.settings.objectToExempt !== false ? t('popup_toggle_on') : t('popup_toggle_off')}
+            </span>
+          </button>
+        )}
 
         {state.hostname && state.settings.enabled && (
           <button

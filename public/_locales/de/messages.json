@@ -425,5 +425,30 @@
   },
   "popup_details_report": {
     "message": "Mit Details melden"
+  },
+  "popup_reask": {
+    "message": "Diese Seite hat $COUNT$-mal erneut gefragt, seit BannerBye hier zuerst abgelehnt hat, $SINCE$. Auch das Löschen von Cookies lässt Seiten erneut fragen.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      },
+      "since": {
+        "content": "$2"
+      }
+    }
+  },
+  "popup_reask_once": {
+    "message": "Diese Seite hat einmal erneut gefragt, seit BannerBye hier zuerst abgelehnt hat, $SINCE$.",
+    "placeholders": {
+      "since": {
+        "content": "$1"
+      }
+    }
+  },
+  "popup_native_gpc": {
+    "message": "Dein Browser sendet selbst auch Global Privacy Control. Das bittet Seiten, deine Daten nicht zu verkaufen. Banner entfernt es nicht — BannerBye schon."
+  },
+  "popup_object_label": {
+    "message": "Auch ausgenommenem Tracking widersprechen"
   }
 }

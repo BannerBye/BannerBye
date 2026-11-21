@@ -69,6 +69,14 @@ export const REJECT_KEYWORDS: readonly string[] = [
   'reject unnecessary cookies',
   'continue without accepting',
   'continue without consent',
+  // v0.4.19 (derde route bij consent-or-pay): gratis weigerroute naast een
+  // betaalknop. Staat hij in deze lijst, dan ziet consent-wall.ts er een echte
+  // weigerknop in (vangrail 3) en klikt laag 5 'm in plaats van de muur te
+  // laten staan.
+  'continue without agreeing',
+  'continue without accepting cookies',
+  'continue without cookies',
+  'proceed without accepting',
   // v0.1.5: courtesy-style decline-knoppen die we eerder gemist hebben.
   'no thanks',
   'no thank you',
@@ -97,6 +105,11 @@ export const REJECT_KEYWORDS: readonly string[] = [
   'alleen technisch noodzakelijk',
   'alleen technisch noodzakelijke cookies',
   'doorgaan zonder accepteren',
+  // v0.4.19 (derde route)
+  'doorgaan zonder te accepteren',
+  'doorgaan zonder toestemming',
+  'verder zonder accepteren',
+  'verder zonder te accepteren',
   'verder zonder accepteren',
   // v0.1.5: "Nee dank je"-varianten zoals op sabineboogaard.nl waar de
   // banner niet werd weggeklikt door v0.1.x. Beleefde refuse-tekst is in
@@ -143,6 +156,12 @@ export const REJECT_KEYWORDS: readonly string[] = [
   'nur technisch notwendige cookies',
   'essenzielle cookies',
   'weiter ohne zustimmung',
+  // v0.4.19 (derde route)
+  'weiter ohne einwilligung',
+  'fortfahren ohne zustimmung',
+  'fortfahren ohne einwilligung',
+  'ohne zustimmung fortfahren',
+  'ohne einwilligung fortfahren',
   // v0.1.5: courtesy-decline.
   'nein danke',
 
@@ -153,6 +172,9 @@ export const REJECT_KEYWORDS: readonly string[] = [
   'refuser tous',
   'refuser tous les cookies',
   'continuer sans accepter',
+  // v0.4.19 (derde route)
+  'continuer sans consentir',
+  'continuer sans accepter les cookies',
   'uniquement essentiels',
   'uniquement nécessaires',
 
@@ -164,6 +186,9 @@ export const REJECT_KEYWORDS: readonly string[] = [
   'sólo necesarias',
   'solo necesarias',
   'continuar sin aceptar',
+  // v0.4.19 (derde route)
+  'continuar sin consentir',
+  'continuar sin aceptar cookies',
 
   // === Italiano ===
   'rifiuta',
@@ -171,6 +196,10 @@ export const REJECT_KEYWORDS: readonly string[] = [
   'rifiuta tutti',
   'solo necessari',
   'continua senza accettare',
+  // v0.4.19 (derde route, ilfattoquotidiano.it e.a.)
+  'continua senza consenso',
+  'prosegui senza accettare',
+  'continua senza accettare i cookie',
 
   // === Ελληνικά (Greek) ===
   // v0.4.3 (14 sep 2026): structurele fix na een gebruikersmelding over
@@ -441,6 +470,46 @@ export const AMBIGUOUS_REJECT_KEYWORDS: readonly string[] = [
 ];
 
 /**
+ * v0.4.19 — bezwaarlaag. Knoppen waarmee je in één keer bezwaar maakt tegen
+ * verwerking op basis van "gerechtvaardigd belang" of tegen metingen die
+ * zonder toestemming mogen (VK sinds feb 2026: statistiek-uitzondering met
+ * verplichte bezwaarmogelijkheid; Raadsvoorstel Digital Omnibus: bereiks-
+ * meting). Exacte match, alleen in cookie-context, en alleen als de
+ * gebruiker de bezwaarlaag aan heeft staan (standaard aan).
+ *
+ * Bewust alleen "alles"-varianten: per-vendor-knoppen ("Object" naast elke
+ * partij) zouden maar één partij raken.
+ *
+ * Een bezwaarknop sluit de banner meestal niet: na de klik scant laag 5
+ * opnieuw met de ontspannen context, zodat "Opslaan"/"Bevestigen" daarna
+ * via AMBIGUOUS_REJECT_KEYWORDS gevonden wordt.
+ */
+export const OBJECT_KEYWORDS: readonly string[] = [
+  // English (InMobi/Quantcast Choice, Sourcepoint, Didomi)
+  'object all',
+  'object to all',
+  'object to all legitimate interests',
+  'object to legitimate interests',
+  // Nederlands
+  'bezwaar tegen alles',
+  'overal bezwaar tegen maken',
+  'bezwaar maken tegen alles',
+  'bezwaar maken tegen alle',
+  // Deutsch
+  'allen widersprechen',
+  'alle widersprechen',
+  'berechtigtem interesse widersprechen',
+  // Français
+  "s'opposer à tout",
+  "m'opposer à tout",
+  // Español
+  'oponerse a todo',
+  // Italiano
+  'opponiti a tutto',
+  'opporsi a tutto',
+];
+
+/**
  * Knoppen die naar een tweede-stap-paneel leiden waar we daadwerkelijk
  * kunnen weigeren. Sites met dark patterns (zoals fok.nl) verstoppen
  * de reject-actie achter een "Meer opties"-knop in plaats van 'm
@@ -640,6 +709,7 @@ let remoteRejectPhrases: string[] = [];
 let remoteContextWords: string[] = [];
 let remoteAttributeWordHints: string[] = [];
 let remoteAttributeCompactHints: string[] = [];
+let remoteObjectKeywords: string[] = [];
 
 /** Eén set remote keyword-velden — zelfde vorm als RemoteAutoclickFields in rules/types.ts. */
 interface RemoteKeywordFields {
@@ -650,6 +720,8 @@ interface RemoteKeywordFields {
   contextWords?: string[];
   attributeWordHints?: string[];
   attributeCompactHints?: string[];
+  /** v0.4.19: extra bezwaarknoppen, zie OBJECT_KEYWORDS. */
+  objectKeywords?: string[];
 }
 
 /**
@@ -695,6 +767,7 @@ export function setRemoteKeywords(
     contextWords: [...(rules.contextWords ?? [])],
     attributeWordHints: [...(rules.attributeWordHints ?? [])],
     attributeCompactHints: [...(rules.attributeCompactHints ?? [])],
+    objectKeywords: [...(rules.objectKeywords ?? [])],
   };
 
   if (currentHost && rules.hostRules) {
@@ -707,6 +780,7 @@ export function setRemoteKeywords(
       merged.contextWords!.push(...(fields.contextWords ?? []));
       merged.attributeWordHints!.push(...(fields.attributeWordHints ?? []));
       merged.attributeCompactHints!.push(...(fields.attributeCompactHints ?? []));
+      merged.objectKeywords!.push(...(fields.objectKeywords ?? []));
     }
   }
 
@@ -717,6 +791,7 @@ export function setRemoteKeywords(
   remoteContextWords = merged.contextWords!.map(normalize).filter((s) => s.length > 0);
   remoteAttributeWordHints = merged.attributeWordHints!.map(normalize).filter((s) => s.length > 0);
   remoteAttributeCompactHints = merged.attributeCompactHints!.map(normalize).filter((s) => s.length > 0);
+  remoteObjectKeywords = merged.objectKeywords!.map(normalize).filter((s) => s.length > 0);
 }
 
 /**
@@ -774,6 +849,16 @@ export function isAmbiguousRejectText(text: string): boolean {
     AMBIGUOUS_REJECT_KEYWORDS.includes(normalized) ||
     remoteAmbiguousKeywords.includes(normalized)
   );
+}
+
+/**
+ * v0.4.19: returns true als de tekst exact één van de bezwaar-keywords is.
+ * Caller checkt zelf nog `isInCookieBanner()`.
+ */
+export function isObjectText(text: string): boolean {
+  const normalized = normalize(text);
+  if (!normalized) return false;
+  return OBJECT_KEYWORDS.includes(normalized) || remoteObjectKeywords.includes(normalized);
 }
 
 /**

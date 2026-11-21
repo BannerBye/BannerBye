@@ -425,5 +425,30 @@
   },
   "popup_details_report": {
     "message": "Signaler avec les détails"
+  },
+  "popup_reask": {
+    "message": "Ce site a redemandé $COUNT$ fois depuis le premier refus de BannerBye ici, $SINCE$. Effacer vos cookies fait aussi redemander les sites.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      },
+      "since": {
+        "content": "$2"
+      }
+    }
+  },
+  "popup_reask_once": {
+    "message": "Ce site a redemandé une fois depuis le premier refus de BannerBye ici, $SINCE$.",
+    "placeholders": {
+      "since": {
+        "content": "$1"
+      }
+    }
+  },
+  "popup_native_gpc": {
+    "message": "Votre navigateur envoie lui aussi Global Privacy Control. Il demande aux sites de ne pas vendre vos données. Il ne supprime pas les bannières — BannerBye, si."
+  },
+  "popup_object_label": {
+    "message": "S'opposer aussi au suivi exempté"
   }
 }

@@ -433,5 +433,30 @@
   },
   "popup_details_report": {
     "message": "Report with details"
+  },
+  "popup_reask": {
+    "message": "This site asked again $COUNT$ times since BannerBye first refused here, $SINCE$. Clearing your cookies also makes sites ask again.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      },
+      "since": {
+        "content": "$2"
+      }
+    }
+  },
+  "popup_reask_once": {
+    "message": "This site asked again once since BannerBye first refused here, $SINCE$.",
+    "placeholders": {
+      "since": {
+        "content": "$1"
+      }
+    }
+  },
+  "popup_native_gpc": {
+    "message": "Your browser sends Global Privacy Control itself too. That asks sites not to sell your data. It doesn't remove banners — BannerBye does."
+  },
+  "popup_object_label": {
+    "message": "Also object to exempt tracking"
   }
 }

@@ -71,6 +71,29 @@ export default defineContentScript({
       return;
     }
 
+    // v0.4.19: stuurt de browser zelf al GPC? Safari (iOS/macOS 27.3), Edge
+    // (VS), Firefox, Brave en straks Chrome hebben een eigen schakelaar. Een
+    // native getter herkennen we aan "[native code]"; een getter van een
+    // andere extensie niet. Alleen het hoofdframe meldt (de bridge luistert
+    // alleen daar).
+    try {
+      const desc = Object.getOwnPropertyDescriptor(Navigator.prototype, 'globalPrivacyControl');
+      const isNative =
+        !!desc?.get && /\[native code\]/.test(Function.prototype.toString.call(desc.get));
+      if (isNative && (navigator as Navigator & { globalPrivacyControl?: boolean }).globalPrivacyControl === true) {
+        traceMain('gpc', 'browser sends GPC natively');
+        if (window.top === window) {
+          // Twee keer: nu, en bij DOMContentLoaded — de bridge (ISOLATED,
+          // ook document_start) kan net na ons starten. Hij dedupt zelf.
+          const ping = () => document.dispatchEvent(new CustomEvent('bb:native-gpc'));
+          ping();
+          document.addEventListener('DOMContentLoaded', ping, { once: true });
+        }
+      }
+    } catch {
+      // detectie is bijzaak
+    }
+
     try {
       Object.defineProperty(Navigator.prototype, 'globalPrivacyControl', {
         get: () => true,

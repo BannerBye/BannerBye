@@ -101,10 +101,12 @@ export default defineContentScript({
     // v0.2.0: respect globale toggle en per-site pause. autoclick draait
     // in ISOLATED world dus heeft directe chrome.storage-toegang — geen
     // window-flag-bridge nodig hier (anders dan TCF/CMP/GPC).
+    let objectToExempt = true;
     try {
       const settings = await getSettings();
       if (!settings.enabled) return;
       if (isHostPaused(location.hostname, settings.pausedSites)) return;
+      objectToExempt = settings.objectToExempt !== false;
     } catch {
       // storage-error — fail-open (= v0.1.x-gedrag). Beter dan een silent
       // disable wanneer er een race-conditie is bij browser-startup.
@@ -125,7 +127,7 @@ export default defineContentScript({
       // storage.local niet beschikbaar of corrupt — niet kritiek.
     }
 
-    const result = await startAutoClick();
+    const result = await startAutoClick({ objectToExempt });
 
     // "Afgehandeld" = geklikt ÉN geverifieerd dat de banner echt weg is. Een
     // klik die de banner niet wegkreeg telt niet mee (en de prehide toont 'm

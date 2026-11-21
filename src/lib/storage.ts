@@ -13,11 +13,14 @@ import {
   type LocalStats,
   type ActivityEntry,
   type ActivityOutcome,
+  type ReaskEntry,
   DEFAULT_SETTINGS,
+  REASK_TTL_MS,
   DEFAULT_STATS,
   ACTIVITY_CAP,
   ACTIVITY_TTL_MS,
 } from './types';
+import { nextReasks } from './reask.ts';
 
 const SETTINGS_KEY = 'settings';
 const STATS_KEY = 'stats';
@@ -160,10 +163,33 @@ export async function recordActivity(
   return updated;
 }
 
-/** v0.4.0: activiteitenlijst wissen — één tik in de popup. */
+export async function recordReask(host: string): Promise<void> {
+  if (!host) return;
+  const current = await getStats();
+  const reasks = nextReasks(current.reasks ?? [], host, Date.now());
+  await chrome.storage.local.set({ [STATS_KEY]: { ...current, reasks } });
+}
+
+/** v0.4.19: de regel voor één host, of null. */
+export async function getReask(host: string): Promise<ReaskEntry | null> {
+  const stats = await getStats();
+  const now = Date.now();
+  return (stats.reasks ?? []).find((e) => e.host === host && now - e.lastAt < REASK_TTL_MS) ?? null;
+}
+
+/** v0.4.19: de browser stuurt zelf GPC — tijdstip vastleggen voor de popup. */
+export async function markNativeGpcSeen(): Promise<void> {
+  const current = await getStats();
+  const now = Date.now();
+  // Hooguit één schrijfactie per uur; dit event komt bij elke paginalading.
+  if (now - (current.nativeGpcSeenAt ?? 0) < 60 * 60 * 1000) return;
+  await chrome.storage.local.set({ [STATS_KEY]: { ...current, nativeGpcSeenAt: now } });
+}
+
+/** v0.4.0: activiteitenlijst wissen — één tik in de popup. v0.4.19: ook de vraag-opnieuw-teller. */
 export async function clearActivity(): Promise<LocalStats> {
   const current = await getStats();
-  const updated: LocalStats = { ...current, recentActivity: [] };
+  const updated: LocalStats = { ...current, recentActivity: [], reasks: [] };
   await chrome.storage.local.set({ [STATS_KEY]: updated });
   return updated;
 }
