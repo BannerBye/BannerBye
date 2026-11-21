@@ -175,6 +175,10 @@ export const REJECT_KEYWORDS: readonly string[] = [
   // v0.4.19 (derde route)
   'continuer sans consentir',
   'continuer sans accepter les cookies',
+  // v0.4.19 (handmatige indexcontrole 21 nov: rtbf.be, marmiton.org)
+  'refuser les cookies optionnels',
+  'refuser les cookies facultatifs',
+  "je n'accepte rien",
   'uniquement essentiels',
   'uniquement nécessaires',
 
@@ -804,8 +808,14 @@ export function setRemoteKeywords(
 export function normalize(text: string): string {
   return text
     .toLowerCase()
+    // v0.4.19: typografische apostrof ("Je n’accepte rien") = gewone.
+    .replace(/[\u2018\u2019\u02bc]/g, "'")
     .replace(/\s+/g, ' ')
-    .trim();
+    .trim()
+    // v0.4.19: sierpijlen voor of na het label ("Continuer sans accepter →",
+    // francetvinfo.fr) horen niet bij de tekst.
+    .replace(/^[\u2192\u203a\u00bb\u2794\u279c>]+\s*/, '')
+    .replace(/\s*[\u2192\u203a\u00bb\u2794\u279c>]+$/, '');
 }
 
 /**

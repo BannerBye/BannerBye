@@ -44,4 +44,10 @@ for (let i = 0; i < REASK_CAP + 20; i++) big = nextReasks(big, `s${i}.example`, 
 assert.equal(big.length, REASK_CAP);
 assert.equal(big[0].host, `s${REASK_CAP + 19}.example`);
 
+// Handmatige indexcontrole 21 nov: pijl, typografische apostrof, Frans.
+for (const t of ['Continuer sans accepter →', 'Je n’accepte rien', "Je n'accepte rien", 'Refuser les cookies optionnels', '› Weigeren']) {
+  assert.equal(isRejectText(t), true, t);
+}
+assert.equal(isRejectText('Accepter →'), false);
+
 console.log('test-0419: all checks passed');
