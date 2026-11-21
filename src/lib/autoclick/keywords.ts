@@ -179,6 +179,8 @@ export const REJECT_KEYWORDS: readonly string[] = [
   'refuser les cookies optionnels',
   'refuser les cookies facultatifs',
   "je n'accepte rien",
+  'refuser et fermer',
+  'refuser & fermer',
   'uniquement essentiels',
   'uniquement nécessaires',
 

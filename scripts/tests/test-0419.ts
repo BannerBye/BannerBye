@@ -45,7 +45,7 @@ assert.equal(big.length, REASK_CAP);
 assert.equal(big[0].host, `s${REASK_CAP + 19}.example`);
 
 // Handmatige indexcontrole 21 nov: pijl, typografische apostrof, Frans.
-for (const t of ['Continuer sans accepter →', 'Je n’accepte rien', "Je n'accepte rien", 'Refuser les cookies optionnels', '› Weigeren']) {
+for (const t of ['Continuer sans accepter →', 'Je n’accepte rien', "Je n'accepte rien", 'Refuser les cookies optionnels', '› Weigeren', 'Refuser et fermer']) {
   assert.equal(isRejectText(t), true, t);
 }
 assert.equal(isRejectText('Accepter →'), false);
