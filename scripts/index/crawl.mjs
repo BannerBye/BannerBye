@@ -99,6 +99,13 @@ async function measure(browser, country, host) {
     row.engine = r.outcome;
     row.ms = r.ms;
     if (r.outcome === 'refused') row.clicks = r.clicks.length;
+    // De motor kijkt grondiger (attribuut-hints, shadow DOM, frames) dan de
+    // labelscan hierboven. Vond hij een banner, dan vroeg de site erom; weigerde
+    // hij met één klik, dan zat weigeren op de eerste laag; weigerde hij, dan
+    // was het geen muur.
+    if (r.outcome === 'refused' || r.outcome === 'unresolved') row.asks = true;
+    if (r.outcome === 'refused' && r.clicks.length === 1 && r.clicks[0].action === 'reject') row.rejectFirst = true;
+    if (row.rejectFirst || r.outcome === 'refused') { row.wall = false; row.settingsOnly = false; }
   } catch (e) {
     row.error = String(e?.message || e).slice(0, 160);
   } finally {
@@ -112,7 +119,12 @@ const rows = [];
 for (const [country, list] of Object.entries(sites)) {
   if (country.startsWith('_') || (only && only !== country)) continue;
   for (const host of list.slice(0, limit)) {
-    const row = await measure(browser, country, host);
+    // Harde grens per site: een pagina die een evaluate laat hangen mag de
+    // rest van de meting niet blokkeren.
+    const row = await Promise.race([
+      measure(browser, country, host),
+      new Promise((res) => setTimeout(() => res({ country, host, engine: 'error', error: 'timeout 90s' }), 90000)),
+    ]);
     rows.push(row);
     process.stderr.write(`${country} ${host} asks=${row.asks} first=${row.rejectFirst} wall=${row.wall} engine=${row.engine}\n`);
   }
