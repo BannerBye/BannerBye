@@ -6,19 +6,27 @@
  *
  * Meet per site, als een gewone bezoeker (GEEN TCF-weigerstring, GEEN GPC
  * vooraf — anders verstoppen we de banner die we willen meten):
- *   banner        is er een cookiebanner te zien (structureel herkend)
+ *   asks          vraagt de site om toestemming (toestemknop zichtbaar in cookie-context)
+ *   rejectFirst   staat er bij het laden al een weigerknop (eerste laag)
+ *   settingsOnly  geen weigerknop, wel een instellingenknop (weigeren zit een laag dieper)
  *   cmp           welk consent-platform de site laadt (zichtbare globals)
  *   wall          consent-or-pay: betaalknop + toestemknop, geen gratis weigering
- *   firstLayer    zit "weigeren" op de eerste laag (eerste klik = weigeren)
- *   clicks        aantal klikken tot de banner weg is (alleen bij outcome 'refused')
- *   outcome       refused | unresolved | clean | error
+ *   engine        wat de BannerBye-motor ervan maakte: refused | unresolved | clean | error
+ *   clicks        aantal klikken van de motor tot de banner weg was (alleen bij refused)
  *
  * Nul telemetrie: dit draait op onze eigen machine, met onze eigen browser.
  * Er komt geen gebruikersdata in.
  */
-import { chromium } from 'playwright';
+// playwright staat als devDependency in packages/refuse.
+import { chromium } from '../../packages/refuse/node_modules/playwright/index.mjs';
 import { readFileSync } from 'node:fs';
 import { refuse } from '../../packages/refuse/dist/index.js';
+// Dezelfde sleutelwoorden als de extensie (Node 22.6+ leest .ts met type-stripping).
+import { isRejectText, containsRejectPhrase, isStepIntoText, hasCookieContext } from '../../src/lib/autoclick/keywords.ts';
+
+// Een gewone desktop-Chrome. Met de standaard "HeadlessChrome"-UA slaan
+// sommige uitgevers (DPG Media) hun toestemmingspagina over — dan meet je niets.
+const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36';
 
 const args = process.argv.slice(2);
 const limit = Number(args[args.indexOf('--limit') + 1]) || Infinity;
@@ -44,37 +52,52 @@ const DETECT = `(() => {
   return { cmps: c, tcf: typeof w.__tcfapi === 'function' };
 })()`;
 
-const WALL = `((PAY, CONSENT) => {
-  const els = [...document.querySelectorAll('button, a, [role=button]')].filter(e => {
-    const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0;
-  });
-  let pay = false, ok = false;
-  for (const e of els) {
-    const t = (e.innerText || '').toLowerCase().trim();
-    if (!t || t.length > 80) continue;
-    if (PAY.some(w => t.includes(w))) pay = true;
-    else if (CONSENT.some(w => t.includes(w))) ok = true;
-  }
-  return pay && ok;
-})`;
+const LABELS = `(() => {
+  const out = [];
+  const walk = (root) => {
+    for (const e of root.querySelectorAll('button, a, [role=button], input[type=button], input[type=submit]')) {
+      const r = e.getBoundingClientRect();
+      if (!(r.width > 0 && r.height > 0)) continue;
+      const t = (e.innerText || e.value || e.getAttribute('aria-label') || '').trim();
+      if (t && t.length <= 80) out.push(t);
+    }
+    for (const h of root.querySelectorAll('*')) if (h.shadowRoot) walk(h.shadowRoot);
+  };
+  walk(document);
+  return { labels: out.slice(0, 300), text: (document.body ? document.body.innerText : '').slice(0, 6000) };
+})()`;
 
 async function measure(browser, country, host) {
-  const ctx = await browser.newContext({ locale: LOCALE[country], viewport: { width: 1366, height: 900 } });
+  const ctx = await browser.newContext({ locale: LOCALE[country], userAgent: UA, viewport: { width: 1366, height: 900 } });
   const page = await ctx.newPage();
-  const row = { country, host, outcome: 'error', banner: false, cmp: [], tcf: false, wall: false, firstLayer: null, clicks: null, ms: null };
+  const row = { country, host, finalHost: null, asks: false, rejectFirst: false, settingsOnly: false, wall: false, cmp: [], tcf: false, engine: 'error', clicks: null, ms: null };
   try {
     await page.goto(`https://${host}/`, { waitUntil: 'domcontentloaded', timeout: 30000 });
-    await page.waitForTimeout(4000);
+    await page.waitForTimeout(6000);
+    // Uitgevers als DPG Media sturen na het laden door naar een aparte toestemmingspagina.
+    await page.waitForLoadState("load", { timeout: 10000 }).catch(() => {});
+    await page.waitForTimeout(1500);
     const d = await page.evaluate(DETECT).catch(() => ({ cmps: [], tcf: false }));
     row.cmp = d.cmps; row.tcf = d.tcf;
+    try { row.finalHost = new URL(page.url()).hostname; } catch {}
+    let labels = [], text = '';
     for (const f of page.frames()) {
-      if (await f.evaluate(`(${WALL})(${JSON.stringify(PAY)}, ${JSON.stringify(CONSENT)})`).catch(() => false)) { row.wall = true; break; }
+      const r = await f.evaluate(LABELS).catch(() => null);
+      if (r) { labels.push(...r.labels); text += ' ' + r.text; }
     }
+    const low = labels.map((l) => l.toLowerCase());
+    // Tekst in shadow DOM (DPG Media) zit niet in innerText; de knoplabels wel.
+    const ctxOk = hasCookieContext(text + ' ' + labels.join(' '));
+    const consent = low.some((l) => CONSENT.some((w) => l.includes(w)));
+    const reject = labels.some((l) => isRejectText(l) || containsRejectPhrase(l));
+    const pay = low.some((l) => PAY.some((w) => l.includes(w)));
+    row.asks = ctxOk && consent;
+    row.rejectFirst = row.asks && reject;
+    row.settingsOnly = row.asks && !reject && labels.some((l) => isStepIntoText(l));
+    row.wall = row.asks && pay && !reject;
     const r = await refuse(page, { timeoutMs: 12000 });
-    row.outcome = r.outcome;
-    row.banner = r.outcome !== 'clean';
+    row.engine = r.outcome;
     row.ms = r.ms;
-    if (r.clicks.length) row.firstLayer = r.clicks[0].action === 'reject';
     if (r.outcome === 'refused') row.clicks = r.clicks.length;
   } catch (e) {
     row.error = String(e?.message || e).slice(0, 160);
@@ -91,7 +114,7 @@ for (const [country, list] of Object.entries(sites)) {
   for (const host of list.slice(0, limit)) {
     const row = await measure(browser, country, host);
     rows.push(row);
-    process.stderr.write(`${country} ${host} ${row.outcome}${row.wall ? ' wall' : ''}\n`);
+    process.stderr.write(`${country} ${host} asks=${row.asks} first=${row.rejectFirst} wall=${row.wall} engine=${row.engine}\n`);
   }
 }
 await browser.close();
