@@ -642,7 +642,23 @@ async function main(): Promise<void> {
   let hosts: HostWork[];
   if (RETRY_MODE) {
     const due = await getDueRetries(redis, MAX_HOSTS);
-    hosts = due.map((m) => ({ ...m.work, attempt: m.attempts + 1 }));
+    // Een host die intussen met de hand op not-a-bug of fixed is gezet (via
+    // /admin) niet opnieuw bezoeken: de herhaalpoging zou die status anders
+    // terugzetten op 'investigating'. De pijplijn zelf zet deze twee nooit op
+    // een host die nog in de wachtrij staat (zie de switch hieronder: elke
+    // tak die ze zet, wist ook de wachtrij), dus dit is altijd handwerk.
+    // Aanleiding: federal-tv.online, ticket hauw-hwjc, 25 nov 2026.
+    const stillDue: typeof due = [];
+    for (const m of due) {
+      const st = (await redis.get(`bb:host:status:${m.work.hostname}`)) as { status?: string } | null;
+      if (st?.status === 'not-a-bug' || st?.status === 'fixed') {
+        await clearRetry(redis, m.work.hostname);
+        console.log(`Retry overgeslagen: ${m.work.hostname} staat al op ${st.status}`);
+      } else {
+        stillDue.push(m);
+      }
+    }
+    hosts = stillDue.map((m) => ({ ...m.work, attempt: m.attempts + 1 }));
     console.log(`Retry-modus: ${hosts.length} host(s) aan de beurt`);
   } else {
     hosts = await getHostsToAnalyze(redis, { maxHosts: MAX_HOSTS });
