@@ -450,5 +450,20 @@
   },
   "popup_object_label": {
     "message": "S'opposer aussi au suivi exempté"
+  },
+  "popup_reason_question": {
+    "message": "Nous n'avons trouvé aucun bandeau cookies ici. Quel est le problème ?"
+  },
+  "popup_reason_banner": {
+    "message": "Un bandeau cookies est encore affiché"
+  },
+  "popup_reason_broken": {
+    "message": "Le site ne fonctionne pas avec BannerBye activé"
+  },
+  "popup_reason_other": {
+    "message": "Autre chose"
+  },
+  "popup_reason_other_note": {
+    "message": "BannerBye refuse uniquement les bandeaux cookies. Il ne bloque pas la publicité et ne répare pas les lecteurs vidéo."
   }
 }

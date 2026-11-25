@@ -458,5 +458,20 @@
   },
   "popup_object_label": {
     "message": "Also object to exempt tracking"
+  },
+  "popup_reason_question": {
+    "message": "We found no cookie banner here. What's going wrong?"
+  },
+  "popup_reason_banner": {
+    "message": "A cookie banner is still showing"
+  },
+  "popup_reason_broken": {
+    "message": "The site doesn't work with BannerBye on"
+  },
+  "popup_reason_other": {
+    "message": "Something else"
+  },
+  "popup_reason_other_note": {
+    "message": "BannerBye only refuses cookie banners. It doesn't block ads or fix video players."
   }
 }

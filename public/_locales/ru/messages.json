@@ -425,5 +425,20 @@
   },
   "popup_details_report": {
     "message": "Сообщить с подробностями"
+  },
+  "popup_reason_question": {
+    "message": "Мы не нашли здесь баннера cookie. Что не так?"
+  },
+  "popup_reason_banner": {
+    "message": "Баннер cookie всё ещё виден"
+  },
+  "popup_reason_broken": {
+    "message": "Сайт не работает с включённым BannerBye"
+  },
+  "popup_reason_other": {
+    "message": "Другое"
+  },
+  "popup_reason_other_note": {
+    "message": "BannerBye отклоняет только баннеры cookie. Он не блокирует рекламу и не чинит видеоплееры."
   }
 }

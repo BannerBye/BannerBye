@@ -450,5 +450,20 @@
   },
   "popup_object_label": {
     "message": "Ook bezwaar maken tegen vrijgestelde tracking"
+  },
+  "popup_reason_question": {
+    "message": "We zagen hier geen cookiebanner. Wat gaat er mis?"
+  },
+  "popup_reason_banner": {
+    "message": "Er staat nog een cookiebanner"
+  },
+  "popup_reason_broken": {
+    "message": "De site werkt niet met BannerBye aan"
+  },
+  "popup_reason_other": {
+    "message": "Iets anders"
+  },
+  "popup_reason_other_note": {
+    "message": "BannerBye weigert alleen cookiebanners. Reclame of een haperende videospeler lost het niet op."
   }
 }

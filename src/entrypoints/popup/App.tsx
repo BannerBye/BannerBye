@@ -119,6 +119,19 @@ function milestoneWarrantsReviewAsk(m: Milestone): boolean {
 
 type ReportStatus = 'idle' | 'sending' | 'sent' | 'error';
 
+/**
+ * v0.4.20: wat de melder bedoelt, gevraagd wanneer BannerBye op deze site
+ * niets vond om te weigeren. Aanleiding: lege meldingen zonder tekst op sites
+ * zonder cookiebanner (federal-tv.online, 25 nov 2026) — elk zo'n melding kost
+ * drie pijplijnruns en eindigt toch als not-a-bug.
+ */
+type ReportReason = 'banner' | 'broken' | 'other';
+const REASON_LABEL: Record<ReportReason, string> = {
+  banner: 'cookie banner still visible',
+  broken: 'site broken with BannerBye on',
+  other: 'something else',
+};
+
 interface PopupState {
   settings: SyncedSettings;
   stats: LocalStats;
@@ -131,6 +144,9 @@ interface PopupState {
     message: string;
     status: ReportStatus;
     errorText: string;
+    /** v0.4.20: alleen gezet als BannerBye hier niets vond (zie askReason). */
+    askReason: boolean;
+    reason: ReportReason | null;
   } | null;
   /** v0.4.0: recente activiteit per host — het bewijs onder de teller. */
   activity: ActivityEntry[];
@@ -433,6 +449,10 @@ export function App() {
         message: prefill,
         status: 'idle',
         errorText: '',
+        // Alleen vragen als we zeker weten dat er niets te weigeren was.
+        // Geen activiteit (content-script nog niet gedraaid) = niet vragen.
+        askReason: hereEntry?.outcome === 'clean',
+        reason: null,
       },
     }));
   }
@@ -463,6 +483,13 @@ export function App() {
     reportBrokenSite(`\n\n--- technical details ---\n${traceText()}`);
   }
 
+  function chooseReason(reason: ReportReason) {
+    setState((s) => ({
+      ...s,
+      reportModal: s.reportModal ? { ...s.reportModal, reason } : null,
+    }));
+  }
+
   function updateReportMessage(message: string) {
     setState((s) => ({
       ...s,
@@ -472,7 +499,13 @@ export function App() {
 
   async function sendReport() {
     if (!state.reportModal) return;
-    const { hostname, message } = state.reportModal;
+    const { hostname, askReason, reason } = state.reportModal;
+    if (askReason && !reason) return;
+    // De keuze staat bovenaan het bericht, zodat hij in de mail en in de
+    // pijplijn leesbaar is zonder serverwijziging; `reason` gaat los mee.
+    const message = reason
+      ? `[Reporter chose: ${REASON_LABEL[reason]}]\n${state.reportModal.message}`.trim()
+      : state.reportModal.message;
     // v0.4.12: anoniem ticket i.p.v. e-mailadres — zie lib/tickets.ts.
     const ticket = newTicketId();
     setState((s) => ({
@@ -496,6 +529,7 @@ export function App() {
           message,
           ticket,
           v: 2,
+          ...(reason ? { reason } : {}),
           path: ctx.path,
           lang: navigator.language ?? '',
           ...(ctx.snapshot ? { snapshot: ctx.snapshot } : {}),
@@ -576,9 +610,30 @@ export function App() {
               </p>
             ) : (
               <>
-                <p className="bb-modal-help">
-                  {t('popup_modal_help', state.reportModal.hostname)}
-                </p>
+                {state.reportModal.askReason ? (
+                  <fieldset className="bb-modal-reason">
+                    <legend className="bb-modal-help">{t('popup_reason_question')}</legend>
+                    {(['banner', 'broken', 'other'] as const).map((r) => (
+                      <button
+                        key={r}
+                        type="button"
+                        className={`bb-modal-reason-opt${state.reportModal!.reason === r ? ' on' : ''}`}
+                        aria-pressed={state.reportModal!.reason === r}
+                        onClick={() => chooseReason(r)}
+                        disabled={state.reportModal!.status === 'sending'}
+                      >
+                        {t(`popup_reason_${r}`)}
+                      </button>
+                    ))}
+                    {state.reportModal.reason === 'other' && (
+                      <p className="bb-modal-fineprint">{t('popup_reason_other_note')}</p>
+                    )}
+                  </fieldset>
+                ) : (
+                  <p className="bb-modal-help">
+                    {t('popup_modal_help', state.reportModal.hostname)}
+                  </p>
+                )}
                 <textarea
                   className="bb-modal-textarea"
                   placeholder={t('popup_modal_placeholder_message')}
@@ -600,7 +655,10 @@ export function App() {
                   type="button"
                   className="bb-modal-copy"
                   onClick={() => void sendReport()}
-                  disabled={state.reportModal.status === 'sending'}
+                  disabled={
+                    state.reportModal.status === 'sending' ||
+                    (state.reportModal.askReason && !state.reportModal.reason)
+                  }
                 >
                   {state.reportModal.status === 'sending'
                     ? t('popup_modal_sending')

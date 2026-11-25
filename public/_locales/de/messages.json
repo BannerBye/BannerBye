@@ -450,5 +450,20 @@
   },
   "popup_object_label": {
     "message": "Auch ausgenommenem Tracking widersprechen"
+  },
+  "popup_reason_question": {
+    "message": "Wir haben hier kein Cookie-Banner gefunden. Was stimmt nicht?"
+  },
+  "popup_reason_banner": {
+    "message": "Ein Cookie-Banner ist noch zu sehen"
+  },
+  "popup_reason_broken": {
+    "message": "Die Seite funktioniert mit BannerBye nicht"
+  },
+  "popup_reason_other": {
+    "message": "Etwas anderes"
+  },
+  "popup_reason_other_note": {
+    "message": "BannerBye lehnt nur Cookie-Banner ab. Werbung oder Videoplayer-Probleme behebt es nicht."
   }
 }

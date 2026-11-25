@@ -905,3 +905,31 @@ body {
   padding: 10px 16px;
 }
 .bb-toggle.bb-toggle-object .bb-toggle-state { color: var(--smoke, #6B7077); }
+
+/* v0.4.20: keuzevraag in de meldmodal als BannerBye hier niets vond. */
+.bb-modal-reason {
+  border: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.bb-modal-reason legend {
+  margin-bottom: 4px;
+}
+.bb-modal-reason-opt {
+  text-align: left;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 13px;
+  padding: 8px 10px;
+  border: 1px solid rgba(14, 17, 22, 0.1);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--ink);
+  cursor: pointer;
+}
+.bb-modal-reason-opt.on {
+  border-color: var(--ember);
+  outline: 1px solid var(--ember);
+}
